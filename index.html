@@ -528,7 +528,7 @@ document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el);}
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
   a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
 });
-var APPS_SCRIPT_URL='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+var APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
 function showToast(msg,ok){
   var t=document.getElementById('yr-toast');if(t)t.remove();
   t=document.createElement('div');t.id='yr-toast';
