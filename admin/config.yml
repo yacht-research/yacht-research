@@ -55,6 +55,8 @@ collections:
     folder: "content/yachts"
     create: true
     slug: "{{slug}}"
+    format: json
+    extension: json
     fields:
       - { label: "Nom du yacht", name: "title", widget: "string" }
       - { label: "Badge (ex: For Sale / Off-Market / New Listing)", name: "badge", widget: "select", options: ["For Sale", "Off-Market", "New Listing", "Charter Available", "Price Reduced"] }
