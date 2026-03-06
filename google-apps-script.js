@@ -16,7 +16,7 @@
 //    à la ligne : const APPS_SCRIPT_URL = 'COLLE_ICI';
 // ============================================================
 
-const NOTIFICATION_EMAIL = 'YOUR_EMAIL_HERE'; // ← Remplace par ton email
+const NOTIFICATION_EMAIL = 'mathis.yachtbroker@outlook.com'; // ← Remplace par ton email
 const SPREADSHEET_NAME   = 'Yacht Research — Form Submissions';
 
 // ─── POINT D'ENTRÉE PRINCIPAL ───────────────────────────────
