@@ -64,6 +64,7 @@ collections:
       - { label: "Localisation", name: "location", widget: "string" }
       - { label: "Prix (ex: € 2,800,000 ou Price on Request)", name: "price", widget: "string" }
       - { label: "Description courte", name: "description", widget: "text", required: false }
+      - { label: "Lien brochure (Google Drive)", name: "brochure", widget: "string", required: false, hint: "Colle ici le lien de partage Google Drive de la brochure PDF" }
       - { label: "Publié", name: "published", widget: "boolean", default: true }
 
   # ──────────────────────────────────────
