@@ -1833,19 +1833,7 @@
     submitForm(fd, document.getElementById('btn-partnership'), 'Partnership Inquiry');
   });
 
-  // RECRUITMENT FORM
-  document.getElementById('btn-recruitment').addEventListener('click', () => {
-    const f = {
-      name: document.getElementById('r-name').value,
-      position: document.getElementById('r-position').value,
-      email: document.getElementById('r-email').value,
-      experience: document.getElementById('r-experience').value
-    };
-    if (!f.name || !f.email) return showToast('Please fill in your name and email.', false);
-    const fd = new FormData();
-    Object.entries(f).forEach(([k,v]) => fd.append(k,v));
-    submitForm(fd, document.getElementById('btn-recruitment'), 'Recruitment Application');
-  });
+  
 </script>
 <style>
   @keyframes fadeInUp {
