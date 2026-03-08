@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Yacht Research — Enquiry Form</title>
-<link rel="icon" type="image/x-icon" href="/favicon.ico" id="favicon-link">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -760,7 +762,6 @@ async function loadCMSSettings() {
     if (!res.ok) return;
     const s = await res.json();
     if (s.page_title) document.title = s.page_title;
-    if (s.favicon) document.getElementById('favicon-link').href = s.favicon;
     if (s.logo_text) document.querySelector('.header-eyebrow').textContent = s.logo_text;
     if (s.hero_line1 || s.hero_line2) {
       const h1 = document.querySelector('.header h1');
