@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yacht Research — Inquiry Form</title>
+<title id="page-title">Yacht Research — Enquiry Form</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico" id="favicon-link">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -751,6 +752,24 @@ async function submitForm() {
   document.getElementById('success').style.display = 'block';
   document.getElementById('progressFill').style.width = '100%';
 }
+
+// ── CMS LOADER ────────────────────────────────────────────────
+async function loadCMSSettings() {
+  try {
+    const res = await fetch('/content/form-settings.json');
+    if (!res.ok) return;
+    const s = await res.json();
+    if (s.page_title) document.title = s.page_title;
+    if (s.favicon) document.getElementById('favicon-link').href = s.favicon;
+    if (s.logo_text) document.querySelector('.header-eyebrow').textContent = s.logo_text;
+    if (s.hero_line1 || s.hero_line2) {
+      const h1 = document.querySelector('.header h1');
+      if (h1) h1.innerHTML = (s.hero_line1||'Your Enquiry,') + '<br><em>' + (s.hero_line2||'Personally Handled') + '</em>';
+    }
+    if (s.location_sub) document.querySelector('.header p').textContent = s.location_sub;
+  } catch(e) {}
+}
+loadCMSSettings();
 </script>
 
 </body>
