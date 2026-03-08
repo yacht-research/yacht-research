@@ -462,32 +462,32 @@
       <p class="step-subtitle">Select all that apply</p>
 
       <div class="project-grid">
-        <div class="project-card" data-value="Yacht Acquisition" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Yacht Acquisition" onclick="selectCard(this)">
           <span class="project-card-icon">⛵</span>
           <p class="project-card-title">Buy a Yacht</p>
           <p class="project-card-desc">Private acquisition, new or pre-owned</p>
         </div>
-        <div class="project-card" data-value="Sell Your Yacht" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Sell Your Yacht" onclick="selectCard(this)">
           <span class="project-card-icon">💰</span>
           <p class="project-card-title">Sell Your Yacht</p>
           <p class="project-card-desc">On-market or discreet off-market sale</p>
         </div>
-        <div class="project-card" data-value="Charter" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Charter" onclick="selectCard(this)">
           <span class="project-card-icon">🌊</span>
           <p class="project-card-title">Charter</p>
           <p class="project-card-desc">Find or place a charter vessel</p>
         </div>
-        <div class="project-card" data-value="Partnership" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Partnership" onclick="selectCard(this)">
           <span class="project-card-icon">🤝</span>
           <p class="project-card-title">Partnership</p>
           <p class="project-card-desc">Broker collaboration or B2B network</p>
         </div>
-        <div class="project-card" data-value="Referral Programme" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Referral Programme" onclick="selectCard(this)">
           <span class="project-card-icon">🔗</span>
           <p class="project-card-title">Referral Programme</p>
           <p class="project-card-desc">Earn commission on introductions</p>
         </div>
-        <div class="project-card" data-value="Bespoke Services" onclick="toggleCard(this)">
+        <div class="project-card" data-value="Bespoke Services" onclick="selectCard(this)">
           <span class="project-card-icon">✨</span>
           <p class="project-card-title">Bespoke Services</p>
           <p class="project-card-desc">Crew, refit, management & more</p>
@@ -586,21 +586,18 @@ document.addEventListener('mousemove', e => {
 });
 
 // ── PROJECT CARDS ─────────────────────────────────────────────
-function toggleCard(el) {
-  el.classList.toggle('selected');
-  const val = el.dataset.value;
-  if (el.classList.contains('selected')) {
-    selectedProjects.push(val);
-  } else {
-    selectedProjects = selectedProjects.filter(v => v !== val);
-  }
+function selectCard(el) {
+  document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedProjects = [el.dataset.value];
 }
 
 // ── DYNAMIC FIELDS ────────────────────────────────────────────
 function buildDynamicFields() {
   const container = document.getElementById('dynamic-fields');
-  const isYacht = selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p));
-  const isPartnership = selectedProjects.includes('Partnership');
+  const project = selectedProjects[0] || '';
+  const isYacht = ['Yacht Acquisition','Sell Your Yacht','Charter','Bespoke Services'].includes(project);
+  const isPartnership = ['Partnership','Referral Programme'].includes(project);
 
   let html = '';
 
@@ -722,10 +719,11 @@ async function submitForm() {
   const projectType = selectedProjects.join(', ');
   const name = fname + ' ' + lname;
 
-  // Determine form_name for Google Sheets
+  // Map selected project to form_name
+  const project = selectedProjects[0] || '';
   let formName = 'Yacht Enquiry';
-  if (selectedProjects.includes('Partnership')) formName = 'Partnership Inquiry';
-  else if (selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p))) formName = 'Yacht Enquiry';
+  if (project === 'Partnership' || project === 'Referral Programme') formName = 'Partnership Inquiry';
+  else if (project === 'Bespoke Services') formName = 'Yacht Enquiry';
 
 
 
