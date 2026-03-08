@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yacht Research — Inquiry Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0f1e;
+    --navy-mid: #111827;
+    --navy-light: #1a2540;
+    --gold: #c9a84c;
+    --gold-light: #e8c96d;
+    --cream: #f8f5ef;
+    --text: #2c2c2c;
+    --muted: #7a7a7a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* Background */
+  .bg-grid {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  /* Layout */
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .header-eyebrow {
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .header h1 {
+    color: #fff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .header h1 em { color: var(--gold); font-style: italic; }
+
+  .gold-line {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 20px auto;
+  }
+
+  .header p {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.3s;
+  }
+  .progress-label.active { color: var(--gold); }
+
+  .progress-track {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 12px rgba(201,168,76,0.5);
+  }
+
+  /* Form card */
+  .form-card {
+    width: 100%;
+    max-width: 640px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 48px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s ease forwards;
+  }
+
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  .form-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px; height: 40px;
+    background: var(--gold);
+  }
+
+  /* Steps */
+  .step { display: none; }
+  .step.active { display: block; animation: stepIn 0.4s ease; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-title {
+    color: #fff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    margin-bottom: 8px;
+  }
+
+  .step-subtitle {
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  /* Project type cards */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .project-card {
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 20px;
+    cursor: none;
+    transition: all 0.25s ease;
+    position: relative;
+    background: transparent;
+  }
+
+  .project-card:hover {
+    border-color: rgba(201,168,76,0.5);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .project-card.selected {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  .project-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 12px; right: 12px;
+    color: var(--gold);
+    font-size: 12px;
+  }
+
+  .project-card-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .project-card-title {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .project-card-desc {
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  /* Inputs */
+  .field { margin-bottom: 24px; }
+
+  .field label {
+    display: block;
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: #fff;
+    padding: 14px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: none;
+    cursor: none;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: rgba(255,255,255,0.2);
+  }
+
+  .field select option {
+    background: var(--navy);
+    color: #fff;
+  }
+
+  .field textarea { resize: none; height: 100px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* Buttons */
+  .btn-next {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.25s ease;
+    margin-top: 8px;
+  }
+
+  .btn-next:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(201,168,76,0.25);
+  }
+
+  .btn-back {
+    background: transparent;
+    color: rgba(255,255,255,0.35);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: none;
+    margin-top: 16px;
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 8px;
+    transition: color 0.2s;
+  }
+  .btn-back:hover { color: rgba(255,255,255,0.7); }
+
+  /* Success screen */
+  .success-screen {
+    text-align: center;
+    padding: 20px 0;
+    display: none;
+  }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    font-size: 28px;
+  }
+
+  .success-screen h2 {
+    color: #fff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+
+  .success-screen p {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+
+  /* Footer links */
+  .footer-links {
+    margin-top: 48px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s ease forwards;
+  }
+
+  .footer-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-link:hover { color: var(--gold); border-color: rgba(201,168,76,0.3); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .form-card { padding: 32px 24px; }
+    .project-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="page">
+
+  <div class="header">
+    <span class="header-eyebrow">Yacht Research</span>
+    <h1>Your Enquiry,<br><em>Personally Handled</em></h1>
+    <div class="gold-line"></div>
+    <p>Dubai · French Riviera · Mediterranean</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-labels">
+      <span class="progress-label active" id="pl-1">01 Project</span>
+      <span class="progress-label" id="pl-2">02 Details</span>
+      <span class="progress-label" id="pl-3">03 Contact</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:33%"></div>
+    </div>
+  </div>
+
+  <div class="form-card">
+
+    <!-- STEP 1 — Project Type -->
+    <div class="step active" id="step-1">
+      <h2 class="step-title">What is your project?</h2>
+      <p class="step-subtitle">Select all that apply</p>
+
+      <div class="project-grid">
+        <div class="project-card" data-value="Yacht Acquisition" onclick="toggleCard(this)">
+          <span class="project-card-icon">⛵</span>
+          <p class="project-card-title">Buy a Yacht</p>
+          <p class="project-card-desc">Private acquisition, new or pre-owned</p>
+        </div>
+        <div class="project-card" data-value="Sell Your Yacht" onclick="toggleCard(this)">
+          <span class="project-card-icon">💰</span>
+          <p class="project-card-title">Sell Your Yacht</p>
+          <p class="project-card-desc">On-market or discreet off-market sale</p>
+        </div>
+        <div class="project-card" data-value="Charter" onclick="toggleCard(this)">
+          <span class="project-card-icon">🌊</span>
+          <p class="project-card-title">Charter</p>
+          <p class="project-card-desc">Find or place a charter vessel</p>
+        </div>
+        <div class="project-card" data-value="Partnership" onclick="toggleCard(this)">
+          <span class="project-card-icon">🤝</span>
+          <p class="project-card-title">Partnership</p>
+          <p class="project-card-desc">Broker collaboration or B2B network</p>
+        </div>
+        <div class="project-card" data-value="Referral Programme" onclick="toggleCard(this)">
+          <span class="project-card-icon">🔗</span>
+          <p class="project-card-title">Referral Programme</p>
+          <p class="project-card-desc">Earn commission on introductions</p>
+        </div>
+        <div class="project-card" data-value="Bespoke Services" onclick="toggleCard(this)">
+          <span class="project-card-icon">✨</span>
+          <p class="project-card-title">Bespoke Services</p>
+          <p class="project-card-desc">Crew, refit, management & more</p>
+        </div>
+      </div>
+
+      <button class="btn-next" onclick="nextStep(1)">Continue →</button>
+    </div>
+
+    <!-- STEP 2 — Project Details -->
+    <div class="step" id="step-2">
+      <h2 class="step-title">Tell us more</h2>
+      <p class="step-subtitle">Help us understand your requirements</p>
+
+      <div id="dynamic-fields"></div>
+
+      <button class="btn-next" onclick="nextStep(2)">Continue →</button>
+      <button class="btn-back" onclick="prevStep(2)">← Back</button>
+    </div>
+
+    <!-- STEP 3 — Contact Info -->
+    <div class="step" id="step-3">
+      <h2 class="step-title">Your contact details</h2>
+      <p class="step-subtitle">We'll reach out within 24 hours</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label>First Name *</label>
+          <input type="text" id="fname" placeholder="Jean-Paul">
+        </div>
+        <div class="field">
+          <label>Last Name *</label>
+          <input type="text" id="lname" placeholder="Dupont">
+        </div>
+      </div>
+      <div class="field">
+        <label>Email Address *</label>
+        <input type="email" id="email" placeholder="your@email.com">
+      </div>
+      <div class="field">
+        <label>Phone / WhatsApp</label>
+        <input type="tel" id="phone" placeholder="+971 50 000 0000">
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <input type="text" id="country" placeholder="UAE, France, Monaco...">
+      </div>
+
+      <button class="btn-next" id="submitBtn" onclick="submitForm()">Send Enquiry →</button>
+      <button class="btn-back" onclick="prevStep(3)">← Back</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success">
+      <div class="success-icon">⛵</div>
+      <h2>Enquiry Received</h2>
+      <div class="gold-line"></div>
+      <p>Thank you for reaching out to Yacht Research.<br>A member of our team will contact you personally<br>within 24 hours.</p>
+      <a href="https://yachtresearchgroup.com" class="btn-next" style="display:block;text-align:center;text-decoration:none;padding:18px;">
+        Explore Our Yachts →
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Footer links -->
+  <div class="footer-links">
+    <a href="https://yachtresearchgroup.com" class="footer-link">🌐 Website</a>
+    <a href="https://www.instagram.com/yacht_research/" class="footer-link">📸 Instagram</a>
+    <a href="https://wa.me/qr/5NK5SR22CXGNC1" class="footer-link">💬 WhatsApp UAE</a>
+    <a href="https://wa.me/message/CVQVHBO3GXLZP1" class="footer-link">💬 WhatsApp FR</a>
+    <a href="https://linktr.ee/yacht_research" class="footer-link">🔗 All Links</a>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────
+// Toutes les clés API sont gérées côté serveur dans Google Apps Script
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
+
+// ── STATE ────────────────────────────────────────────────────
+let selectedProjects = [];
+let formData = {};
+
+// ── CURSOR ───────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 60);
+});
+
+// ── PROJECT CARDS ─────────────────────────────────────────────
+function toggleCard(el) {
+  el.classList.toggle('selected');
+  const val = el.dataset.value;
+  if (el.classList.contains('selected')) {
+    selectedProjects.push(val);
+  } else {
+    selectedProjects = selectedProjects.filter(v => v !== val);
+  }
+}
+
+// ── DYNAMIC FIELDS ────────────────────────────────────────────
+function buildDynamicFields() {
+  const container = document.getElementById('dynamic-fields');
+  const isYacht = selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p));
+  const isPartnership = selectedProjects.includes('Partnership');
+
+  let html = '';
+
+  if (isYacht) {
+    html += `
+    <div class="field">
+      <label>Budget Range</label>
+      <select id="budget">
+        <option value="">Select a range</option>
+        <option>Under €500K</option>
+        <option>€500K – €1M</option>
+        <option>€1M – €3M</option>
+        <option>€3M – €10M</option>
+        <option>€10M+</option>
+        <option>Price on Request</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Yacht Type</label>
+        <select id="yacht_type">
+          <option value="">Any</option>
+          <option>Motor Yacht</option>
+          <option>Sailing Yacht</option>
+          <option>Catamaran</option>
+          <option>Superyacht (30m+)</option>
+          <option>Open / Sport</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Preferred Market</label>
+        <select id="market">
+          <option value="">Any</option>
+          <option>Dubai / UAE</option>
+          <option>French Riviera</option>
+          <option>Mediterranean</option>
+          <option>Atlantic</option>
+          <option>Worldwide</option>
+        </select>
+      </div>
+    </div>`;
+  }
+
+  if (isPartnership) {
+    html += `
+    <div class="field">
+      <label>Company / Brokerage</label>
+      <input type="text" id="company" placeholder="Your company name">
+    </div>
+    <div class="field">
+      <label>Role</label>
+      <input type="text" id="role" placeholder="Yacht Broker, Concierge, Real Estate...">
+    </div>`;
+  }
+
+  html += `
+  <div class="field">
+    <label>Message</label>
+    <textarea id="message" placeholder="Tell us more about your project, timeline, or any specific requirements..."></textarea>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function nextStep(from) {
+  if (from === 1) {
+    if (selectedProjects.length === 0) {
+      alert('Please select at least one option.');
+      return;
+    }
+    buildDynamicFields();
+  }
+
+  if (from === 2) {
+    formData.message = document.getElementById('message')?.value || '';
+    formData.budget = document.getElementById('budget')?.value || '';
+    formData.yacht_type = document.getElementById('yacht_type')?.value || '';
+    formData.market = document.getElementById('market')?.value || '';
+    formData.company = document.getElementById('company')?.value || '';
+    formData.role = document.getElementById('role')?.value || '';
+  }
+
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + (from + 1)).classList.add('active');
+
+  const fills = { 1: '33%', 2: '66%', 3: '100%' };
+  document.getElementById('progressFill').style.width = fills[from] || '66%';
+
+  ['pl-1','pl-2','pl-3'].forEach((id, i) => {
+    document.getElementById(id).classList.toggle('active', i < from);
+  });
+}
+
+function prevStep(from) {
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + (from - 1)).classList.add('active');
+  const fills = { 2: '33%', 3: '66%' };
+  document.getElementById('progressFill').style.width = fills[from] || '33%';
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────
+async function submitForm() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const country = document.getElementById('country').value.trim();
+
+  if (!fname || !email) {
+    alert('Please fill in your name and email address.');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const projectType = selectedProjects.join(', ');
+  const name = fname + ' ' + lname;
+
+  // Determine form_name for Google Sheets
+  let formName = 'Yacht Inquiry';
+  if (selectedProjects.includes('Partnership')) formName = 'Partnership Inquiry';
+  else if (selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p))) formName = 'Contact Enquiry';
+
+
+
+  // 1. Send to Google Apps Script (Sheets + email)
+  try {
+    const params = new URLSearchParams({
+      form_name: formName,
+      name, email, phone, country,
+      type: projectType,
+      budget: formData.budget || '',
+      yacht_type: formData.yacht_type || '',
+      market: formData.market || '',
+      company: formData.company || '',
+      role: formData.role || '',
+      message: formData.message || '',
+      submitted_at: new Date().toLocaleString('fr-FR')
+    });
+    await fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' });
+  } catch(e) { console.log('Sheets error:', e); }
+
+  // Brevo contact ajout géré par Google Apps Script côté serveur
+
+  // Show success
+  document.getElementById('step-3').classList.remove('active');
+  document.getElementById('success').style.display = 'block';
+  document.getElementById('progressFill').style.width = '100%';
+}
+</script>
+
+</body>
+</html>
