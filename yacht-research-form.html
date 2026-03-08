@@ -723,9 +723,9 @@ async function submitForm() {
   const name = fname + ' ' + lname;
 
   // Determine form_name for Google Sheets
-  let formName = 'Yacht Inquiry';
+  let formName = 'Yacht Enquiry';
   if (selectedProjects.includes('Partnership')) formName = 'Partnership Inquiry';
-  else if (selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p))) formName = 'Contact Enquiry';
+  else if (selectedProjects.some(p => ['Yacht Acquisition','Sell Your Yacht','Charter'].includes(p))) formName = 'Yacht Enquiry';
 
 
 
