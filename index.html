@@ -418,7 +418,10 @@ footer{padding:60px 30px 30px;}
         <div class="form-field"><label>Role</label><input id="p-role" type="text" placeholder="Your role"></div>
         <div class="form-field"><label>Country</label><input id="p-country" type="text" placeholder="Country of operation"></div>
       </div>
-      <div class="form-field"><label>Email</label><input id="p-email" type="email" placeholder="your@email.com"></div>
+      <div class="form-row">
+        <div class="form-field"><label>Email</label><input id="p-email" type="email" placeholder="your@email.com"></div>
+        <div class="form-field"><label>Phone / WhatsApp</label><input id="p-phone" type="tel" placeholder="+971 50 000 0000"></div>
+      </div>
       <div class="form-field"><label>Message</label><textarea id="p-message" placeholder="Describe your business and how you'd like to collaborate..."></textarea></div>
       <button id="btn-partnership" class="btn-submit">Submit Partnership Inquiry</button>
     </div>
@@ -569,6 +572,7 @@ document.getElementById('btn-partnership').addEventListener('click',function(){
   fd.append('role',document.getElementById('p-role').value);
   fd.append('country',document.getElementById('p-country').value);
   fd.append('email',document.getElementById('p-email').value);
+  fd.append('phone',document.getElementById('p-phone').value);
   fd.append('message',document.getElementById('p-message').value);
   if(!document.getElementById('p-name').value||!document.getElementById('p-email').value)return showToast('Please fill in your name and email.',false);
   submitForm(fd,this,'Partnership Inquiry');
