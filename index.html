@@ -198,6 +198,7 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 .mobile-menu.open{transform:translateX(0);}
 .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
 .mobile-menu a:hover{color:var(--gold);}
+.mobile-menu .mobile-enquire-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:16px 40px;border:none;margin-bottom:8px;}
 .close-menu{position:absolute;top:30px;right:30px;font-size:30px;color:var(--white);cursor:pointer;background:none;border:none;}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
@@ -208,6 +209,7 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 nav{padding:20px 30px;}nav.scrolled{padding:14px 30px;}
 .nav-links,.nav-cta{display:none;}
 .hamburger{display:flex;}
+.nav-cta{display:inline-block;font-size:9px;padding:8px 14px;letter-spacing:1.5px;}
 #why,#services,#yachts,#about,#charter,#bespoke,#partnerships,#referral,#recruitment,#contact{padding:80px 30px;}
 footer{padding:60px 30px 30px;}
 .why-grid,.about-grid,.bespoke-inner,.recruitment-inner,.contact-inner{grid-template-columns:1fr;gap:50px;}
@@ -246,7 +248,7 @@ footer{padding:60px 30px 30px;}
   <a href="#partnerships" onclick="toggleMenu()">Partnerships</a>
   <a href="#referral" onclick="toggleMenu()">Referral</a>
   <a href="#recruitment" onclick="toggleMenu()">Careers</a>
-  <a href="/yacht-research-form.html" onclick="toggleMenu()">Enquire Now</a>
+  <a href="/yacht-research-form.html" class="mobile-enquire-cta" onclick="toggleMenu()">Enquire Now</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
 </div>
 <nav id="navbar">
