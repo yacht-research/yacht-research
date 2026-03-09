@@ -825,9 +825,11 @@ function submitNewsletter(){
   var ln=document.getElementById('nl-lastname').value.trim();
   var em=document.getElementById('nl-email').value.trim();
   if(!fn||!em){alert('Please enter your name and email.');return;}
+  var params = new URLSearchParams({form_name:'Newsletter',firstname:fn,lastname:ln,email:em});
   fetch('https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec',{
     method:'POST',
-    body:JSON.stringify({form_name:'Newsletter',firstname:fn,lastname:ln,email:em})
+    body:params,
+    mode:'no-cors'
   }).then(function(){
     document.getElementById('popupForm').style.display='none';
     document.getElementById('popupSuccess').style.display='block';
