@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /yacht-research-form.html
+Disallow: /admin/
+Disallow: /content/
+Sitemap: https://yachtresearchgroup.com/sitemap.xml
