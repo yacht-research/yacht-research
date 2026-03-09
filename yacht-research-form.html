@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Yacht Research — Enquiry Form</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -428,6 +430,16 @@
     .project-grid { grid-template-columns: 1fr; }
     .field-row { grid-template-columns: 1fr; }
   }
+
+/* ─── COOKIE BANNER ─────────────────────────────────────────── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
+#cookie-banner.visible{transform:translateY(0);}
+#cookie-banner p{color:rgba(255,255,255,0.6);font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:1px;line-height:1.7;margin:0;flex:1;min-width:200px;}
+#cookie-banner a{color:#c9a84c;text-decoration:underline;}
+.cookie-buttons{display:flex;gap:12px;flex-shrink:0;}
+#cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
+#cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+#cookie-decline:hover{color:rgba(255,255,255,0.7);}
 </style>
 </head>
 <body>
@@ -512,6 +524,8 @@
     </div>
 
     <!-- STEP 3 — Contact Info -->
+    <!-- Honeypot anti-spam: invisible for humans, bots will fill it -->
+    <input type="text" id="honeypot" name="website" style="display:none;position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
     <div class="step" id="step-3">
       <h2 class="step-title">Your contact details</h2>
       <p class="step-subtitle">We'll reach out within 24 hours</p>
@@ -539,7 +553,13 @@
         <input type="text" id="country" placeholder="UAE, France, Monaco...">
       </div>
 
-      <button class="btn-next" id="submitBtn" onclick="submitForm()">Send Enquiry →</button>
+      <div style="margin-bottom:20px;">
+      <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.5;">
+        <input type="checkbox" id="gdprConsent" required style="margin-top:3px;accent-color:#c9a84c;width:16px;height:16px;flex-shrink:0;">
+        <span>I accept the <a href="/privacy-policy" style="color:#c9a84c;text-decoration:underline;">Privacy Policy</a> and consent to Yacht Research processing my personal data to respond to my enquiry.</span>
+      </label>
+    </div>
+    <button class="btn-next" id="submitBtn" onclick="submitForm()">Send Enquiry →</button>
       <button class="btn-back" onclick="prevStep(3)">← Back</button>
     </div>
 
@@ -704,6 +724,12 @@ function prevStep(from) {
 
 // ── SUBMIT ────────────────────────────────────────────────────
 async function submitForm() {
+  // GDPR check
+  const gdpr = document.getElementById('gdprConsent');
+  if (gdpr && !gdpr.checked) {
+    alert('Please accept the Privacy Policy to continue.');
+    return;
+  }
   const fname = document.getElementById('fname').value.trim();
   const lname = document.getElementById('lname').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -732,7 +758,9 @@ async function submitForm() {
 
   // 1. Send to Google Apps Script (Sheets + email)
   try {
+    const honeypot = document.getElementById('honeypot') ? document.getElementById('honeypot').value : '';
     const params = new URLSearchParams({
+      website: honeypot,
       form_name: formName,
       name, email, phone, country,
       type: projectType,
@@ -773,5 +801,26 @@ async function loadCMSSettings() {
 loadCMSSettings();
 </script>
 
+<!-- ─── COOKIE BANNER ─────────────────────────────────────────── -->
+<div id="cookie-banner">
+  <p>We use cookies to ensure basic website functionality and to improve your experience. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a> and consent to our use of cookies.</p>
+  <div class="cookie-buttons">
+    <button id="cookie-decline">Decline</button>
+    <button id="cookie-accept">Accept</button>
+  </div>
+</div>
+<script>
+// ─── COOKIE BANNER ───────────────────────────────────────────
+(function(){
+  function getCookie(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}
+  function setCookie(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*24*60*60*1000));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+  var consent=getCookie('yr_cookie_consent');
+  if(!consent){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}
+  var a=document.getElementById('cookie-accept');
+  var d=document.getElementById('cookie-decline');
+  if(a)a.addEventListener('click',function(){setCookie('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+  if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+})();
+</script>
 </body>
 </html>
