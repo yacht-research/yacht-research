@@ -5,6 +5,8 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yacht Research | The Art of Effortless Yachting</title>
 <meta name="description" content="Yacht Research, international luxury yacht brokerage. Yacht sales, off-market acquisitions, charter placements & buyer representation. Dubai, France, Mediterranean, Middle East, USA.">
@@ -264,6 +266,16 @@ footer{padding:60px 30px 30px;}
 .popup-submit:hover{background:var(--gold-light);}
 .popup-success{display:none;text-align:center;padding:20px 0;}
 .popup-success p{color:var(--gold);font-size:13px;letter-spacing:1px;}
+
+/* ─── COOKIE BANNER ─────────────────────────────────────────── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
+#cookie-banner.visible{transform:translateY(0);}
+#cookie-banner p{color:rgba(255,255,255,0.6);font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:1px;line-height:1.7;margin:0;flex:1;min-width:200px;}
+#cookie-banner a{color:#c9a84c;text-decoration:underline;}
+.cookie-buttons{display:flex;gap:12px;flex-shrink:0;}
+#cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
+#cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+#cookie-decline:hover{color:rgba(255,255,255,0.7);}
 </style>
 </head>
 <body>
@@ -456,7 +468,11 @@ footer{padding:60px 30px 30px;}
         <div class="form-field"><label>Phone / WhatsApp</label><input id="p-phone" type="tel" placeholder="+971 50 000 0000"></div>
       </div>
       <div class="form-field"><label>Message</label><textarea id="p-message" placeholder="Describe your business and how you'd like to collaborate..."></textarea></div>
-      <button id="btn-partnership" class="btn-submit">Submit Partnership Inquiry</button>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+  <input type="checkbox" id="gdpr-partnership" required style="margin-top:3px;accent-color:#c9a84c;width:15px;height:15px;flex-shrink:0;">
+  <label for="gdpr-partnership" style="font-size:11px;color:rgba(255,255,255,0.5);font-family:Montserrat,sans-serif;line-height:1.6;">I accept the <a href="/privacy-policy" style="color:#c9a84c;text-decoration:underline;">Privacy Policy</a> and consent to Yacht Research processing my personal data.</label>
+</div>
+<button id="btn-partnership" class="btn-submit">Submit Partnership Inquiry</button>
     </div>
   </div>
 </section>
@@ -530,7 +546,11 @@ footer{padding:60px 30px 30px;}
         </select>
       </div>
       <div class="form-field"><label>Message</label><textarea id="c-message" placeholder="Tell us about your requirements..."></textarea></div>
-      <button id="btn-contact" class="btn-submit">Send Enquiry</button>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+  <input type="checkbox" id="gdpr-contact" required style="margin-top:3px;accent-color:#c9a84c;width:15px;height:15px;flex-shrink:0;">
+  <label for="gdpr-contact" style="font-size:11px;color:rgba(255,255,255,0.5);font-family:Montserrat,sans-serif;line-height:1.6;">I accept the <a href="/privacy-policy" style="color:#c9a84c;text-decoration:underline;">Privacy Policy</a> and consent to Yacht Research processing my personal data.</label>
+</div>
+<button id="btn-contact" class="btn-submit">Send Enquiry</button>
     </div>
   </div>
 </section>
@@ -630,7 +650,9 @@ document.getElementById('btn-contact').addEventListener('click',function(){
   fd.append('email',document.getElementById('c-email').value);
   fd.append('type',document.getElementById('c-type').value);
   fd.append('message',document.getElementById('c-message').value);
+  fd.append('website','');
   if(!document.getElementById('c-name').value||!document.getElementById('c-email').value)return showToast('Please fill in your name and email.',false);
+  if(!document.getElementById('gdpr-contact').checked)return showToast('Please accept the Privacy Policy.',false);
   submitForm(fd,this,'Contact Enquiry');
 });
 document.getElementById('btn-partnership').addEventListener('click',function(){
@@ -642,7 +664,9 @@ document.getElementById('btn-partnership').addEventListener('click',function(){
   fd.append('email',document.getElementById('p-email').value);
   fd.append('phone',document.getElementById('p-phone').value);
   fd.append('message',document.getElementById('p-message').value);
+  fd.append('website','');
   if(!document.getElementById('p-name').value||!document.getElementById('p-email').value)return showToast('Please fill in your name and email.',false);
+  if(!document.getElementById('gdpr-partnership').checked)return showToast('Please accept the Privacy Policy.',false);
   submitForm(fd,this,'Partnership Inquiry');
 });
 </script>
@@ -838,6 +862,27 @@ function submitNewsletter(){
     document.getElementById('popupSuccess').style.display='block';
   });
 }
+</script>
+<!-- ─── COOKIE BANNER ─────────────────────────────────────────── -->
+<div id="cookie-banner">
+  <p>We use cookies to ensure basic website functionality and to improve your experience. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a> and consent to our use of cookies.</p>
+  <div class="cookie-buttons">
+    <button id="cookie-decline">Decline</button>
+    <button id="cookie-accept">Accept</button>
+  </div>
+</div>
+<script>
+// ─── COOKIE BANNER ───────────────────────────────────────────
+(function(){
+  function getCookie(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}
+  function setCookie(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*24*60*60*1000));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+  var consent=getCookie('yr_cookie_consent');
+  if(!consent){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}
+  var a=document.getElementById('cookie-accept');
+  var d=document.getElementById('cookie-decline');
+  if(a)a.addEventListener('click',function(){setCookie('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+  if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+})();
 </script>
 </body>
 </html>
