@@ -58,31 +58,25 @@ collections:
         format: json
         fields:
           - { label: Label, name: label, widget: string, default: "Why Clients Choose Us" }
-          - { label: "Titre (HTML autorisé)", name: title, widget: string }
+          - { label: "Titre ligne 1", name: title_line1, widget: string, default: "Strategic Access." }
+          - { label: "Titre ligne 2 (italic doré)", name: title_line2, widget: string, default: "Stronger Results." }
           - { label: Paragraphe 1, name: para1, widget: text }
           - { label: Paragraphe 2, name: para2, widget: text }
-          - { label: Paragraphe 3, name: para3, widget: text }
-          - { label: "Stat — Chiffre", name: stat_num, widget: string, default: "5" }
-          - { label: "Stat — Label", name: stat_label, widget: string, default: "Continents of Coverage" }
+          - { label: "Citation (italic doré)", name: quote, widget: string, required: false }
           - { label: Image, name: image, widget: image }
-
-      # ABOUT
-      - label: "🏢 About"
-        name: about
-        file: content/about.json
-        format: json
-        fields:
-          - { label: "Titre (HTML autorisé)", name: title, widget: string }
-          - { label: Paragraphe 1, name: para1, widget: text }
-          - { label: Paragraphe 2, name: para2, widget: text }
-          - { label: Citation (quote), name: quote, widget: string }
-          - { label: Image, name: image, widget: image }
-          - label: Présences
-            name: presences
+          - label: "Notre Expertise — Titre"
+            name: expertise_title
+            widget: string
+            default: "A Complete Suite of Yachting Services"
+            required: false
+          - label: Services
+            name: services
             widget: list
+            required: false
             fields:
-              - { label: Ville, name: city, widget: string }
-              - { label: Région, name: region, widget: string }
+              - { label: Numéro, name: num, widget: string }
+              - { label: Titre, name: title, widget: string }
+              - { label: Description, name: desc, widget: text }
 
       # CHARTER
       - label: "⚓ Charter"
@@ -136,6 +130,67 @@ collections:
           - { label: "Titre de la page", name: title, widget: string }
           - { label: "Meta description", name: description, widget: text }
           - { label: "Image réseaux sociaux (OG)", name: og_image, widget: image }
+
+
+      # BESPOKE / SERVICES
+      - label: "✨ Bespoke Services"
+        name: bespoke
+        file: content/bespoke.json
+        format: json
+        fields:
+          - { label: Titre, name: title, widget: string, default: "Beyond Brokerage" }
+          - { label: Intro, name: intro, widget: text }
+          - label: Services
+            name: items
+            widget: list
+            fields:
+              - { label: Titre, name: title, widget: string }
+              - { label: Description, name: desc, widget: text }
+
+      # PARTNERSHIPS
+      - label: "🤝 Partnerships"
+        name: partnerships
+        file: content/partnerships.json
+        format: json
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - label: Types de partenariat
+            name: types
+            widget: list
+            fields:
+              - { label: Titre, name: title, widget: string }
+              - { label: Description, name: desc, widget: text }
+
+      # REFERRAL
+      - label: "💰 Referral Programme"
+        name: referral
+        file: content/referral.json
+        format: json
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - label: Étapes
+            name: steps
+            widget: list
+            fields:
+              - { label: Numéro, name: num, widget: string }
+              - { label: Titre, name: title, widget: string }
+              - { label: Description, name: desc, widget: text }
+
+      # RECRUITMENT
+      - label: "👔 Recruitment"
+        name: recruitment
+        file: content/recruitment.json
+        format: json
+        fields:
+          - { label: Titre, name: title, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - label: Postes ouverts
+            name: roles
+            widget: list
+            fields:
+              - { label: Intitulé du poste, name: title, widget: string }
 
   # ── FORMULAIRE STANDALONE ────────────────────────────────
   - label: "📋 Formulaire Enquête"
