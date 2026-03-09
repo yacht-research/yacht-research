@@ -63,24 +63,6 @@ section{position:relative;}
 .section-title em{font-style:italic;color:var(--gold-light);}
 .section-body{font-size:13px;line-height:2;color:rgba(255,255,255,0.65);font-weight:300;letter-spacing:0.5px;}
 .gold-divider{width:60px;height:1px;background:var(--gold);margin:28px 0;}
-#why{padding:120px 60px;background:var(--navy);}
-.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
-.why-image{position:relative;height:600px;overflow:hidden;}
-.why-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s ease;}
-.why-image:hover img{transform:scale(1.03);}
-.why-image-frame{position:absolute;inset:20px;border:1px solid rgba(201,168,76,0.3);pointer-events:none;}
-#services{padding:120px 60px;background:var(--navy-mid);}
-.services-header{text-align:center;max-width:700px;margin:0 auto 80px;}
-.services-header .gold-divider{margin:28px auto;}
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1200px;margin:0 auto;}
-.service-card{background:var(--navy-light);padding:60px 40px;position:relative;overflow:hidden;transition:all 0.4s ease;cursor:pointer;}
-.service-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform 0.4s ease;}
-.service-card:hover{background:rgba(201,168,76,0.07);}
-.service-card:hover::before{transform:scaleX(1);}
-.service-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:rgba(201,168,76,0.12);line-height:1;margin-bottom:24px;}
-.service-icon{width:40px;height:1px;background:var(--gold);margin-bottom:24px;}
-.service-card h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:16px;letter-spacing:0.5px;}
-.service-card p{font-size:12px;line-height:2;color:rgba(255,255,255,0.55);font-weight:300;}
 #yachts{padding:120px 60px;background:var(--navy);}
 .yachts-header{display:flex;justify-content:space-between;align-items:flex-end;max-width:1200px;margin:0 auto 60px;}
 .yachts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1200px;margin:0 auto 60px;}
@@ -190,11 +172,11 @@ nav{padding:20px 30px;}nav.scrolled{padding:14px 30px;}
 .nav-links,.nav-cta{display:none;}
 .hamburger{display:flex;}
 .nav-cta{display:inline-block;font-size:9px;padding:8px 14px;letter-spacing:1.5px;}
-#why,#services,#yachts,#about,#charter,#contact{padding:80px 30px;}
+#why,#yachts,#about,#charter,#contact{padding:80px 30px;}
 footer{padding:60px 30px 30px;}
-.why-grid,.about-grid,.recruitment-inner,.contact-inner{grid-template-columns:1fr;gap:50px;}
+.about-grid,.recruitment-inner,.contact-inner{grid-template-columns:1fr;gap:50px;}
 .partnerships-header{grid-template-columns:1fr;gap:40px;}
-.services-grid{grid-template-columns:1fr 1fr;}
+
 .partner-types{grid-template-columns:1fr 1fr;}
 .charter-regions{grid-template-columns:1fr 1fr;}
 .yachts-grid{grid-template-columns:1fr 1fr;}
@@ -258,9 +240,9 @@ footer{padding:60px 30px 30px;}
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
   <a href="#yachts" onclick="toggleMenu()">Buy</a>
   <a href="#charter" onclick="toggleMenu()">Charter</a>
+  <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
   <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
   <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
   <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
@@ -269,11 +251,11 @@ footer{padding:60px 30px 30px;}
   <a href="#newsletter-section" onclick="toggleMenu()" style="color:var(--gold);font-size:18px;letter-spacing:3px;text-transform:uppercase;font-family:'Montserrat',sans-serif;">Newsletter</a>
 </div>
 <nav id="navbar">
-  <a href="#hero" class="nav-logo"><img src="/images/uploads/yacht-research-logo.png" alt="Yacht Research" style="height:48px;mix-blend-mode:screen;filter:brightness(1.1);"></a>
+  <a href="#hero" class="nav-logo">Yacht <span>Research</span></a>
   <ul class="nav-links">
-    <li><a href="/why-us.html">Why Us</a></li>
     <li><a href="#yachts">Buy</a></li>
     <li><a href="#charter">Charter</a></li>
+    <li><a href="/why-us.html">Why Us</a></li>
     <li><a href="/bespoke.html">Services</a></li>
     <li><a href="/partnerships.html">Partnerships</a></li>
     <li><a href="/recruitment.html">Recruitment</a></li>
@@ -298,39 +280,8 @@ footer{padding:60px 30px 30px;}
   </div>
 
 </section>
-<section id="why">
-  <div class="why-grid">
-    <div class="why-image reveal">
-      <img src="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/perfect-dubai-private-yacht-tour-for-group%20(1).webp" alt="Luxury Yacht">
-      <div class="why-image-frame"></div>
-    </div>
-    <div class="reveal reveal-delay-1">
-      <p class="section-label">Why Clients Choose Us</p>
-      <h2 class="section-title">Strategic Access.<br><em>Stronger Results.</em></h2>
-      <div class="gold-divider"></div>
-      <p class="section-body">In yachting, access defines opportunity. That is our advantage.</p><br>
-      <p class="section-body">Through direct B2B partnerships, we secure preferential charter rates and off-market listings not available to the public — giving our clients a decisive edge in every transaction.</p><br>
-      <p class="section-body" style="color:var(--gold-pale);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:15px;">Strategic access. Stronger pricing. Trusted guidance.</p><br><br>
-      <a href="/yacht-research-form.html" class="btn-primary">Enquire Now</a>
-    </div>
-  </div>
-</section>
-<section id="services">
-  <div class="services-header reveal">
-    <p class="section-label">Our Expertise</p>
-    <h2 class="section-title">A Complete Suite of<br><em>Yachting Services</em></h2>
-    <div class="gold-divider"></div>
-    <p class="section-body">From acquisition to charter, from off-market sourcing to bespoke services: Yacht Research accompanies you at every stage of your yachting journey.</p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card reveal"><div class="service-num">01</div><div class="service-icon"></div><h3>Luxury Yacht Sales</h3><p>Access to an international portfolio of yachts for sale, including exclusive off-market opportunities secured through our global brokerage network.</p></div>
-    <div class="service-card reveal reveal-delay-1"><div class="service-num">02</div><div class="service-icon"></div><h3>Charter Placements</h3><p>Worldwide charter opportunities with preferential rates. Mediterranean, Middle East, Caribbean and beyond, curated for UHNW clients.</p></div>
-    <div class="service-card reveal reveal-delay-2"><div class="service-num">03</div><div class="service-icon"></div><h3>Buyer Representation</h3><p>Dedicated representation for buyers navigating the global market. We identify, negotiate, and secure the right yacht at the right value.</p></div>
-    <div class="service-card reveal"><div class="service-num">04</div><div class="service-icon"></div><h3>Off-Market Sourcing</h3><p>Discreet access to private listings not publicly available. Our network ensures you discover opportunities before they reach the open market.</p></div>
-    <div class="service-card reveal reveal-delay-1"><div class="service-num">05</div><div class="service-icon"></div><h3>Broker Collaboration</h3><p>Strategic co-brokerage arrangements with international partners. Shared listings, qualified buyers, and transparent collaboration.</p></div>
-    <div class="service-card reveal reveal-delay-2"><div class="service-num">06</div><div class="service-icon"></div><h3>Bespoke Services</h3><p>Refit, insurance, marina solutions, and yacht management. A white-glove approach to every aspect of yacht ownership.</p></div>
-  </div>
-</section>
+
+
 <section id="yachts">
   <div class="yachts-header reveal">
     <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2></div>
@@ -448,8 +399,8 @@ footer{padding:60px 30px 30px;}
       <p>International luxury yacht brokerage specialising in sales, charters, and private acquisitions. Dubai &middot; French Riviera &middot; Mediterranean &middot; Atlantic.</p>
     </div>
     <div class="footer-col"><h4>Services</h4><ul><li><a href="#yachts">Buy a Yacht</a></li><li><a href="#contact">Sell Your Yacht</a></li><li><a href="#charter">Charter</a></li><li><a href="/bespoke.html">Bespoke Services</a></li></ul></div>
-    <div class="footer-col"><h4>Company</h4><ul><li><a href="#about">About Us</a></li><li><a href="#partnerships">Partnerships</a></li><li><a href="#referral">Referral Programme</a></li><li><a href="#recruitment">Careers</a></li></ul></div>
-    <div class="footer-col"><h4>Connect</h4><ul><li><a href="#contact">Contact</a></li><li><a href="https://linktr.ee/yacht_research" target="_blank">Linktree</a></li><li><a href="#partnerships">B2B Network</a></li></ul>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="/why-us.html">Why Us</a></li><li><a href="/partnerships.html">Partnerships</a></li><li><a href="/partnerships.html#referral">Referral Programme</a></li><li><a href="/recruitment.html">Recruitment</a></li></ul></div>
+    <div class="footer-col"><h4>Connect</h4><ul><li><a href="#contact">Contact</a></li><li><a href="https://linktr.ee/yacht_research" target="_blank">Linktree</a></li><li><a href="/partnerships.html">B2B Network</a></li></ul>
   <div class="footer-social">
     <a href="https://www.instagram.com/yacht_research/" target="_blank" title="Instagram">&#128247;</a>
     <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" title="WhatsApp UAE">&#128172;</a>
