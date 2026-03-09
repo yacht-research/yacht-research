@@ -40,8 +40,8 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);padding:1
 .nav-links a:hover::after{right:0;}
 .nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 24px;text-decoration:none;transition:all 0.3s ease;}
 .nav-cta:hover{background:var(--gold);color:var(--navy);}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;}
-.hamburger span{width:24px;height:1px;background:var(--white);transition:all 0.3s;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;z-index:1000;position:relative;}
+.hamburger span{width:24px;height:1px;background:var(--white);transition:all 0.35s ease;display:block;transform-origin:center;}
 #hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,15,30,0.85) 0%,rgba(10,15,30,0.4) 50%,rgba(10,15,30,0.75) 100%),url('https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/birthday-yacht-party-in-dubai-with-searide%20(1)%20(1).webp') center/cover no-repeat;animation:heroZoom 20s ease infinite alternate;}
 @keyframes heroZoom{from{transform:scale(1);}to{transform:scale(1.06);}}
@@ -69,7 +69,7 @@ section{position:relative;}
 .why-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s ease;}
 .why-image:hover img{transform:scale(1.03);}
 .why-image-frame{position:absolute;inset:20px;border:1px solid rgba(201,168,76,0.3);pointer-events:none;}
-.why-stat{position:absolute;bottom:-20px;right:-20px;background:var(--gold);color:var(--navy);padding:24px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px;}
+.why-stat{position:absolute;bottom:-10px;right:-10px;background:var(--gold);color:var(--navy);padding:20px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px;}
 .why-stat .num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;line-height:1;}
 .why-stat .label{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-top:6px;text-align:center;width:100%;}
 #services{padding:120px 60px;background:var(--navy-mid);}
@@ -194,10 +194,13 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 .footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
 .mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
 .mobile-menu.open{transform:translateX(0);}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
 .mobile-menu a:hover{color:var(--gold);}
 .mobile-menu .mobile-enquire-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:16px 40px;border:none;margin-bottom:8px;}
-.close-menu{position:absolute;top:30px;right:30px;font-size:30px;color:var(--white);cursor:pointer;background:none;border:none;}
+
 .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 .reveal-delay-1{transition-delay:0.15s;}
@@ -216,7 +219,7 @@ footer{padding:60px 30px 30px;}
 .partner-types{grid-template-columns:1fr 1fr;}
 .charter-regions{grid-template-columns:1fr 1fr;}
 .yachts-grid{grid-template-columns:1fr 1fr;}
-.why-stat{right:10px;bottom:10px;}
+.why-stat{right:0;bottom:0;left:0;width:100%;position:relative;margin-top:-4px;border-radius:0;}
 .about-quote{position:relative;left:0;bottom:0;max-width:100%;}
 .footer-top{grid-template-columns:1fr 1fr;gap:40px;}
 .referral-steps{grid-template-columns:1fr;}
@@ -278,7 +281,6 @@ footer{padding:60px 30px 30px;}
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="mobile-menu" id="mobileMenu">
-  <button class="close-menu" onclick="toggleMenu()">&#x2715;</button>
   <a href="#why" onclick="toggleMenu()">Why Us</a>
   <a href="#yachts" onclick="toggleMenu()">Buy</a>
   <a href="#about" onclick="toggleMenu()">About</a>
@@ -614,7 +616,7 @@ document.querySelectorAll('a,button,.service-card,.yacht-card,.charter-region,.r
   el.addEventListener('mouseleave',function(){ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(201,168,76,0.5)';});
 });
 window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.hamburger').classList.toggle('open');}
 var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el);});
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
