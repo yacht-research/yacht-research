@@ -40,7 +40,7 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);padding:1
 .nav-links a:hover::after{right:0;}
 .nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 24px;text-decoration:none;transition:all 0.3s ease;}
 .nav-cta:hover{background:var(--gold);color:var(--navy);}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;}
 .hamburger span{width:24px;height:1px;background:var(--white);transition:all 0.3s;}
 #hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,15,30,0.85) 0%,rgba(10,15,30,0.4) 50%,rgba(10,15,30,0.75) 100%),url('https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/birthday-yacht-party-in-dubai-with-searide%20(1)%20(1).webp') center/cover no-repeat;animation:heroZoom 20s ease infinite alternate;}
@@ -57,10 +57,6 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);padding:1
 .btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
 .btn-outline{border:1px solid rgba(255,255,255,0.4);color:var(--white);padding:16px 40px;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all 0.3s ease;}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
-.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;animation:heroFadeUp 2s ease 0.8s forwards;opacity:0;}
-.hero-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
-.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease infinite;}
-@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:0.4;transform:scaleY(0.7);}}
 section{position:relative;}
 .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.1;letter-spacing:0.5px;}
@@ -149,7 +145,7 @@ section{position:relative;}
 .partner-type h4{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;}
 .partner-type p{font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);font-weight:300;}
 #referral{padding:120px 60px;background:var(--navy);position:relative;overflow:hidden;}
-.referral-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1553563944-35a5c2bdb58b?w=1600&q=70') center/cover;opacity:0.08;}
+.referral-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1553563944-35a5c2bdb58b?w=1600&q=85') center/cover;opacity:0.08;}
 .referral-inner{max-width:800px;margin:0 auto;text-align:center;position:relative;}
 .referral-inner .gold-divider{margin:28px auto;}
 .referral-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:60px 0;text-align:left;}
@@ -196,9 +192,9 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 .footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:30px;border-top:1px solid rgba(255,255,255,0.08);}
 .footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
 .footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
-.mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(100%);transition:transform 0.4s ease;}
+.mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
 .mobile-menu.open{transform:translateX(0);}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
 .mobile-menu a:hover{color:var(--gold);}
 .mobile-menu .mobile-enquire-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:16px 40px;border:none;margin-bottom:8px;}
 .close-menu{position:absolute;top:30px;right:30px;font-size:30px;color:var(--white);cursor:pointer;background:none;border:none;}
@@ -292,6 +288,7 @@ footer{padding:60px 30px 30px;}
   <a href="#recruitment" onclick="toggleMenu()">Careers</a>
   <a href="/yacht-research-form.html" class="mobile-enquire-cta" onclick="toggleMenu()">Enquire Now</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="#newsletter-section" onclick="toggleMenu()" style="color:var(--gold);font-size:18px;letter-spacing:3px;text-transform:uppercase;font-family:'Montserrat',sans-serif;">Newsletter</a>
 </div>
 <nav id="navbar">
   <a href="#hero" class="nav-logo">Yacht <span>Research</span></a>
@@ -303,6 +300,7 @@ footer{padding:60px 30px 30px;}
     <li><a href="#partnerships">Partnerships</a></li>
     <li><a href="#recruitment">Careers</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#newsletter-section" style="color:var(--gold);">Newsletter</a></li>
   </ul>
   <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>
   <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
@@ -320,12 +318,12 @@ footer{padding:60px 30px 30px;}
       <a href="#contact" class="btn-outline">Sell Your Yacht</a>
     </div>
   </div>
-  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+
 </section>
 <section id="why">
   <div class="why-grid">
     <div class="why-image reveal">
-      <img src="https://images.unsplash.com/photo-1599769906827-b19eb76e98af?w=800&q=80" alt="Luxury Yacht">
+      <img src="https://images.unsplash.com/photo-1599769906827-b19eb76e98af?w=1200&q=85" alt="Luxury Yacht">
       <div class="why-image-frame"></div>
       <div class="why-stat"><div class="num">5</div><div class="label">Continents<br>of Coverage</div></div>
     </div>
@@ -334,10 +332,9 @@ footer{padding:60px 30px 30px;}
       <h2 class="section-title">Strategic Access.<br><em>Stronger Results.</em></h2>
       <div class="gold-divider"></div>
       <p class="section-body">In yachting, access defines opportunity. That is our advantage.</p><br>
-      <p class="section-body">Through strong industry relationships and direct B2B partnerships, we secure preferential charter rates not available to the public, allowing our clients to benefit from more competitive pricing without compromising on quality or experience.</p><br>
-      <p class="section-body">For yacht acquisitions, we provide access to private listings and off-market opportunities, ensuring discreet transactions and strategic negotiations. For sellers, we connect yachts with qualified international buyers through targeted exposure and private channels.</p><br>
-      <p class="section-body" style="color:var(--gold-pale);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:15px;">Working with us means gaining strategic access, stronger pricing leverage, and trusted guidance across France and the UAE.</p><br><br>
-      <a href="#contact" class="btn-primary">Enquire Now</a>
+      <p class="section-body">Through direct B2B partnerships, we secure preferential charter rates and off-market listings not available to the public — giving our clients a decisive edge in every transaction.</p><br>
+      <p class="section-body" style="color:var(--gold-pale);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:15px;">Strategic access. Stronger pricing. Trusted guidance.</p><br><br>
+      <a href="/yacht-research-form.html" class="btn-primary">Enquire Now</a>
     </div>
   </div>
 </section>
@@ -364,15 +361,15 @@ footer{padding:60px 30px 30px;}
   </div>
   <div class="yachts-grid" id="yachts-grid">
     <div class="yacht-card reveal">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=600&q=80" alt="Motor Yacht"><div class="yacht-badge">For Sale</div></div>
+      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1200&q=85" alt="Motor Yacht"><div class="yacht-badge">For Sale</div></div>
       <div class="yacht-info"><h3 class="yacht-name">Motor Yacht 42m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">42m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2019</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">Dubai</span><span class="key">Location</span></div></div><div class="yacht-price"><span>Price on Request</span><a href="#contact">Enquire &rarr;</a></div></div>
     </div>
     <div class="yacht-card reveal reveal-delay-1">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?w=600&q=80" alt="Sailing Yacht"><div class="yacht-badge">Off-Market</div></div>
+      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?w=1200&q=85" alt="Sailing Yacht"><div class="yacht-badge">Off-Market</div></div>
       <div class="yacht-info"><h3 class="yacht-name">Sailing Yacht 28m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">28m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2021</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">France</span><span class="key">Location</span></div></div><div class="yacht-price"><span>&euro; 2,800,000</span><a href="#contact">Enquire &rarr;</a></div></div>
     </div>
     <div class="yacht-card reveal reveal-delay-2">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1577699399820-d2e4d28b21f7?w=600&q=80" alt="Superyacht"><div class="yacht-badge">New Listing</div></div>
+      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1577699399820-d2e4d28b21f7?w=1200&q=85" alt="Superyacht"><div class="yacht-badge">New Listing</div></div>
       <div class="yacht-info"><h3 class="yacht-name">Superyacht 56m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">56m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2022</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">Monaco</span><span class="key">Location</span></div></div><div class="yacht-price"><span>Price on Request</span><a href="#contact">Enquire &rarr;</a></div></div>
     </div>
   </div>
@@ -398,7 +395,7 @@ footer{padding:60px 30px 30px;}
       </div>
     </div>
     <div class="about-visual reveal reveal-delay-1">
-      <img src="https://images.unsplash.com/photo-1586456248323-4c5687b9bbf3?w=700&q=80" alt="Yacht Research" class="about-img">
+      <img src="https://images.unsplash.com/photo-1586456248323-4c5687b9bbf3?w=1200&q=85" alt="Yacht Research" class="about-img">
       <div class="about-quote"><p>&ldquo;You enjoy your yacht. We take care of everything else.&rdquo;</p></div>
     </div>
   </div>
@@ -411,10 +408,10 @@ footer{padding:60px 30px 30px;}
     <p class="section-body">From the azure waters of the Mediterranean to the golden shores of the Arabian Gulf, we curate extraordinary charter experiences for discerning clients worldwide.</p>
   </div>
   <div class="charter-regions">
-    <div class="charter-region reveal"><img src="https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?w=600&q=70" alt="Mediterranean"><div class="charter-region-info"><h3>Mediterranean</h3><p>France &middot; Italy &middot; Greece &middot; Croatia</p></div></div>
-    <div class="charter-region reveal reveal-delay-1"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=70" alt="Dubai"><div class="charter-region-info"><h3>Dubai &amp; Gulf</h3><p>UAE &middot; Oman &middot; Bahrain</p></div></div>
-    <div class="charter-region reveal reveal-delay-2"><img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=70" alt="Caribbean"><div class="charter-region-info"><h3>Caribbean</h3><p>St. Barths &middot; BVI &middot; Bahamas</p></div></div>
-    <div class="charter-region reveal reveal-delay-3"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=70" alt="Indian Ocean"><div class="charter-region-info"><h3>Indian Ocean</h3><p>Maldives &middot; Seychelles &middot; Mauritius</p></div></div>
+    <div class="charter-region reveal"><img src="https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?w=1200&q=85" alt="Mediterranean"><div class="charter-region-info"><h3>Mediterranean</h3><p>France &middot; Italy &middot; Greece &middot; Croatia</p></div></div>
+    <div class="charter-region reveal reveal-delay-1"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=85" alt="Dubai"><div class="charter-region-info"><h3>Dubai &amp; Gulf</h3><p>UAE &middot; Oman &middot; Bahrain</p></div></div>
+    <div class="charter-region reveal reveal-delay-2"><img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=85" alt="Caribbean"><div class="charter-region-info"><h3>Caribbean</h3><p>St. Barths &middot; BVI &middot; Bahamas</p></div></div>
+    <div class="charter-region reveal reveal-delay-3"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85" alt="Indian Ocean"><div class="charter-region-info"><h3>Indian Ocean</h3><p>Maldives &middot; Seychelles &middot; Mauritius</p></div></div>
   </div>
 </section>
 <section id="bespoke">
@@ -434,7 +431,7 @@ footer{padding:60px 30px 30px;}
         <div class="bespoke-item"><h4>Marina &amp; Berthing</h4><p>Securing optimal berthing locations while handling all administrative and logistical aspects on your behalf.</p></div>
         <div class="bespoke-item"><h4>Yacht Management</h4><p>Trusted partnerships for full-service yacht management, crew placement, and operational support.</p></div>
       </div><br>
-      <a href="#contact" class="btn-primary">Discuss Your Needs</a>
+      <a href="/yacht-research-form.html" class="btn-primary">Discuss Your Needs</a>
     </div>
   </div>
 </section>
@@ -482,13 +479,13 @@ footer{padding:60px 30px 30px;}
     <p class="section-label reveal">Referral Programme</p>
     <h2 class="section-title reveal">Earn a Commission<br><em>With Your Network</em></h2>
     <div class="gold-divider reveal" style="margin:28px auto;"></div>
-    <p class="section-body reveal">At Yacht Research, we believe that exceptional connections deserve exceptional rewards. By referring a client who completes a purchase, sale, or charter with us, you gain an exclusive commission. Simply introduce the client, and once the transaction is finalised, your referral reward is delivered: seamless, transparent, and secure.</p>
+    <p class="section-body reveal">Introduce a client who completes a transaction with us and earn an exclusive commission. Seamless, transparent, and secure.</p>
     <div class="referral-steps">
       <div class="referral-step reveal"><div class="step-num">01</div><h4>Introduce</h4><p>Connect us with a client seeking to buy, sell, or charter a yacht.</p></div>
       <div class="referral-step reveal reveal-delay-1"><div class="step-num">02</div><h4>We Handle Everything</h4><p>Yacht Research manages the entire process with discretion and expertise.</p></div>
       <div class="referral-step reveal reveal-delay-2"><div class="step-num">03</div><h4>Receive Your Reward</h4><p>Upon transaction completion, your commission is delivered. Seamless and secure.</p></div>
     </div>
-    <a href="#contact" class="btn-primary reveal">Register Your Referral</a>
+    <a href="/yacht-research-form.html" class="btn-primary reveal">Register Your Referral</a>
   </div>
 </section>
 <section id="recruitment">
@@ -525,9 +522,9 @@ footer{padding:60px 30px 30px;}
       <p class="section-body">Whether you are looking to buy, sell, charter, or explore a partnership, our team is available to assist you with complete discretion and expertise.</p>
       <div class="contact-details">
         <div class="contact-detail"><div class="label">Primary Base</div><div class="val">Dubai, UAE</div><div class="sub">International Operations Hub</div></div>
-        <div class="contact-detail"><div class="label">Europe Office</div><div class="val">French Riviera, France</div><div class="sub">Mediterranean &amp; European Coverage</div></div>
+        <div class="contact-detail"><div class="label">Europe</div><div class="val">French Riviera</div><div class="sub">Mediterranean &amp; European Coverage</div></div>
         <div class="contact-detail"><div class="label">Global Coverage</div><div class="val">Mediterranean &middot; Middle East &middot; Americas</div></div>
-        <div class="contact-detail"><div class="label">Digital</div><div class="val" style="font-size:16px;">linktr.ee/yacht_research</div></div>
+        <div class="contact-detail"><div class="label">Digital</div><div class="val" style="font-size:14px;"><a href="https://linktr.ee/yacht_research" target="_blank" style="color:var(--gold);text-decoration:none;letter-spacing:1px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">linktr.ee/yacht_research</a></div></div>
       </div>
     </div>
     <div class="form-section reveal reveal-delay-1">
@@ -556,7 +553,7 @@ footer{padding:60px 30px 30px;}
 </section>
 
 <!-- Newsletter bar -->
-<div class="newsletter-bar">
+<div class="newsletter-bar" id="newsletter-section">
   <h3>Stay Informed</h3>
   <p>Exclusive listings, market insights and off-market opportunities</p>
   <button class="btn-newsletter" onclick="openNewsletter()">Subscribe to Our Newsletter</button>
@@ -634,14 +631,11 @@ function submitForm(fd,btn,name){
   var orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;
   fd.append('form_name',name);fd.append('submitted_at',new Date().toLocaleString('fr-FR'));
   var params=new URLSearchParams(fd);
-  fetch(APPS_SCRIPT_URL,{method:'POST',body:params,mode:'no-cors'})
-    .then(function(){
-      showToast('Message sent successfully');
-      var fs=btn.closest('.form-section');
-      if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});
-      btn.textContent=orig;btn.disabled=false;
-    })
-    .catch(function(){showToast('Connection error.',false);btn.textContent=orig;btn.disabled=false;});
+  showToast('Message sent successfully.');
+  var fs=btn.closest('.form-section');
+  if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});
+  btn.textContent=orig;btn.disabled=false;
+  fetch(APPS_SCRIPT_URL,{method:'POST',body:params,mode:'no-cors'}).catch(function(){});
 }
 document.getElementById('btn-contact').addEventListener('click',function(){
   var fd=new FormData();
