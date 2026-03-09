@@ -69,7 +69,7 @@ section{position:relative;}
 .why-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s ease;}
 .why-image:hover img{transform:scale(1.03);}
 .why-image-frame{position:absolute;inset:20px;border:1px solid rgba(201,168,76,0.3);pointer-events:none;}
-.why-stat{position:absolute;bottom:-20px;right:-20px;background:var(--gold);color:var(--navy);padding:30px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:140px;}
+.why-stat{position:absolute;bottom:-20px;right:-20px;background:var(--gold);color:var(--navy);padding:24px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px;}
 .why-stat .num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;line-height:1;}
 .why-stat .label{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-top:6px;text-align:center;width:100%;}
 #services{padding:120px 60px;background:var(--navy-mid);}
@@ -524,7 +524,7 @@ footer{padding:60px 30px 30px;}
         <div class="contact-detail"><div class="label">Primary Base</div><div class="val">Dubai, UAE</div><div class="sub">International Operations Hub</div></div>
         <div class="contact-detail"><div class="label">Europe</div><div class="val">French Riviera</div><div class="sub">Mediterranean &amp; European Coverage</div></div>
         <div class="contact-detail"><div class="label">Global Coverage</div><div class="val">Mediterranean &middot; Middle East &middot; Americas</div></div>
-        <div class="contact-detail"><div class="label">Digital</div><div class="val" style="font-size:14px;"><a href="https://linktr.ee/yacht_research" target="_blank" style="color:var(--gold);text-decoration:none;letter-spacing:1px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">linktr.ee/yacht_research</a></div></div>
+        <div class="contact-detail"><div class="label">Digital</div><div class="val"><a href="https://linktr.ee/yacht_research" target="_blank" id="lt-btn" style="display:inline-block;background:var(--gold);color:var(--navy);font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:700;padding:12px 28px;text-decoration:none;transition:background .3s;" onmouseover="this.style.background='#b8963e'" onmouseout="this.style.background='var(--gold)'">Linktree</a></div></div>
       </div>
     </div>
     <div class="form-section reveal reveal-delay-1">
@@ -807,11 +807,18 @@ async function loadCMSContent() {
     if (ct) {
       var vals=document.querySelectorAll('#contact .contact-detail .val');
       if(ct.city_main&&vals[0])vals[0].textContent=ct.city_main;
-      if(ct.city_eu&&vals[1])vals[1].textContent=ct.city_eu;
+      // Always show French Riviera regardless of CMS value
+      if(vals[1])vals[1].textContent='French Riviera';
       if(ct.coverage&&vals[2])vals[2].textContent=ct.coverage;
       if(ct.linktree){
-        document.querySelectorAll('a[href*="linktr.ee"]').forEach(function(l){l.href=ct.linktree;});
-        var dv=vals[3];if(dv)dv.textContent=ct.linktree.replace('https://','');
+        // Update href of existing anchor, preserve the link styling
+        var ltAnchors=document.querySelectorAll('a[href*="linktr.ee"]');
+        ltAnchors.forEach(function(l){l.href=ct.linktree;});
+        var dv=vals[3];
+        if(dv){
+          var existingA=dv.querySelector('a');
+          if(existingA){existingA.href=ct.linktree;}
+        }
       }
     }
   } catch(e){ console.log('contact',e); }
