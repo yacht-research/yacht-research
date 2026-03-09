@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Partnerships & Referral — Yacht Research</title>
+<meta name="description" content="Join the Yacht Research international network. Co-brokerage, referral programme, and strategic partnerships.">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a0f1e;--navy-mid:#111827;--navy-light:#1a2540;--gold:#c9a84c;--gold-light:#e2c97e;--gold-pale:#f5edd6;--white:#ffffff;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;cursor:none;}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:width 0.3s,height 0.3s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);}
+.nav-logo img{height:48px;mix-blend-mode:screen;filter:brightness(1.1);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 22px;text-decoration:none;transition:all 0.3s;}
+.nav-cta:hover{background:var(--gold);color:var(--navy);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;z-index:1000;position:relative;}
+.hamburger span{width:24px;height:1px;background:var(--white);transition:all 0.35s ease;display:block;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
+.mobile-menu.open{transform:translateX(0);}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);}
+.mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:16px 40px;text-decoration:none;}
+.section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.1;}
+.section-title em{font-style:italic;color:var(--gold-light);}
+.section-body{font-size:13px;line-height:2;color:rgba(255,255,255,0.65);font-weight:300;letter-spacing:0.5px;}
+.gold-divider{width:60px;height:1px;background:var(--gold);margin:28px 0;}
+.btn-primary{display:inline-block;background:var(--gold);color:var(--navy);padding:16px 40px;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all 0.3s;font-weight:500;}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-outline{display:inline-block;border:1px solid rgba(255,255,255,0.4);color:var(--white);padding:16px 40px;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all 0.3s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.15s;}.reveal-delay-2{transition-delay:0.3s;}
+.form-section{background:var(--navy-light);padding:50px;border:1px solid rgba(201,168,76,0.15);}
+.form-section h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:8px;}
+.form-section>p{font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:30px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-field{margin-bottom:16px;}
+.form-field label{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.form-field input,.form-field select,.form-field textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:14px 18px;font-size:12px;font-family:'Montserrat',sans-serif;font-weight:300;outline:none;transition:border-color 0.3s;appearance:none;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--gold);}
+.form-field select option{background:var(--navy);}
+.form-field textarea{resize:vertical;min-height:120px;}
+.btn-submit{background:var(--gold);color:var(--navy);border:none;padding:16px 48px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s;width:100%;margin-top:8px;}
+footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
+.footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
+#cookie-banner.visible{transform:translateY(0);}
+#cookie-banner p{color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:1px;line-height:1.7;margin:0;flex:1;min-width:200px;}
+#cookie-banner a{color:#c9a84c;text-decoration:underline;}
+.cookie-buttons{display:flex;gap:12px;}
+#cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
+#cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+@media(max-width:1024px){nav{padding:16px 24px;}.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.form-row{grid-template-columns:1fr;}footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu()" >Home</a>
+  <a href="/why-us.html" onclick="toggleMenu()" >Why Us</a>
+  <a href="/#yachts" onclick="toggleMenu()" >Buy</a>
+  <a href="/#charter" onclick="toggleMenu()" >Charter</a>
+  <a href="/bespoke.html" onclick="toggleMenu()" >Services</a>
+  <a href="/partnerships.html" onclick="toggleMenu()" class="active">Partnerships</a>
+  <a href="/recruitment.html" onclick="toggleMenu()" >Recruitment</a>
+  <a href="/#contact" onclick="toggleMenu()" >Contact</a>
+  <a href="/yacht-research-form.html" class="mob-cta" onclick="toggleMenu()">Enquire Now</a>
+</div>
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/uploads/yacht-research-logo.png" alt="Yacht Research"></a>
+  <ul class="nav-links">    <li><a href="/why-us.html" >Why Us</a></li>
+    <li><a href="/#yachts" >Buy</a></li>
+    <li><a href="/#charter" >Charter</a></li>
+    <li><a href="/bespoke.html" >Services</a></li>
+    <li><a href="/partnerships.html" class="active">Partnerships</a></li>
+    <li><a href="/recruitment.html" >Recruitment</a></li>
+    <li><a href="/#contact" >Contact</a></li></ul>
+  <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div style="padding:140px 60px 80px;max-width:1200px;margin:0 auto;">
+  <p class="section-label reveal">International Network</p>
+  <h1 class="section-title reveal">Built on<br><em>Trusted Partnerships</em></h1>
+  <div class="gold-divider reveal"></div>
+  <p class="section-body reveal" style="max-width:700px;margin-top:8px;">Yacht Research actively collaborates with international brokers, shipyards, and luxury service providers to deliver unparalleled opportunities. Our partnership network allows us to exchange qualified buyer requirements, share exclusive listings, co-broker transactions, and develop strategic business opportunities worldwide.</p>
+</div>
+<section style="padding:0 60px 80px;background:var(--navy);">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1200px;margin:0 auto;" class="pt-grid">
+    <div class="pt-item reveal"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Yacht Brokerages</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Co-brokerage agreements with established firms. Share listings, exchange buyer mandates, close more deals together.</p></div>
+    <div class="pt-item reveal reveal-delay-1"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Independent Brokers</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">We welcome independent brokers seeking a reliable international partner for their clients' requirements.</p></div>
+    <div class="pt-item reveal reveal-delay-2"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Shipyards &amp; Builders</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Collaborate on new build projects and connect builders with our network of qualified buyers and investors.</p></div>
+    <div class="pt-item reveal"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Family Offices</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Discrete advisory services for family offices and wealth managers seeking yacht acquisition guidance.</p></div>
+    <div class="pt-item reveal reveal-delay-1"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Luxury Concierge</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Preferred partnership arrangements with leading concierge companies and lifestyle management firms.</p></div>
+    <div class="pt-item reveal reveal-delay-2"><div style="width:36px;height:1px;background:var(--gold);margin-bottom:24px;"></div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Charter Managers</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Strategic alliances with charter management companies to expand fleet availability and client access.</p></div>
+  </div>
+</section>
+<section style="padding:80px 60px;background:var(--navy-mid);" id="form">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="form-section reveal">
+      <h3>Partnership Inquiry</h3>
+      <p>Interested in collaborating with Yacht Research? Submit your details and we will be in touch.</p>
+      <div class="form-row">
+        <div class="form-field"><label>Name</label><input id="p-name" type="text" placeholder="Your full name"></div>
+        <div class="form-field"><label>Company</label><input id="p-company" type="text" placeholder="Company name"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label>Role</label><input id="p-role" type="text" placeholder="Your role"></div>
+        <div class="form-field"><label>Country</label><input id="p-country" type="text" placeholder="Country of operation"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label>Email</label><input id="p-email" type="email" placeholder="your@email.com"></div>
+        <div class="form-field"><label>Phone / WhatsApp</label><input id="p-phone" type="tel" placeholder="+971 50 000 0000"></div>
+      </div>
+      <div class="form-field"><label>Message</label><textarea id="p-message" placeholder="Describe your business and how you'd like to collaborate..."></textarea></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+        <input type="checkbox" id="gdpr-p" required style="margin-top:3px;accent-color:#c9a84c;width:15px;height:15px;flex-shrink:0;">
+        <label for="gdpr-p" style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.6;">I accept the <a href="/privacy-policy" style="color:#c9a84c;text-decoration:underline;">Privacy Policy</a> and consent to Yacht Research processing my personal data.</label>
+      </div>
+      <input type="text" id="p-website" style="display:none;" tabindex="-1">
+      <button id="btn-p" class="btn-submit">Submit Partnership Inquiry</button>
+    </div>
+  </div>
+</section>
+<section style="padding:80px 60px;background:var(--navy);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1553563944-35a5c2bdb58b?w=1600&q=85') center/cover;opacity:0.06;"></div>
+  <div style="max-width:800px;margin:0 auto;text-align:center;position:relative;">
+    <p class="section-label reveal">Referral Programme</p>
+    <h2 class="section-title reveal">Earn a Commission<br><em>With Your Network</em></h2>
+    <div class="gold-divider reveal" style="margin:28px auto;"></div>
+    <p class="section-body reveal">Introduce a client who completes a transaction with us and earn an exclusive commission. Seamless, transparent, and secure.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:60px 0;" class="ref-steps">
+      <div style="background:rgba(255,255,255,0.04);padding:40px 30px;border-top:2px solid var(--gold);" class="reveal"><div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);font-weight:300;line-height:1;margin-bottom:16px;opacity:0.6;">01</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Introduce</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Connect us with a client seeking to buy, sell, or charter a yacht.</p></div>
+      <div style="background:rgba(255,255,255,0.04);padding:40px 30px;border-top:2px solid var(--gold);" class="reveal reveal-delay-1"><div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);font-weight:300;line-height:1;margin-bottom:16px;opacity:0.6;">02</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">We Handle Everything</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Yacht Research manages the entire process with discretion and expertise.</p></div>
+      <div style="background:rgba(255,255,255,0.04);padding:40px 30px;border-top:2px solid var(--gold);" class="reveal reveal-delay-2"><div style="font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold);font-weight:300;line-height:1;margin-bottom:16px;opacity:0.6;">03</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:12px;">Receive Your Reward</h4><p style="font-size:11px;line-height:1.9;color:rgba(255,255,255,0.5);">Upon transaction completion, your commission is delivered. Seamless and secure.</p></div>
+    </div>
+    <a href="/yacht-research-form.html" class="btn-primary reveal">Register Your Referral</a>
+  </div>
+</section>
+<style>
+.pt-item{background:var(--navy-light);padding:40px 30px;transition:background 0.3s;}
+.pt-item:hover{background:rgba(201,168,76,0.07);}
+@media(max-width:1024px){.pt-grid{grid-template-columns:1fr 1fr!important;}.ref-steps{grid-template-columns:1fr!important;}}
+@media(max-width:640px){.pt-grid{grid-template-columns:1fr!important;}}
+</style>
+<script>
+document.getElementById('btn-p').addEventListener('click',function(){
+  var fd=new FormData();
+  fd.append('name',document.getElementById('p-name').value);
+  fd.append('company',document.getElementById('p-company').value);
+  fd.append('role',document.getElementById('p-role').value);
+  fd.append('country',document.getElementById('p-country').value);
+  fd.append('email',document.getElementById('p-email').value);
+  fd.append('phone',document.getElementById('p-phone').value);
+  fd.append('message',document.getElementById('p-message').value);
+  fd.append('website',document.getElementById('p-website').value);
+  if(!document.getElementById('p-name').value||!document.getElementById('p-email').value)return showToast('Please fill in your name and email.',false);
+  if(!document.getElementById('gdpr-p').checked)return showToast('Please accept the Privacy Policy.',false);
+  if(document.getElementById('p-website').value)return;
+  submitForm(fd,this,'Partnership Inquiry');
+});
+</script>
+
+<footer>
+  <div class="footer-bottom">
+    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
+    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
+    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
+  </div>
+</footer>
+<div id="cookie-banner">
+  <p>We use cookies to ensure basic functionality. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a>.</p>
+  <div class="cookie-buttons"><button id="cookie-decline">Decline</button><button id="cookie-accept">Accept</button></div>
+</div>
+<script>
+var cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cursor.style.left=mx-4+'px';cursor.style.top=my-4+'px';});
+function animateRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateRing);}
+animateRing();
+document.querySelectorAll('a,button').forEach(function(el){el.addEventListener('mouseenter',function(){ring.style.width='50px';ring.style.height='50px';});el.addEventListener('mouseleave',function(){ring.style.width='32px';ring.style.height='32px';});});
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.hamburger').classList.toggle('open');}
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+document.getElementById('yr-year').textContent='© '+new Date().getFullYear();
+(function(){function gc(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*864e5));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}if(!gc('yr_cookie_consent')){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}var a=document.getElementById('cookie-accept'),d=document.getElementById('cookie-decline');if(a)a.onclick=function(){sc('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';};if(d)d.onclick=function(){sc('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';};})();
+var APPS_URL='https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
+function showToast(msg,ok){var t=document.getElementById('yr-toast');if(t)t.remove();t=document.createElement('div');t.id='yr-toast';t.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:'+(ok!==false?'#c9a84c':'#c0392b')+';color:'+(ok!==false?'#0a0f1e':'#fff')+';padding:16px 40px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:9999;';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},4000);}
+function submitForm(fd,btn,name){var orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;fd.append('form_name',name);fd.append('submitted_at',new Date().toLocaleString('fr-FR'));showToast('Message sent successfully.');var fs=btn.closest('.form-section');if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});btn.textContent=orig;btn.disabled=false;fetch(APPS_URL,{method:'POST',body:new URLSearchParams(fd),mode:'no-cors'}).catch(function(){});}
+</script>
+</body>
+</html>
