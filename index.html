@@ -290,20 +290,16 @@ footer{padding:60px 30px 30px;}
 <section id="yachts">
   <div class="yachts-header reveal">
     <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2></div>
-    <a href="#contact" class="btn-outline">View All Listings</a>
+    <a href="/listings.html" class="btn-outline">View All Listings</a>
   </div>
   <div class="yachts-grid" id="yachts-grid">
-    <div class="yacht-card reveal">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1200&q=85" alt="Motor Yacht"><div class="yacht-badge">For Sale</div></div>
-      <div class="yacht-info"><h3 class="yacht-name">Motor Yacht 42m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">42m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2019</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">Dubai</span><span class="key">Location</span></div></div><div class="yacht-price"><span>Price on Request</span><a href="#contact">Enquire &rarr;</a></div></div>
-    </div>
-    <div class="yacht-card reveal reveal-delay-1">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?w=1200&q=85" alt="Sailing Yacht"><div class="yacht-badge">Off-Market</div></div>
-      <div class="yacht-info"><h3 class="yacht-name">Sailing Yacht 28m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">28m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2021</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">France</span><span class="key">Location</span></div></div><div class="yacht-price"><span>&euro; 2,800,000</span><a href="#contact">Enquire &rarr;</a></div></div>
-    </div>
-    <div class="yacht-card reveal reveal-delay-2">
-      <div class="yacht-img"><img src="https://images.unsplash.com/photo-1577699399820-d2e4d28b21f7?w=1200&q=85" alt="Superyacht"><div class="yacht-badge">New Listing</div></div>
-      <div class="yacht-info"><h3 class="yacht-name">Superyacht 56m</h3><div class="yacht-specs"><div class="yacht-spec"><span class="val">56m</span><span class="key">Length</span></div><div class="yacht-spec"><span class="val">2022</span><span class="key">Built</span></div><div class="yacht-spec"><span class="val">Monaco</span><span class="key">Location</span></div></div><div class="yacht-price"><span>Price on Request</span><a href="#contact">Enquire &rarr;</a></div></div>
+    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;">
+        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out infinite;"></span>
+        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.2s infinite;"></span>
+        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.4s infinite;"></span>
+      </div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Loading listings…</p>
     </div>
   </div>
   <div class="submit-yacht-banner reveal">
@@ -501,6 +497,11 @@ async function loadCMSContent() {
       var jsonFiles = files.filter(function(f){ return f.name.endsWith('.json'); });
       var all = await Promise.all(jsonFiles.map(function(f){ return loadJSON('/content/yachts/'+f.name); }));
       var pub = all.filter(function(y){ return y && y.published !== false; });
+      // Tri par prix croissant
+      pub.sort(function(a,b){
+        function parsePrice(p){ if(!p) return Infinity; return parseFloat(String(p).replace(/[^0-9.]/g,''))||Infinity; }
+        return parsePrice(a.price) - parsePrice(b.price);
+      });
       if (pub.length) {
         var grid = document.querySelector('#yachts-grid');
         if (grid) grid.innerHTML = pub.map(function(y) {

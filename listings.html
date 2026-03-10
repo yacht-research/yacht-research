@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yachts for Sale — Yacht Research</title>
+<meta name="description" content="Browse our full collection of luxury yachts for sale. Filter by price, size, year and more. Dubai · French Riviera · Mediterranean.">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a0f1e;--navy-mid:#111827;--navy-light:#1a2540;--gold:#c9a84c;--gold-light:#e2c97e;--white:#ffffff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;cursor:none;}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:width 0.3s,height 0.3s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 22px;text-decoration:none;transition:all 0.3s;}
+.nav-cta:hover{background:var(--gold);color:var(--navy);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;z-index:1000;}
+.hamburger span{width:24px;height:1px;background:var(--white);transition:all 0.35s ease;display:block;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
+.mobile-menu.open{transform:translateX(0);}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--white);text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
+.mobile-menu a:hover{color:var(--gold);}
+.mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--navy);background:var(--gold);padding:16px 40px;}
+.mobile-menu .mob-newsletter{font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+
+/* PAGE HERO */
+.page-hero{padding:140px 60px 50px;max-width:1400px;margin:0 auto;}
+.section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.1;}
+.page-hero h1 em{font-style:italic;color:var(--gold-light);}
+.gold-divider{width:60px;height:1px;background:var(--gold);margin:24px 0;}
+
+/* FILTER BAR */
+.filter-section{background:var(--navy);padding:0 60px 40px;max-width:1400px;margin:0 auto;}
+.filter-bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:24px 32px;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.15);}
+.filter-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px;}
+.filter-label{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.filter-select,.filter-input{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.15);color:var(--white);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:300;padding:6px 0;outline:none;width:100%;appearance:none;cursor:pointer;transition:border-color 0.3s;}
+.filter-select:focus,.filter-input:focus{border-bottom-color:var(--gold);}
+.filter-select option{background:#111827;color:var(--white);}
+.filter-input::placeholder{color:rgba(255,255,255,0.3);}
+.filter-divider{width:1px;height:48px;background:rgba(255,255,255,0.1);flex-shrink:0;}
+.filter-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.badge-filter{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.25s;white-space:nowrap;background:transparent;}
+.badge-filter:hover{border-color:var(--gold);color:var(--gold);}
+.badge-filter.active{border-color:var(--gold);color:var(--navy);background:var(--gold);}
+.btn-reset{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);background:transparent;border:none;cursor:pointer;padding:7px 0;transition:color 0.25s;white-space:nowrap;font-family:'Montserrat',sans-serif;}
+.btn-reset:hover{color:var(--gold);}
+
+/* RESULTS COUNT + SORT */
+.results-bar{display:flex;justify-content:space-between;align-items:center;padding:20px 60px;max-width:1400px;margin:0 auto;}
+.results-count{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.4);}
+.results-count span{color:var(--gold);}
+.sort-wrap{display:flex;align-items:center;gap:10px;}
+.sort-wrap label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+.sort-select{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.15);color:var(--white);font-family:'Montserrat',sans-serif;font-size:11px;padding:4px 0;outline:none;appearance:none;cursor:pointer;transition:border-color 0.3s;}
+.sort-select:focus{border-bottom-color:var(--gold);}
+.sort-select option{background:#111827;}
+
+/* YACHT GRID */
+.listings-container{max-width:1400px;margin:0 auto;padding:0 60px 80px;}
+.listings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.yacht-card{background:var(--navy-light);overflow:hidden;transition:transform 0.4s ease;position:relative;}
+.yacht-card:hover{transform:translateY(-6px);}
+.yacht-img{position:relative;overflow:hidden;aspect-ratio:4/3;}
+.yacht-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
+.yacht-card:hover .yacht-img img{transform:scale(1.05);}
+.yacht-badge-wrap{position:absolute;top:16px;left:16px;display:flex;gap:6px;flex-wrap:wrap;}
+.yacht-badge{font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;font-weight:500;}
+.badge-sale{background:var(--gold);color:var(--navy);}
+.badge-new{background:#1a6b3a;color:#fff;}
+.badge-reduced{background:#8b1a1a;color:#fff;}
+.badge-offmarket{background:#1a3a6b;color:#fff;}
+.badge-charter{background:#4a1a6b;color:#fff;}
+.yacht-info{padding:24px;}
+.yacht-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;margin-bottom:16px;letter-spacing:0.5px;}
+.yacht-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.yacht-spec{display:flex;flex-direction:column;gap:4px;}
+.yacht-spec .val{font-size:13px;font-weight:400;color:var(--white);}
+.yacht-spec .key{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.yacht-price-row{display:flex;justify-content:space-between;align-items:center;}
+.yacht-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold-light);}
+.yacht-enquire{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.3s;border-bottom:1px solid transparent;}
+.yacht-enquire:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.yacht-brochure-btn{display:block;margin-top:14px;font-size:8px;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);text-decoration:none;transition:all 0.3s;}
+.yacht-brochure-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* EMPTY STATE */
+.empty-state{grid-column:1/-1;text-align:center;padding:80px 20px;}
+.empty-state p{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:rgba(255,255,255,0.3);margin-bottom:12px;}
+.empty-state span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+
+/* LOADING */
+.loading-state{grid-column:1/-1;text-align:center;padding:80px 20px;}
+.loading-dots{display:flex;justify-content:center;gap:8px;margin-bottom:20px;}
+.loading-dots span{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:dot-pulse 1.4s ease-in-out infinite;}
+.loading-dots span:nth-child(2){animation-delay:0.2s;}
+.loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes dot-pulse{0%,80%,100%{opacity:0.2;transform:scale(0.8);}40%{opacity:1;transform:scale(1);}}
+.loading-state p{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+
+/* FOOTER */
+footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
+.footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
+.footer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:24px 0;margin-top:40px;border-top:1px solid rgba(255,255,255,0.06);max-width:1200px;margin-left:auto;margin-right:auto;}
+.footer-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.3);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;padding:10px 16px;border:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
+.footer-link:hover{color:#c9a84c;border-color:rgba(201,168,76,0.3);}
+
+/* COOKIE */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
+#cookie-banner.visible{transform:translateY(0);}
+#cookie-banner p{color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:1px;line-height:1.7;margin:0;flex:1;min-width:200px;}
+#cookie-banner a{color:#c9a84c;text-decoration:underline;}
+.cookie-buttons{display:flex;gap:12px;flex-shrink:0;}
+#cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
+#cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  nav{padding:16px 24px;}
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .page-hero{padding:120px 24px 40px;}
+  .filter-section{padding:0 24px 32px;}
+  .filter-bar{padding:18px 20px;gap:8px;}
+  .filter-group{min-width:120px;}
+  .filter-divider{display:none;}
+  .results-bar{padding:16px 24px;}
+  .listings-container{padding:0 24px 60px;}
+  .listings-grid{grid-template-columns:1fr 1fr;gap:20px;}
+  footer{padding:40px 24px 30px;}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
+}
+@media(max-width:640px){
+  .listings-grid{grid-template-columns:1fr;}
+  .filter-bar{flex-direction:column;align-items:stretch;}
+  .filter-group{min-width:100%;}
+  .filter-badges{justify-content:flex-start;}
+  .footer-links{gap:10px;}
+  .footer-link{font-size:9px;letter-spacing:1px;padding:10px 12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu()">Home</a>
+  <a href="/listings.html" onclick="toggleMenu()" style="color:var(--gold)">Buy</a>
+  <a href="/#charter" onclick="toggleMenu()">Charter</a>
+  <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
+  <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
+  <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
+  <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
+  <a href="/#contact" onclick="toggleMenu()">Contact</a>
+  <a href="/yacht-research-form.html" onclick="toggleMenu()" class="mob-cta">Enquire Now</a>
+  <a href="/#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Yacht <span>Research</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/listings.html" class="active">Buy</a></li>
+    <li><a href="/#charter">Charter</a></li>
+    <li><a href="/why-us.html">Why Us</a></li>
+    <li><a href="/bespoke.html">Services</a></li>
+    <li><a href="/partnerships.html">Partnerships</a></li>
+    <li><a href="/recruitment.html">Recruitment</a></li>
+    <li><a href="/#contact">Contact</a></li>
+    <li><a href="/#newsletter-section" style="color:var(--gold)">Newsletter</a></li>
+  </ul>
+  <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <p class="section-label">Yacht Research · Listings</p>
+  <h1>Yachts <em>for Sale</em></h1>
+  <div class="gold-divider"></div>
+  <p style="font-size:12px;color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:0.5px;line-height:1.9;max-width:520px;">Browse our curated selection of luxury motor and sailing yachts. Every listing is personally vetted by our brokers in Dubai and the French Riviera.</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filter-section">
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-group" style="min-width:180px;">
+      <span class="filter-label">Search</span>
+      <input class="filter-input" id="f-search" type="text" placeholder="Brand, model…" oninput="applyFilters()">
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <!-- Price min -->
+    <div class="filter-group">
+      <span class="filter-label">Min Price</span>
+      <select class="filter-select" id="f-price-min" onchange="applyFilters()">
+        <option value="">Any</option>
+        <option value="100000">€100k</option>
+        <option value="250000">€250k</option>
+        <option value="500000">€500k</option>
+        <option value="1000000">€1M</option>
+        <option value="2000000">€2M</option>
+        <option value="5000000">€5M</option>
+      </select>
+    </div>
+
+    <!-- Price max -->
+    <div class="filter-group">
+      <span class="filter-label">Max Price</span>
+      <select class="filter-select" id="f-price-max" onchange="applyFilters()">
+        <option value="">Any</option>
+        <option value="250000">€250k</option>
+        <option value="500000">€500k</option>
+        <option value="1000000">€1M</option>
+        <option value="2000000">€2M</option>
+        <option value="5000000">€5M</option>
+        <option value="10000000">€10M</option>
+      </select>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <!-- Length -->
+    <div class="filter-group">
+      <span class="filter-label">Min Length</span>
+      <select class="filter-select" id="f-length" onchange="applyFilters()">
+        <option value="">Any</option>
+        <option value="10">10m+</option>
+        <option value="15">15m+</option>
+        <option value="20">20m+</option>
+        <option value="30">30m+</option>
+        <option value="40">40m+</option>
+        <option value="50">50m+</option>
+      </select>
+    </div>
+
+    <!-- Year -->
+    <div class="filter-group">
+      <span class="filter-label">Min Year</span>
+      <select class="filter-select" id="f-year" onchange="applyFilters()">
+        <option value="">Any</option>
+        <option value="2020">2020+</option>
+        <option value="2015">2015+</option>
+        <option value="2010">2010+</option>
+        <option value="2005">2005+</option>
+        <option value="2000">2000+</option>
+      </select>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <!-- Badge filters -->
+    <div class="filter-group" style="min-width:auto;flex:none;">
+      <span class="filter-label">Tags</span>
+      <div class="filter-badges">
+        <button class="badge-filter" data-badge="new" onclick="toggleBadge(this)">New Listing</button>
+        <button class="badge-filter" data-badge="reduced" onclick="toggleBadge(this)">Price Reduced</button>
+        <button class="badge-filter" data-badge="offmarket" onclick="toggleBadge(this)">Off Market</button>
+        <button class="badge-filter" data-badge="charter" onclick="toggleBadge(this)">Charter Ready</button>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetFilters()">✕ Reset</button>
+  </div>
+</div>
+
+<!-- RESULTS BAR -->
+<div class="results-bar">
+  <p class="results-count"><span id="count">—</span> yacht(s) found</p>
+  <div class="sort-wrap">
+    <label for="sort-select">Sort</label>
+    <select class="sort-select" id="sort-select" onchange="applyFilters()">
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="year-desc">Newest First</option>
+      <option value="year-asc">Oldest First</option>
+      <option value="length-desc">Largest First</option>
+      <option value="length-asc">Smallest First</option>
+    </select>
+  </div>
+</div>
+
+<!-- LISTINGS GRID -->
+<div class="listings-container">
+  <div class="listings-grid" id="listings-grid">
+    <div class="loading-state">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p>Loading listings…</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/yacht_research/" target="_blank" class="footer-link">📸 Instagram</a>
+    <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" class="footer-link">💬 WhatsApp UAE</a>
+    <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" class="footer-link">💬 WhatsApp FR</a>
+    <a href="https://linktr.ee/yacht_research" target="_blank" class="footer-link">🔗 All Links</a>
+  </div>
+  <div class="footer-bottom">
+    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
+    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
+    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <p>We use cookies to ensure basic functionality. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a>.</p>
+  <div class="cookie-buttons"><button id="cookie-decline">Decline</button><button id="cookie-accept">Accept</button></div>
+</div>
+
+<script>
+// ── Cursor ────────────────────────────────────────────────────
+var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
+function animRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+
+// ── Mobile menu ───────────────────────────────────────────────
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+
+// ── Footer year ───────────────────────────────────────────────
+document.getElementById('yr-year').textContent = '© ' + new Date().getFullYear();
+
+// ── Cookie ────────────────────────────────────────────────────
+(function(){
+  function getCookie(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}
+  function setCookie(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*24*60*60*1000));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+  if(!getCookie('yr_cookie_consent')){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}
+  document.getElementById('cookie-accept').addEventListener('click',function(){setCookie('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+  document.getElementById('cookie-decline').addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
+})();
+
+// ── Data & Filtering ──────────────────────────────────────────
+var ALL_YACHTS = [];
+var activeBadges = new Set();
+
+function parsePrice(p){
+  if(!p) return Infinity;
+  return parseFloat(String(p).replace(/[^0-9.]/g,'')) || Infinity;
+}
+
+function parseLength(l){
+  if(!l) return 0;
+  return parseFloat(String(l).replace(/[^0-9.]/g,'')) || 0;
+}
+
+function parseBadge(b){
+  if(!b) return '';
+  var s = b.toLowerCase();
+  if(s.includes('new')) return 'new';
+  if(s.includes('reduc') || s.includes('price')) return 'reduced';
+  if(s.includes('off')) return 'offmarket';
+  if(s.includes('charter')) return 'charter';
+  return 'sale';
+}
+
+function badgeHTML(y){
+  var out = '';
+  var b = parseBadge(y.badge);
+  var map = {sale:'badge-sale',new:'badge-new',reduced:'badge-reduced',offmarket:'badge-offmarket',charter:'badge-charter'};
+  var labels = {sale:'For Sale',new:'New Listing',reduced:'Price Reduced',offmarket:'Off Market',charter:'Charter Ready'};
+  if(b) out += '<span class="yacht-badge '+(map[b]||'badge-sale')+'">'+(labels[b]||'For Sale')+'</span>';
+  return out;
+}
+
+function renderCard(y){
+  var priceNum = parsePrice(y.price);
+  var priceStr = priceNum === Infinity ? 'Price on request' : (y.price || 'Price on request');
+  return '<div class="yacht-card">'
+    +'<div class="yacht-img">'
+    +'<img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'
+    +'<div class="yacht-badge-wrap">'+badgeHTML(y)+'</div>'
+    +'</div>'
+    +'<div class="yacht-info">'
+    +'<h3 class="yacht-name">'+(y.title||'')+'</h3>'
+    +'<div class="yacht-specs">'
+    +'<div class="yacht-spec"><span class="val">'+(y.length||'—')+'</span><span class="key">Length</span></div>'
+    +'<div class="yacht-spec"><span class="val">'+(y.year||'—')+'</span><span class="key">Built</span></div>'
+    +'<div class="yacht-spec"><span class="val">'+(y.location||'—')+'</span><span class="key">Location</span></div>'
+    +'</div>'
+    +'<div class="yacht-price-row">'
+    +'<span class="yacht-price">'+priceStr+'</span>'
+    +'<a href="/#contact" class="yacht-enquire">Enquire →</a>'
+    +'</div>'
+    +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
+    +'</div>'
+    +'</div>';
+}
+
+function applyFilters(){
+  var search = document.getElementById('f-search').value.toLowerCase().trim();
+  var pMin = parseFloat(document.getElementById('f-price-min').value) || 0;
+  var pMax = parseFloat(document.getElementById('f-price-max').value) || Infinity;
+  var lMin = parseFloat(document.getElementById('f-length').value) || 0;
+  var yMin = parseFloat(document.getElementById('f-year').value) || 0;
+  var sort = document.getElementById('sort-select').value;
+
+  var filtered = ALL_YACHTS.filter(function(y){
+    var price = parsePrice(y.price);
+    var length = parseLength(y.length);
+    var year = parseFloat(y.year) || 0;
+    var badge = parseBadge(y.badge);
+    var text = ((y.title||'')+(y.location||'')+(y.year||'')).toLowerCase();
+
+    if(search && !text.includes(search)) return false;
+    if(price < pMin) return false;
+    if(price > pMax) return false;
+    if(lMin && length < lMin) return false;
+    if(yMin && year < yMin) return false;
+    if(activeBadges.size > 0 && !activeBadges.has(badge)) return false;
+    return true;
+  });
+
+  // Sort
+  filtered.sort(function(a,b){
+    if(sort==='price-asc') return parsePrice(a.price)-parsePrice(b.price);
+    if(sort==='price-desc') return parsePrice(b.price)-parsePrice(a.price);
+    if(sort==='year-desc') return (parseFloat(b.year)||0)-(parseFloat(a.year)||0);
+    if(sort==='year-asc') return (parseFloat(a.year)||0)-(parseFloat(b.year)||0);
+    if(sort==='length-desc') return parseLength(b.length)-parseLength(a.length);
+    if(sort==='length-asc') return parseLength(a.length)-parseLength(b.length);
+    return 0;
+  });
+
+  var grid = document.getElementById('listings-grid');
+  document.getElementById('count').textContent = filtered.length;
+
+  if(filtered.length === 0){
+    grid.innerHTML = '<div class="empty-state"><p>No yachts match your search</p><span>Try adjusting your filters</span></div>';
+  } else {
+    grid.innerHTML = filtered.map(renderCard).join('');
+  }
+}
+
+function toggleBadge(btn){
+  var b = btn.dataset.badge;
+  if(activeBadges.has(b)){
+    activeBadges.delete(b);
+    btn.classList.remove('active');
+  } else {
+    activeBadges.add(b);
+    btn.classList.add('active');
+  }
+  applyFilters();
+}
+
+function resetFilters(){
+  document.getElementById('f-search').value='';
+  document.getElementById('f-price-min').value='';
+  document.getElementById('f-price-max').value='';
+  document.getElementById('f-length').value='';
+  document.getElementById('f-year').value='';
+  document.getElementById('sort-select').value='price-asc';
+  activeBadges.clear();
+  document.querySelectorAll('.badge-filter').forEach(function(b){b.classList.remove('active');});
+  applyFilters();
+}
+
+// ── Load yachts from GitHub API ───────────────────────────────
+async function loadJSON(url){
+  try{var r=await fetch(url+'?v='+Date.now());if(!r.ok)return null;return await r.json();}
+  catch(e){return null;}
+}
+
+async function loadListings(){
+  try{
+    var res = await fetch('https://api.github.com/repos/yacht-research/yacht-research/contents/content/yachts?ref=main&t='+Date.now());
+    if(!res.ok) throw new Error('API error');
+    var files = await res.json();
+    var jsonFiles = files.filter(function(f){return f.name.endsWith('.json');});
+    var all = await Promise.all(jsonFiles.map(function(f){return loadJSON('/content/yachts/'+f.name);}));
+    ALL_YACHTS = all.filter(function(y){return y && y.published !== false;});
+    applyFilters();
+  } catch(e){
+    document.getElementById('listings-grid').innerHTML='<div class="empty-state"><p>Unable to load listings</p><span>Please try again shortly</span></div>';
+    console.log('listings error',e);
+  }
+}
+
+loadListings();
+</script>
+</body>
+</html>
