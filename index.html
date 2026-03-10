@@ -493,11 +493,13 @@ async function loadJSON(p) {
 
 async function loadCMSContent() {
 
-  // YACHTS
+  // YACHTS — GitHub API (aucun index.json requis, tous les yachts du CMS apparaissent automatiquement)
   try {
-    var idx = await loadJSON('/content/yachts/index.json');
-    if (idx && idx.yachts && idx.yachts.length) {
-      var all = await Promise.all(idx.yachts.map(function(f){ return loadJSON('/content/yachts/'+f); }));
+    var ghApi = await fetch('https://api.github.com/repos/yacht-research/yacht-research/contents/content/yachts?ref=main&t='+Date.now());
+    if (ghApi.ok) {
+      var files = await ghApi.json();
+      var jsonFiles = files.filter(function(f){ return f.name.endsWith('.json'); });
+      var all = await Promise.all(jsonFiles.map(function(f){ return loadJSON('/content/yachts/'+f.name); }));
       var pub = all.filter(function(y){ return y && y.published !== false; });
       if (pub.length) {
         var grid = document.querySelector('#yachts-grid');
@@ -511,7 +513,7 @@ async function loadCMSContent() {
             +'<div class="yacht-spec"><span class="val">'+(y.year||'')+'</span><span class="key">Built</span></div>'
             +'<div class="yacht-spec"><span class="val">'+(y.location||'')+'</span><span class="key">Location</span></div>'
             +'</div>'
-            +'<div class="yacht-price"><span>'+(y.price||'')+'</span><a href="#contact">Enquire &rarr;</a></div>'
+            +'<div class="yacht-price"><span>'+(y.price||'')+'</span><a href="#contact">Enquire →</a></div>'
             +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
             +'</div></div>';
         }).join('');
