@@ -83,6 +83,10 @@ footer{padding:40px 24px 30px;}
 
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
+.footer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:24px 0;margin-top:40px;border-top:1px solid rgba(255,255,255,0.06);max-width:1200px;margin-left:auto;margin-right:auto;}
+.footer-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.3);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;padding:10px 16px;border:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
+.footer-link:hover{color:#c9a84c;border-color:rgba(201,168,76,0.3);}
+@media(max-width:640px){.footer-links{gap:10px;}.footer-link{font-size:9px;letter-spacing:1px;padding:10px 12px;}}
 </style>
 </head>
 <body>
@@ -164,7 +168,13 @@ footer{padding:40px 24px 30px;}
 </style>
 
 <footer>
-  <div class="footer-bottom">
+  <div class="footer-links">
+    <a href="https://www.instagram.com/yacht_research/" target="_blank" class="footer-link">📸 Instagram</a>
+    <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" class="footer-link">💬 WhatsApp UAE</a>
+    <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" class="footer-link">💬 WhatsApp FR</a>
+    <a href="https://linktr.ee/yacht_research" target="_blank" class="footer-link">🔗 All Links</a>
+  </div>
+    <div class="footer-bottom">
     <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
     <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
     <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
