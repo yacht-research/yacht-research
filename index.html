@@ -63,7 +63,7 @@ section{position:relative;}
 .section-title em{font-style:italic;color:var(--gold-light);}
 .section-body{font-size:13px;line-height:2;color:rgba(255,255,255,0.65);font-weight:300;letter-spacing:0.5px;}
 .gold-divider{width:60px;height:1px;background:var(--gold);margin:28px 0;}
-#yachts{padding:120px 60px;background:var(--navy);}
+#yachts{padding:120px 60px;background:var(--navy);scroll-margin-top:80px;}
 .yachts-header{display:flex;justify-content:space-between;align-items:flex-end;max-width:1200px;margin:0 auto 60px;}
 .yachts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1200px;margin:0 auto 60px;}
 .yacht-card{background:var(--navy-light);overflow:hidden;transition:transform 0.4s ease;}
@@ -81,7 +81,7 @@ section{position:relative;}
 .yacht-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:16px;letter-spacing:0.5px;}
 .yacht-specs{display:flex;gap:24px;margin-bottom:20px;}
 .yacht-spec{text-align:center;}
-.yacht-spec .val{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold);display:block;}
+.yacht-spec .val{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--white);display:block;}
 .yacht-spec .key{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
 .yacht-price{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;border-top:1px solid rgba(201,168,76,0.2);padding-top:16px;display:flex;justify-content:space-between;align-items:center;}
 .yacht-price a{color:var(--gold);text-decoration:none;font-size:9px;letter-spacing:2px;}
@@ -90,7 +90,7 @@ section{position:relative;}
 .submit-yacht-banner{background:var(--navy-light);border:1px solid rgba(201,168,76,0.2);padding:50px;text-align:center;max-width:1200px;margin:0 auto;}
 .submit-yacht-banner h3{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:12px;}
 .submit-yacht-banner p{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:30px;}
-#charter{padding:120px 60px;background:var(--navy);}
+#charter{padding:120px 60px;background:var(--navy);scroll-margin-top:80px;}
 .charter-header{text-align:center;max-width:700px;margin:0 auto 80px;}
 .charter-header .gold-divider{margin:28px auto;}
 .charter-regions{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto;}
@@ -139,7 +139,7 @@ section{position:relative;}
 .form-field textarea{resize:vertical;min-height:120px;}
 .btn-submit{background:var(--gold);color:var(--navy);border:none;padding:16px 48px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:500;cursor:pointer;transition:all 0.3s ease;width:100%;margin-top:8px;}
 .btn-submit:hover{background:var(--gold-light);transform:translateY(-2px);}
-#contact{padding:120px 60px;background:var(--navy);}
+#contact{padding:120px 60px;background:var(--navy);scroll-margin-top:80px;}
 .contact-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:100px;align-items:start;}
 .contact-details{margin-top:48px;display:flex;flex-direction:column;gap:30px;}
 .contact-detail .label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
@@ -251,6 +251,7 @@ footer{padding:60px 30px 30px;}
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#yachts" onclick="toggleMenu()">Buy</a>
+  <a href="/listings.html" onclick="toggleMenu()">Listings</a>
   <a href="#charter" onclick="toggleMenu()">Charter</a>
   <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
   <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
@@ -264,6 +265,7 @@ footer{padding:60px 30px 30px;}
   <a href="#hero" class="nav-logo">Yacht <span>Research</span></a>
   <ul class="nav-links">
     <li><a href="#yachts">Buy</a></li>
+    <li><a href="/listings.html">Listings</a></li>
     <li><a href="#charter">Charter</a></li>
     <li><a href="/why-us.html">Why Us</a></li>
     <li><a href="/bespoke.html">Services</a></li>
@@ -372,7 +374,7 @@ footer{padding:60px 30px 30px;}
 </section>
 
 <!-- Newsletter bar -->
-<div class="newsletter-bar" id="newsletter-section">
+<div class="newsletter-bar" id="newsletter-section" style="scroll-margin-top:80px;">
   <h3>Stay Informed</h3>
   <p>Exclusive listings, market insights and off-market opportunities</p>
   <button class="btn-newsletter" onclick="openNewsletter()">Subscribe to Our Newsletter</button>
