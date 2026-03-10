@@ -395,8 +395,7 @@
   }
 
   /* Footer links */
-  .footer-links {
-    margin-top: 48px;
+      margin-top: 48px;
     display: flex;
     gap: 20px;
     justify-content: center;
@@ -457,11 +456,12 @@
   .hamburger{display:flex!important;}
   #navbar{padding:16px 24px!important;}
 }
+@media(max-width:1024px){.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
 footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
 .footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
 .footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
 .footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
-@media(max-width:1024px){.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
+@media(max-width:1024px){footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
 </style>
 </head>
 <body>
@@ -630,13 +630,7 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
   </div>
 
   <!-- Footer links -->
-<footer>
-  <div class="footer-bottom">
-    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
-    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
-    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
-  </div>
-</footer>
+
 
 </div>
 
@@ -876,6 +870,21 @@ function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("op
   if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
 })();
 </script>
-<script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
+<div style="background:#060a14;padding:40px 60px 0;border-top:1px solid rgba(201,168,76,0.15);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:16px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06);">
+    <a href="https://www.instagram.com/yacht_research/" target="_blank" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(201,168,76,0.3);color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:all 0.3s;" onmouseover="this.style.borderColor='#c9a84c';this.style.color='#c9a84c'" onmouseout="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(255,255,255,0.6)'" title="Instagram">&#128247;</a>
+    <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(201,168,76,0.3);color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:all 0.3s;" onmouseover="this.style.borderColor='#c9a84c';this.style.color='#c9a84c'" onmouseout="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(255,255,255,0.6)'" title="WhatsApp UAE">&#128172;</a>
+    <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(201,168,76,0.3);color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:all 0.3s;" onmouseover="this.style.borderColor='#c9a84c';this.style.color='#c9a84c'" onmouseout="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(255,255,255,0.6)'" title="WhatsApp FR">&#127467;&#127479;</a>
+    <a href="https://linktr.ee/yacht_research" target="_blank" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(201,168,76,0.3);color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:all 0.3s;" onmouseover="this.style.borderColor='#c9a84c';this.style.color='#c9a84c'" onmouseout="this.style.borderColor='rgba(201,168,76,0.3)';this.style.color='rgba(255,255,255,0.6)'" title="Linktree">&#128279;</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-bottom">
+    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
+    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
+    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
+  </div>
+</footer>
+<script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
 </body>
 </html>

@@ -44,6 +44,11 @@ li{margin-bottom:8px;}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 #mobileMenu.open{transform:translateX(0)!important;}
+footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
+.footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
+@media(max-width:1024px){footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
 </style>
 </head>
 <body>
@@ -169,13 +174,7 @@ li{margin-bottom:8px;}
 
 </div>
 
-<footer>
-  <div class="footer-bottom">
-    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
-    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
-    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
-  </div>
-</footer>
+
 
 <div id="cookie-banner">
   <p>We use cookies to ensure basic website functionality and to improve your experience. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a> and consent to our use of cookies.</p>
@@ -217,6 +216,13 @@ animRing();
   if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
 })();
 </script>
-<script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
+<footer>
+  <div class="footer-bottom">
+    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
+    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
+    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
+  </div>
+</footer>
+<script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
 </body>
 </html>
