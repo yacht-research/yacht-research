@@ -52,7 +52,7 @@ section{position:relative;}
 .gold-divider{width:60px;height:1px;background:var(--gold);margin:28px 0;}
 #yachts{padding:120px 60px;background:var(--navy);scroll-margin-top:80px;}
 .yachts-header{display:flex;justify-content:space-between;align-items:flex-end;max-width:1200px;margin:0 auto 60px;}
-.yachts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1200px;margin:0 auto 60px;}
+.yachts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1200px;margin:0 auto;}
 .yacht-card{background:var(--navy-light);overflow:hidden;transition:transform 0.4s ease;}
 .yacht-card:hover{transform:translateY(-8px);}
 .yacht-img{height:260px;overflow:hidden;position:relative;}
@@ -76,6 +76,9 @@ section{position:relative;}
 .yacht-brochure-btn{display:block;text-align:center;margin:12px 30px 20px;padding:11px 20px;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all 0.3s ease;}
 .yacht-brochure-btn:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);transform:translateY(-1px);}
 .submit-yacht-banner{background:var(--navy-light);border:1px solid rgba(201,168,76,0.2);padding:50px;text-align:center;max-width:1200px;margin:0 auto;}
+.yachts-fade-wrap{position:relative;max-width:1200px;margin:0 auto;}
+.yachts-fade{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent,var(--navy) 85%);pointer-events:none;display:none;}
+.yachts-cta-wrap{text-align:center;padding-top:24px;}
 .submit-yacht-banner h3{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:12px;}
 .submit-yacht-banner p{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:30px;}
 #charter{padding:120px 60px;background:var(--navy);scroll-margin-top:80px;}
@@ -257,6 +260,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .mobile-menu .mob-newsletter{font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;text-decoration:none;}
 @media(max-width:1024px){nav{padding:16px 24px;}.nav-center,.nav-cta{display:none;}.hamburger{display:flex;}}
 </style>
+<script>
+/* Prevent hero flash: hide page immediately if we need to scroll to a section */
+(function(){
+  var t=sessionStorage.getItem('scrollTo')||window.location.hash;
+  if(t&&t!=='#'&&t!=='#hero')document.documentElement.style.visibility='hidden';
+})();
+</script>
 </head>
 <body>
 <div class="cursor" id="cursor"></div>
@@ -313,18 +323,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 <section id="yachts">
   <div class="yachts-header reveal">
     <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2><p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:12px;font-weight:300;letter-spacing:0.5px;">Personally vetted listings &middot; Dubai &middot; French Riviera &middot; Mediterranean</p></div>
-    <a href="/listings.html" class="btn-primary" style="display:inline-block;">View All Listings</a>
   </div>
-  <div class="yachts-grid" id="yachts-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
-      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;">
-        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out infinite;"></span>
-        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.2s infinite;"></span>
-        <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.4s infinite;"></span>
+  <div class="yachts-fade-wrap">
+    <div class="yachts-grid" id="yachts-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+        <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;">
+          <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out infinite;"></span>
+          <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.2s infinite;"></span>
+          <span style="width:6px;height:6px;background:#c9a84c;border-radius:50%;display:inline-block;animation:dot-pulse 1.4s ease-in-out 0.4s infinite;"></span>
+        </div>
+        <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Loading listings…</p>
       </div>
-      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Loading listings…</p>
     </div>
+    <div class="yachts-fade" id="yachts-fade"></div>
   </div>
+  <div class="yachts-cta-wrap">
+    <a href="/listings.html" class="btn-primary" style="display:inline-block;">View All Listings &rarr;</a>
+    <p id="yachts-more-count" style="font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.35);margin-top:16px;text-transform:uppercase;"></p>
+  </div>
+  <div style="height:60px;"></div>
   <div class="submit-yacht-banner reveal">
     <h3>Are You a Broker&#160;? Submit Your Yacht</h3>
     <p>Yacht Research welcomes co-brokerage submissions. Share your listing with our international buyer network.</p>
@@ -537,7 +554,8 @@ async function loadCMSContent() {
       });
       if (pub.length) {
         var grid = document.querySelector('#yachts-grid');
-        if (grid) grid.innerHTML = pub.map(function(y) {
+        var show = pub.slice(0, 3); // 3 moins chers seulement
+        if (grid) grid.innerHTML = show.map(function(y) {
           var badgeKey = (y.badge||'').toLowerCase();
           var badgeCls = badgeKey.includes('new')?'badge-new':badgeKey.includes('reduc')||badgeKey.includes('price')?'badge-reduced':badgeKey.includes('off')?'badge-offmarket':badgeKey.includes('charter')?'badge-charter':'badge-sale';
           var badgeLbl = badgeKey.includes('new')?'New Listing':badgeKey.includes('reduc')||badgeKey.includes('price')?'Price Reduced':badgeKey.includes('off')?'Off Market':badgeKey.includes('charter')?'Charter Ready':'For Sale';
@@ -560,6 +578,13 @@ async function loadCMSContent() {
             +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
             +'</div></div>';
         }).join('');
+        // Fade + CTA si plus de 3 yachts
+        if(pub.length > 3) {
+          var fadeWrap = document.getElementById('yachts-fade');
+          if(fadeWrap) fadeWrap.style.display='block';
+          var cnt = document.getElementById('yachts-more-count');
+          if(cnt) cnt.textContent = (pub.length - 3)+' more listing'+(pub.length-3>1?'s':'');
+        }
       }
     }
   } catch(e){ console.log('yachts',e); }
@@ -704,26 +729,27 @@ document.addEventListener('DOMContentLoaded', function(){
   var y=document.getElementById('yr-year');
   if(y) y.textContent='© '+new Date().getFullYear();
   var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
-  if(targetId) sessionStorage.removeItem('scrollTo');
-  loadCMSContent().then(function(){
-    if(targetId){
-      setTimeout(function(){
-        var t=document.querySelector(targetId);
-        if(t){
-          document.documentElement.style.scrollBehavior='auto';
-          t.scrollIntoView({block:'start'});
-          setTimeout(function(){document.documentElement.style.scrollBehavior='';},100);
-        }
-      },120);
-    }
-  });
+  if(targetId && targetId !== '#' && targetId !== '#hero') {
+    sessionStorage.removeItem('scrollTo');
+    // Scroll synchronously before first paint
+    document.documentElement.style.scrollBehavior='auto';
+    var t=document.querySelector(targetId);
+    if(t) window.scrollTo(0, t.offsetTop - 80);
+    document.documentElement.style.visibility='';
+    document.documentElement.style.scrollBehavior='';
+  } else {
+    sessionStorage.removeItem('scrollTo');
+    document.documentElement.style.visibility='';
+  }
+  loadCMSContent();
 });
 
 
-function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
+function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollTo({left:n.scrollLeft+d*200,behavior:'smooth'});setTimeout(syncArrows,300);}
 function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.classList.toggle('shown',n.scrollLeft>2);if(r)r.classList.toggle('shown',n.scrollLeft<n.scrollWidth-n.clientWidth-2);}
 function initNavArrows(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth+2)r.classList.add('shown');syncArrows();}
 window.addEventListener('load',initNavArrows);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(initNavArrows);
 window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
 function openNewsletter(){document.getElementById('newsletterPopup').classList.add('open');}
 function closeNewsletter(){document.getElementById('newsletterPopup').classList.remove('open');document.getElementById('popupForm').style.display='block';document.getElementById('popupSuccess').style.display='none';}

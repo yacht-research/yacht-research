@@ -949,10 +949,11 @@ loadCMSSettings();
 
 <script>
 /* ── NAV JS ── */
-function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
+function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollTo({left:n.scrollLeft+d*200,behavior:'smooth'});setTimeout(syncArrows,300);}
 function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.classList.toggle('shown',n.scrollLeft>2);if(r)r.classList.toggle('shown',n.scrollLeft<n.scrollWidth-n.clientWidth-2);}
 function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth+2)r.classList.add('shown');syncArrows();}
 window.addEventListener('load',initNav);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(initNav);
 window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
