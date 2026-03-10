@@ -234,10 +234,12 @@ footer{padding:60px 30px 30px;}
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
-.nav-center{display:flex;align-items:center;gap:0;}
-.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;pointer-events:none;}
+.nav-center{display:flex;align-items:center;gap:0;max-width:min(620px,calc(100vw - 380px));}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;}
+.nav-scroll-btn.shown{opacity:1;pointer-events:auto;}
 .nav-scroll-btn:hover{color:#c9a84c;}
-.nav-links{display:flex;gap:28px;list-style:none;overflow:hidden;white-space:nowrap;}
+.nav-links{display:flex;gap:28px;list-style:none;overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
+.nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:#c9a84c;}
 .nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;border:1px solid #c9a84c;padding:10px 22px;text-decoration:none;transition:all 0.3s;flex-shrink:0;margin-left:24px;}
@@ -701,13 +703,17 @@ async function loadCMSContent() {
 document.addEventListener('DOMContentLoaded', function(){
   var y=document.getElementById('yr-year');
   if(y) y.textContent='© '+new Date().getFullYear();
-  // Scroll IMMÉDIAT — avant que les yachts chargent
+  // Scroll IMMÉDIAT — désactive smooth-scroll global avant de scroller
   var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
   if(targetId){
     sessionStorage.removeItem('scrollTo');
     setTimeout(function(){
       var t=document.querySelector(targetId);
-      if(t) t.scrollIntoView({behavior:'auto',block:'start'});
+      if(t){
+        document.documentElement.style.scrollBehavior='auto';
+        t.scrollIntoView({block:'start'});
+        setTimeout(function(){document.documentElement.style.scrollBehavior='';},100);
+      }
     },50);
   }
   loadCMSContent();
@@ -715,10 +721,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
-function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.style.opacity=n.scrollLeft>2?'1':'0';if(r)r.style.opacity=n.scrollLeft<n.scrollWidth-n.clientWidth-2?'1':'0';}
-function initNavArrows(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth)r.style.opacity='1';syncArrows();}
+function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.classList.toggle('shown',n.scrollLeft>2);if(r)r.classList.toggle('shown',n.scrollLeft<n.scrollWidth-n.clientWidth-2);}
+function initNavArrows(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth+2)r.classList.add('shown');syncArrows();}
 window.addEventListener('load',initNavArrows);
-window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.style.opacity=n.scrollWidth>n.clientWidth?'1':'0';}syncArrows();});
+window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
 function openNewsletter(){document.getElementById('newsletterPopup').classList.add('open');}
 function closeNewsletter(){document.getElementById('newsletterPopup').classList.remove('open');document.getElementById('popupForm').style.display='block';document.getElementById('popupSuccess').style.display='none';}
 document.getElementById('newsletterPopup').addEventListener('click',function(e){if(e.target===this)closeNewsletter();});
