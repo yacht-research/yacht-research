@@ -22,6 +22,8 @@ h2{font-family:Montserrat,Arial,sans-serif;font-size:11px;letter-spacing:3px;tex
 p{color:rgba(255,255,255,0.7);font-size:15px;margin-bottom:16px;}
 ul{color:rgba(255,255,255,0.7);font-size:15px;margin-bottom:16px;padding-left:24px;}
 li{margin-bottom:8px;}
+.nav-links{padding-left:0!important;margin-bottom:0!important;font-size:unset!important;}
+.nav-links li{margin-bottom:0!important;}
 .email-link{color:#c9a84c;text-decoration:underline;cursor:pointer;}
 .contact-box{background:#0d1428;border:1px solid #1a2540;padding:28px 32px;margin-top:40px;}
 #cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
@@ -72,7 +74,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
+.mobile-menu{position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;padding:80px 20px 40px;overflow-y:auto;}
 .mobile-menu.open{transform:translateX(0);}
 .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
 .mobile-menu a:hover{color:#c9a84c;}
@@ -261,9 +263,9 @@ document.addEventListener("DOMContentLoaded",function(){var y=document.getElemen
 /* ── NAV JS ── */
 function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollTo({left:n.scrollLeft+d*200,behavior:'smooth'});setTimeout(syncArrows,300);}
 function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.classList.toggle('shown',n.scrollLeft>2);if(r)r.classList.toggle('shown',n.scrollLeft<n.scrollWidth-n.clientWidth-2);}
-function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth+2)r.classList.add('shown');syncArrows();}
-window.addEventListener('load',initNav);
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(initNav);
+function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);syncArrows();}
+window.addEventListener('load',function(){initNav();[200,500,1000].forEach(function(t){setTimeout(syncArrows,t);});});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){initNav();setTimeout(syncArrows,200);});
 window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
