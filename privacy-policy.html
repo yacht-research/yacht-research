@@ -14,7 +14,7 @@ body{background:#0a0f1e;color:#fff;font-family:Georgia,serif;line-height:1.8;}
 .logo{font-family:Montserrat,Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c9a84c;text-decoration:none;}
 .back{font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .3s;}
 .back:hover{color:#c9a84c;}
-.hero{background:#0a0f1e;padding:60px 40px 40px;max-width:800px;margin:0 auto;}
+.hero{background:#0a0f1e;padding:110px 40px 40px;max-width:800px;margin:0 auto;}
 .tag{font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;}
 h1{font-size:36px;font-weight:300;color:#fff;margin-bottom:8px;}
 .date{font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;}
@@ -36,14 +36,54 @@ li{margin-bottom:8px;}
 #cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
 #cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
 #cookie-decline:hover{color:rgba(255,255,255,0.7);}
+
+@media(max-width:1024px){
+  #navbar{padding:16px 24px!important;}
+  #navbar ul, #navbar > a[href="/yacht-research-form.html"]{display:none!important;}
+  .hamburger{display:flex!important;}
+}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+#mobileMenu.open{transform:translateX(0)!important;}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <a href="/" class="logo">Yacht Research</a>
-  <a href="/" class="back">← Back to site</a>
+<div class="cursor" id="cursor" style="position:fixed;width:8px;height:8px;background:#c9a84c;border-radius:50%;pointer-events:none;z-index:9999;"></div>
+<div class="cursor-ring" id="cursorRing" style="position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:width 0.3s,height 0.3s;"></div>
+<div id="mobileMenu" style="position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;">
+  <a href="/" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Home</a>
+  <a href="/#yachts" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Buy</a>
+  <a href="/#charter" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Charter</a>
+  <a href="/why-us.html" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Why Us</a>
+  <a href="/bespoke.html" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Services</a>
+  <a href="/partnerships.html" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Partnerships</a>
+  <a href="/recruitment.html" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Recruitment</a>
+  <a href="/#contact" onclick="toggleMenu()" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;">Contact</a>
+  <a href="/yacht-research-form.html" onclick="toggleMenu()" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;margin-top:8px;">Enquire Now</a>
+  <a href="/#newsletter-section" onclick="toggleMenu()" style="font-family:'Montserrat',sans-serif;font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;text-decoration:none;">Newsletter</a>
 </div>
+<nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);">
+  <a href="/" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;">Yacht <span style="color:#c9a84c;">Research</span></a>
+  <ul style="display:flex;gap:32px;list-style:none;">
+    <li><a href="/" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Home</a></li>
+    <li><a href="/#yachts" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Buy</a></li>
+    <li><a href="/#charter" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Charter</a></li>
+    <li><a href="/why-us.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Why Us</a></li>
+    <li><a href="/bespoke.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Services</a></li>
+    <li><a href="/partnerships.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Partnerships</a></li>
+    <li><a href="/recruitment.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Recruitment</a></li>
+    <li><a href="/#contact" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Contact</a></li>
+    <li><a href="/#newsletter-section" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c;text-decoration:none;">Newsletter</a></li>
+  </ul>
+  <a href="/yacht-research-form.html" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;border:1px solid #c9a84c;padding:10px 22px;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background='#c9a84c';this.style.color='#0a0f1e'" onmouseout="this.style.background='transparent';this.style.color='#c9a84c'">Enquire Now</a>
+  <div class="hamburger" onclick="toggleMenu()" style="display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;z-index:1000;">
+    <span style="width:24px;height:1px;background:#fff;display:block;transition:all 0.35s ease;transform-origin:center;"></span>
+    <span style="width:24px;height:1px;background:#fff;display:block;transition:all 0.35s ease;transform-origin:center;"></span>
+    <span style="width:24px;height:1px;background:#fff;display:block;transition:all 0.35s ease;transform-origin:center;"></span>
+  </div>
+</nav>
 
 <div class="hero">
   <p class="tag">Legal</p>
@@ -91,10 +131,13 @@ li{margin-bottom:8px;}
   <ul>
     <li>Google Apps Script / Google Sheets — form data storage (Google LLC, USA)</li>
     <li>Brevo (formerly Sendinblue) — email marketing and contact management (France / EU)</li>
-    <li>Cloudflare — website hosting, CDN and security (USA)</li>
-    <li>Unsplash — website imagery (Canada)</li>
+    <li>Cloudflare Pages — website hosting, CDN and security (USA)</li>
+    <li>Cloudflare Web Analytics — privacy-friendly, cookieless audience analytics. No personal data or cross-site tracking. EU visitor data excluded from analytics in compliance with GDPR.</li>
+    <li>GitHub (Microsoft) — image hosting via raw.githubusercontent.com for website media assets (USA)</li>
+    <li>Unsplash — supplementary website imagery for yacht listings (Canada)</li>
+    <li>Google Fonts — web typography loaded from fonts.googleapis.com (Google LLC, USA)</li>
   </ul>
-  <p>Each of these providers maintains their own privacy policies and GDPR compliance frameworks.</p>
+  <p>Each of these providers maintains their own privacy policies and GDPR compliance frameworks. Where applicable, data processing agreements are in place.</p>
 
   <h2>7. Your Rights</h2>
   <p>Under the GDPR (for EU residents) and the PDPL (for UAE residents), you have the following rights:</p>
@@ -110,7 +153,8 @@ li{margin-bottom:8px;}
   <p>To exercise any of these rights, please contact us at <span class="email-link" id="email3">contact [at] yachtresearchgroup.com</span>. We will respond within 30 days.</p>
 
   <h2>8. Cookies</h2>
-  <p>Our website may use cookies to ensure basic website functionality and to improve your experience. We do not use tracking or advertising cookies. A cookie consent banner is displayed on your first visit to allow you to manage your preferences.</p>
+  <p>Our website uses strictly necessary cookies to ensure basic functionality. We do not use advertising or cross-site tracking cookies. A cookie consent banner is displayed on your first visit to allow you to manage your preferences.</p>
+  <p>We use Cloudflare Web Analytics, a cookieless and privacy-preserving analytics tool that does not track individual visitors, does not set cookies, and does not share data with third parties. EU visitor data is excluded from analytics reports in accordance with GDPR requirements.</p>
 
   <h2>9. Newsletter</h2>
   <p>If you subscribe to our newsletter, your email address and name will be stored in our mailing list managed by Brevo. You may unsubscribe at any time by clicking the unsubscribe link in any email we send, or by contacting us directly.</p>
@@ -138,6 +182,19 @@ li{margin-bottom:8px;}
     <button id="cookie-accept">Accept</button>
   </div>
 </div>
+
+
+<script>
+function toggleMenu(){
+  document.getElementById('mobileMenu').style.transform = 
+    document.getElementById('mobileMenu').style.transform === 'translateX(0px)' ? 'translateX(100%)' : 'translateX(0px)';
+  document.querySelector('.hamburger').classList.toggle('open');
+}
+var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
+function animRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+</script>
 
 <script>
 (function(){
