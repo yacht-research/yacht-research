@@ -241,7 +241,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.35s ease;flex-shrink:0;opacity:0;pointer-events:none;}
 .nav-scroll-btn.shown{opacity:1;pointer-events:auto;}
 .nav-scroll-btn:hover{color:#c9a84c;}
-.nav-links{display:flex;gap:28px;list-style:none;overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
+.nav-links{display:flex;gap:28px;list-style:none;overflow-x:auto;white-space:nowrap;scrollbar-width:none;flex:1;min-width:0;}
 .nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:#c9a84c;}
@@ -585,6 +585,17 @@ async function loadCMSContent() {
           var cnt = document.getElementById('yachts-more-count');
           if(cnt) cnt.textContent = (pub.length - 3)+' more listing'+(pub.length-3>1?'s':'');
         }
+        // Re-scroll si la cible était sous les yachts
+        if(window._pendingScroll){
+          var ps=window._pendingScroll;
+          window._pendingScroll=null;
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+              var t=document.querySelector(ps);
+              if(t){document.documentElement.style.scrollBehavior='auto';window.scrollTo(0,t.offsetTop-80);document.documentElement.style.scrollBehavior='';}
+            });
+          });
+        }
       }
     }
   } catch(e){ console.log('yachts',e); }
@@ -723,23 +734,35 @@ async function loadCMSContent() {
       }
     }
   } catch(e){ console.log('seo',e); }
+
+  // Fallback scroll si les yachts n'ont pas pu rendre (API erreur)
+  if(window._pendingScroll){
+    var ps=window._pendingScroll;
+    window._pendingScroll=null;
+    var t=document.querySelector(ps);
+    if(t){document.documentElement.style.scrollBehavior='auto';window.scrollTo(0,t.offsetTop-80);document.documentElement.style.scrollBehavior='';}
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function(){
   var y=document.getElementById('yr-year');
   if(y) y.textContent='© '+new Date().getFullYear();
   var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
-  if(targetId && targetId !== '#' && targetId !== '#hero') {
-    sessionStorage.removeItem('scrollTo');
-    // Scroll synchronously before first paint
-    document.documentElement.style.scrollBehavior='auto';
-    var t=document.querySelector(targetId);
-    if(t) window.scrollTo(0, t.offsetTop - 80);
-    document.documentElement.style.visibility='';
-    document.documentElement.style.scrollBehavior='';
-  } else {
-    sessionStorage.removeItem('scrollTo');
-    document.documentElement.style.visibility='';
+  sessionStorage.removeItem('scrollTo');
+  if(targetId && targetId !== '#' && targetId !== '#hero'){
+    // Sections SOUS #yachts : charter, contact, newsletter — attendre le CMS
+    var belowYachts = ['#charter','#contact','#newsletter-section','#partnerships','#referral','#recruitment'];
+    var needsDelay = belowYachts.indexOf(targetId) !== -1;
+    if(needsDelay){
+      // Stocker pour re-scroll après injection des yachts
+      window._pendingScroll = targetId;
+    } else {
+      // Scroll immédiat pour hero, yachts, why, about, services
+      document.documentElement.style.scrollBehavior='auto';
+      var t=document.querySelector(targetId);
+      if(t) window.scrollTo(0, t.offsetTop - 80);
+      document.documentElement.style.scrollBehavior='';
+    }
   }
   loadCMSContent();
 });
