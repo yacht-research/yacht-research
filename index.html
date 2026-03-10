@@ -71,7 +71,12 @@ section{position:relative;}
 .yacht-img{height:260px;overflow:hidden;position:relative;}
 .yacht-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
 .yacht-card:hover .yacht-img img{transform:scale(1.05);}
-.yacht-badge{position:absolute;top:20px;left:20px;background:var(--gold);color:var(--navy);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;font-weight:500;}
+.yacht-badge{position:absolute;top:20px;left:20px;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;font-weight:500;}
+.badge-sale{background:var(--gold);color:var(--navy);}
+.badge-new{background:#1a6b3a;color:#fff;}
+.badge-reduced{background:#8b1a1a;color:#fff;}
+.badge-offmarket{background:#1a3a6b;color:#fff;}
+.badge-charter{background:#4a1a6b;color:#fff;}
 .yacht-info{padding:30px;}
 .yacht-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:16px;letter-spacing:0.5px;}
 .yacht-specs{display:flex;gap:24px;margin-bottom:20px;}
@@ -290,7 +295,7 @@ footer{padding:60px 30px 30px;}
 <section id="yachts">
   <div class="yachts-header reveal">
     <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2></div>
-    <a href="/listings.html" class="btn-outline">View All Listings</a>
+    <a href="/listings.html" class="btn-primary" style="display:inline-block;">View All Listings</a>
   </div>
   <div class="yachts-grid" id="yachts-grid">
     <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
@@ -497,24 +502,41 @@ async function loadCMSContent() {
       var jsonFiles = files.filter(function(f){ return f.name.endsWith('.json'); });
       var all = await Promise.all(jsonFiles.map(function(f){ return loadJSON('/content/yachts/'+f.name); }));
       var pub = all.filter(function(y){ return y && y.published !== false; });
-      // Tri par prix croissant
+      // Tri par prix croissant — normalisé en EUR (AED×0.23, GBP×1.18)
       pub.sort(function(a,b){
-        function parsePrice(p){ if(!p) return Infinity; return parseFloat(String(p).replace(/[^0-9.]/g,''))||Infinity; }
-        return parsePrice(a.price) - parsePrice(b.price);
+        function toEur(p){
+          if(!p) return Infinity;
+          var s=String(p).toUpperCase();
+          var n=parseFloat(s.replace(/[^0-9.]/g,''))||0;
+          if(!n) return Infinity;
+          if(s.includes('AED')||s.includes('DH')) return n*0.23;
+          if(s.includes('£')||s.includes('GBP')) return n*1.18;
+          return n;
+        }
+        return toEur(a.price)-toEur(b.price);
       });
       if (pub.length) {
         var grid = document.querySelector('#yachts-grid');
         if (grid) grid.innerHTML = pub.map(function(y) {
+          var badgeKey = (y.badge||'').toLowerCase();
+          var badgeCls = badgeKey.includes('new')?'badge-new':badgeKey.includes('reduc')||badgeKey.includes('price')?'badge-reduced':badgeKey.includes('off')?'badge-offmarket':badgeKey.includes('charter')?'badge-charter':'badge-sale';
+          var badgeLbl = badgeKey.includes('new')?'New Listing':badgeKey.includes('reduc')||badgeKey.includes('price')?'Price Reduced':badgeKey.includes('off')?'Off Market':badgeKey.includes('charter')?'Charter Ready':'For Sale';
+          var priceHTML = '';
+          if(y.original_price && y.price){
+            priceHTML = '<span style="text-decoration:line-through;color:rgba(255,255,255,0.3);font-size:10px;margin-right:8px;">'+y.original_price+'</span><span>'+y.price+'</span>';
+          } else {
+            priceHTML = '<span>'+(y.price||'Price on Request')+'</span>';
+          }
           return '<div class="yacht-card reveal visible">'
             +'<div class="yacht-img"><img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'
-            +'<div class="yacht-badge">'+(y.badge||'')+'</div></div>'
+            +'<div class="yacht-badge '+badgeCls+'">'+badgeLbl+'</div></div>'
             +'<div class="yacht-info"><h3 class="yacht-name">'+(y.title||'')+'</h3>'
             +'<div class="yacht-specs">'
-            +'<div class="yacht-spec"><span class="val">'+(y.length||'')+'</span><span class="key">Length</span></div>'
-            +'<div class="yacht-spec"><span class="val">'+(y.year||'')+'</span><span class="key">Built</span></div>'
-            +'<div class="yacht-spec"><span class="val">'+(y.location||'')+'</span><span class="key">Location</span></div>'
+            +'<div class="yacht-spec"><span class="val">'+(y.length||'—')+'</span><span class="key">Length</span></div>'
+            +'<div class="yacht-spec"><span class="val">'+(y.year||'—')+'</span><span class="key">Built</span></div>'
+            +'<div class="yacht-spec"><span class="val">'+(y.location||'—')+'</span><span class="key">Location</span></div>'
             +'</div>'
-            +'<div class="yacht-price"><span>'+(y.price||'')+'</span><a href="#contact">Enquire →</a></div>'
+            +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html">Enquire →</a></div>'
             +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
             +'</div></div>';
         }).join('');

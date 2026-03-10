@@ -95,9 +95,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .yacht-spec .val{font-size:13px;font-weight:400;color:var(--white);}
 .yacht-spec .key{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
 .yacht-price-row{display:flex;justify-content:space-between;align-items:center;}
-.yacht-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold-light);}
-.yacht-enquire{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.3s;border-bottom:1px solid transparent;}
-.yacht-enquire:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.yacht-price{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;border-top:1px solid rgba(201,168,76,0.2);padding-top:16px;display:flex;justify-content:space-between;align-items:center;width:100%;}
+.yacht-price a{color:var(--gold);text-decoration:none;font-size:9px;letter-spacing:2px;}
+.yacht-price a:hover{color:var(--gold-light);}
+.yacht-enquire{color:var(--gold);text-decoration:none;font-size:9px;letter-spacing:2px;text-transform:uppercase;transition:color 0.3s;}
+.yacht-enquire:hover{color:var(--gold-light);}
 .yacht-brochure-btn{display:block;margin-top:14px;font-size:8px;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);text-decoration:none;transition:all 0.3s;}
 .yacht-brochure-btn:hover{border-color:var(--gold);color:var(--gold);}
 
@@ -167,7 +169,7 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="/" onclick="toggleMenu()">Home</a>
-  <a href="/listings.html" onclick="toggleMenu()" style="color:var(--gold)">Buy</a>
+  <a href="/#yachts" onclick="toggleMenu()">Buy</a>
   <a href="/#charter" onclick="toggleMenu()">Charter</a>
   <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
   <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
@@ -183,7 +185,7 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
   <a href="/" class="nav-logo">Yacht <span>Research</span></a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/listings.html" class="active">Buy</a></li>
+    <li><a href="/#yachts">Buy</a></li>
     <li><a href="/#charter">Charter</a></li>
     <li><a href="/why-us.html">Why Us</a></li>
     <li><a href="/bespoke.html">Services</a></li>
@@ -370,7 +372,12 @@ var activeBadges = new Set();
 
 function parsePrice(p){
   if(!p) return Infinity;
-  return parseFloat(String(p).replace(/[^0-9.]/g,'')) || Infinity;
+  var s=String(p).toUpperCase();
+  var n=parseFloat(s.replace(/[^0-9.]/g,''))||0;
+  if(!n) return Infinity;
+  if(s.includes('AED')||s.includes('DH')) return n*0.23;
+  if(s.includes('£')||s.includes('GBP')) return n*1.18;
+  return n;
 }
 
 function parseLength(l){
@@ -399,7 +406,12 @@ function badgeHTML(y){
 
 function renderCard(y){
   var priceNum = parsePrice(y.price);
-  var priceStr = priceNum === Infinity ? 'Price on request' : (y.price || 'Price on request');
+  var priceHTML = '';
+  if(y.original_price && y.price){
+    priceHTML = '<span style="text-decoration:line-through;color:rgba(255,255,255,0.3);font-size:10px;margin-right:8px;">'+y.original_price+'</span><span>'+y.price+'</span>';
+  } else {
+    priceHTML = '<span>'+(priceNum===Infinity?'Price on Request':(y.price||'Price on Request'))+'</span>';
+  }
   return '<div class="yacht-card">'
     +'<div class="yacht-img">'
     +'<img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'
@@ -412,10 +424,7 @@ function renderCard(y){
     +'<div class="yacht-spec"><span class="val">'+(y.year||'—')+'</span><span class="key">Built</span></div>'
     +'<div class="yacht-spec"><span class="val">'+(y.location||'—')+'</span><span class="key">Location</span></div>'
     +'</div>'
-    +'<div class="yacht-price-row">'
-    +'<span class="yacht-price">'+priceStr+'</span>'
-    +'<a href="/#contact" class="yacht-enquire">Enquire →</a>'
-    +'</div>'
+    +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html" class="yacht-enquire">Enquire →</a></div>'
     +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
     +'</div>'
     +'</div>';
