@@ -77,9 +77,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
 .nav-center{display:flex;align-items:center;gap:0;}
-.nav-scroll-btn{display:none;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s;flex-shrink:0;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;pointer-events:none;}
 .nav-scroll-btn:hover{color:#c9a84c;}
-.nav-scroll-btn.visible{display:block;}
+.nav-scroll-btn[style*="opacity:1"],.nav-scroll-btn[style*="opacity: 1"]{pointer-events:auto;}
 .nav-links{display:flex;gap:28px;list-style:none;overflow:hidden;white-space:nowrap;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:#c9a84c;}
@@ -97,6 +97,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
 .mobile-menu .mob-newsletter{font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;text-decoration:none;}
 @media(max-width:1024px){nav{padding:16px 24px;}.nav-center,.nav-cta{display:none;}.hamburger{display:flex;}}
+.footer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:24px 0;margin-top:40px;border-top:1px solid rgba(255,255,255,0.06);max-width:1200px;margin-left:auto;margin-right:auto;}
+.footer-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.3);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;padding:10px 16px;border:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
+.footer-link:hover{color:#c9a84c;border-color:rgba(201,168,76,0.3);}
+@media(max-width:640px){.footer-links{gap:10px;}.footer-link{font-size:9px;letter-spacing:1px;padding:10px 12px;}}
 </style>
 </head>
 <body>
@@ -104,6 +108,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu()">Home</a>
   <a href="/#yachts" onclick="toggleMenu()">Buy</a>
   <a href="/listings.html" onclick="toggleMenu()">Listings</a>
   <a href="/#charter" onclick="toggleMenu()">Charter</a>
@@ -112,8 +117,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
   <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
   <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
   <a href="/#contact" onclick="toggleMenu()">Contact</a>
-  <a href="/#newsletter-section" onclick="toggleMenu()" style="color:#c9a84c">Newsletter</a>
   <a href="/yacht-research-form.html" onclick="toggleMenu()" class="mob-cta">Enquire Now</a>
+  <a href="/#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
 </div>
 <nav>
   <a href="/" class="nav-logo">Yacht <span>Research</span></a>
@@ -256,6 +261,12 @@ document.addEventListener("DOMContentLoaded",function(){var y=document.getElemen
 })();
 </script>
 <footer>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/yacht_research/" target="_blank" class="footer-link">📸 Instagram</a>
+    <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" class="footer-link">💬 WhatsApp UAE</a>
+    <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" class="footer-link">💬 WhatsApp FR</a>
+    <a href="https://linktr.ee/yacht_research" target="_blank" class="footer-link">🔗 All Links</a>
+  </div>
   <div class="footer-bottom">
     <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
     <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
@@ -264,23 +275,19 @@ document.addEventListener("DOMContentLoaded",function(){var y=document.getElemen
 </footer>
 <script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
 
+
 <script>
-}
-window.addEventListener('load',checkNavOverflow);window.addEventListener('resize',checkNavOverflow);
-</script>
-<script>
-function scrollNav(dir){var nl=document.getElementById('navLinks');if(nl)nl.scrollLeft+=dir*160;setTimeout(updateNavBtns,50);}
-function updateNavBtns(){var nl=document.getElementById('navLinks');if(!nl)return;var l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(l){nl.scrollLeft>2?l.classList.add('visible'):l.classList.remove('visible');}if(r){nl.scrollLeft<nl.scrollWidth-nl.clientWidth-2?r.classList.add('visible'):r.classList.remove('visible');}}
-function initNav(){var nl=document.getElementById('navLinks');if(!nl)return;nl.addEventListener('scroll',updateNavBtns);if(nl.scrollWidth>nl.clientWidth){var r=document.getElementById('navRight');if(r)r.classList.add('visible');}}
-window.addEventListener('load',initNav);window.addEventListener('resize',function(){var nl=document.getElementById('navLinks');var r=document.getElementById('navRight');if(nl&&r){nl.scrollWidth>nl.clientWidth?r.classList.add('visible'):r.classList.remove('visible');}updateNavBtns();});
+/* ── NAV JS ── */
+function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
+function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.style.opacity=n.scrollLeft>2?'1':'0';if(r)r.style.opacity=n.scrollLeft<n.scrollWidth-n.clientWidth-2?'1':'0';}
+function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth)r.style.opacity='1';syncArrows();}
+window.addEventListener('load',initNav);
+window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.style.opacity=n.scrollWidth>n.clientWidth?'1':'0';};syncArrows();});
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
-function animRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
-animRing();
-document.querySelectorAll('a[href^="/#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();sessionStorage.setItem('scrollTo',a.getAttribute('href').substring(1));window.location.href='/';});});
-// sessionStorage re-scroll
-document.querySelectorAll("a[href^='/#']").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();sessionStorage.setItem("scrollTo",a.getAttribute("href").substring(1));window.location.href="/";});});
+if(cur&&ring){document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});(function anim(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();}
+/* cross-page scroll */
+document.querySelectorAll('a[href^="/#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();sessionStorage.setItem('scrollTo',a.getAttribute('href').substring(1));window.location.href='/';})});
 </script>
 </body>
 </html>

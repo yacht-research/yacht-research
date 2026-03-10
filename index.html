@@ -59,7 +59,7 @@ section{position:relative;}
 .yacht-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
 .yacht-card:hover .yacht-img img{transform:scale(1.05);}
 .yacht-badge-wrap{position:absolute;top:16px;left:16px;display:flex;gap:6px;flex-wrap:wrap;}
-.yacht-badge{font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;font-weight:500;}
+.yacht-badge{position:absolute;top:16px;left:16px;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;font-weight:500;}
 .badge-sale{background:var(--gold);color:var(--navy);}
 .badge-new{background:#1a6b3a;color:#fff;}
 .badge-reduced{background:#8b1a1a;color:#fff;}
@@ -235,9 +235,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
 .nav-center{display:flex;align-items:center;gap:0;}
-.nav-scroll-btn{display:none;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s;flex-shrink:0;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;pointer-events:none;}
 .nav-scroll-btn:hover{color:#c9a84c;}
-.nav-scroll-btn.visible{display:block;}
 .nav-links{display:flex;gap:28px;list-style:none;overflow:hidden;white-space:nowrap;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:#c9a84c;}
@@ -311,7 +310,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 
 <section id="yachts">
   <div class="yachts-header reveal">
-    <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2></div>
+    <div><p class="section-label">Current Selection</p><h2 class="section-title">Yachts <em>for Sale</em></h2><p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:12px;font-weight:300;letter-spacing:0.5px;">Personally vetted listings — Dubai &middot; French Riviera &middot; Mediterranean</p></div>
     <a href="/listings.html" class="btn-primary" style="display:inline-block;">View All Listings</a>
   </div>
   <div class="yachts-grid" id="yachts-grid">
@@ -702,17 +701,24 @@ async function loadCMSContent() {
 document.addEventListener('DOMContentLoaded', function(){
   var y=document.getElementById('yr-year');
   if(y) y.textContent='© '+new Date().getFullYear();
-  loadCMSContent().then(function(){
-    // Re-scroll après chargement async (yachts décalent la page)
-    var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
-    if(targetId){
-      sessionStorage.removeItem('scrollTo');
-      var t = document.querySelector(targetId);
-      if(t) setTimeout(function(){t.scrollIntoView({behavior:'smooth',block:'start'});},200);
-    }
-  });
+  // Scroll IMMÉDIAT — avant que les yachts chargent
+  var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
+  if(targetId){
+    sessionStorage.removeItem('scrollTo');
+    setTimeout(function(){
+      var t=document.querySelector(targetId);
+      if(t) t.scrollIntoView({behavior:'auto',block:'start'});
+    },50);
+  }
+  loadCMSContent();
 });
 
+
+function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
+function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.style.opacity=n.scrollLeft>2?'1':'0';if(r)r.style.opacity=n.scrollLeft<n.scrollWidth-n.clientWidth-2?'1':'0';}
+function initNavArrows(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth)r.style.opacity='1';syncArrows();}
+window.addEventListener('load',initNavArrows);
+window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.style.opacity=n.scrollWidth>n.clientWidth?'1':'0';}syncArrows();});
 function openNewsletter(){document.getElementById('newsletterPopup').classList.add('open');}
 function closeNewsletter(){document.getElementById('newsletterPopup').classList.remove('open');document.getElementById('popupForm').style.display='block';document.getElementById('popupSuccess').style.display='none';}
 document.getElementById('newsletterPopup').addEventListener('click',function(e){if(e.target===this)closeNewsletter();});
@@ -756,37 +762,7 @@ function submitNewsletter(){
   if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
 })();
 
-// Nav scroll arrows
-function scrollNav(dir){
-  var nl=document.getElementById('navLinks');
-  if(nl) nl.scrollLeft+=dir*160;
-  setTimeout(updateNavBtns,50);
-}
-function updateNavBtns(){
-  var nl=document.getElementById('navLinks');
-  if(!nl) return;
-  var l=document.getElementById('navLeft'),r=document.getElementById('navRight');
-  if(l){nl.scrollLeft>2?l.classList.add('visible'):l.classList.remove('visible');}
-  if(r){nl.scrollLeft<nl.scrollWidth-nl.clientWidth-2?r.classList.add('visible'):r.classList.remove('visible');}
-}
-function initNav(){
-  var nl=document.getElementById('navLinks');
-  if(!nl) return;
-  nl.addEventListener('scroll',updateNavBtns);
-  // Show right arrow if content overflows
-  if(nl.scrollWidth>nl.clientWidth){document.getElementById('navRight').classList.add('visible');}
-}
-window.addEventListener('load',initNav);
-window.addEventListener('resize',function(){
-  var nl=document.getElementById('navLinks');
-  var r=document.getElementById('navRight');
-  if(nl&&r){nl.scrollWidth>nl.clientWidth?r.classList.add('visible'):r.classList.remove('visible');}
-  updateNavBtns();
-});
-function toggleMenu(){
-  document.getElementById('mobileMenu').classList.toggle('open');
-  document.getElementById('hamburger').classList.toggle('open');
-}
+
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
 function animRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}

@@ -79,9 +79,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
 .nav-center{display:flex;align-items:center;gap:0;}
-.nav-scroll-btn{display:none;background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s;flex-shrink:0;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;pointer-events:none;}
 .nav-scroll-btn:hover{color:#c9a84c;}
-.nav-scroll-btn.visible{display:block;}
+.nav-scroll-btn[style*="opacity:1"],.nav-scroll-btn[style*="opacity: 1"]{pointer-events:auto;}
 .nav-links{display:flex;gap:28px;list-style:none;overflow:hidden;white-space:nowrap;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:#c9a84c;}
@@ -105,16 +105,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu()">Home</a>
   <a href="/#yachts" onclick="toggleMenu()">Buy</a>
   <a href="/listings.html" onclick="toggleMenu()">Listings</a>
   <a href="/#charter" onclick="toggleMenu()">Charter</a>
   <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
-  <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
+  <a href="/bespoke.html" onclick="toggleMenu()" style="color:#c9a84c;">Services</a>
   <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
   <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
   <a href="/#contact" onclick="toggleMenu()">Contact</a>
-  <a href="/#newsletter-section" onclick="toggleMenu()" style="color:#c9a84c">Newsletter</a>
   <a href="/yacht-research-form.html" onclick="toggleMenu()" class="mob-cta">Enquire Now</a>
+  <a href="/#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
 </div>
 <nav>
   <a href="/" class="nav-logo">Yacht <span>Research</span></a>
@@ -193,39 +194,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
   <p>We use cookies to ensure basic functionality. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a>.</p>
   <div class="cookie-buttons"><button id="cookie-decline">Decline</button><button id="cookie-accept">Accept</button></div>
 </div>
-<script>
-var cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cursor.style.left=mx-4+'px';cursor.style.top=my-4+'px';});
-function animateRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateRing);}
-animateRing();
-document.querySelectorAll('a,button').forEach(function(el){el.addEventListener('mouseenter',function(){ring.style.width='50px';ring.style.height='50px';});el.addEventListener('mouseleave',function(){ring.style.width='32px';ring.style.height='32px';});});
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.hamburger').classList.toggle('open');}
-var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
-document.getElementById('yr-year').textContent='© '+new Date().getFullYear();
-(function(){function gc(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*864e5));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}if(!gc('yr_cookie_consent')){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}var a=document.getElementById('cookie-accept'),d=document.getElementById('cookie-decline');if(a)a.onclick=function(){sc('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';};if(d)d.onclick=function(){sc('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';};})();
-var APPS_URL='https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
-function showToast(msg,ok){var t=document.getElementById('yr-toast');if(t)t.remove();t=document.createElement('div');t.id='yr-toast';t.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:'+(ok!==false?'#c9a84c':'#c0392b')+';color:'+(ok!==false?'#0a0f1e':'#fff')+';padding:16px 40px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:9999;';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},4000);}
-function submitForm(fd,btn,name){var orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;fd.append('form_name',name);fd.append('submitted_at',new Date().toLocaleString('fr-FR'));showToast('Message sent successfully.');var fs=btn.closest('.form-section');if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});btn.textContent=orig;btn.disabled=false;fetch(APPS_URL,{method:'POST',body:new URLSearchParams(fd),mode:'no-cors'}).catch(function(){});}
-</script>
 
 <script>
-}
-window.addEventListener('load',checkNavOverflow);window.addEventListener('resize',checkNavOverflow);
-</script>
-<script>
-function scrollNav(dir){var nl=document.getElementById('navLinks');if(nl)nl.scrollLeft+=dir*160;setTimeout(updateNavBtns,50);}
-function updateNavBtns(){var nl=document.getElementById('navLinks');if(!nl)return;var l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(l){nl.scrollLeft>2?l.classList.add('visible'):l.classList.remove('visible');}if(r){nl.scrollLeft<nl.scrollWidth-nl.clientWidth-2?r.classList.add('visible'):r.classList.remove('visible');}}
-function initNav(){var nl=document.getElementById('navLinks');if(!nl)return;nl.addEventListener('scroll',updateNavBtns);if(nl.scrollWidth>nl.clientWidth){var r=document.getElementById('navRight');if(r)r.classList.add('visible');}}
-window.addEventListener('load',initNav);window.addEventListener('resize',function(){var nl=document.getElementById('navLinks');var r=document.getElementById('navRight');if(nl&&r){nl.scrollWidth>nl.clientWidth?r.classList.add('visible'):r.classList.remove('visible');}updateNavBtns();});
+/* ── NAV JS ── */
+function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollLeft+=d*160;setTimeout(syncArrows,50);}
+function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.style.opacity=n.scrollLeft>2?'1':'0';if(r)r.style.opacity=n.scrollLeft<n.scrollWidth-n.clientWidth-2?'1':'0';}
+function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);if(n.scrollWidth>n.clientWidth)r.style.opacity='1';syncArrows();}
+window.addEventListener('load',initNav);
+window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.style.opacity=n.scrollWidth>n.clientWidth?'1':'0';};syncArrows();});
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
-function animRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
-animRing();
-document.querySelectorAll('a[href^="/#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();sessionStorage.setItem('scrollTo',a.getAttribute('href').substring(1));window.location.href='/';});});
-// sessionStorage re-scroll
-document.querySelectorAll("a[href^='/#']").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();sessionStorage.setItem("scrollTo",a.getAttribute("href").substring(1));window.location.href="/";});});
+if(cur&&ring){document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});(function anim(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();}
+/* cross-page scroll */
+document.querySelectorAll('a[href^="/#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();sessionStorage.setItem('scrollTo',a.getAttribute('href').substring(1));window.location.href='/';})});
 </script>
 </body>
 </html>
