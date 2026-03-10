@@ -204,6 +204,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 @media(max-width:640px){.pt-grid{grid-template-columns:1fr!important;}}
 </style>
 <script>
+var APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
+function showToast(msg,ok){
+  var t=document.getElementById('yr-toast');if(t)t.remove();
+  t=document.createElement('div');t.id='yr-toast';
+  t.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:'+(ok!==false?'#c9a84c':'#c0392b')+';color:'+(ok!==false?'#0a0f1e':'#fff')+';padding:16px 40px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:9999;';
+  t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},4000);
+}
+function submitForm(fd,btn,name){
+  var orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;
+  fd.append('form_name',name);fd.append('submitted_at',new Date().toLocaleString('fr-FR'));
+  var params=new URLSearchParams(fd);
+  showToast('Message sent successfully.');
+  var fs=btn.closest('.form-section');
+  if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});
+  btn.textContent=orig;btn.disabled=false;
+  fetch(APPS_SCRIPT_URL,{method:'POST',body:params,mode:'no-cors'}).catch(function(){});
+}
 document.getElementById('btn-p').addEventListener('click',function(){
   var fd=new FormData();
   fd.append('name',document.getElementById('p-name').value);
