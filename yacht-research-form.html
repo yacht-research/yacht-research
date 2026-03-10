@@ -452,6 +452,7 @@
 .mobile-menu a:hover{color:#c9a84c;}
 .mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
 @media(max-width:1024px){
+  .nav-links-wrap{display:none;}
   #navbar ul, #navbar > a[href="/yacht-research-form.html"]{display:none!important;}
   .hamburger{display:flex!important;}
   #navbar{padding:16px 24px!important;}
@@ -467,6 +468,10 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
 .footer-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.3);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;padding:10px 16px;border:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
 .footer-link:hover{color:#c9a84c;border-color:rgba(201,168,76,0.3);}
 @media(max-width:640px){.footer-links{gap:10px;}.footer-link{font-size:9px;letter-spacing:1px;padding:10px 12px;}}
+.nav-links-wrap{display:flex;align-items:center;gap:6px;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:16px;padding:4px 6px;line-height:1;transition:color 0.2s;flex-shrink:0;}
+.nav-scroll-btn:hover{color:#c9a84c;}
+.nav-links{display:flex;gap:24px;list-style:none;overflow:hidden;max-width:560px;scroll-behavior:smooth;}
 </style>
 </head>
 <body>
@@ -894,5 +899,25 @@ function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("op
   </div>
 </footer>
 <script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
+
+<script>
+// Cross-page anchor scroll
+document.querySelectorAll('a[href^="/#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var full = a.getAttribute('href'); // ex: /#charter
+    var hash = full.substring(1);       // ex: #charter
+    sessionStorage.setItem('scrollTo', hash);
+    window.location.href = '/';
+  });
+});
+</script>
+<script>
+// Nav scroll arrows
+function scrollNav(dir){var nl=document.getElementById('navLinks');if(nl)nl.scrollLeft+=dir*150;updateNavBtns();}
+function updateNavBtns(){var nl=document.getElementById('navLinks');if(!nl)return;var l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(l)l.style.display=nl.scrollLeft>4?'block':'none';if(r)r.style.display=nl.scrollLeft<(nl.scrollWidth-nl.clientWidth-4)?'block':'none';}
+function checkNavOverflow(){var nl=document.getElementById('navLinks');if(!nl)return;if(nl.scrollWidth>nl.clientWidth){var r=document.getElementById('navRight');if(r)r.style.display='block';}}
+window.addEventListener('load',checkNavOverflow);window.addEventListener('resize',checkNavOverflow);
+</script>
 </body>
 </html>

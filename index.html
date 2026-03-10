@@ -71,7 +71,8 @@ section{position:relative;}
 .yacht-img{height:260px;overflow:hidden;position:relative;}
 .yacht-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
 .yacht-card:hover .yacht-img img{transform:scale(1.05);}
-.yacht-badge{position:absolute;top:20px;left:20px;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;font-weight:500;}
+.yacht-badge-wrap{position:absolute;top:16px;left:16px;display:flex;gap:6px;flex-wrap:wrap;}
+.yacht-badge{font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;font-weight:500;}
 .badge-sale{background:var(--gold);color:var(--navy);}
 .badge-new{background:#1a6b3a;color:#fff;}
 .badge-reduced{background:#8b1a1a;color:#fff;}
@@ -79,11 +80,11 @@ section{position:relative;}
 .badge-charter{background:#4a1a6b;color:#fff;}
 .yacht-info{padding:30px;}
 .yacht-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:16px;letter-spacing:0.5px;}
-.yacht-specs{display:flex;gap:24px;margin-bottom:20px;}
-.yacht-spec{text-align:center;}
-.yacht-spec .val{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--white);display:block;}
-.yacht-spec .key{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);}
-.yacht-price{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;border-top:1px solid rgba(201,168,76,0.2);padding-top:16px;display:flex;justify-content:space-between;align-items:center;}
+.yacht-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.yacht-spec{display:flex;flex-direction:column;gap:4px;}
+.yacht-spec .val{font-size:13px;font-weight:400;color:var(--white);}
+.yacht-spec .key{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.yacht-price{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
 .yacht-price a{color:var(--gold);text-decoration:none;font-size:9px;letter-spacing:2px;}
 .yacht-brochure-btn{display:block;text-align:center;margin:12px 30px 20px;padding:11px 20px;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all 0.3s ease;}
 .yacht-brochure-btn:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);transform:translateY(-1px);}
@@ -174,7 +175,7 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 .reveal-delay-3{transition-delay:0.45s;}
 @media(max-width:1024px){
 nav{padding:20px 30px;}nav.scrolled{padding:14px 30px;}
-.nav-links,.nav-cta{display:none;}
+.nav-links-wrap,.nav-cta{display:none;}
 .hamburger{display:flex;}
 .nav-cta{display:inline-block;font-size:9px;padding:8px 14px;letter-spacing:1.5px;}
 #why,#yachts,#about,#charter,#contact{padding:80px 30px;}
@@ -263,7 +264,7 @@ footer{padding:60px 30px 30px;}
 </div>
 <nav id="navbar">
   <a href="#hero" class="nav-logo">Yacht <span>Research</span></a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#yachts">Buy</a></li>
     <li><a href="/listings.html">Listings</a></li>
     <li><a href="#charter">Charter</a></li>
@@ -273,6 +274,9 @@ footer{padding:60px 30px 30px;}
     <li><a href="/recruitment.html">Recruitment</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#newsletter-section" style="color:var(--gold);">Newsletter</a></li>
+  </ul>
+    <button class="nav-scroll-btn" id="navRight" onclick="scrollNav(1)">&#8594;</button>
+  </div>
   </ul>
   <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>
   <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
@@ -431,6 +435,29 @@ var mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cursor.style.left=mx-4+'px';cursor.style.top=my-4+'px';});
 function animateRing(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateRing);}
 animateRing();
+// Nav scroll arrows
+function scrollNav(dir){
+  var nl=document.getElementById('navLinks');
+  if(nl) nl.scrollLeft += dir*150;
+  updateNavBtns();
+}
+function updateNavBtns(){
+  var nl=document.getElementById('navLinks');
+  if(!nl) return;
+  var l=document.getElementById('navLeft'),r=document.getElementById('navRight');
+  if(l) l.style.display=nl.scrollLeft>4?'block':'none';
+  if(r) r.style.display=nl.scrollLeft<(nl.scrollWidth-nl.clientWidth-4)?'block':'none';
+}
+function checkNavOverflow(){
+  var nl=document.getElementById('navLinks');
+  if(!nl) return;
+  var r=document.getElementById('navRight');
+  if(nl.scrollWidth>nl.clientWidth){if(r) r.style.display='block';}
+  else{if(r) r.style.display='none';}
+}
+window.addEventListener('load',checkNavOverflow);
+window.addEventListener('resize',checkNavOverflow);
+
 document.querySelectorAll('a,button,.service-card,.yacht-card,.charter-region,.role-item').forEach(function(el){
   el.addEventListener('mouseenter',function(){ring.style.width='50px';ring.style.height='50px';ring.style.borderColor='rgba(201,168,76,0.8)';});
   el.addEventListener('mouseleave',function(){ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(201,168,76,0.5)';});
@@ -683,9 +710,17 @@ async function loadCMSContent() {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  loadCMSContent();
   var y=document.getElementById('yr-year');
   if(y) y.textContent='© '+new Date().getFullYear();
+  loadCMSContent().then(function(){
+    // Re-scroll après chargement async (yachts décalent la page)
+    var targetId = sessionStorage.getItem('scrollTo') || window.location.hash;
+    if(targetId){
+      sessionStorage.removeItem('scrollTo');
+      var t = document.querySelector(targetId);
+      if(t) setTimeout(function(){t.scrollIntoView({behavior:'smooth',block:'start'});},200);
+    }
+  });
 });
 
 function openNewsletter(){document.getElementById('newsletterPopup').classList.add('open');}

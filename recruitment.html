@@ -16,7 +16,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--navy);color:var(--whit
 .cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;}
 .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:width 0.3s,height 0.3s;}
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);}
-.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links-wrap{display:flex;align-items:center;gap:6px;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:16px;padding:4px 6px;line-height:1;transition:color 0.2s;flex-shrink:0;}
+.nav-scroll-btn:hover{color:var(--gold);}
+.nav-links{display:flex;gap:24px;list-style:none;overflow:hidden;max-width:560px;scroll-behavior:smooth;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 .nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 22px;text-decoration:none;transition:all 0.3s;}
@@ -65,7 +68,7 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
 .cookie-buttons{display:flex;gap:12px;}
 #cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
 #cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
-@media(max-width:1024px){nav{padding:16px 24px;}.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.form-row{grid-template-columns:1fr;}footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
+@media(max-width:1024px){nav{padding:16px 24px;}.nav-links-wrap,.nav-cta{display:none;}.hamburger{display:flex;}.form-row{grid-template-columns:1fr;}footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
 .footer-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:24px 0;margin-top:40px;border-top:1px solid rgba(255,255,255,0.06);max-width:1200px;margin-left:auto;margin-right:auto;}
@@ -173,6 +176,26 @@ document.getElementById('yr-year').textContent='© '+new Date().getFullYear();
 var APPS_URL='https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
 function showToast(msg,ok){var t=document.getElementById('yr-toast');if(t)t.remove();t=document.createElement('div');t.id='yr-toast';t.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:'+(ok!==false?'#c9a84c':'#c0392b')+';color:'+(ok!==false?'#0a0f1e':'#fff')+';padding:16px 40px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:9999;';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove();},4000);}
 function submitForm(fd,btn,name){var orig=btn.textContent;btn.textContent='Sending...';btn.disabled=true;fd.append('form_name',name);fd.append('submitted_at',new Date().toLocaleString('fr-FR'));showToast('Message sent successfully.');var fs=btn.closest('.form-section');if(fs)fs.querySelectorAll('input,select,textarea').forEach(function(f){f.value='';});btn.textContent=orig;btn.disabled=false;fetch(APPS_URL,{method:'POST',body:new URLSearchParams(fd),mode:'no-cors'}).catch(function(){});}
+</script>
+
+<script>
+// Cross-page anchor scroll
+document.querySelectorAll('a[href^="/#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var full = a.getAttribute('href'); // ex: /#charter
+    var hash = full.substring(1);       // ex: #charter
+    sessionStorage.setItem('scrollTo', hash);
+    window.location.href = '/';
+  });
+});
+</script>
+<script>
+// Nav scroll arrows
+function scrollNav(dir){var nl=document.getElementById('navLinks');if(nl)nl.scrollLeft+=dir*150;updateNavBtns();}
+function updateNavBtns(){var nl=document.getElementById('navLinks');if(!nl)return;var l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(l)l.style.display=nl.scrollLeft>4?'block':'none';if(r)r.style.display=nl.scrollLeft<(nl.scrollWidth-nl.clientWidth-4)?'block':'none';}
+function checkNavOverflow(){var nl=document.getElementById('navLinks');if(!nl)return;if(nl.scrollWidth>nl.clientWidth){var r=document.getElementById('navRight');if(r)r.style.display='block';}}
+window.addEventListener('load',checkNavOverflow);window.addEventListener('resize',checkNavOverflow);
 </script>
 </body>
 </html>
