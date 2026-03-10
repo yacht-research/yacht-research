@@ -440,13 +440,56 @@
 #cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
 #cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
 #cookie-decline:hover{color:rgba(255,255,255,0.7);}
+
+/* ── NAVIGATION ── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:16px;z-index:1000;position:relative;}
+.hamburger span{width:24px;height:1px;background:#fff;transition:all 0.35s ease;display:block;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-menu{position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
+.mobile-menu.open{transform:translateX(0);}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
+.mobile-menu a:hover{color:#c9a84c;}
+.mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
+@media(max-width:1024px){
+  #navbar ul, #navbar > a[href="/yacht-research-form.html"]{display:none!important;}
+  .hamburger{display:flex!important;}
+  #navbar{padding:16px 24px!important;}
+}
 </style>
 </head>
 <body>
-<div style="position:fixed;top:0;left:0;right:0;background:rgba(10,15,30,0.95);border-bottom:1px solid #1a2540;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;z-index:1000;">
-  <span style="font-family:Montserrat,Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c9a84c;">Yacht Research</span>
-  <a href="/" style="font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">← Back to site</a>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/" onclick="toggleMenu()">Home</a>
+  <a href="/#yachts" onclick="toggleMenu()">Buy</a>
+  <a href="/#charter" onclick="toggleMenu()">Charter</a>
+  <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
+  <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
+  <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
+  <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
+  <a href="/#contact" onclick="toggleMenu()">Contact</a>
+  <a href="/yacht-research-form.html" class="mob-cta" onclick="toggleMenu()">Enquire Now</a>
+  <a href="/#newsletter" onclick="toggleMenu()" style="color:var(--gold);font-size:18px;letter-spacing:3px;text-transform:uppercase;font-family:'Montserrat',sans-serif;">Newsletter</a>
 </div>
+<nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);">
+  <a href="/" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;">Yacht <span style="color:#c9a84c;">Research</span></a>
+  <ul style="display:flex;gap:32px;list-style:none;">
+    <li><a href="/" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Home</a></li>
+    <li><a href="/#yachts" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Buy</a></li>
+    <li><a href="/#charter" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Charter</a></li>
+    <li><a href="/why-us.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Why Us</a></li>
+    <li><a href="/bespoke.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Services</a></li>
+    <li><a href="/partnerships.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Partnerships</a></li>
+    <li><a href="/recruitment.html" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Recruitment</a></li>
+    <li><a href="/#contact" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;">Contact</a></li>
+    <li><a href="/#newsletter" style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c;text-decoration:none;">Newsletter</a></li>
+  </ul>
+  <a href="/yacht-research-form.html" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;border:1px solid #c9a84c;padding:10px 22px;text-decoration:none;">Enquire Now</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
 <div style="height:56px;"></div>
 
 <div class="cursor" id="cursor"></div>
@@ -804,6 +847,7 @@ async function loadCMSSettings() {
   } catch(e) {}
 }
 loadCMSSettings();
+function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("open");document.querySelector(".hamburger").classList.toggle("open");}
 </script>
 
 <!-- ─── COOKIE BANNER ─────────────────────────────────────────── -->
