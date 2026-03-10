@@ -32,12 +32,6 @@ li{margin-bottom:8px;}
 #cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
 #cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
 #cookie-decline:hover{color:rgba(255,255,255,0.7);}
-
-@media(max-width:1024px){
-  #navbar{padding:16px 24px!important;}
-  #navbar ul, #navbar > a[href="/yacht-research-form.html"]{display:none!important;}
-  
-}
 footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
 .footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
 .footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
@@ -47,14 +41,6 @@ footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,1
 :root{--navy:#0a0f1e;--navy-mid:#111827;--navy-light:#1a2540;--gold:#c9a84c;--gold-light:#e2c97e;--white:#ffffff;}
 .cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;}
 .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:width 0.3s,height 0.3s;}
-
-
-.nav-logo span{color:var(--gold);}
-
-
-
-
-
 
 
 
@@ -72,7 +58,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
 .nav-logo span{color:#c9a84c;}
 .nav-center{display:flex;align-items:center;gap:0;max-width:min(620px,calc(100vw - 380px));}
-.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.2s;flex-shrink:0;opacity:0;}
+.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.35s ease;flex-shrink:0;opacity:0;pointer-events:none;}
 .nav-scroll-btn.shown{opacity:1;pointer-events:auto;}
 .nav-scroll-btn:hover{color:#c9a84c;}
 .nav-links{display:flex;gap:28px;list-style:none;overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
