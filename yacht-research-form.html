@@ -666,7 +666,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
       <h2>Enquiry Received</h2>
       <div class="gold-line"></div>
       <p>Thank you for reaching out to Yacht Research.<br>A member of our team will contact you personally<br>within 24 hours.</p>
-      <a href="https://yachtresearchgroup.com" class="btn-next" style="display:block;text-align:center;text-decoration:none;padding:18px;">
+      <a href="https://yachtresearchgroup.com/listings.html" class="btn-next" style="display:block;text-align:center;text-decoration:none;padding:18px;">
         Explore Our Yachts →
       </a>
     </div>
@@ -823,7 +823,7 @@ function prevStep(from) {
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────
-async function submitForm() {
+function submitForm() {
   // GDPR check
   const gdpr = document.getElementById('gdprConsent');
   if (gdpr && !gdpr.checked) {
@@ -856,28 +856,24 @@ async function submitForm() {
 
 
 
-  // 1. Send to Google Apps Script (Sheets + email)
-  try {
-    const honeypot = document.getElementById('honeypot') ? document.getElementById('honeypot').value : '';
-    const params = new URLSearchParams({
-      website: honeypot,
-      form_name: formName,
-      name, email, phone, country,
-      type: projectType,
-      budget: formData.budget || '',
-      yacht_type: formData.yacht_type || '',
-      market: formData.market || '',
-      company: formData.company || '',
-      role: formData.role || '',
-      message: formData.message || '',
-      submitted_at: new Date().toLocaleString('fr-FR')
-    });
-    await fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' });
-  } catch(e) { console.log('Sheets error:', e); }
+  // Fire and forget — do not await, show success immediately
+  const honeypot = document.getElementById('honeypot') ? document.getElementById('honeypot').value : '';
+  const params = new URLSearchParams({
+    website: honeypot,
+    form_name: formName,
+    name, email, phone, country,
+    type: projectType,
+    budget: formData.budget || '',
+    yacht_type: formData.yacht_type || '',
+    market: formData.market || '',
+    company: formData.company || '',
+    role: formData.role || '',
+    message: formData.message || '',
+    submitted_at: new Date().toLocaleString('fr-FR')
+  });
+  fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});
 
-  // Brevo contact ajout géré par Google Apps Script côté serveur
-
-  // Show success
+  // Show success immediately
   var s3 = document.getElementById('step-3');
   s3.classList.add('leaving');
   setTimeout(function(){
