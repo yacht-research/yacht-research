@@ -3,8 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yachts for Sale — Yacht Research</title>
-<meta name="description" content="Browse our full collection of luxury yachts for sale. Filter by price, size, year and more. Dubai · French Riviera · Mediterranean.">
+<meta name="robots" content="index, follow">
+<title>Luxury Yachts for Sale | Yacht Research Listings — Dubai & Mediterranean</title>
+<meta name="description" content="Browse our selection of luxury yachts for sale. Sunseeker, Catafjord, Fjord and more. Filter by price, size and year. Dubai, French Riviera, Mediterranean.">
+<meta name="keywords" content="luxury yachts for sale, superyacht for sale Dubai, Sunseeker for sale, yacht listings Mediterranean, buy luxury yacht, motor yacht for sale UAE, catamaran for sale France">
+<meta name="author" content="Yacht Research">
+<link rel="canonical" href="https://yachtresearchgroup.com/listings.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yachtresearchgroup.com/listings.html">
+<meta property="og:title" content="Luxury Yachts for Sale | Yacht Research Listings — Dubai & Mediterranean">
+<meta property="og:description" content="Browse our selection of luxury yachts for sale. Sunseeker, Catafjord, Fjord and more. Filter by price, size and year. Dubai, French Riviera, Mediterranean.">
+<meta property="og:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
+<meta property="og:site_name" content="Yacht Research">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Luxury Yachts for Sale | Yacht Research Listings — Dubai & Mediterranean">
+<meta name="twitter:description" content="Browse our selection of luxury yachts for sale. Sunseeker, Catafjord, Fjord and more. Filter by price, size and year. Dubai, French Riviera, Mediterranean.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Luxury Yacht Listings","url":"https://yachtresearchgroup.com/listings.html","description":"Luxury yachts for sale in Dubai, French Riviera and Mediterranean. Sunseeker, Fjord, Catafjord and more.","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://yachtresearchgroup.com"},{"@type":"ListItem","position":2,"name":"Listings","item":"https://yachtresearchgroup.com/listings.html"}]}}</script>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -433,7 +448,8 @@ function renderCard(y){
   } else {
     priceHTML = '<span>'+(priceNum===Infinity?'Price on Request':(y.price||'Price on Request'))+'</span>';
   }
-  return '<div class="yacht-card">'
+  var pageUrl = y._slug ? '/yacht/'+y._slug : '/yacht-research-form.html';
+  return '<div class="yacht-card" onclick="window.location=\''+pageUrl+'\'" style="cursor:pointer;">'
     +'<div class="yacht-img">'
     +'<img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'
     +'<div class="yacht-badge-wrap">'+badgeHTML(y)+'</div>'
@@ -441,12 +457,12 @@ function renderCard(y){
     +'<div class="yacht-info">'
     +'<h3 class="yacht-name">'+(y.title||'')+'</h3>'
     +'<div class="yacht-specs">'
-    +'<div class="yacht-spec"><span class="val">'+(y.length||'—')+'</span><span class="key">Length</span></div>'
-    +'<div class="yacht-spec"><span class="val">'+(y.year||'—')+'</span><span class="key">Built</span></div>'
-    +'<div class="yacht-spec"><span class="val">'+(y.location||'—')+'</span><span class="key">Location</span></div>'
+    +'<div class="yacht-spec"><span class="val">'+(y.length||'&#8212;')+'</span><span class="key">Length</span></div>'
+    +'<div class="yacht-spec"><span class="val">'+(y.year||'&#8212;')+'</span><span class="key">Built</span></div>'
+    +'<div class="yacht-spec"><span class="val">'+(y.location||'&#8212;')+'</span><span class="key">Location</span></div>'
     +'</div>'
-    +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html" class="yacht-enquire">Enquire →</a></div>'
-    +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
+    +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html" class="yacht-enquire" onclick="event.stopPropagation();">Enquire &#8594;</a></div>'
+    +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn" onclick="event.stopPropagation();">Download Brochure</a>':'')
     +'</div>'
     +'</div>';
 }
@@ -532,7 +548,12 @@ async function loadListings(){
     if(!res.ok) throw new Error('API error');
     var files = await res.json();
     var jsonFiles = files.filter(function(f){return f.name.endsWith('.json');});
-    var all = await Promise.all(jsonFiles.map(function(f){return loadJSON('/content/yachts/'+f.name);}));
+    var all = await Promise.all(jsonFiles.map(function(f){
+      return loadJSON('/content/yachts/'+f.name).then(function(y){
+        if(y) y._slug = f.name.replace('.json','');
+        return y;
+      });
+    }));
     ALL_YACHTS = all.filter(function(y){return y && y.published !== false;});
     applyFilters();
   } catch(e){

@@ -5,21 +5,53 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yacht Research | The Art of Effortless Yachting</title>
-<meta name="description" content="Yacht Research, international luxury yacht brokerage. Yacht sales, off-market acquisitions, charter placements & buyer representation. Dubai, French Riviera, Mediterranean, Atlantic.">
-<meta name="keywords" content="luxury yacht brokerage, yacht for sale, buy a yacht, sell a yacht, yacht charter, superyacht broker, off-market yacht, Dubai yacht broker, Mediterranean yacht charter, yacht buyer representation">
 <meta name="robots" content="index, follow">
+<meta name="referrer" content="no-referrer-when-downgrade">
+<title>Yacht Research | Luxury Yacht Brokerage — Dubai, French Riviera, Mediterranean</title>
+<meta name="description" content="Yacht Research is an international luxury yacht brokerage specialising in yacht sales, off-market acquisitions, charter placements and buyer representation. Based in Dubai and the French Riviera.">
+<meta name="keywords" content="luxury yacht brokerage, yacht for sale Dubai, superyacht broker, buy a yacht, sell a yacht, yacht charter Mediterranean, off-market yacht, yacht broker French Riviera, yacht buyer representation, yacht sales UAE">
 <meta name="author" content="Yacht Research">
 <link rel="canonical" href="https://yachtresearchgroup.com/">
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yachtresearchgroup.com/">
-<meta property="og:title" content="Yacht Research | Luxury Yacht Brokerage">
-<meta property="og:description" content="International luxury yacht brokerage. Dubai · French Riviera · Mediterranean · Atlantic.">
-<meta property="og:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/birthday-yacht-party-in-dubai-with-searide%20(1)%20(1).webp">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Yacht Research","url":"https://yachtresearchgroup.com","areaServed":["Dubai","France","Mediterranean","Middle East","USA"],"serviceType":["Yacht Sales","Yacht Charter","Buyer Representation"]}</script>
+<meta property="og:title" content="Yacht Research | Luxury Yacht Brokerage — Dubai & French Riviera">
+<meta property="og:description" content="International luxury yacht brokerage specialising in sales, off-market acquisitions, charter and buyer representation. Dubai · French Riviera · Mediterranean.">
+<meta property="og:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Yacht Research">
+<meta property="og:locale" content="en_GB">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yacht Research | Luxury Yacht Brokerage">
+<meta name="twitter:description" content="International luxury yacht brokerage. Dubai · French Riviera · Mediterranean.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Yacht Research",
+  "url": "https://yachtresearchgroup.com",
+  "logo": "https://yachtresearchgroup.com/images/uploads/yacht-research-logo.png",
+  "description": "International luxury yacht brokerage specialising in sales, off-market acquisitions, charter placements and buyer representation.",
+  "email": "contact@yachtresearchgroup.com",
+  "areaServed": ["Dubai", "United Arab Emirates", "France", "Monaco", "Mediterranean", "Middle East", "Atlantic"],
+  "serviceType": ["Luxury Yacht Sales", "Yacht Charter", "Buyer Representation", "Off-Market Acquisitions", "Yacht Co-Brokerage", "Bespoke Yacht Services"],
+  "sameAs": ["https://www.instagram.com/yacht_research/", "https://linktr.ee/yacht_research"],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Yacht Listings",
+    "url": "https://yachtresearchgroup.com/listings.html"
+  },
+  "location": [
+    {"@type": "Place", "name": "Dubai, UAE"},
+    {"@type": "Place", "name": "French Riviera, France"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -541,7 +573,12 @@ async function loadCMSContent() {
     if (ghApi.ok) {
       var files = await ghApi.json();
       var jsonFiles = files.filter(function(f){ return f.name.endsWith('.json'); });
-      var all = await Promise.all(jsonFiles.map(function(f){ return loadJSON('/content/yachts/'+f.name); }));
+      var all = await Promise.all(jsonFiles.map(function(f){
+        return loadJSON('/content/yachts/'+f.name).then(function(y){
+          if(y) y._slug = f.name.replace('.json','');
+          return y;
+        });
+      }));
       var pub = all.filter(function(y){ return y && y.published !== false; });
       // Tri par prix croissant — normalisé en EUR (AED×0.23, GBP×1.18)
       pub.sort(function(a,b){
@@ -569,18 +606,8 @@ async function loadCMSContent() {
           } else {
             priceHTML = '<span>'+(y.price||'Price on Request')+'</span>';
           }
-          return '<div class="yacht-card reveal visible">'
-            +'<div class="yacht-img"><img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'
-            +'<div class="yacht-badge '+badgeCls+'">'+badgeLbl+'</div></div>'
-            +'<div class="yacht-info"><h3 class="yacht-name">'+(y.title||'')+'</h3>'
-            +'<div class="yacht-specs">'
-            +'<div class="yacht-spec"><span class="val">'+(y.length||'—')+'</span><span class="key">Length</span></div>'
-            +'<div class="yacht-spec"><span class="val">'+(y.year||'—')+'</span><span class="key">Built</span></div>'
-            +'<div class="yacht-spec"><span class="val">'+(y.location||'—')+'</span><span class="key">Location</span></div>'
-            +'</div>'
-            +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html">Enquire →</a></div>'
-            +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn">Download Brochure</a>':'')
-            +'</div></div>';
+          var pageUrl = y._slug ? '/yacht/'+y._slug : '/yacht-research-form.html';
+          return '<div class="yacht-card reveal visible" onclick="window.location=\''+pageUrl+'\'" style="cursor:pointer;">'            +'<div class="yacht-img"><img src="'+(y.image||'')+'" alt="'+(y.title||'')+'" loading="lazy">'            +'<div class="yacht-badge '+badgeCls+'">'+badgeLbl+'</div></div>'            +'<div class="yacht-info"><h3 class="yacht-name">'+(y.title||'')+'</h3>'            +'<div class="yacht-specs">'            +'<div class="yacht-spec"><span class="val">'+(y.length||'&#8212;')+'</span><span class="key">Length</span></div>'            +'<div class="yacht-spec"><span class="val">'+(y.year||'&#8212;')+'</span><span class="key">Built</span></div>'            +'<div class="yacht-spec"><span class="val">'+(y.location||'&#8212;')+'</span><span class="key">Location</span></div>'            +'</div>'            +'<div class="yacht-price">'+priceHTML+'<a href="/yacht-research-form.html" onclick="event.stopPropagation();">Enquire &#8594;</a></div>'            +(y.brochure?'<a href="'+y.brochure+'" target="_blank" class="yacht-brochure-btn" onclick="event.stopPropagation();">Download Brochure</a>':'')            +'</div></div>';
         }).join('');
         // Fade + CTA si plus de 3 yachts
         if(pub.length > 3) {
