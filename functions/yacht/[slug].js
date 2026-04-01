@@ -83,7 +83,7 @@ function priceDisplay(yacht) {
 }
 
 function buildSpecsRow(yacht) {
-  let cells = '';
+  var cells = '';
   if (yacht.length) {
     cells += '<td><p class="spec-val">' + yacht.length + '</p><p class="spec-key">Length</p></td>';
   }
@@ -98,26 +98,32 @@ function buildSpecsRow(yacht) {
 }
 
 function renderYachtPage(y, slug, baseUrl) {
-  const title = y.title || 'Yacht for Sale';
-  const location = y.location || 'Mediterranean';
-  const desc = title + ' for sale — '
-    + (y.year ? y.year + ' · ' : '')
-    + (y.length ? y.length + ' · ' : '')
-    + location
+  var title = y.title || 'Yacht for Sale';
+  var location = y.location || 'Mediterranean';
+
+  var description = y.description
+    ? y.description
+    : title + ' is a ' + (y.year ? y.year + ' ' : '') + (y.length ? y.length + ' ' : '') + 'yacht available for sale through Yacht Research. Located in ' + location + ', this vessel is available for immediate viewing. Contact our team for full specifications and survey reports.';
+
+  var metaDesc = title + ' for sale'
+    + (y.year ? ' · ' + y.year : '')
+    + (y.length ? ' · ' + y.length : '')
+    + ' · ' + location
     + '. Listed by Yacht Research, international luxury yacht brokerage.'
     + (y.price ? ' Asking price : ' + y.price + '.' : ' Price on Request.');
-  const canonical = baseUrl + '/yacht/' + slug;
-  const image = y.image || (baseUrl + '/images/uploads/hero-yacht-BzzzVtkx.jpg');
-  const badge = getBadgeLabel(y.badge);
-  const badgeCls = getBadgeClass(y.badge);
-  const subtitle = [y.year, y.length, y.location].filter(Boolean).join(' &middot; ');
-  const currency = getPriceCurrency(y.price);
 
-  const schema = JSON.stringify({
+  var canonical = baseUrl + '/yacht/' + slug;
+  var image = y.image || (baseUrl + '/images/uploads/hero-yacht-BzzzVtkx.jpg');
+  var badge = getBadgeLabel(y.badge);
+  var badgeCls = getBadgeClass(y.badge);
+  var subtitle = [y.year, y.length, y.location].filter(Boolean).join(' &nbsp;&middot;&nbsp; ');
+  var currency = getPriceCurrency(y.price);
+
+  var schema = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Product",
     "name": title,
-    "description": desc,
+    "description": metaDesc,
     "url": canonical,
     "image": image,
     "brand": { "@type": "Brand", "name": "Yacht Research" },
@@ -136,11 +142,11 @@ function renderYachtPage(y, slug, baseUrl) {
     ]
   });
 
-  const heroImg = y.image
+  var heroImg = y.image
     ? '<img class="hero-img" src="' + y.image + '" alt="' + title + '" />'
     : '<div style="height:62px;"></div>';
 
-  const brochureBtn = y.brochure
+  var brochureBtn = y.brochure
     ? '<a href="' + y.brochure + '" target="_blank" class="btn-brochure">Download Brochure</a>'
     : '';
 
@@ -151,19 +157,19 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
     + '<meta name="robots" content="index, follow">\n'
     + '<title>' + title + ' for Sale | Yacht Research</title>\n'
-    + '<meta name="description" content="' + desc + '">\n'
+    + '<meta name="description" content="' + metaDesc + '">\n'
     + '<meta name="keywords" content="' + title + ' for sale, buy ' + title + ', ' + location + ' yacht for sale, luxury yacht broker, Yacht Research">\n'
     + '<meta name="author" content="Yacht Research">\n'
     + '<link rel="canonical" href="' + canonical + '">\n'
     + '<meta property="og:type" content="website">\n'
     + '<meta property="og:url" content="' + canonical + '">\n'
     + '<meta property="og:title" content="' + title + ' for Sale | Yacht Research">\n'
-    + '<meta property="og:description" content="' + desc + '">\n'
+    + '<meta property="og:description" content="' + metaDesc + '">\n'
     + '<meta property="og:image" content="' + image + '">\n'
     + '<meta property="og:site_name" content="Yacht Research">\n'
     + '<meta name="twitter:card" content="summary_large_image">\n'
     + '<meta name="twitter:title" content="' + title + ' for Sale | Yacht Research">\n'
-    + '<meta name="twitter:description" content="' + desc + '">\n'
+    + '<meta name="twitter:description" content="' + metaDesc + '">\n'
     + '<meta name="twitter:image" content="' + image + '">\n'
     + '<script type="application/ld+json">' + schema + '</script>\n'
     + '<link rel="icon" type="image/x-icon" href="/favicon.ico">\n'
@@ -212,6 +218,14 @@ function renderYachtPage(y, slug, baseUrl) {
     + '.desc{color:rgba(255,255,255,0.65);font-size:14px;line-height:2;margin-bottom:40px;}\n'
     + '.price-block{background:#111827;border:1px solid rgba(201,168,76,0.2);padding:32px 40px;margin-bottom:40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}\n'
     + '@media(max-width:600px){.price-block{padding:24px 20px;flex-direction:column;align-items:flex-start;}}\n'
+    + '.contact-block{background:#0d1428;border:1px solid rgba(201,168,76,0.15);padding:32px 40px;margin-bottom:40px;}\n'
+    + '@media(max-width:600px){.contact-block{padding:24px 20px;}}\n'
+    + '.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px;}\n'
+    + '@media(max-width:600px){.contact-grid{grid-template-columns:1fr;}}\n'
+    + '.contact-item{display:flex;flex-direction:column;gap:8px;}\n'
+    + '.contact-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:\'Montserrat\',sans-serif;}\n'
+    + '.contact-value a{color:var(--gold);text-decoration:none;font-size:13px;font-family:\'Montserrat\',sans-serif;transition:opacity 0.2s;}\n'
+    + '.contact-value a:hover{opacity:0.75;}\n'
     + '.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:60px;}\n'
     + '.btn-enquire{background:var(--gold);color:var(--navy);padding:16px 40px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.3s;font-family:\'Montserrat\',sans-serif;display:inline-block;}\n'
     + '.btn-enquire:hover{background:var(--gold-light);}\n'
@@ -250,14 +264,32 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<div class="gold-bar"></div>\n'
     + '<div class="specs-bar"><table><tr>' + buildSpecsRow(y) + '</tr></table></div>\n'
     + '<div class="main">\n'
-    + '  <p class="section-label">About this Listing</p>\n'
-    + '  <p class="desc">' + title + ' is presented for sale by Yacht Research, international luxury yacht brokerage specialising in sales, off-market acquisitions and buyer representation in Dubai, the French Riviera and the Mediterranean. All enquiries are handled with complete discretion.</p>\n'
+    + '  <p class="section-label">About this Vessel</p>\n'
+    + '  <p class="desc">' + description + '</p>\n'
     + '  <div class="price-block">\n'
     + '    <div>\n'
     + '      <p class="section-label">Asking Price</p>\n'
     + '      <div>' + priceDisplay(y) + '</div>\n'
     + '    </div>\n'
     + '    <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;">Taxes excluded &nbsp;&middot;&nbsp; All enquiries treated with discretion</div>\n'
+    + '  </div>\n'
+    + '  <div class="contact-block">\n'
+    + '    <p class="section-label">Contact Us</p>\n'
+    + '    <p style="color:rgba(255,255,255,0.5);font-size:12px;line-height:1.8;">Our team is available to answer any question about this vessel and arrange a viewing.</p>\n'
+    + '    <div class="contact-grid">\n'
+    + '      <div class="contact-item">\n'
+    + '        <span class="contact-label">Email</span>\n'
+    + '        <span class="contact-value"><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a></span>\n'
+    + '      </div>\n'
+    + '      <div class="contact-item">\n'
+    + '        <span class="contact-label">WhatsApp UAE</span>\n'
+    + '        <span class="contact-value"><a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank">Message on WhatsApp</a></span>\n'
+    + '      </div>\n'
+    + '      <div class="contact-item">\n'
+    + '        <span class="contact-label">WhatsApp France</span>\n'
+    + '        <span class="contact-value"><a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank">Message on WhatsApp</a></span>\n'
+    + '      </div>\n'
+    + '    </div>\n'
     + '  </div>\n'
     + '  <div class="cta-row">\n'
     + '    <a href="/yacht-research-form.html" class="btn-enquire">Enquire About This Yacht</a>\n'
