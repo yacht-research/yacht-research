@@ -1,210 +1,189 @@
 backend:
-  name: github
-  repo: yacht-research/yacht-research
+  name: git-gateway
   branch: main
-  base_url: https://delicate-snowflake-ff71.mathis-yachtbroker.workers.dev
 
-media_folder: images/uploads
-public_folder: /images/uploads
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: fr
 
 collections:
 
-  # ── YACHTS ──────────────────────────────────────────────
-  - name: yachts
-    label: "🛥 Yachts"
-    folder: content/yachts
+  # ──────────────────────────────────────
+  # HERO
+  # ──────────────────────────────────────
+  - name: "hero"
+    label: "🏠 Page d'accueil — Hero"
+    files:
+      - name: "hero"
+        label: "Section Hero"
+        file: "content/hero.json"
+        fields:
+          - { label: "Accroche principale (ligne 1)", name: "title_line1", widget: "string", default: "The Art of" }
+          - { label: "Accroche principale (ligne 2 — italique)", name: "title_line2", widget: "string", default: "Effortless Yachting" }
+          - { label: "Sous-titre", name: "subtitle", widget: "string" }
+          - { label: "Ligne de destinations", name: "eyebrow", widget: "string", default: "Dubai · French Riviera · Mediterranean · Middle East" }
+          - { label: "Image de fond", name: "hero_image", widget: "image" }
+          - { label: "Texte bouton 1", name: "btn1_text", widget: "string", default: "Explore Yachts" }
+          - { label: "Texte bouton 2", name: "btn2_text", widget: "string", default: "Charter a Yacht" }
+          - { label: "Texte bouton 3", name: "btn3_text", widget: "string", default: "Sell Your Yacht" }
+
+  # ──────────────────────────────────────
+  # YACHTS (VENTE & CHARTER)
+  # ──────────────────────────────────────
+  - name: "yachts"
+    label: "⛵ Yachts (Vente & Charter)"
+    label_singular: "Yacht"
+    folder: "content/yachts"
     create: true
     slug: "{{slug}}"
-    format: json
-    extension: json
     fields:
-      - { label: Title, name: title, widget: string }
-      - label: Badge
-        name: badge
-        widget: select
-        options: ["For Sale", "Off-Market", "New Listing", "Charter", "Price Reduced", "Sold"]
-      - { label: Length, name: length, widget: string, hint: "ex: 42m" }
-      - { label: Year Built, name: year, widget: string }
-      - { label: Location, name: location, widget: string }
-      - { label: Price, name: price, widget: string, hint: "ex: Price on Request ou € 2,800,000" }
-      - { label: "Original Price (barré)", name: original_price, widget: string, required: false, hint: "ex: € 390,000 — laisser vide si pas de réduction" }
-      - { label: Image, name: image, widget: image }
-      - { label: Brochure URL, name: brochure, widget: string, required: false, hint: "Lien Google Drive PDF" }
-      - { label: Published, name: published, widget: boolean, default: true }
+      - { label: "Nom du yacht", name: "title", widget: "string", hint: "Ex : Sunseeker Manhattan 68" }
+      - label: "Badge"
+        name: "badge"
+        widget: "select"
+        hint: "Statut du bateau"
+        options:
+          - { label: "For Sale", value: "For Sale" }
+          - { label: "New Listing", value: "New Listing" }
+          - { label: "Price Reduced", value: "Price Reduced" }
+          - { label: "Off Market", value: "Off Market" }
+          - { label: "Charter Ready", value: "Charter Ready" }
+      - { label: "Photo principale", name: "image", widget: "image", hint: "Photo affichée sur les cards et en haut de la page du bateau" }
+      - label: "Photos supplémentaires (galerie)"
+        name: "gallery"
+        widget: "list"
+        required: false
+        hint: "Photos additionnelles visibles sur la page du bateau"
+        field: { label: "Photo", name: "url", widget: "image" }
+      - { label: "Longueur", name: "length", widget: "string", hint: "Ex : 21.21m", required: false }
+      - { label: "Année de construction", name: "year", widget: "string", required: false }
+      - { label: "Localisation", name: "location", widget: "string", hint: "Ex : UAE, French Riviera, Mediterranean" }
+      - { label: "Prix actuel", name: "price", widget: "string", hint: "Ex : £ 3,235,000 ou Price on Request" }
+      - { label: "Ancien prix (barré)", name: "original_price", widget: "string", required: false, hint: "Laisser vide si pas de réduction de prix" }
+      - label: "Description du bateau"
+        name: "description"
+        widget: "text"
+        required: false
+        hint: "Texte affiché sur la page dédiée de ce bateau. Si vide, un texte générique sera généré automatiquement."
+      - { label: "Lien brochure PDF (Google Drive)", name: "brochure", widget: "string", required: false, hint: "Lien de partage Google Drive" }
+      - { label: "Publié", name: "published", widget: "boolean", default: true, hint: "Décocher pour masquer ce bateau du site" }
 
-  # ── PAGES ───────────────────────────────────────────────
-  - name: settings
-    label: "⚙️ Site Content"
+  # ──────────────────────────────────────
+  # WHY CLIENTS CHOOSE US
+  # ──────────────────────────────────────
+  - name: "why"
+    label: "⭐ Pourquoi nous choisir"
     files:
-
-      # HERO
-      - label: "🏠 Hero (Accueil)"
-        name: hero
-        file: content/hero.json
-        format: json
+      - name: "why"
+        label: "Section Why Clients Choose Us"
+        file: "content/why.json"
         fields:
-          - { label: Eyebrow (villes), name: eyebrow, widget: string }
-          - { label: "Titre ligne 1", name: title_line1, widget: string }
-          - { label: "Titre ligne 2 (italic doré)", name: title_line2, widget: string }
-          - { label: Sous-titre, name: subtitle, widget: string }
-          - { label: Image de fond, name: hero_image, widget: image }
-          - { label: "Bouton 1 (texte)", name: btn1_text, widget: string, default: "Explore Yachts" }
-          - { label: "Bouton 2 (texte)", name: btn2_text, widget: string, default: "Charter a Yacht" }
-          - { label: "Bouton 3 (texte)", name: btn3_text, widget: string, default: "Sell Your Yacht" }
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Paragraphe 1", name: "para1", widget: "text" }
+          - { label: "Paragraphe 2", name: "para2", widget: "text" }
+          - { label: "Paragraphe 3 (citation)", name: "para3", widget: "text" }
+          - { label: "Photo", name: "image", widget: "image" }
+          - { label: "Stat — Chiffre", name: "stat_num", widget: "string", default: "5" }
+          - { label: "Stat — Label", name: "stat_label", widget: "string", default: "Continents of Coverage" }
 
-      # WHY US
-      - label: "⭐ Why Us"
-        name: why
-        file: content/why.json
-        format: json
-        fields:
-          - { label: Label, name: label, widget: string, default: "Why Clients Choose Us" }
-          - { label: "Titre ligne 1", name: title_line1, widget: string, default: "Strategic Access." }
-          - { label: "Titre ligne 2 (italic doré)", name: title_line2, widget: string, default: "Stronger Results." }
-          - { label: Paragraphe 1, name: para1, widget: text }
-          - { label: Paragraphe 2, name: para2, widget: text }
-          - { label: "Citation (italic doré)", name: quote, widget: string, required: false }
-          - { label: Image, name: image, widget: image }
-          - label: "Notre Expertise — Titre"
-            name: expertise_title
-            widget: string
-            default: "A Complete Suite of Yachting Services"
-            required: false
-          - label: Services
-            name: services
-            widget: list
-            required: false
-            fields:
-              - { label: Numéro, name: num, widget: string }
-              - { label: Titre, name: title, widget: string }
-              - { label: Description, name: desc, widget: text }
-
-      # CHARTER
-      - label: "⚓ Charter"
-        name: charter
-        file: content/charter.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Sous-titre, name: subtitle, widget: text }
-          - label: Destinations
-            name: regions
-            widget: list
-            fields:
-              - { label: Nom, name: name, widget: string }
-              - { label: Sous-titre, name: sub, widget: string }
-              - { label: Image, name: image, widget: image }
-
-      # SERVICES
-      - label: "🔧 Services"
-        name: services
-        file: content/services.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Sous-titre, name: subtitle, widget: text }
-          - label: Services
-            name: items
-            widget: list
-            fields:
-              - { label: Numéro, name: num, widget: string }
-              - { label: Titre, name: title, widget: string }
-              - { label: Description, name: desc, widget: text }
-
-      # CONTACT
-      - label: "📬 Contact"
-        name: contact
-        file: content/contact.json
-        format: json
-        fields:
-          - { label: "Ville principale", name: city_main, widget: string, default: "Dubai, UAE" }
-          - { label: "Ville Europe", name: city_eu, widget: string, default: "Paris, France" }
-          - { label: Couverture globale, name: coverage, widget: string }
-          - { label: Linktree URL, name: linktree, widget: string }
-
-      # SEO
-      - label: "🔍 SEO"
-        name: seo
-        file: content/seo.json
-        format: json
-        fields:
-          - { label: "Titre de la page", name: title, widget: string }
-          - { label: "Meta description", name: description, widget: text }
-          - { label: "Image réseaux sociaux (OG)", name: og_image, widget: image }
-
-
-      # BESPOKE / SERVICES
-      - label: "✨ Bespoke Services"
-        name: bespoke
-        file: content/bespoke.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string, default: "Beyond Brokerage" }
-          - { label: Intro, name: intro, widget: text }
-          - label: Services
-            name: items
-            widget: list
-            fields:
-              - { label: Titre, name: title, widget: string }
-              - { label: Description, name: desc, widget: text }
-
-      # PARTNERSHIPS
-      - label: "🤝 Partnerships"
-        name: partnerships
-        file: content/partnerships.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Intro, name: intro, widget: text }
-          - label: Types de partenariat
-            name: types
-            widget: list
-            fields:
-              - { label: Titre, name: title, widget: string }
-              - { label: Description, name: desc, widget: text }
-
-      # REFERRAL
-      - label: "💰 Referral Programme"
-        name: referral
-        file: content/referral.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Intro, name: intro, widget: text }
-          - label: Étapes
-            name: steps
-            widget: list
-            fields:
-              - { label: Numéro, name: num, widget: string }
-              - { label: Titre, name: title, widget: string }
-              - { label: Description, name: desc, widget: text }
-
-      # RECRUITMENT
-      - label: "👔 Recruitment"
-        name: recruitment
-        file: content/recruitment.json
-        format: json
-        fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Intro, name: intro, widget: text }
-          - label: Postes ouverts
-            name: roles
-            widget: list
-            fields:
-              - { label: Intitulé du poste, name: title, widget: string }
-
-  # ── FORMULAIRE STANDALONE ────────────────────────────────
-  - label: "📋 Formulaire Enquête"
-    name: enquiry_form
+  # ──────────────────────────────────────
+  # ABOUT
+  # ──────────────────────────────────────
+  - name: "about"
+    label: "🏢 À propos"
     files:
-      - label: "🔧 Paramètres du formulaire"
-        name: form_settings
-        file: content/form-settings.json
-        format: json
+      - name: "about"
+        label: "Section About"
+        file: "content/about.json"
         fields:
-          - { label: "Titre onglet navigateur", name: page_title, widget: string, default: "Yacht Research — Enquiry Form" }
-          - { label: "Favicon (URL ou chemin)", name: favicon, widget: string, default: "/favicon.ico" }
-          - { label: "Logo texte (haut de page)", name: logo_text, widget: string, default: "Yacht Research" }
-          - { label: "Titre principal ligne 1", name: hero_line1, widget: string, default: "Your Enquiry," }
-          - { label: "Titre principal ligne 2 (italic doré)", name: hero_line2, widget: string, default: "Personally Handled" }
-          - { label: "Sous-titre localisation", name: location_sub, widget: string, default: "Dubai · French Riviera · Mediterranean" }
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Paragraphe 1", name: "para1", widget: "text" }
+          - { label: "Paragraphe 2", name: "para2", widget: "text" }
+          - { label: "Citation (encart doré)", name: "quote", widget: "string" }
+          - { label: "Photo", name: "image", widget: "image" }
+          - label: "Présences internationales"
+            name: "presences"
+            widget: "list"
+            fields:
+              - { label: "Ville", name: "city", widget: "string" }
+              - { label: "Région / Label", name: "region", widget: "string" }
+
+  # ──────────────────────────────────────
+  # BESPOKE SERVICES
+  # ──────────────────────────────────────
+  - name: "bespoke"
+    label: "💎 Services Bespoke"
+    files:
+      - name: "bespoke"
+        label: "Section Bespoke Services"
+        file: "content/bespoke.json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Paragraphe intro 1", name: "para1", widget: "text" }
+          - { label: "Paragraphe intro 2", name: "para2", widget: "text" }
+          - { label: "Paragraphe intro 3", name: "para3", widget: "text" }
+          - { label: "Citation finale (italique)", name: "quote", widget: "string" }
+          - label: "Services (4 encarts)"
+            name: "services"
+            widget: "list"
+            max: 4
+            fields:
+              - { label: "Titre du service", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+  # ──────────────────────────────────────
+  # REFERRAL
+  # ──────────────────────────────────────
+  - name: "referral"
+    label: "💰 Programme Referral"
+    files:
+      - name: "referral"
+        label: "Section Referral"
+        file: "content/referral.json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Paragraphe 1", name: "para1", widget: "text" }
+          - { label: "Paragraphe 2", name: "para2", widget: "text" }
+          - { label: "Paragraphe 3", name: "para3", widget: "text" }
+          - label: "3 étapes"
+            name: "steps"
+            widget: "list"
+            max: 3
+            fields:
+              - { label: "Titre de l'étape", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+  # ──────────────────────────────────────
+  # CONTACT
+  # ──────────────────────────────────────
+  - name: "contact"
+    label: "📞 Contact & Coordonnées"
+    files:
+      - name: "contact"
+        label: "Informations de contact"
+        file: "content/contact.json"
+        fields:
+          - { label: "Email principal", name: "email", widget: "string" }
+          - { label: "Téléphone", name: "phone", widget: "string" }
+          - { label: "Ville principale", name: "city_main", widget: "string", default: "Dubai, UAE" }
+          - { label: "Label ville principale", name: "city_main_label", widget: "string", default: "International Operations Hub" }
+          - { label: "Bureau Europe", name: "city_eu", widget: "string", default: "French Riviera, France" }
+          - { label: "Label bureau Europe", name: "city_eu_label", widget: "string", default: "Mediterranean & European Coverage" }
+          - { label: "Couverture globale", name: "coverage", widget: "string", default: "Mediterranean · Middle East · Americas" }
+          - { label: "Lien Linktree", name: "linktree", widget: "string" }
+
+  # ──────────────────────────────────────
+  # SEO
+  # ──────────────────────────────────────
+  - name: "seo"
+    label: "🔍 SEO & Métadonnées"
+    files:
+      - name: "seo"
+        label: "SEO"
+        file: "content/seo.json"
+        fields:
+          - { label: "Titre de la page", name: "title", widget: "string" }
+          - { label: "Description (Google)", name: "description", widget: "text" }
+          - { label: "Mots-clés", name: "keywords", widget: "string" }
+          - { label: "Logo (URL)", name: "logo_url", widget: "image", required: false }
