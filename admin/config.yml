@@ -39,6 +39,9 @@ collections:
     folder: "content/yachts"
     create: true
     slug: "{{slug}}"
+    identifier_field: "title"
+    extension: "json"
+    format: "json"
     fields:
       - { label: "Nom du yacht", name: "title", widget: "string", hint: "Ex : Sunseeker Manhattan 68" }
       - label: "Badge"
