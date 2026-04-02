@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: yacht-research/yacht-research
   branch: main
+  base_url: https://delicate-snowflake-ff71.mathis-yachtbroker.workers.dev
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
