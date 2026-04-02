@@ -1,10 +1,10 @@
 {
+  "email": "contact@yachtresearchgroup.com",
+  "phone": "WhatsApp : +971 52 430 2425 | +33 7 45 53 28 09",
   "city_main": "Dubai, UAE",
-  "city_eu": "Cannes, France",
-  "coverage": "Mediterranean · Middle East · Americas",
-  "linktree": "https://linktr.ee/yacht_research",
-  "city_eu_label": "Mediterranean & European Coverage",
   "city_main_label": "International Operations Hub",
-  "email": "mathis.yachtbroker@outlook.com",
-  "phone": "WhatsApp : +971 52 430 2425 | +33 7 45 53 28 09"
+  "city_eu": "Cannes, France",
+  "city_eu_label": "Mediterranean & European Coverage",
+  "coverage": "Mediterranean · Middle East · Americas",
+  "linktree": "https://linktr.ee/yacht_research"
 }
