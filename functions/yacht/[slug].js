@@ -36,7 +36,8 @@ export async function onRequest(context) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600'
+      // 60 secondes seulement — les modifications dans le CMS s'affichent rapidement
+      'Cache-Control': 'public, max-age=60, must-revalidate'
     }
   });
 }
@@ -70,7 +71,7 @@ function getPriceCurrency(price) {
 
 function priceDisplay(yacht) {
   if (yacht.original_price && yacht.price) {
-    return '<span style="text-decoration:line-through;color:rgba(255,255,255,0.35);font-size:14px;margin-right:10px;">'
+    return '<span style="text-decoration:line-through;color:rgba(255,255,255,0.35);font-size:14px;margin-right:12px;">'
       + yacht.original_price
       + '</span><span style="color:#c9a84c;font-size:22px;font-weight:300;">'
       + yacht.price
@@ -97,15 +98,38 @@ function buildSpecsRow(yacht) {
   return cells;
 }
 
+function buildGallery(gallery) {
+  if (!gallery || !Array.isArray(gallery) || gallery.length === 0) return '';
+
+  var imgs = '';
+  for (var i = 0; i < gallery.length; i++) {
+    var url = typeof gallery[i] === 'string' ? gallery[i] : (gallery[i].url || '');
+    if (url) {
+      imgs += '<div class="gallery-item"><img src="' + url + '" alt="Photo ' + (i + 1) + '" loading="lazy" onclick="openLightbox(this.src)" /></div>';
+    }
+  }
+
+  if (!imgs) return '';
+
+  return '<div class="gallery-section">'
+    + '<p class="section-label">Gallery</p>'
+    + '<div class="gallery-grid">' + imgs + '</div>'
+    + '</div>'
+    + '<div class="lightbox" id="lightbox" onclick="closeLightbox()">'
+    + '<img id="lightbox-img" src="" alt="Photo" />'
+    + '</div>';
+}
+
 function renderYachtPage(y, slug, baseUrl) {
   var title = y.title || 'Yacht for Sale';
   var location = y.location || 'Mediterranean';
+  var isCharter = y.badge && y.badge.toLowerCase().includes('charter');
 
   var description = y.description
     ? y.description
-    : title + ' is a ' + (y.year ? y.year + ' ' : '') + (y.length ? y.length + ' ' : '') + 'yacht available for sale through Yacht Research. Located in ' + location + ', this vessel is available for immediate viewing. Contact our team for full specifications and survey reports.';
+    : title + ' is a ' + (y.year ? y.year + ' ' : '') + (y.length ? y.length + ' ' : '') + 'yacht available for ' + (isCharter ? 'charter' : 'sale') + ' through Yacht Research. Located in ' + location + ', this vessel is available for immediate viewing. Contact our team for full specifications and survey reports.';
 
-  var metaDesc = title + ' for sale'
+  var metaDesc = title + ' for ' + (isCharter ? 'charter' : 'sale')
     + (y.year ? ' · ' + y.year : '')
     + (y.length ? ' · ' + y.length : '')
     + ' · ' + location
@@ -119,6 +143,36 @@ function renderYachtPage(y, slug, baseUrl) {
   var subtitle = [y.year, y.length, y.location].filter(Boolean).join(' &nbsp;&middot;&nbsp; ');
   var currency = getPriceCurrency(y.price);
 
+  // Extract numeric price for Schema.org (Google requires a plain number)
+  var numericPrice = null;
+  if (y.price) {
+    var priceDigits = y.price.replace(/[^0-9]/g, '');
+    if (priceDigits) numericPrice = parseFloat(priceDigits);
+  }
+
+  var offersObj = {
+    "@type": "Offer",
+    "priceCurrency": currency,
+    "availability": "https://schema.org/InStock",
+    "url": canonical,
+    "priceValidUntil": "2027-12-31",
+    "seller": { "@type": "Organization", "name": "Yacht Research", "url": baseUrl },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "FR",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+    },
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": currency },
+      "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "AE" },
+      "deliveryTime": { "@type": "ShippingDeliveryTime", "businessDays": { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"] } }
+    }
+  };
+  if (numericPrice !== null) {
+    offersObj["price"] = numericPrice;
+  }
+
   var schema = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Product",
@@ -127,14 +181,7 @@ function renderYachtPage(y, slug, baseUrl) {
     "url": canonical,
     "image": image,
     "brand": { "@type": "Brand", "name": "Yacht Research" },
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": currency,
-      "price": y.price || 'Price on Request',
-      "availability": "https://schema.org/InStock",
-      "url": canonical,
-      "seller": { "@type": "Organization", "name": "Yacht Research", "url": baseUrl }
-    },
+    "offers": offersObj,
     "additionalProperty": [
       { "@type": "PropertyValue", "name": "Length", "value": y.length || '' },
       { "@type": "PropertyValue", "name": "Year Built", "value": y.year || '' },
@@ -150,25 +197,31 @@ function renderYachtPage(y, slug, baseUrl) {
     ? '<a href="' + y.brochure + '" target="_blank" class="btn-brochure">Download Brochure</a>'
     : '';
 
+  var gallery = buildGallery(y.gallery);
+
+  var enquireLabel = isCharter ? 'Enquire About Charter' : 'Enquire About This Yacht';
+  var priceLabel = isCharter ? 'Charter Rate' : 'Asking Price';
+  var pageTitle = title + ' for ' + (isCharter ? 'Charter' : 'Sale') + ' | Yacht Research';
+
   return '<!DOCTYPE html>\n'
     + '<html lang="en">\n'
     + '<head>\n'
     + '<meta charset="UTF-8">\n'
     + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
     + '<meta name="robots" content="index, follow">\n'
-    + '<title>' + title + ' for Sale | Yacht Research</title>\n'
+    + '<title>' + pageTitle + '</title>\n'
     + '<meta name="description" content="' + metaDesc + '">\n'
     + '<meta name="keywords" content="' + title + ' for sale, buy ' + title + ', ' + location + ' yacht for sale, luxury yacht broker, Yacht Research">\n'
     + '<meta name="author" content="Yacht Research">\n'
     + '<link rel="canonical" href="' + canonical + '">\n'
     + '<meta property="og:type" content="website">\n'
     + '<meta property="og:url" content="' + canonical + '">\n'
-    + '<meta property="og:title" content="' + title + ' for Sale | Yacht Research">\n'
+    + '<meta property="og:title" content="' + pageTitle + '">\n'
     + '<meta property="og:description" content="' + metaDesc + '">\n'
     + '<meta property="og:image" content="' + image + '">\n'
     + '<meta property="og:site_name" content="Yacht Research">\n'
     + '<meta name="twitter:card" content="summary_large_image">\n'
-    + '<meta name="twitter:title" content="' + title + ' for Sale | Yacht Research">\n'
+    + '<meta name="twitter:title" content="' + pageTitle + '">\n'
     + '<meta name="twitter:description" content="' + metaDesc + '">\n'
     + '<meta name="twitter:image" content="' + image + '">\n'
     + '<script type="application/ld+json">' + schema + '</script>\n'
@@ -226,6 +279,14 @@ function renderYachtPage(y, slug, baseUrl) {
     + '.contact-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:\'Montserrat\',sans-serif;}\n'
     + '.contact-value a{color:var(--gold);text-decoration:none;font-size:13px;font-family:\'Montserrat\',sans-serif;transition:opacity 0.2s;}\n'
     + '.contact-value a:hover{opacity:0.75;}\n'
+    + '.gallery-section{margin-bottom:40px;}\n'
+    + '.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}\n'
+    + '@media(max-width:600px){.gallery-grid{grid-template-columns:repeat(2,1fr);}}\n'
+    + '.gallery-item img{width:100%;height:220px;object-fit:cover;cursor:pointer;transition:opacity 0.2s;display:block;}\n'
+    + '.gallery-item img:hover{opacity:0.85;}\n'
+    + '.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;}\n'
+    + '.lightbox.open{display:flex;}\n'
+    + '.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;}\n'
     + '.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:60px;}\n'
     + '.btn-enquire{background:var(--gold);color:var(--navy);padding:16px 40px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.3s;font-family:\'Montserrat\',sans-serif;display:inline-block;}\n'
     + '.btn-enquire:hover{background:var(--gold-light);}\n'
@@ -246,7 +307,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '  <ul class="nav-links-simple">\n'
     + '    <li><a href="/#yachts">Buy</a></li>\n'
     + '    <li><a href="/listings.html" style="color:var(--gold);">Listings</a></li>\n'
-    + '    <li><a href="/#charter">Charter</a></li>\n'
+    + '    <li><a href="/charter.html">Charter</a></li>\n'
     + '    <li><a href="/why-us.html">Why Us</a></li>\n'
     + '    <li><a href="/partnerships.html">Partnerships</a></li>\n'
     + '    <li><a href="/#contact">Contact</a></li>\n'
@@ -254,9 +315,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '  <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>\n'
     + '</nav>\n'
     + heroImg + '\n'
-    + '<div class="badge-strip">\n'
-    + '  <span class="badge ' + badgeCls + '">' + badge + '</span>\n'
-    + '</div>\n'
+    + '<div class="badge-strip"><span class="badge ' + badgeCls + '">' + badge + '</span></div>\n'
     + '<div class="title-band">\n'
     + '  <h1 class="yacht-title">' + title + '</h1>\n'
     + '  <p class="yacht-subtitle">' + subtitle + '</p>\n'
@@ -266,33 +325,22 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<div class="main">\n'
     + '  <p class="section-label">About this Vessel</p>\n'
     + '  <p class="desc">' + description + '</p>\n'
+    + gallery + '\n'
     + '  <div class="price-block">\n'
-    + '    <div>\n'
-    + '      <p class="section-label">Asking Price</p>\n'
-    + '      <div>' + priceDisplay(y) + '</div>\n'
-    + '    </div>\n'
+    + '    <div><p class="section-label">' + priceLabel + '</p><div>' + priceDisplay(y) + '</div></div>\n'
     + '    <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;">Taxes excluded &nbsp;&middot;&nbsp; All enquiries treated with discretion</div>\n'
     + '  </div>\n'
     + '  <div class="contact-block">\n'
     + '    <p class="section-label">Contact Us</p>\n'
     + '    <p style="color:rgba(255,255,255,0.5);font-size:12px;line-height:1.8;">Our team is available to answer any question about this vessel and arrange a viewing.</p>\n'
     + '    <div class="contact-grid">\n'
-    + '      <div class="contact-item">\n'
-    + '        <span class="contact-label">Email</span>\n'
-    + '        <span class="contact-value"><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a></span>\n'
-    + '      </div>\n'
-    + '      <div class="contact-item">\n'
-    + '        <span class="contact-label">WhatsApp UAE</span>\n'
-    + '        <span class="contact-value"><a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank">Message on WhatsApp</a></span>\n'
-    + '      </div>\n'
-    + '      <div class="contact-item">\n'
-    + '        <span class="contact-label">WhatsApp France</span>\n'
-    + '        <span class="contact-value"><a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank">Message on WhatsApp</a></span>\n'
-    + '      </div>\n'
+    + '      <div class="contact-item"><span class="contact-label">Email</span><span class="contact-value"><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a></span></div>\n'
+    + '      <div class="contact-item"><span class="contact-label">WhatsApp UAE</span><span class="contact-value"><a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank">Message on WhatsApp</a></span></div>\n'
+    + '      <div class="contact-item"><span class="contact-label">WhatsApp France</span><span class="contact-value"><a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank">Message on WhatsApp</a></span></div>\n'
     + '    </div>\n'
     + '  </div>\n'
     + '  <div class="cta-row">\n'
-    + '    <a href="/yacht-research-form.html" class="btn-enquire">Enquire About This Yacht</a>\n'
+    + '    <a href="/yacht-research-form.html" class="btn-enquire">' + enquireLabel + '</a>\n'
     + '    ' + brochureBtn + '\n'
     + '    <a href="/listings.html" class="btn-back">&#8592; All Listings</a>\n'
     + '  </div>\n'
@@ -304,6 +352,9 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<script>\n'
     + 'var cur=document.getElementById("cursor"),ring=document.getElementById("cursorRing"),mx=0,my=0,rx=0,ry=0;\n'
     + 'if(cur&&ring){document.addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+"px";cur.style.top=my-4+"px";});(function anim(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+"px";ring.style.top=ry+"px";requestAnimationFrame(anim);})();}\n'
+    + 'function openLightbox(src){var lb=document.getElementById("lightbox");var img=document.getElementById("lightbox-img");if(lb&&img){img.src=src;lb.classList.add("open");}}\n'
+    + 'function closeLightbox(){var lb=document.getElementById("lightbox");if(lb)lb.classList.remove("open");}\n'
+    + 'document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLightbox();});\n'
     + '</script>\n'
     + '</body>\n'
     + '</html>';
