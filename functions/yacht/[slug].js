@@ -345,7 +345,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '  <div class="cta-row">\n'
     + '    <a href="/yacht-research-form.html" class="btn-enquire">' + enquireLabel + '</a>\n'
     + '    ' + brochureBtn + '\n'
-    + '    <a href="/listings.html" class="btn-back">&#8592; All Listings</a>\n'
+    + '    <a href="' + (isCharter ? '/charter.html' : '/listings.html') + '" class="btn-back">&#8592; ' + (isCharter ? 'All Charters' : 'All Listings') + '</a>\n'
     + '  </div>\n'
     + '</div>\n'
     + '<footer>\n'
