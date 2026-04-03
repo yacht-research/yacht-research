@@ -137,7 +137,10 @@ function renderYachtPage(y, slug, baseUrl) {
     + (y.price ? ' Asking price : ' + y.price + '.' : ' Price on Request.');
 
   var canonical = baseUrl + '/yacht/' + slug;
-  var image = y.image || (baseUrl + '/images/uploads/hero-yacht-BzzzVtkx.jpg');
+  // Encode image URL to handle spaces and special chars
+  var rawImage = y.image || (baseUrl + '/images/uploads/hero-yacht-BzzzVtkx.jpg');
+  var image = rawImage.startsWith('http') ? rawImage : baseUrl + encodeURI(rawImage.startsWith('/') ? rawImage : '/' + rawImage);
+  image = image.replace(/ /g, '%20');
   var badge = getBadgeLabel(y.badge);
   var badgeCls = getBadgeClass(y.badge);
   var subtitle = [y.year, y.length, y.location].filter(Boolean).join(' &nbsp;&middot;&nbsp; ');
@@ -324,7 +327,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<div class="specs-bar"><table><tr>' + buildSpecsRow(y) + '</tr></table></div>\n'
     + '<div class="main">\n'
     + '  <p class="section-label">About this Vessel</p>\n'
-    + '  <p class="desc">' + description + '</p>\n'
+    + '  <div class="desc" style="white-space:pre-line;">' + description + '</div>\n'
     + gallery + '\n'
     + '  <div class="price-block">\n'
     + '    <div><p class="section-label">' + priceLabel + '</p><div>' + priceDisplay(y) + '</div></div>\n'
