@@ -266,12 +266,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
       <span class="filter-label">Min Price</span>
       <select class="filter-select" id="f-price-min" onchange="applyFilters()">
         <option value="">Any</option>
-        <option value="500">€500/day</option>
-        <option value="1000">€1,000/day</option>
-        <option value="3000">€3,000/day</option>
-        <option value="5000">€5,000/day</option>
-        <option value="10000">€10,000/day</option>
-        <option value="20000">€20,000/week</option>
+        <option value="5000">€5k / week</option>
+        <option value="10000">€10k / week</option>
+        <option value="20000">€20k / week</option>
+        <option value="50000">€50k / week</option>
+        <option value="100000">€100k / week</option>
+        <option value="200000">€200k / week</option>
+        <option value="500000">€500k / week</option>
       </select>
     </div>
 
@@ -280,12 +281,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
       <span class="filter-label">Max Price</span>
       <select class="filter-select" id="f-price-max" onchange="applyFilters()">
         <option value="">Any</option>
-        <option value="1000">€1,000/day</option>
-        <option value="3000">€3,000/day</option>
-        <option value="5000">€5,000/day</option>
-        <option value="10000">€10,000/day</option>
-        <option value="20000">€20,000/day</option>
-        <option value="50000">€50,000/week</option>
+        <option value="10000">€10k / week</option>
+        <option value="20000">€20k / week</option>
+        <option value="50000">€50k / week</option>
+        <option value="100000">€100k / week</option>
+        <option value="200000">€200k / week</option>
+        <option value="500000">€500k / week</option>
+        <option value="1000000">€1M / week</option>
+        <option value="9999999">+€1M / week</option>
       </select>
     </div>
 
@@ -411,8 +414,11 @@ function parsePrice(p){
   var s=String(p).toUpperCase();
   var n=parseFloat(s.replace(/[^0-9.]/g,''))||0;
   if(!n) return Infinity;
-  if(s.includes('AED')||s.includes('DH')) return n*0.23;
-  if(s.includes('£')||s.includes('GBP')) return n*1.18;
+  // Convert currencies to EUR
+  if(s.includes('AED')||s.includes('DH')) n=n*0.23;
+  else if(s.includes('£')||s.includes('GBP')) n=n*1.18;
+  // Normalize to weekly: if price is per day, multiply by 7
+  if(s.includes('/DAY')||s.includes('PER DAY')||s.includes('DAILY')) n=n*7;
   return n;
 }
 

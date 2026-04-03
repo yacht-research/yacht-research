@@ -324,7 +324,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
     <div class="filter-group" style="min-width:auto;flex:none;">
       <span class="filter-label">Tags</span>
       <div class="filter-badges">
-        <button class="badge-filter active" data-badge="sale" onclick="toggleBadge(this)">For Sale</button>
+        <button class="badge-filter" data-badge="sale" onclick="toggleBadge(this)">For Sale</button>
         <button class="badge-filter" data-badge="new" onclick="toggleBadge(this)">New Listing</button>
         <button class="badge-filter" data-badge="reduced" onclick="toggleBadge(this)">Price Reduced</button>
         <button class="badge-filter" data-badge="offmarket" onclick="toggleBadge(this)">Off Market</button>
@@ -559,9 +559,6 @@ async function loadListings(){
       var b = (y.badge||'').toLowerCase();
       return !b.includes('charter');
     });
-    // Pre-activate For Sale badge
-    var saleBtn = document.querySelector('.badge-filter[data-badge="sale"]');
-    if(saleBtn){ activeBadges.add('sale'); saleBtn.classList.add('active'); }
     applyFilters();
   } catch(e){
     document.getElementById('listings-grid').innerHTML='<div class="empty-state"><p>Unable to load listings</p><span>Please try again shortly</span></div>';
