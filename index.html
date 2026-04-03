@@ -579,7 +579,11 @@ async function loadCMSContent() {
           return y;
         });
       }));
-      var pub = all.filter(function(y){ return y && y.published !== false; });
+      var pub = all.filter(function(y){
+        if(!y || y.published === false) return false;
+        var b = (y.badge||'').toLowerCase();
+        return !b.includes('charter'); // charter yachts excluded from sale section
+      });
       // Tri par prix croissant — normalisé en EUR (AED×0.23, GBP×1.18)
       pub.sort(function(a,b){
         function toEur(p){
