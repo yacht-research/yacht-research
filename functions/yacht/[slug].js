@@ -203,6 +203,8 @@ function renderYachtPage(y, slug, baseUrl) {
 
   var enquireLabel = isCharter ? 'Enquire About Charter' : 'Enquire About This Yacht';
   var priceLabel = isCharter ? 'Charter Rate' : 'Asking Price';
+  var listingsActive = isCharter ? '">' : '" class="active">';
+  var charterActive = isCharter ? '" class="active">' : '">';
 
   return '<!DOCTYPE html>\n'
     + '<html lang="en">\n'
@@ -341,8 +343,8 @@ function renderYachtPage(y, slug, baseUrl) {
     + '    <button class="nav-scroll-btn" id="navLeft" onclick="scrollNav(-1)">&#8592;</button>\n'
     + '    <ul class="nav-links" id="navLinks">\n'
     + '      <li><a href="/#yachts">Buy</a></li>\n'
-    + '      <li><a href="/listings.html"' + listingsActive + '">Listings</a></li>\n'
-    + '      <li><a href="/charter.html"' + charterActive + '">Charter</a></li>\n'
+    + '      <li><a href="/listings.html' + listingsActive + 'Listings</a></li>\n'
+    + '      <li><a href="/charter.html' + charterActive + 'Charter</a></li>\n'
     + '      <li><a href="/why-us.html">Why Us</a></li>\n'
     + '      <li><a href="/bespoke.html">Services</a></li>\n'
     + '      <li><a href="/partnerships.html">Partnerships</a></li>\n'
