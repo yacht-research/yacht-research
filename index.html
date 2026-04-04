@@ -760,10 +760,18 @@ async function loadCMSContent() {
 
   // SEO
   try {
-    var seo = await loadJSON('/content/seo.json');
+    var seo = await loadJSON('/content/seo/index.json');
+    if(!seo) seo = await loadJSON('/content/seo.json');
     if (seo) {
-      if(seo.title)document.title=seo.title;
-      if(seo.description){var m=document.querySelector('meta[name="description"]');if(m)m.setAttribute('content',seo.description);}
+      if(seo.title){
+        document.title=seo.title;
+        var ogT=document.querySelector('meta[property="og:title"]');if(ogT)ogT.setAttribute('content',seo.title);
+        var twT=document.querySelector('meta[name="twitter:title"]');if(twT)twT.setAttribute('content',seo.title);
+      }
+      if(seo.description){
+        var m=document.querySelector('meta[name="description"]');if(m)m.setAttribute('content',seo.description);
+        var ogD=document.querySelector('meta[property="og:description"]');if(ogD)ogD.setAttribute('content',seo.description);
+      }
       if(seo.og_image){
         document.querySelectorAll('meta[property="og:image"],meta[name="twitter:image"]').forEach(function(m){m.setAttribute('content',seo.og_image);});
       }
