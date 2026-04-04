@@ -304,7 +304,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '<div class="cursor" id="cursor"></div>\n'
     + '<div class="cursor-ring" id="cursorRing"></div>\n'
     + '<nav>\n'
-    + '  <a href="/" class="nav-logo">Yacht <span>Research</span></a>\n'
+    + '  <a href="/" class="nav-logo" translate="no">Yacht <span>Research</span></a>\n'
     + '  <ul class="nav-links-simple">\n'
     + '    <li><a href="/#yachts">Buy</a></li>\n'
     + '    <li><a href="/listings.html" style="color:var(--gold);">Listings</a></li>\n'
