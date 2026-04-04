@@ -486,7 +486,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
       <div class="logo" translate="no">Yacht <span>Research</span></div>
       <p>International luxury yacht brokerage specialising in sales, charters, and private acquisitions. Dubai &middot; French Riviera &middot; Mediterranean &middot; Atlantic.</p>
     </div>
-    <div class="footer-col"><h4>Services</h4><ul><li><a href="#yachts">Buy a Yacht</a></li><li><a href="#contact">Sell Your Yacht</a></li><li><a href="/charter.html">Charter</a></li><li><a href="/bespoke.html">Bespoke Services</a></li></ul></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="/listings.html">Buy a Yacht</a></li><li><a href="#contact">Sell Your Yacht</a></li><li><a href="/charter.html">Charter</a></li><li><a href="/bespoke.html">Bespoke Services</a></li></ul></div>
     <div class="footer-col"><h4>Company</h4><ul><li><a href="/why-us.html">Why Us</a></li><li><a href="/partnerships.html">Partnerships</a></li><li><a href="/partnerships.html#referral">Referral Programme</a></li><li><a href="/recruitment.html">Recruitment</a></li></ul></div>
     <div class="footer-col"><h4>Connect</h4><ul><li><a href="#contact">Contact</a></li><li><a href="https://linktr.ee/yacht_research" target="_blank">Linktree</a></li><li><a href="/partnerships.html">B2B Network</a></li></ul>
   
@@ -518,7 +518,23 @@ document.querySelectorAll('a,button,.service-card,.yacht-card,.charter-region,.r
   el.addEventListener('mouseleave',function(){ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(201,168,76,0.5)';});
 });
 window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.hamburger').classList.toggle('open');}
+function toggleMenu(){
+  var isOpen = document.getElementById('mobileMenu').classList.toggle('open');
+  document.querySelector('.hamburger').classList.toggle('open');
+  if(isOpen){
+    document.body.style.overflow='hidden';
+    document.body.style.position='fixed';
+    document.body.style.width='100%';
+    document.body.style.top='-'+window.scrollY+'px';
+  } else {
+    var scrollY = document.body.style.top;
+    document.body.style.overflow='';
+    document.body.style.position='';
+    document.body.style.width='';
+    document.body.style.top='';
+    window.scrollTo(0, parseInt(scrollY||'0')*-1);
+  }
+}
 var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el);});
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
