@@ -256,7 +256,7 @@ function renderYachtPage(y, slug, baseUrl) {
     + '.nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:10px 22px;text-decoration:none;transition:all 0.3s;}\n'
     + '.nav-cta:hover{background:var(--gold);color:var(--navy);}\n'
     + 'body.menu-open{overflow:hidden;position:fixed;width:100%;}\n'
-    + '@media(max-width:1024px){nav{padding:16px 20px;}.nav-center{display:none;}.hero-enquire-btn{display:inline-block;font-size:9px;padding:10px 18px;letter-spacing:3px;}}\n'
+    + '@media(max-width:1024px){nav{padding:16px 20px;}.nav-center{display:none;}.hero-enquire-btn{display:inline-block;font-size:8px;padding:8px 12px;letter-spacing:2px;}}\n'
     + '.hero-img{width:100%;height:520px;object-fit:cover;display:block;margin-top:62px;}\n'
     + '@media(max-width:600px){.hero-img{height:260px;}}\n'
     + '.badge-strip{background:var(--navy);padding:16px 60px;}\n'
