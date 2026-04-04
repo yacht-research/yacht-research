@@ -36,7 +36,7 @@ export async function onRequest(context) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      // 60 secondes seulement — les modifications dans le CMS s'affichent rapidement
+      'X-Robots-Tag': 'index, follow',
       'Cache-Control': 'public, max-age=60, must-revalidate'
     }
   });
@@ -124,17 +124,16 @@ function renderYachtPage(y, slug, baseUrl) {
   var title = y.title || 'Yacht for Sale';
   var location = y.location || 'Mediterranean';
   var isCharter = y.badge && y.badge.toLowerCase().includes('charter');
-
   var description = y.description
     ? y.description
     : title + ' is a ' + (y.year ? y.year + ' ' : '') + (y.length ? y.length + ' ' : '') + 'yacht available for ' + (isCharter ? 'charter' : 'sale') + ' through Yacht Research. Located in ' + location + ', this vessel is available for immediate viewing. Contact our team for full specifications and survey reports.';
-
-  var metaDesc = title + ' for ' + (isCharter ? 'charter' : 'sale')
+  var pageTitle = y.seo_title || (title + ' for ' + (isCharter ? 'Charter' : 'Sale') + ' | Yacht Research');
+  var metaDesc = y.seo_description || (title + ' for ' + (isCharter ? 'charter' : 'sale')
     + (y.year ? ' · ' + y.year : '')
     + (y.length ? ' · ' + y.length : '')
     + ' · ' + location
     + '. Listed by Yacht Research, international luxury yacht brokerage.'
-    + (y.price ? ' Asking price : ' + y.price + '.' : ' Price on Request.');
+    + (y.price ? ' Asking price : ' + y.price + '.' : ' Price on Request.'));
 
   var canonical = baseUrl + '/yacht/' + slug;
   // Encode image URL to handle spaces and special chars
@@ -192,8 +191,8 @@ function renderYachtPage(y, slug, baseUrl) {
     ]
   });
 
-  var heroImg = y.image
-    ? '<img class="hero-img" src="' + y.image + '" alt="' + title + '" />'
+  var heroImg = image
+    ? '<img class="hero-img" src="' + image + '" alt="' + title + '" />'
     : '<div style="height:62px;"></div>';
 
   var brochureBtn = y.brochure
@@ -204,7 +203,6 @@ function renderYachtPage(y, slug, baseUrl) {
 
   var enquireLabel = isCharter ? 'Enquire About Charter' : 'Enquire About This Yacht';
   var priceLabel = isCharter ? 'Charter Rate' : 'Asking Price';
-  var pageTitle = title + ' for ' + (isCharter ? 'Charter' : 'Sale') + ' | Yacht Research';
 
   return '<!DOCTYPE html>\n'
     + '<html lang="en">\n'
