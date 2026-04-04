@@ -71,6 +71,16 @@ collections:
         widget: "text"
         required: false
         hint: "Texte affiché sur la page dédiée de ce bateau. Si vide, un texte générique sera généré automatiquement."
+      - label: "Titre SEO (Google) — optionnel"
+        name: "seo_title"
+        widget: "string"
+        required: false
+        hint: "Titre affiché dans Google. Si vide : '[Nom du bateau] for Sale | Yacht Research'"
+      - label: "Description SEO (Google) — optionnel"
+        name: "seo_description"
+        widget: "text"
+        required: false
+        hint: "Description affichée sous le titre dans Google. Si vide, générée automatiquement."
       - { label: "Lien brochure PDF (Google Drive)", name: "brochure", widget: "string", required: false, hint: "Lien de partage Google Drive" }
       - { label: "Publié", name: "published", widget: "boolean", default: true, hint: "Décocher pour masquer ce bateau du site" }
 
@@ -179,16 +189,62 @@ collections:
           - { label: "Lien Linktree", name: "linktree", widget: "string" }
 
   # ──────────────────────────────────────
-  # SEO
+  # SEO PAR PAGE
   # ──────────────────────────────────────
   - name: "seo"
-    label: "🔍 SEO & Métadonnées"
+    label: "🔍 SEO — Titres & Descriptions Google"
     files:
-      - name: "seo"
-        label: "SEO"
-        file: "content/seo.json"
+      - name: "seo_index"
+        label: "🏠 Accueil (index)"
+        file: "content/seo/index.json"
         fields:
-          - { label: "Titre de la page", name: "title", widget: "string" }
-          - { label: "Description (Google)", name: "description", widget: "text" }
-          - { label: "Mots-clés", name: "keywords", widget: "string" }
-          - { label: "Logo (URL)", name: "logo_url", widget: "image", required: false }
+          - { label: "Titre Google", name: "title", widget: "string", hint: "Ex : Yacht Research | Luxury Yacht Brokerage | Dubai, French Riviera" }
+          - { label: "Description Google", name: "description", widget: "text", hint: "155 caractères max" }
+      - name: "seo_listings"
+        label: "⛵ Listings (yachts à vendre)"
+        file: "content/seo/listings.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_charter"
+        label: "🌊 Charter"
+        file: "content/seo/charter.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_why_us"
+        label: "⭐ Why Us"
+        file: "content/seo/why-us.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_bespoke"
+        label: "💎 Services Bespoke"
+        file: "content/seo/bespoke.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_partnerships"
+        label: "🤝 Partnerships"
+        file: "content/seo/partnerships.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_recruitment"
+        label: "📋 Recruitment"
+        file: "content/seo/recruitment.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_yacht_research_form"
+        label: "📝 Yacht Research Form"
+        file: "content/seo/yacht-research-form.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
+      - name: "seo_privacy"
+        label: "🔒 Privacy Policy"
+        file: "content/seo/privacy-policy.json"
+        fields:
+          - { label: "Titre Google", name: "title", widget: "string" }
+          - { label: "Description Google", name: "description", widget: "text" }
