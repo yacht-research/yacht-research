@@ -107,7 +107,7 @@ section{position:relative;}
 .yacht-price a{color:var(--gold);text-decoration:none;font-size:9px;letter-spacing:2px;}
 .yacht-brochure-btn{display:block;text-align:center;margin:12px 30px 20px;padding:11px 20px;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all 0.3s ease;}
 .yacht-brochure-btn:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);transform:translateY(-1px);}
-.submit-yacht-banner{background:var(--navy-light);border:1px solid rgba(201,168,76,0.2);padding:50px;text-align:center;max-width:1200px;margin:0 auto;}
+.submit-yacht-banner{background:var(--navy-light);border:1px solid rgba(201,168,76,0.2);padding:50px;text-align:center;max-width:1200px;margin:0 auto;}.submit-yacht-banner h3{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,32px);font-weight:300;margin-bottom:12px;word-break:break-word;}.submit-yacht-banner p{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:30px;}@media(max-width:600px){.submit-yacht-banner{padding:32px 20px;}}
 .yachts-fade-wrap{position:relative;max-width:1200px;margin:0 auto;}
 .yachts-fade{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent,var(--navy) 85%);pointer-events:none;display:none;}
 .yachts-cta-wrap{text-align:center;padding-top:24px;}
@@ -183,6 +183,7 @@ footer{background:#060a14;padding:80px 60px 40px;border-top:1px solid rgba(201,1
 .footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
 .mobile-menu{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
 .mobile-menu.open{transform:translateX(0);}
+body.menu-open{overflow:hidden;touch-action:none;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
@@ -320,7 +321,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
   <a href="#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
 </div>
 <nav>
-  <a href="#hero" class="nav-logo">Yacht <span>Research</span></a>
+  <a href="#hero" class="nav-logo" translate="no">Yacht <span>Research</span></a>
   <div class="nav-center">
     <button class="nav-scroll-btn" id="navLeft" onclick="scrollNav(-1)">&#8592;</button>
     <ul class="nav-links" id="navLinks">
@@ -348,8 +349,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
     <p class="hero-subtitle">International yacht brokerage specializing in luxury yacht sales, charters, and private acquisitions</p>
     <div class="hero-buttons">
       <a href="/charter.html" class="btn-outline">Charter a Yacht</a>
-      <a href="#yachts" class="btn-primary">Explore Yachts</a>
+      <a href="/listings.html" class="btn-primary">Explore Yachts</a>
       <a href="#contact" class="btn-outline">Sell Your Yacht</a>
+    </div>
+    <div style="margin-top:24px;text-align:center;">
+      <a href="/yacht-research-form.html" style="display:inline-block;background:#c9a84c;color:#0a0f1e;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;font-weight:600;padding:16px 48px;text-decoration:none;transition:background 0.3s;" onmouseover="this.style.background='#e2c97e'" onmouseout="this.style.background='#c9a84c'">Enquire Now</a>
     </div>
   </div>
 
@@ -472,7 +476,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="logo">Yacht <span>Research</span></div>
+      <div class="logo" translate="no">Yacht <span>Research</span></div>
       <p>International luxury yacht brokerage specialising in sales, charters, and private acquisitions. Dubai &middot; French Riviera &middot; Mediterranean &middot; Atlantic.</p>
     </div>
     <div class="footer-col"><h4>Services</h4><ul><li><a href="#yachts">Buy a Yacht</a></li><li><a href="#contact">Sell Your Yacht</a></li><li><a href="/charter.html">Charter</a></li><li><a href="/bespoke.html">Bespoke Services</a></li></ul></div>

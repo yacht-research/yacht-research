@@ -111,6 +111,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 .mobile-menu{position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
 .mobile-menu.open{transform:translateX(0);}
+body.menu-open{overflow:hidden;touch-action:none;}
 .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
 .mobile-menu a:hover{color:#c9a84c;}
 .mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
@@ -154,7 +155,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
   <a href="/#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
 </div>
 <nav>
-  <a href="/" class="nav-logo">Yacht <span>Research</span></a>
+  <a href="/" class="nav-logo" translate="no">Yacht <span>Research</span></a>
   <div class="nav-center">
     <button class="nav-scroll-btn" id="navLeft" onclick="scrollNav(-1)">&#8592;</button>
     <ul class="nav-links" id="navLinks">
@@ -298,7 +299,7 @@ function initNav(){var n=document.getElementById('navLinks'),r=document.getEleme
 window.addEventListener('load',initNav);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(initNav);
 window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');document.body.classList.toggle('menu-open');}
 var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
 if(cur&&ring){document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});(function anim(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();}
 /* cross-page scroll */
