@@ -296,6 +296,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
 .mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
 .mobile-menu .mob-newsletter{font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;text-decoration:none;}
 @media(max-width:1024px){nav{padding:16px 24px;}.nav-center,.nav-cta{display:none;}.hamburger{display:flex;}}
+
+.offmarket-banner{background:linear-gradient(135deg,#060c1a 0%,#0e1628 50%,#060c1a 100%);border-top:1px solid rgba(201,168,76,0.25);border-bottom:1px solid rgba(201,168,76,0.25);padding:64px 60px;text-align:center;position:relative;overflow:hidden;}
+.offmarket-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,0.07) 0%,transparent 65%);pointer-events:none;}
+.offmarket-banner::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.05),transparent);transform:skewX(-20deg);animation:omSheen 7s infinite;}
+@keyframes omSheen{0%{left:-100%;}55%,100%{left:160%;}}
+.offmarket-eyebrow{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#c9a84c;margin:0 0 18px;font-family:'Montserrat',sans-serif;}
+.offmarket-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.5vw,44px);font-weight:300;color:#fff;line-height:1.35;margin:0 0 10px;}
+.offmarket-title em{color:#c9a84c;font-style:italic;}
+.offmarket-sub{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1.5px;margin:0 0 36px;font-family:'Montserrat',sans-serif;}
+.offmarket-cta{position:relative;display:inline-block;background:#c9a84c;color:#0a0f1e;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;font-weight:700;padding:18px 52px;text-decoration:none;overflow:hidden;box-shadow:0 0 28px rgba(201,168,76,0.5),0 0 56px rgba(201,168,76,0.18);transition:box-shadow 0.3s,transform 0.3s;}
+.offmarket-cta:hover{box-shadow:0 0 42px rgba(201,168,76,0.85),0 0 84px rgba(201,168,76,0.4);transform:translateY(-3px);}
+.offmarket-cta .shine{position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent);transform:skewX(-20deg);animation:omBtnShine 2.8s infinite;}
+@keyframes omBtnShine{0%{left:-75%;}60%,100%{left:130%;}}
+@media(max-width:600px){.offmarket-banner{padding:48px 24px;}.offmarket-cta{padding:15px 32px;font-size:10px;letter-spacing:4px;}}
+
+.offmarket-banner{background:linear-gradient(135deg,#060c1a 0%,#0e1628 50%,#060c1a 100%);border-top:1px solid rgba(201,168,76,0.25);border-bottom:1px solid rgba(201,168,76,0.25);padding:64px 60px;text-align:center;position:relative;overflow:hidden;}
+.offmarket-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,0.07) 0%,transparent 65%);pointer-events:none;}
+.offmarket-banner::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.05),transparent);transform:skewX(-20deg);animation:omSheen 7s infinite;}
+@keyframes omSheen{0%{left:-100%;}55%,100%{left:160%;}}
+.offmarket-eyebrow{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#c9a84c;margin:0 0 18px;font-family:'Montserrat',sans-serif;}
+.offmarket-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.5vw,44px);font-weight:300;color:#fff;line-height:1.35;margin:0 0 10px;}
+.offmarket-title em{color:#c9a84c;font-style:italic;}
+.offmarket-sub{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1.5px;margin:0 0 36px;font-family:'Montserrat',sans-serif;}
+.offmarket-cta{position:relative;display:inline-block;background:#c9a84c;color:#0a0f1e;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;font-weight:700;padding:18px 52px;text-decoration:none;overflow:hidden;box-shadow:0 0 28px rgba(201,168,76,0.5),0 0 56px rgba(201,168,76,0.18);transition:box-shadow 0.3s,transform 0.3s;}
+.offmarket-cta:hover{box-shadow:0 0 42px rgba(201,168,76,0.85),0 0 84px rgba(201,168,76,0.4);transform:translateY(-3px);}
+.offmarket-cta .shine{position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent);transform:skewX(-20deg);animation:omBtnShine 2.8s infinite;}
+@keyframes omBtnShine{0%{left:-75%;}60%,100%{left:130%;}}
+@media(max-width:600px){.offmarket-banner{padding:48px 24px;}.offmarket-cta{padding:15px 32px;font-size:10px;letter-spacing:4px;}}
 </style>
 <script>
 /* Prevent hero flash: hide page immediately if we need to scroll to a section */
@@ -388,6 +416,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
     <a href="/listings.html" class="btn-primary" style="display:inline-block;">View All Listings &rarr;</a>
     <p id="yachts-more-count" style="font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.35);margin-top:16px;text-transform:uppercase;"></p>
   </div>
+</section>
+
+<section class="offmarket-banner">
+  <p class="offmarket-eyebrow">Exclusive Access</p>
+  <h2 class="offmarket-title">Off-Market Yachts <em>Worldwide.</em><br>Thousands of Vessels, One Message.</h2>
+  <p class="offmarket-sub">Discreet listings &nbsp;&middot;&nbsp; Private acquisitions &nbsp;&middot;&nbsp; Dubai &middot; French Riviera &middot; Mediterranean</p>
+  <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" class="offmarket-cta">
+    <span class="shine"></span>
+    Send Us a Message
+  </a>
+</section>
+
+
+<section id="yachts-bottom">
   <div style="height:60px;"></div>
   <div class="submit-yacht-banner reveal">
     <h3>Are You a Broker&#160;? Submit Your Yacht</h3>
@@ -480,15 +522,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:f
   </div>
 </div>
 
-<section class="offmarket-banner">
-  <p class="offmarket-eyebrow">Exclusive Access</p>
-  <h2 class="offmarket-title">Off-Market Yachts <em>Worldwide.</em><br>Thousands of Vessels, One Message.</h2>
-  <p class="offmarket-sub">Discreet listings &nbsp;&middot;&nbsp; Private acquisitions &nbsp;&middot;&nbsp; Dubai &middot; French Riviera &middot; Mediterranean</p>
-  <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" class="offmarket-btn">
-    <span></span>
-    Send Us a Message
-  </a>
-</section>
 
 <footer>
   <div class="footer-top">
