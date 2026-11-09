@@ -89,6 +89,15 @@ async function main() {
       console.log(`✓ ${f} → _travail/${slug}/photos`);
     }
     fs.writeFileSync(path.join(outDir, 'source.txt'), f, 'utf8');
+    // Photos HD fournies à part : dossier du même nom que le PDF (ex. "Riva 76.pdf" + dossier "Riva 76")
+    const hdSrc = path.join(INBOX, f.replace(/\.pdf$/i, ''));
+    if (isPdf && fs.existsSync(hdSrc) && fs.statSync(hdSrc).isDirectory()) {
+      const hdDst = path.join(outDir, 'hd');
+      fs.mkdirSync(hdDst, { recursive: true });
+      let n = 0;
+      for (const p of fs.readdirSync(hdSrc).filter(p => /\.(jpe?g|png|webp|tiff?)$/i.test(p)).sort()) { fs.copyFileSync(path.join(hdSrc, p), path.join(hdDst, p)); n++; }
+      console.log(`  + ${n} photo(s) HD depuis le dossier « ${path.basename(hdSrc)} »`);
+    }
   }
 }
 
