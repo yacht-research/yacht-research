@@ -1,7 +1,7 @@
 {
   "title": "Sunreef 80 Eco",
   "badge": "Price Reduced",
-  "image": "/images/uploads/2022-sunreef-80-eco-sail-9655894-20250116035309583-1_XLARGE.jpg",
+  "image": "/images/opt/2022-sunreef-80-eco-sail-9655894-20250116035309583-1-xlarge.webp",
   "length": "24.40 m / 80 ft",
   "year": "2022",
   "location": "Dubai",
@@ -9,5 +9,6 @@
   "original_price": "€ 8,400,000",
   "description": "The 2022 Sunreef 80 Eco is one of the most advanced luxury sailing catamarans available today. Built by Sunreef Yachts in Poland, she features solar panels integrated directly into the hulls and sails, generating clean energy at sea and dramatically reducing fuel consumption without compromising performance.\n\nAt 24 metres with 6 cabins accommodating up to 12 guests, her 100% electric propulsion delivers whisper-quiet offshore capability. The Eco series is the future of sustainable superyacht sailing, offering the space of a vessel 30% larger with zero emissions.\n\nCurrently located in Dubai and available for immediate viewing. Contact Yacht Research for full specifications and a private survey.",
   "brochure": "https://drive.google.com/file/d/1DwVlnHG4nVQ-p32MPGVpcQEQm3dz7QwT/view?usp=drivesdk",
-  "published": true
+  "published": true,
+  "thumb": "/images/opt/2022-sunreef-80-eco-sail-9655894-20250116035309583-1-xlarge-800.webp"
 }

@@ -1,7 +1,7 @@
 {
   "title": "Catamaran Catafjord Nordest 63",
   "badge": "Price Reduced",
-  "image": "/images/uploads/cataf-1.jpg",
+  "image": "/images/opt/cataf-1.webp",
   "length": "19.80 m / 65 ft",
   "year": "1996",
   "location": "France, Tréguier (22)",
@@ -9,5 +9,6 @@
   "original_price": "€ 390,000",
   "description": "The Catafjord Nordest 63 is a 1996 ketch catamaran built in Quebec, Canada on plans by renowned Australian naval architect Lock Crowther. Constructed in strip-planking cedar reinforced with marine plywood and epoxy.\n\nAt 19.80 meters with a beam of 9.14 meters, her ketch rig makes her exceptionally easy to handle shorthanded while delivering outstanding seakeeping and speed. Regularly maintained and improved, she is ready for ocean passages or Mediterranean cruising.\n\nCurrently located in Tréguier, France. Price reduced to € 340,000. Contact our team for full specifications and a viewing.",
   "brochure": "https://drive.google.com/file/d/19C5SaCrvCo9mH2yHGWpCzjBM3HvayBIz/view?usp=drive_link",
-  "published": true
+  "published": true,
+  "thumb": "/images/opt/cataf-1-800.webp"
 }

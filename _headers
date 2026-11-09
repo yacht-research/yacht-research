@@ -1,0 +1,12 @@
+# Cloudflare Pages : règles de cache
+# Images : 30 jours (les nouvelles photos ont un nouveau nom de fichier)
+/images/*
+  Cache-Control: public, max-age=2592000
+
+# Feuille de style et scripts du site : 7 jours (on change ?v= à chaque mise à jour)
+/assets/*
+  Cache-Control: public, max-age=604800
+
+# Fiches et index des yachts : 5 minutes, pour qu'un nouveau bateau apparaisse vite
+/content/*
+  Cache-Control: public, max-age=300
