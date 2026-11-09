@@ -491,5 +491,26 @@ let idx = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8').replace(/\r\n/g
 idx = idx.replace(/<nav id="nav">[\s\S]*?<\/nav>\n<div class="menu" id="menu">[\s\S]*?<\/div>/, NAV);
 idx = idx.replace(/<footer class="foot">[\s\S]*?<\/footer>\n<div class="wa-stack">[\s\S]*?<\/div>\n<div class="cookie" id="cookie"[\s\S]*?<\/div>\n<\/div>/, FOOTER);
 idx = idx.replace(/yr\.css\?v=\d+/, 'yr.css?v=' + V).replace(/yr\.js\?v=\d+/, 'yr.js?v=' + V);
+
+// Cartes yachts pré-remplies depuis content/yachts/index.json (lancer « node build.js » avant).
+// Le script de la page les rafraîchit ensuite ; Google et les visiteurs voient tout de suite les vraies annonces.
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function badgeLabel(b, type) { b = (b || '').toLowerCase(); if (type === 'charter') return 'Charter'; if (b.includes('reduc') || b.includes('price')) return 'Price reduced'; if (b.includes('off')) return 'Off market'; if (b.includes('new')) return 'New listing'; return 'For sale'; }
+function splitTitle(t) { if (t.includes(' - ')) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()); const p = t.split(' '); return p.length === 1 ? '<em>' + esc(t) + '</em>' : esc(p[0]) + ' <em>' + esc(p.slice(1).join(' ')) + '</em>'; }
+function shortLen(l) { const m = String(l || '').match(/[\d.,]+\s*m\b/i); return m ? m[0].replace(/\s+/g, ' ').replace(/(\.\d)\d+/, '$1') : (l || ''); }
+function card(y, i) {
+  let sub = [y.builder || '', y.year, y.location].filter(Boolean).join(' · ');
+  if (y.type === 'charter' && y.title.includes(' - ')) sub = y.title.split(' - ').slice(1).join(' - ') + (y.location ? ' · ' + y.location : '');
+  const specs = y.type === 'charter' ? '' : '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
+    (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
+    (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
+  const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
+  return '\n    <a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '"><div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
+    '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';
+}
+const yIndex = JSON.parse(fs.readFileSync(path.join(SITE, 'content', 'yachts', 'index.json'), 'utf8')).yachts;
+const cardsFor = (type, lim) => yIndex.filter(y => y.type === type).slice(0, lim).map(card).join('');
+idx = idx.replace(/(<div class="rail" data-yachts="sale"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/, (m, a, b) => a + cardsFor('sale', 10) + b);
+idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n<\/section>)/, (m, a, b) => a + cardsFor('charter', 8) + b);
 fs.writeFileSync(path.join(SITE, 'index.html'), idx, 'utf8');
 console.log('✓ index.html (en-tête et pied de page)');
