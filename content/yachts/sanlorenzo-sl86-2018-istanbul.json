@@ -45,15 +45,9 @@
   "seo_title": "Sanlorenzo SL86 (2018) for Sale in Istanbul | Yacht Research",
   "seo_description": "2018 Sanlorenzo SL86 for sale in Istanbul, Turkey. One owner, 490 engine hours, 41 m² flybridge, Canaletto walnut interior. Asking € 3,950,000. Yacht Research.",
   "brochure": "",
-  "published": true,
-  "image": "/images/yachts/sanlorenzo-sl86-2018-istanbul/01.webp",
-  "thumb": "/images/yachts/sanlorenzo-sl86-2018-istanbul/01-800.webp",
-  "gallery": [
-    "/images/yachts/sanlorenzo-sl86-2018-istanbul/02.webp",
-    "/images/yachts/sanlorenzo-sl86-2018-istanbul/03.webp",
-    "/images/yachts/sanlorenzo-sl86-2018-istanbul/04.webp",
-    "/images/yachts/sanlorenzo-sl86-2018-istanbul/05.webp",
-    "/images/yachts/sanlorenzo-sl86-2018-istanbul/06.webp"
-  ],
+  "published": false,
+  "image": "",
+  "thumb": "",
+  "gallery": [],
   "updated": "2026-11-09"
 }

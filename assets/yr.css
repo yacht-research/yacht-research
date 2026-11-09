@@ -62,10 +62,10 @@ nav.solid{background:rgba(7,7,7,.78);-webkit-backdrop-filter:blur(16px);backdrop
 .burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(243,238,228,.3);background:none;cursor:pointer;position:relative}
 .burger i{position:absolute;left:13px;right:13px;height:1px;background:var(--cream);transition:.4s var(--ease)}
 .burger i:nth-child(1){top:18px}.burger i:nth-child(2){top:25px}
-body.menu .burger i:nth-child(1){top:21px;transform:rotate(45deg)}
-body.menu .burger i:nth-child(2){top:21px;transform:rotate(-45deg)}
+body.menu-open .burger i:nth-child(1){top:21px;transform:rotate(45deg)}
+body.menu-open .burger i:nth-child(2){top:21px;transform:rotate(-45deg)}
 .menu{position:fixed;inset:0;z-index:70;background:var(--black);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);clip-path:circle(0 at calc(100% - 40px) 38px);transition:clip-path .8s var(--ease)}
-body.menu .menu{clip-path:circle(150% at calc(100% - 40px) 38px)}
+body.menu-open .menu{clip-path:circle(150% at calc(100% - 40px) 38px)}
 .menu a{font:300 clamp(34px,9vw,60px)/1.25 var(--sans);text-transform:uppercase;letter-spacing:.02em}
 .menu a em{font:italic 400 .8em var(--serif);color:var(--gold);text-transform:none}
 @media(max-width:1020px){.nav-links{display:none}.burger{display:block}.nav-r .btn{display:none}}
@@ -442,7 +442,7 @@ html{overflow-x:clip}
 
 /* ---------- aucun effet bizarre au toucher / au clic ---------- */
 html{-webkit-tap-highlight-color:transparent}
-*{-webkit-tap-highlight-color:transparent}
+a,button,[role=button],label.consent,.pcard,.chips button{-webkit-tap-highlight-color:rgba(201,168,76,.28)}
 a,button,input,select,textarea,label{cursor:auto}
 a,button,[role=button],label.consent,.yp-shot,.card{cursor:pointer}
 /* ---------- pages intérieures : bandeau de titre ---------- */
@@ -539,3 +539,15 @@ a,button,[role=button],label.consent,.yp-shot,.card{cursor:pointer}
 .legal ul{margin:0 0 16px 20px}
 .legal li::marker{color:var(--gold)}
 .legal a.mail{color:var(--gold)}
+/* ---------- le contenu du haut ne passe jamais sous le menu ---------- */
+.hero,.phero,.yp-hero{padding-top:clamp(104px,13vh,140px)}
+@media(max-height:760px) and (min-width:900px){.phero-title{font-size:clamp(44px,6.4vw,92px)}.yp-title{font-size:clamp(42px,6vw,90px)}.hero h1{font-size:clamp(46px,8vw,118px)}}
+/* menu mobile ouvert */
+body.menu-open{overflow:hidden}
+.menu a{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .6s var(--ease)}
+body.menu-open .menu a{opacity:1;transform:none}
+body.menu-open .menu a:nth-child(2){transition-delay:.04s}body.menu-open .menu a:nth-child(3){transition-delay:.08s}body.menu-open .menu a:nth-child(4){transition-delay:.12s}body.menu-open .menu a:nth-child(5){transition-delay:.16s}body.menu-open .menu a:nth-child(6){transition-delay:.2s}body.menu-open .menu a:nth-child(7){transition-delay:.24s}body.menu-open .menu a:nth-child(8){transition-delay:.28s}body.menu-open .menu a:nth-child(9){transition-delay:.32s}
+.menu{gap:4px;padding-top:90px;overflow-y:auto}
+.menu a{line-height:1.15;padding:6px 0;border-bottom:1px solid var(--line-2)}
+.pcard .ic svg{stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
+.pcard .ic{width:46px;height:46px;border-radius:13px}

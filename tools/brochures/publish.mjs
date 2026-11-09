@@ -28,10 +28,27 @@ if (!/^[a-z0-9-]+$/.test(slug)) throw new Error('slug invalide : ' + slug);
 const imgDir = path.join(SITE, 'images', 'yachts', slug);
 fs.mkdirSync(imgDir, { recursive: true });
 
-const photos = fiche._photos || [];           // ordre choisi : la 1re = photo principale
+// Règle qualité : une photo de moins de 1400 px de large ne va JAMAIS sur le site.
+// Les photos HD fournies à part (dossier "<brochure>/" à côté du PDF, ou _travail/<slug>/hd/) passent en premier.
+const MIN_WIDTH = 1400;
+const hdDir = path.join(workDir, 'hd');
+const candidates = [
+  ...(fs.existsSync(hdDir) ? fs.readdirSync(hdDir).filter(f => /\.(jpe?g|png|webp|heic|tiff?)$/i.test(f)).map(f => path.join(hdDir, f)) : []),
+  ...(fiche._photos || []).map(f => path.join(workDir, 'photos', f))   // ordre choisi : la 1re = photo principale
+];
+const photos = [];
+for (const p of candidates) {
+  const m = await sharp(p).metadata();
+  if ((m.width || 0) >= MIN_WIDTH) photos.push(p);
+  else console.log(`  ✗ écartée (trop petite, ${m.width}px) : ${path.basename(p)}`);
+}
+if (!photos.length) {
+  fiche.published = false;
+  console.log('  ⚠ Aucune photo HD : la fiche est enregistrée mais NON publiée (published: false). Fournir des photos HD.');
+}
 const urls = [];
 for (let i = 0; i < photos.length; i++) {
-  const src = path.join(workDir, 'photos', photos[i]);
+  const src = photos[i];
   const n = String(i + 1).padStart(2, '0');
   await sharp(src).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 78 }).toFile(path.join(imgDir, `${n}.webp`));
   await sharp(src).rotate().resize({ width: 800, withoutEnlargement: true }).webp({ quality: 72 }).toFile(path.join(imgDir, `${n}-800.webp`));

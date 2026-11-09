@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '5'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '6'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -322,12 +322,12 @@ pages.push({
       <p class="cform-sub">Select one option</p>
       <div class="pgrid">
         ${[
-          ['Yacht Acquisition', 'Buy a yacht', 'Private acquisition, new or pre-owned', '<path d="M3 17l3 3h12l3-3M5 17l2-7h10l2 7M12 3v7M12 3l5 4h-5"/>'],
-          ['Sell Your Yacht', 'Sell your yacht', 'On-market or discreet off-market sale', '<path d="M4 12h16M12 4v16M7 7l10 10"/>'],
-          ['Charter', 'Charter', 'Find or place a charter vessel', '<path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 20c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M12 3v9M12 3l6 7h-6"/>'],
-          ['Partnership', 'Partnership', 'Broker collaboration or B2B network', '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5"/>'],
-          ['Referral Programme', 'Referral programme', 'Earn commission on introductions', '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/>'],
-          ['Bespoke Services', 'Bespoke services', 'Crew, refit, management and more', '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/>']
+          ['Yacht Acquisition', 'Buy a yacht', 'Private acquisition, new or pre-owned', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'],
+          ['Sell Your Yacht', 'Sell your yacht', 'On-market or discreet off-market sale', '<path d="M3 11.5V4.2A1.2 1.2 0 0 1 4.2 3h7.3l9.2 9.2a1.2 1.2 0 0 1 0 1.7l-6.8 6.8a1.2 1.2 0 0 1-1.7 0z"/><circle cx="7.8" cy="7.8" r="1.6"/>'],
+          ['Charter', 'Charter', 'Find or place a charter vessel', '<circle cx="12" cy="9" r="3.6"/><path d="M12 2.2v1.6M5.2 9H3.6M20.4 9h-1.6M7.2 4.2l1.1 1.1M16.8 4.2l-1.1 1.1M2.5 16.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2M2.5 20.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2"/>'],
+          ['Partnership', 'Partnership', 'Broker collaboration or B2B network', '<circle cx="8.5" cy="12" r="5.5"/><circle cx="15.5" cy="12" r="5.5"/>'],
+          ['Referral Programme', 'Referral programme', 'Earn commission on introductions', '<circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="5.5" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/>'],
+          ['Bespoke Services', 'Bespoke services', 'Crew, refit, management and more', '<path d="M6.5 3.5h11l3.5 5.5-9 12-9-12z"/><path d="M3 9h18M12 21L8.6 9l1.6-5.5M12 21l3.4-12-1.6-5.5"/>']
         ].map(([v, t, d, ic]) => `<button type="button" class="pcard" data-value="${v}"><span class="ic"><svg viewBox="0 0 24 24">${ic}</svg></span><b>${t}</b><small>${d}</small></button>`).join('')}
       </div>
       <p class="cform-msg" id="msg-1"></p>
@@ -375,7 +375,7 @@ pages.push({
   function sel(id, label, opts){ return '<label class="field"><span>' + label + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option' + (i ? '' : ' value=""') + '>' + o + '</option>'; }).join('') + '</select></label>'; }
   function buildDynamicFields(){
     var p = selected, html = '';
-    var isYacht = ['Yacht Acquisition', 'Sell Your Yacht', 'Charter', 'Bespoke Services'].indexOf(p) > -1;
+    var isYacht = ['Yacht Acquisition', 'Sell Your Yacht', 'Charter', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'].indexOf(p) > -1;
     var isPartner = ['Partnership', 'Referral Programme'].indexOf(p) > -1;
     if (isYacht) {
       html += sel('budget', 'Budget range', ['Select a range', 'Under €500K', '€500K – €1M', '€1M – €3M', '€3M – €10M', '€10M+', 'Price on Request']).replace('class="field"', 'class="field full"');

@@ -11,8 +11,8 @@
 
   // ---------- Menu mobile ----------
   var burger = $('#burger');
-  if (burger) burger.addEventListener('click', function(){ document.body.classList.toggle('menu'); });
-  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ document.body.classList.remove('menu'); }); });
+  if (burger) burger.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
+  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); }); });
 
   // ---------- Titres : découpe mot par mot ----------
   function splitWords(h){
