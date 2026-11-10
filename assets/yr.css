@@ -609,10 +609,6 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 /* 8 liens dans la barre : le menu burger prend le relais plus tôt */
 @media(max-width:1380px){.nav-links{gap:22px}}
 @media(max-width:1240px){.nav-links{display:none}.burger{display:block}.nav-r .btn{display:none}}
-/* lien Academy en bleu YCA (barre du haut + menu) */
-.nav-links a.yca-link,.nav-links a.yca-link.active,.menu a.yca-link,.menu a.yca-link em{color:#A9C1EA}
-.nav-links a.yca-link:hover{color:#d4e1f6}
-.nav-links a.yca-link:after{background:#A9C1EA}
 /* « No first clients. » barré, comme sur le site YCA */
 .ya-h2.ya-pain{font-size:clamp(24px,2.9vw,46px);max-width:none}
 .ya-strike{position:relative;white-space:nowrap;color:rgba(248,249,250,.55);margin-left:.3em}
@@ -624,7 +620,7 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .ya-offer .ya-list li:before{left:18px}
 /* photos de la page Academy */
 .ya-ebook{display:flex;gap:20px;align-items:center}
-.ya-ebook img{width:96px;height:auto;flex:none;border-radius:6px;box-shadow:0 14px 30px -10px rgba(0,0,0,.6);transform:rotate(-3deg)}
+.ya-ebook img{width:104px;height:auto;flex:none;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
 .ya-ebook>div{min-width:0}
 .ya-gal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:48px}
 .ya-gal figure,.ya-int-ph figure{margin:0;position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/5;background:#0B2D6B}
