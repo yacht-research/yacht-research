@@ -609,6 +609,19 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 /* 8 liens dans la barre : le menu burger prend le relais plus tôt */
 @media(max-width:1380px){.nav-links{gap:22px}}
 @media(max-width:1240px){.nav-links{display:none}.burger{display:block}.nav-r .btn{display:none}}
+/* lien Academy en bleu YCA (barre du haut + menu) */
+.nav-links a.yca-link,.nav-links a.yca-link.active,.menu a.yca-link,.menu a.yca-link em{color:#A9C1EA}
+.nav-links a.yca-link:hover{color:#d4e1f6}
+.nav-links a.yca-link:after{background:#A9C1EA}
+/* « No first clients. » barré, comme sur le site YCA */
+.ya-h2.ya-pain{font-size:clamp(24px,2.9vw,46px);max-width:none}
+.ya-strike{position:relative;white-space:nowrap;color:rgba(248,249,250,.55);margin-left:.3em}
+.ya-strike:after{content:"";position:absolute;left:-3%;right:-3%;top:50%;height:4px;border-radius:2px;background:#F8F9FA;transform:rotate(-2deg)}
+.ya-offer .ya-card>p:not(.ya-k){margin-top:10px}
+.ya-offer .ya-k{margin-bottom:14px}
+.ya-offer .ya-list{margin-top:20px}
+.ya-offer .ya-list li{padding:12px 16px 12px 46px;font-size:15px}
+.ya-offer .ya-list li:before{left:18px}
 /* page Yacht Club Academy */
 .ya{background:#01163C;color:#F8F9FA}
 .ya-hero{position:relative;text-align:center;padding:calc(clamp(104px,13vh,140px) + 30px) var(--pad) clamp(70px,9vw,120px);background:radial-gradient(ellipse at 50% 0%,#1E4D96 0%,#0B2D6B 40%,#01163C 80%)}
