@@ -40,7 +40,16 @@ export async function onRequestGet(ctx) {
   const firstByProduct = new Map();
   open.forEach(d => { if (!firstByProduct.has(d.product_id)) firstByProduct.set(d.product_id, d); });
   const prices = new Map();
-  await Promise.all([...firstByProduct.values()].slice(0, 25).map(async d => prices.set(d.product_id, await fromPrice(env, ctx, d))));
+  // Devis « à partir de » : 3 à la fois au plus (le portail limite les rafales), un nouvel essai si besoin
+  const queue = [...firstByProduct.values()].slice(0, 25);
+  const worker = async () => {
+    for (let d; (d = queue.shift());) {
+      let p = await fromPrice(env, ctx, d);
+      if (p === null) { await new Promise(r => setTimeout(r, 400)); p = await fromPrice(env, ctx, d); }
+      prices.set(d.product_id, p);
+    }
+  };
+  await Promise.all([worker(), worker(), worker()]);
 
   const departures = list.map(d => ({
     id: d.id, product_id: d.product_id, product: d.product, date: d.date, time: d.time,
