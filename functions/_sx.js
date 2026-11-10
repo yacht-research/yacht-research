@@ -68,7 +68,9 @@ export function safeEqual(a, b) {
   return d === 0;
 }
 
-// Copie de la réservation à Yacht Research (même canal que les formulaires du site)
+// Copie de la réservation à Yacht Research (même canal que les formulaires du site).
+// L'adresse du client part dans « client_email » (jamais « email ») : l'Apps Script n'écrit au client
+// qu'une fois la réservation confirmée, avec sa propre confirmation Yacht Research.
 export async function notify(env, fields) {
   try {
     const fd = new URLSearchParams({ form_name: 'Shared Experience Booking', submitted_at: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }), ...fields });

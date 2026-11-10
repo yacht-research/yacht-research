@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-10T15:54:21.314Z",
- "count": 48,
+ "generated": "2026-11-10T17:21:01.112Z",
+ "count": 49,
  "yachts": [
   {
    "slug": "princess-y85-2021-singapore",
@@ -19,6 +19,25 @@
    "price_eur": 5300000,
    "guests": "",
    "cabins": "4",
+   "updated": "2026-11-10"
+  },
+  {
+   "slug": "nasayem-125ft-motor-yacht-2011-dubai",
+   "type": "sale",
+   "title": "Nasayem",
+   "builder": "Custom build (UAE)",
+   "model": "125ft motor yacht",
+   "badge": "New Listing",
+   "image": "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/01.webp",
+   "thumb": "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/01-800.webp",
+   "length": "38 m / 125 ft",
+   "year": "2011",
+   "location": "Dubai, UAE",
+   "price": "AED 11,000,000",
+   "original_price": "",
+   "price_eur": 2750000,
+   "guests": "",
+   "cabins": "7",
    "updated": "2026-11-10"
   },
   {
