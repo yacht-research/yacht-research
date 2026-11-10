@@ -6,6 +6,13 @@
   var nav = $('#nav');
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
 
+  // ---------- Vitesse : une fois la page affichée, les images plus bas se chargent en fond ----------
+  // (sinon elles ne partent qu'au moment où on fait défiler, et arrivent en retard)
+  window.addEventListener('load', function(){
+    var go = function(){ $$('img[loading="lazy"]').forEach(function(im){ im.loading = 'eager'; }); };
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 800);
+  });
+
   var swoosh = $('#heroSwoosh');
   if (swoosh) setTimeout(function(){ swoosh.classList.add('is-in'); }, 60);
 

@@ -3,18 +3,11 @@
 import { json, xc, retailMinor, dubaiToday } from '../../_sx.js';
 
 const CACHE_HOST = 'https://sx-cache.yachtresearchgroup.com';
-
-async function fromPrice(env, ctx, dep) {
-  const cache = caches.default;
-  const key = new Request(CACHE_HOST + '/from/' + dep.product_id + '/' + dep.date);
-  const hit = await cache.match(key);
-  if (hit) return (await hit.json()).minor;
-  const q = await xc(env, '/quote', { method: 'POST', body: { departure_id: dep.id, adults: 1, children: 0, featured: false } });
-  if (!q.ok) return null;
-  const minor = retailMinor(q.data.total_minor, env);
-  ctx.waitUntil(cache.put(key, new Response(JSON.stringify({ minor }), { headers: { 'Cache-Control': 'max-age=21600' } })));
-  return minor;
-}
+// Le portail autorise 60 appels par minute et par clé : le prix « à partir de » (1 adulte) de chaque produit
+// est gardé 12 h dans UNE entrée de cache commune à toutes les dates, et on ne demande que les produits manquants
+// (8 devis au plus par appel, le reste est complété aux appels suivants).
+const PRICES_KEY = CACHE_HOST + '/prices/v2';
+const MAX_QUOTES = 8, PRICE_TTL = 12 * 3600e3;
 
 export async function onRequestGet(ctx) {
   const { env, request } = ctx;
@@ -36,25 +29,34 @@ export async function onRequestGet(ctx) {
     ctx.waitUntil(cache.put(listKey, new Response(JSON.stringify(list), { headers: { 'Cache-Control': 'max-age=60' } })));
   }
 
+  const pReq = new Request(PRICES_KEY);
+  const pHit = await cache.match(pReq);
+  const prices = pHit ? await pHit.json() : {}; // { product_id: { m: minor, t: horodatage } }
+  const now = Date.now();
   const open = list.filter(d => d.availability !== 'None');
-  const firstByProduct = new Map();
-  open.forEach(d => { if (!firstByProduct.has(d.product_id)) firstByProduct.set(d.product_id, d); });
-  const prices = new Map();
-  // Devis « à partir de » : 3 à la fois au plus (le portail limite les rafales), un nouvel essai si besoin
-  const queue = [...firstByProduct.values()].slice(0, 25);
-  const worker = async () => {
-    for (let d; (d = queue.shift());) {
-      let p = await fromPrice(env, ctx, d);
-      if (p === null) { await new Promise(r => setTimeout(r, 400)); p = await fromPrice(env, ctx, d); }
-      prices.set(d.product_id, p);
-    }
-  };
-  await Promise.all([worker(), worker(), worker()]);
+  const todo = [];
+  open.forEach(d => {
+    const p = prices[d.product_id];
+    if ((!p || now - p.t > PRICE_TTL) && !todo.some(t => t.product_id === d.product_id)) todo.push(d);
+  });
+
+  if (todo.length) {
+    const queue = todo.slice(0, MAX_QUOTES);
+    let changed = false;
+    const worker = async () => {
+      for (let d; (d = queue.shift());) {
+        const q = await xc(env, '/quote', { method: 'POST', body: { departure_id: d.id, adults: 1, children: 0, featured: false } });
+        if (q.ok) { prices[d.product_id] = { m: retailMinor(q.data.total_minor, env), t: now }; changed = true; }
+      }
+    };
+    await Promise.all([worker(), worker()]);
+    if (changed) ctx.waitUntil(cache.put(pReq, new Response(JSON.stringify(prices), { headers: { 'Cache-Control': 'max-age=86400' } })));
+  }
 
   const departures = list.map(d => ({
     id: d.id, product_id: d.product_id, product: d.product, date: d.date, time: d.time,
     availability: d.availability, categories: d.categories,
-    from_aed: prices.has(d.product_id) && prices.get(d.product_id) ? prices.get(d.product_id) / 100 : null
+    from_aed: prices[d.product_id] ? prices[d.product_id].m / 100 : null
   })).sort((a, b) => a.time.localeCompare(b.time));
 
   return json({ enabled: true, bookings: env.SX_BOOKINGS === 'on' && !!env.STRIPE_SECRET_KEY, date, departures });

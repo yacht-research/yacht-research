@@ -12,6 +12,8 @@ export async function onRequest(context) {
     { url: '/listings', priority: '0.9', changefreq: 'weekly' },
     { url: '/charter', priority: '0.9', changefreq: 'weekly' },
     { url: '/shared-experiences', priority: '0.9', changefreq: 'daily' },
+    ...['superyacht-experience', 'sunseeker-experience', 'yacht-tour-bbq', 'breakfast-yacht-tour', 'dinner-cruise', 'yacht-party', 'harbour-bbq-tour', 'harbour-tour', 'marina-tour', 'speedboat-tour', 'ain-cruise']
+      .map(id => ({ url: '/shared-experiences/' + id, priority: '0.8', changefreq: 'weekly' })),
     { url: '/why-us', priority: '0.8', changefreq: 'monthly' },
     { url: '/bespoke', priority: '0.8', changefreq: 'monthly' },
     { url: '/yacht-club-academy', priority: '0.7', changefreq: 'monthly' },

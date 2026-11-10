@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-10T20:22:13.193Z",
- "count": 49,
+ "generated": "2026-11-10T22:51:39.962Z",
+ "count": 51,
  "yachts": [
   {
    "slug": "princess-y85-2021-singapore",
@@ -22,6 +22,25 @@
    "updated": "2026-11-10"
   },
   {
+   "slug": "asmaraty-g-100-superyacht-new-build",
+   "type": "sale",
+   "title": "Asmaraty G-100",
+   "builder": "Asmaraty",
+   "model": "G-100 Super Yacht",
+   "badge": "Exclusive price",
+   "image": "/images/yachts/asmaraty-g-100-superyacht-new-build/01.webp",
+   "thumb": "/images/yachts/asmaraty-g-100-superyacht-new-build/01-800.webp",
+   "length": "30.5 m / 100 ft",
+   "year": "New",
+   "location": "UAE & Qatar",
+   "price": "USD 3,800,000",
+   "original_price": "",
+   "price_eur": 3496000,
+   "guests": "",
+   "cabins": "5",
+   "updated": "2026-11-10"
+  },
+  {
    "slug": "nasayem-125ft-motor-yacht-2011-dubai",
    "type": "sale",
    "title": "Nasayem",
@@ -38,6 +57,25 @@
    "price_eur": 2750000,
    "guests": "",
    "cabins": "7",
+   "updated": "2026-11-10"
+  },
+  {
+   "slug": "asmaraty-g-77-luxury-yacht-new-build",
+   "type": "sale",
+   "title": "Asmaraty G-77",
+   "builder": "Asmaraty",
+   "model": "G-77 Luxury Yacht",
+   "badge": "Exclusive price",
+   "image": "/images/yachts/asmaraty-g-77-luxury-yacht-new-build/01.webp",
+   "thumb": "/images/yachts/asmaraty-g-77-luxury-yacht-new-build/01-800.webp",
+   "length": "23.7 m / 78 ft",
+   "year": "New",
+   "location": "UAE & Qatar",
+   "price": "USD 1,900,000",
+   "original_price": "",
+   "price_eur": 1748000,
+   "guests": "",
+   "cabins": "4",
    "updated": "2026-11-10"
   },
   {

@@ -33,10 +33,13 @@
   // Remplit une carte avec ses départs du jour
   function fill(card, title, deps) {
     var slots = card.querySelector('[data-slots]'), price = card.querySelector('[data-price]'), cta = card.querySelector('[data-cta]');
+    var fromEl = card.querySelector('.xp-from');
     card.classList.toggle('xp-off', !deps.length);
     card.style.order = deps.length ? '0' : '1'; // les expériences disponibles ce jour-là d'abord
+    if (fromEl) fromEl.hidden = !!deps.length; // le prix du jour remplace le prix indicatif
     if (!deps.length) { slots.innerHTML = '<span class="xp-wait">No departure on this date. Try another day.</span>'; price.innerHTML = ''; cta.innerHTML = ''; return; }
     var low = deps.map(function (d) { return d.from_aed; }).filter(Boolean);
+    if (!low.length && card.dataset.from) low = [+card.dataset.from]; // prix indicatif si le devis du jour n'est pas encore arrivé
     price.innerHTML = low.length ? '<small>From</small> ' + aed(Math.min.apply(null, low)) + ' <small>per guest</small>' : '<small>Price on request</small>';
     slots.innerHTML = deps.map(function (d, i) {
       return '<button type="button" class="xp-slot' + (d.availability === 'Low availability' ? ' low' : '') + '" data-i="' + i + '" title="' + (d.availability === 'Low availability' ? 'Few places left' : 'Available') + '">' + esc(d.time) + (d.availability === 'Low availability' ? '<small>Few left</small>' : '') + '</button>';
@@ -75,6 +78,7 @@
       var rest = deps.filter(function (x) { return !used[x.id]; }), groups = {};
       rest.forEach(function (x) { (groups[x.product] = groups[x.product] || []).push(x); });
       var keys = Object.keys(groups);
+      if (more.hasAttribute('data-off')) keys = []; // fiche d'une seule expérience : pas de liste annexe
       more.hidden = !keys.length;
       moreGrid.innerHTML = keys.map(function (k) { return '<article class="sx-card xp-mini"><h4>' + esc(k) + '</h4><div class="xp-slots" data-slots></div><div class="xp-foot"><p class="xp-price" data-price></p><span data-cta></span></div></article>'; }).join('');
       [].slice.call(moreGrid.children).forEach(function (el, i) { fill(el, keys[i], groups[keys[i]]); });
@@ -82,6 +86,7 @@
       note.textContent = 'Live times are unavailable right now. Send us your request and we will confirm availability for you.';
       cards.forEach(function (c) {
         c.querySelector('[data-slots]').innerHTML = '';
+        c.querySelector('[data-price]').innerHTML = c.dataset.from ? '<small>From</small> ' + aed(c.dataset.from) + ' <small>per guest</small>' : '';
         c.querySelector('[data-cta]').innerHTML = '<a class="btn btn-gold" href="/yacht-research-form?project=charter&yacht=' + encodeURIComponent(c.dataset.title) + '">Enquire <i>→</i></a>';
       });
     });

@@ -36,6 +36,7 @@ function abs(u, base) {
 function badgeLabel(b, isCharter) {
   b = (b || '').toLowerCase();
   if (isCharter) return 'Charter';
+  if (b.includes('exclusive')) return 'Exclusive price';
   if (b.includes('reduc') || b.includes('price')) return 'Price reduced';
   if (b.includes('off')) return 'Off market';
   if (b.includes('new')) return 'New listing';
@@ -112,13 +113,21 @@ function renderYachtPage(y, slug, base, origin) {
     ? '<div class="yp-hl rv"><p class="eyebrow">Highlights</p><ul>' + y.highlights.map(h => '<li>' + esc(h) + '</li>').join('') + '</ul></div>' : '';
   const galHTML = gallery.length
     ? '<section class="yp-sec" style="padding-right:0"><div class="head" style="padding-right:var(--pad)"><div><p class="eyebrow rv">Gallery</p><h2 class="t-l split-words yp-h2">On <span class="acc">board</span></h2></div><div class="rail-ui"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div></div>' +
-      '<div class="rail yp-gal">' + [y.image].concat(gallery).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(g) + '" alt="' + esc(title) + ' photo ' + (i + 1) + '" loading="lazy"></button>').join('') + '</div><div class="progress" style="margin-right:var(--pad)"><i></i></div></section>'
+      '<div class="rail yp-gal">' + [y.image].concat(gallery).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(/^\/images\/.*\.webp$/.test(g) ? g.replace(/\.webp$/, '-800.webp') : g) + '" decoding="async" alt="' + esc(title) + ' photo ' + (i + 1) + '" loading="lazy"></button>').join('') + '</div><div class="progress" style="margin-right:var(--pad)"><i></i></div></section>'
     : '';
   // Vidéo courte (muette, en boucle, lancée seulement quand elle arrive à l'écran ; rien n'est chargé avant)
   const videoHTML = y.video
     ? '<section class="yp-sec yp-film"><p class="eyebrow rv">The film</p><h2 class="t-l split-words yp-h2">Step <span class="acc">aboard</span></h2>' +
-      '<div class="yp-film-box rv"><video src="' + esc(y.video) + '"' + (y.video_poster ? ' poster="' + esc(y.video_poster) + '"' : '') + ' muted loop playsinline preload="none" controls aria-label="' + esc(title) + ' video tour"></video></div>' +
+      '<div class="yp-film-box rv' + (y.video_vertical ? ' yp-film-v' : '') + '"><video src="' + esc(y.video) + '"' + (y.video_poster ? ' poster="' + esc(y.video_poster) + '"' : '') + ' muted loop playsinline preload="none" controls aria-label="' + esc(title) + ' video tour"></video></div>' +
       '<script>(function(){var v=document.currentScript.previousElementSibling.querySelector("video");if(!("IntersectionObserver"in window))return;new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){var p=v.play();p&&p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})()</script></section>'
+    : '';
+  // Encart mis en avant juste sous les chiffres clés (argument principal de l'annonce)
+  const c = y.callout;
+  const calloutHTML = c && c.title
+    ? '<section class="yp-callout rv"><div class="yp-callout-in">' + (c.eyebrow ? '<p class="eyebrow">' + esc(c.eyebrow) + '</p>' : '') +
+      '<h2 class="yp-callout-t">' + esc(c.title) + '</h2>' + (c.text ? '<p class="yp-callout-p">' + esc(c.text) + '</p>' : '') +
+      (Array.isArray(c.points) && c.points.length ? '<ul class="yp-callout-pts">' + c.points.map(p => '<li>' + esc(p) + '</li>').join('') + '</ul>' : '') +
+      '</div></section>'
     : '';
   const brochure = y.brochure ? '<a href="' + esc(y.brochure) + '" class="btn btn-ghost" target="_blank" rel="noopener">Brochure <i>↓</i></a>' : '';
   const enquire = '/yacht-research-form?' + (isCharter ? 'project=charter&' : '') + 'yacht=' + encodeURIComponent(title);
@@ -136,7 +145,7 @@ function renderYachtPage(y, slug, base, origin) {
     '<span class="tag yp-tag">' + badgeLabel(y.badge, isCharter) + '</span>' +
     '<h1 class="t-l yp-title">' + titleHTML(title) + '</h1>' +
     '<p class="yp-sub rv">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div></header>' +
-    '<div class="yp-keys">' + keySpecs.map(s => '<div class="rv"><span>' + esc(s[0]) + '</span><b>' + esc(s[1]) + '</b></div>').join('') + '</div>' +
+    '<div class="yp-keys">' + keySpecs.map(s => '<div class="rv"><span>' + esc(s[0]) + '</span><b>' + esc(s[1]) + '</b></div>').join('') + '</div>' + calloutHTML +
     '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + '</div>' +
     '<aside class="yp-card rv"><p class="eyebrow">' + (isCharter ? 'Charter rate' : 'Asking price') + '</p>' +
     (y.original_price ? '<p class="yp-was">' + esc(y.original_price) + '</p>' : '') +
