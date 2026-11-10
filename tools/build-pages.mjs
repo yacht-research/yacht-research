@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '8'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '9'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -158,7 +158,13 @@ const OFFMARKET = (img, charter) => `<section class="offm offm-s offm-top">
 const LI_SVG = '<svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>';
 const TEAM = `<section class="team" id="team">
   <div class="team-wrap">
-    <div class="team-ph clip"><img src="/images/team/founders.webp" alt="Mathis Y. and Antoine E., founders of Yacht Research" width="1000" height="1250" loading="lazy"></div>
+    <div class="team-media">
+      <div class="team-ph clip"><img src="/images/team/founders.webp" alt="Mathis Y. and Antoine E., founders of Yacht Research" width="1000" height="1250" loading="lazy"></div>
+      <div class="team-duo">
+        <div class="team-ph2 rv"><img src="/images/team/dubai.webp" alt="Mathis and Antoine overlooking Dubai Marina" width="1200" height="553" loading="lazy"></div>
+        <div class="team-ph2 rv d1"><img src="/images/team/night.webp" alt="Mathis and Antoine on a yacht at night" width="1000" height="750" loading="lazy"></div>
+      </div>
+    </div>
     <div class="team-txt">
       <p class="eyebrow rv">The founders</p>
       <h2 class="t-l split-words" style="margin-top:22px">The people <span class="acc">behind the search</span></h2>
@@ -167,12 +173,18 @@ const TEAM = `<section class="team" id="team">
           ['Mathis Y.', 'Founder &amp; Yacht Broker', 'Raised between Brittany and Paris, Mathis built a close bond with yachting through summers and first connections on the French Riviera: Cannes, Antibes, Monaco and Saint-Tropez.', 'Off-market, events and charter', 'https://www.linkedin.com/in/mathis-ybs-bb20483b7'],
           ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a yacht broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
         ].map(([n, r, bio, sp, li], i) => `<article class="tcard rv${i ? ' d1' : ''}">
-          <div class="tcard-h"><div><h4>${n}</h4><p class="trole">${r}</p></div><a class="tli" href="${li}" target="_blank" rel="noopener" aria-label="${n} on LinkedIn">${LI_SVG}</a></div>
+          <div class="tcard-h"><h4>${n}</h4><p class="trole">${r}</p></div>
           <p>${bio}</p>
           <dl><div><dt>Based</dt><dd>France &amp; UAE</dd></div><div><dt>Languages</dt><dd>French, English, Spanish</dd></div><div><dt>Speciality</dt><dd>${sp}</dd></div></dl>
+          <a class="tli" href="${li}" target="_blank" rel="noopener">${LI_SVG}<span>View ${n.split(' ')[0]}'s LinkedIn profile</span><i>↗</i></a>
         </article>`).join('')}
       </div>
-      <p class="team-yca rv">Mathis and Antoine are also the founders of <a href="https://yachtclubacademy.com" target="_blank" rel="noopener">Yacht Club Academy <i>→</i></a></p>
+      <a class="yca-card rv" href="https://yachtclubacademy.com/en/" target="_blank" rel="noopener">
+        <span class="yca-k">Also founded by Mathis &amp; Antoine</span>
+        <b>Yacht Club <span class="acc">Academy</span></b>
+        <span class="yca-p">Our academy for those who want to become yacht brokers: the off-market world, the method professionals use and a 30-day plan to find your first clients.</span>
+        <span class="yca-go">Visit yachtclubacademy.com <i>→</i></span>
+      </a>
     </div>
   </div>
 </section>`;
