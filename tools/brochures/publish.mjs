@@ -30,7 +30,7 @@ fs.mkdirSync(imgDir, { recursive: true });
 
 // Règle qualité : une photo de moins de 1400 px de large ne va JAMAIS sur le site.
 // Les photos HD fournies à part (dossier "<brochure>/" à côté du PDF, ou _travail/<slug>/hd/) passent en premier.
-const MIN_WIDTH = 1400;
+const MIN_WIDTH = Number(process.env.YR_MIN_WIDTH) || 1400;   // exception ponctuelle : YR_MIN_WIDTH=1280
 const hdDir = path.join(workDir, 'hd');
 const candidates = [
   ...(fs.existsSync(hdDir) ? fs.readdirSync(hdDir).filter(f => /\.(jpe?g|png|webp|heic|tiff?)$/i.test(f)).map(f => path.join(hdDir, f)) : []),
