@@ -13,6 +13,7 @@ export async function onRequest(context) {
     { url: '/charter', priority: '0.9', changefreq: 'weekly' },
     { url: '/why-us', priority: '0.8', changefreq: 'monthly' },
     { url: '/bespoke', priority: '0.8', changefreq: 'monthly' },
+    { url: '/yacht-club-academy', priority: '0.7', changefreq: 'monthly' },
     { url: '/partnerships', priority: '0.7', changefreq: 'monthly' },
     { url: '/recruitment', priority: '0.6', changefreq: 'monthly' },
     { url: '/yacht-research-form', priority: '0.9', changefreq: 'weekly' },

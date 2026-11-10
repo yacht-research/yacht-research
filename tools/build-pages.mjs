@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '10'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '12'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -23,6 +23,7 @@ const NAV = `<nav id="nav">
     <li><a href="/charter">Charter</a></li>
     <li><a href="/bespoke">Services</a></li>
     <li><a href="/why-us">Why Us</a></li>
+    <li><a href="/yacht-club-academy">Academy</a></li>
     <li><a href="/partnerships">Partners</a></li>
     <li><a href="/recruitment">Careers</a></li>
     <li><a href="/#newsletter" class="gold-link">Newsletter</a></li>
@@ -39,6 +40,7 @@ const NAV = `<nav id="nav">
   <a href="/yacht-research-form">Sell <em>your yacht</em></a>
   <a href="/bespoke">Services</a>
   <a href="/why-us">Why us</a>
+  <a href="/yacht-club-academy">Yacht Club <em>Academy</em></a>
   <a href="/partnerships">Partners <em>&amp; referrals</em></a>
   <a href="/recruitment">Careers</a>
   <a href="/#newsletter"><em>Newsletter</em></a>
@@ -51,8 +53,8 @@ const FOOTER = `<footer class="foot">
   <div class="foot-top">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
     <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
-    <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
-    <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">LinkedIn · Mathis Y.</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">LinkedIn · Antoine E.</a></div>
+    <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
+    <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
   <div class="foot-bot"><span>© 2026 Yacht Research Group · Worldwide</span><span><a href="/privacy-policy">Privacy policy</a> · Photography: Unsplash</span></div>
 </footer>
@@ -179,12 +181,12 @@ const TEAM = `<section class="team" id="team">
           <a class="tli" href="${li}" target="_blank" rel="noopener">${LI_SVG}<span>View ${n.split(' ')[0]}'s LinkedIn profile</span><i>↗</i></a>
         </article>`).join('')}
       </div>
-      <a class="yca-card rv" href="https://yachtclubacademy.com/en/" target="_blank" rel="noopener">
+      <a class="yca-card rv" href="/yacht-club-academy">
         <img class="yca-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="88" height="60" loading="lazy">
         <span class="yca-k">Also founded by Mathis &amp; Antoine</span>
         <b>Yacht Club <em>Academy</em></b>
         <span class="yca-p">Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.</span>
-        <span class="yca-go">Visit yachtclubacademy.com <i>→</i></span>
+        <span class="yca-go">Discover the academy <i>→</i></span>
       </a>
     </div>
   </div>
@@ -240,6 +242,91 @@ pages.push({
   </div>
   <div class="ctas rv" style="margin-top:50px"><a href="/yacht-research-form" class="btn btn-gold">Enquire now <i>→</i></a><a href="/listings" class="btn btn-ghost">View yachts</a></div>
 </section>` + TEAM
+});
+
+// Yacht Club Academy : résumé de l'académie, aux couleurs de YCA (bleu marine, bleu ciel, nacré)
+const YCA_URL = 'https://yachtclubacademy.com/en/';
+pages.push({
+  file: 'yacht-club-academy.html', canonical: '/yacht-club-academy',
+  title: 'Yacht Club Academy | Become a Yacht Broker | By the founders of Yacht Research',
+  desc: 'Yacht Club Academy, founded by Mathis and Antoine of Yacht Research: the method, the network and a 30-day plan to start your career as a Yacht Broker.',
+  body: `<div class="ya">
+<header class="ya-hero">
+  <div class="ya-in">
+    <img class="ya-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="132" height="90">
+    <p class="ya-k">By the founders of Yacht Research</p>
+    <h1 class="ya-h1">Want to become<br>a Yacht <em>Broker?</em></h1>
+    <p class="ya-lead">Yacht Club Academy is the academy we created to open the doors of our profession. No theory from the outside: the method we use every day at Yacht Research, shared step by step, wherever you are in the world.</p>
+    <div class="ya-ctas"><a href="${YCA_URL}" target="_blank" rel="noopener" class="ya-btn">Discover the academy <i>→</i></a><a href="#ya-plan" class="ya-btn ya-ghost">See the 30-day plan</a></div>
+  </div>
+</header>
+
+<section class="ya-sec">
+  <p class="ya-k rv">Where it starts</p>
+  <h2 class="ya-h2 split-words">No method. No network. <em>No first clients.</em></h2>
+  <div class="ya-grid3">
+    ${[
+      ['No method', 'Where do you start? Understand the market, master the method, find your clients: the steps are laid out in order.'],
+      ['No network', 'How do you find your place in yachting? Practical ways to reach owners, captains, buyers and partners, wherever you live.'],
+      ['No first clients', 'What if you reached out to your first clients this season? A dedicated guide with message, email and call templates ready to adapt.']
+    ].map(([t, p], i) => `<div class="ya-card rv${i ? ' d' + i : ''}"><b>0${i + 1}</b><h3>${t}</h3><p>${p}</p></div>`).join('')}
+  </div>
+</section>
+
+<section class="ya-sec ya-split">
+  <div>
+    <p class="ya-k rv">What you get</p>
+    <h2 class="ya-h2 split-words">Everything to take your <em>first step</em></h2>
+    <p class="ya-p rv">It starts with our ebook, an introduction to the Yacht Broker profession, available in English and French.</p>
+  </div>
+  <ul class="ya-list rv">
+    <li>An introduction to the yacht brokerage market</li>
+    <li>How off-market opportunities really work</li>
+    <li>Outreach templates: messages, emails and call scripts</li>
+    <li>The guide “How to find your first clients”</li>
+    <li>An exclusive video masterclass and 5 bonus resources</li>
+    <li>A preferred rate when you move on to coaching</li>
+  </ul>
+</section>
+
+<section class="ya-sec" id="ya-plan">
+  <p class="ya-k rv">Your 30-day plan</p>
+  <h2 class="ya-h2 split-words">From zero to your <em>first conversations</em></h2>
+  <div class="ya-weeks">
+    ${[
+      ['Week 1', 'Positioning and credibility', 'Choose your niche, write a three-sentence introduction and set up your mini CRM.'],
+      ['Week 2', 'Network and targeting', 'Build your first list of owners, buyers, captains and partners.'],
+      ['Week 3', 'Quality outreach', 'Reach out to a few prospects every day with genuinely personal messages.'],
+      ['Week 4', 'Conversion and follow-up', 'Qualify needs, send a summary after each conversation and follow up with tact.']
+    ].map(([w, t, p], i) => `<div class="ya-week rv${i ? ' d' + i : ''}"><span>${w}</span><h3>${t}</h3><p>${p}</p></div>`).join('')}
+  </div>
+</section>
+
+<section class="ya-sec">
+  <p class="ya-k rv">Go further</p>
+  <h2 class="ya-h2 split-words">Learn with us, <em>one to one</em></h2>
+  <div class="ya-grid2">
+    <div class="ya-card rv"><h3>Yacht Broker Elite Pack</h3><p>The complete path to learn the profession step by step: the market, sales and charter, high-end prospecting, qualifying, negotiation, closing and client follow-up, with 24/7 support on our private numbers.</p></div>
+    <div class="ya-card ya-hl rv d1"><h3>Private Coaching</h3><p>Everything in the Elite Pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.</p></div>
+  </div>
+  <p class="ya-p rv" style="margin-top:22px">A dedicated member platform is on its way. Payment in instalments is available, and a free 30-minute discovery call helps you choose the right path.</p>
+</section>
+
+<section class="ya-sec ya-split">
+  <div>
+    <p class="ya-k rv">In the field</p>
+    <h2 class="ya-h2 split-words">Built close to the boats <em>and the people</em></h2>
+    <p class="ya-p rv">Our journey started in Antibes, Cannes and Monaco, then continued in Dubai. We have been interviewed by Loïc Bourget in Paris and Marvin Ndiaye in Dubai, and we meet the industry where it happens.</p>
+  </div>
+  <div class="ya-tags rv"><span>Qatar Boat Show 2026</span><span>Dubai</span><span>Maybourne Riviera, Monaco</span><span>Cannes Yachting Festival</span><span>At sea</span></div>
+</section>
+
+<section class="ya-cta">
+  <h2 class="ya-h2">Your yachting career <em>starts here</em></h2>
+  <p class="ya-p">Join Yacht Club Academy and learn the profession from two brokers who do it every day.</p>
+  <div class="ya-ctas" style="justify-content:center"><a href="${YCA_URL}" target="_blank" rel="noopener" class="ya-btn">Visit yachtclubacademy.com <i>→</i></a><a href="https://www.instagram.com/yachtclubacademy/" target="_blank" rel="noopener" class="ya-btn ya-ghost">@yachtclubacademy</a></div>
+</section>
+</div>`
 });
 
 pages.push({

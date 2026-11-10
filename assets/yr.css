@@ -551,7 +551,8 @@ body.menu-open .menu a:nth-child(2){transition-delay:.04s}body.menu-open .menu a
 .menu{gap:0;justify-content:flex-start;padding:96px var(--pad) 40px;overflow-y:auto;overscroll-behavior:contain}
 .menu>a:first-child{margin-top:auto}.menu>a:last-child{margin-bottom:auto}
 .menu{scrollbar-width:none}
-.menu a{font-size:clamp(21px,min(7vw,3.9svh),52px);line-height:1.2;padding:.32em 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+body.menu-open .menu a:nth-child(12){transition-delay:.44s}body.menu-open .menu a:nth-child(13){transition-delay:.48s}
+.menu a{font-size:clamp(20px,min(7vw,3.5svh),50px);line-height:1.2;padding:.32em 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
 .menu a.menu-cta{align-self:flex-start;margin-top:26px;border:0;padding:16px 30px;font:600 12px/1 var(--sans);letter-spacing:.26em;white-space:nowrap}
 body.menu-open .menu a:nth-child(10){transition-delay:.36s}body.menu-open .menu a:nth-child(11){transition-delay:.4s}
 /* bouton menu : 3 traits */
@@ -605,6 +606,51 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .yca-p{display:block;color:rgba(248,249,250,.82);line-height:1.7}
 .yca-go{display:inline-block;margin-top:20px;padding:13px 22px;border-radius:999px;background:#F8F9FA;color:#01163C;font:700 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
 .yca-card:hover .yca-go{background:#A9C1EA}
+/* 8 liens dans la barre : le menu burger prend le relais plus tôt */
+@media(max-width:1380px){.nav-links{gap:22px}}
+@media(max-width:1240px){.nav-links{display:none}.burger{display:block}.nav-r .btn{display:none}}
+/* page Yacht Club Academy */
+.ya{background:#01163C;color:#F8F9FA}
+.ya-hero{position:relative;text-align:center;padding:calc(clamp(104px,13vh,140px) + 30px) var(--pad) clamp(70px,9vw,120px);background:radial-gradient(ellipse at 50% 0%,#1E4D96 0%,#0B2D6B 40%,#01163C 80%)}
+.ya-in{max-width:900px;margin:0 auto}
+.ya-logo{height:90px;width:auto;margin:0 auto 26px;opacity:0;animation:fade 1s ease forwards}
+.ya-k{font:600 11px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:#A9C1EA}
+.ya-h1{margin:22px 0 0;font:800 clamp(40px,7vw,96px)/1 var(--sans);text-transform:uppercase;letter-spacing:.005em;opacity:0;animation:fade 1.2s ease .15s forwards}
+.ya-h1 em,.ya-h2 em,.ya-h2 .acc{font:italic 500 1.06em var(--serif);text-transform:none;color:#A9C1EA;background:none;-webkit-background-clip:border-box;background-clip:border-box}
+.ya .split-words .acc .wd>span,.ya-h2 em .wd>span{background:none;color:#A9C1EA}
+.ya-lead{max-width:680px;margin:26px auto 0;font-size:clamp(16px,1.3vw,19px);line-height:1.75;color:rgba(248,249,250,.82);opacity:0;animation:fade 1.2s ease .4s forwards}
+.ya-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
+.ya-hero .ya-ctas{opacity:0;animation:fade 1.2s ease .6s forwards}
+.ya-btn{display:inline-flex;align-items:center;gap:10px;padding:17px 28px;border-radius:999px;background:#F8F9FA;color:#01163C;font:700 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;transition:.3s}
+.ya-btn:hover{background:#A9C1EA}
+.ya-btn i{font-style:normal}
+.ya-ghost{background:transparent;color:#F8F9FA;border:1px solid rgba(248,249,250,.4)}
+.ya-ghost:hover{background:rgba(169,193,234,.15);border-color:#A9C1EA}
+.ya-sec{padding:clamp(70px,9vw,120px) var(--pad);max-width:1300px;margin:0 auto;border-top:1px solid rgba(169,193,234,.15)}
+.ya-h2{margin-top:18px;font:800 clamp(30px,4.4vw,60px)/1.05 var(--sans);text-transform:uppercase;max-width:950px}
+.ya-p{margin-top:20px;max-width:640px;line-height:1.8;color:rgba(248,249,250,.8)}
+.ya-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:44px}
+.ya-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:44px}
+.ya-card{padding:clamp(24px,2.6vw,34px);border-radius:14px;background:linear-gradient(160deg,#0B2D6B,#01163C);border:1px solid rgba(169,193,234,.22)}
+.ya-card b{display:block;font:italic 500 34px/1 var(--serif);color:#A9C1EA;margin-bottom:16px}
+.ya-card h3{font:700 clamp(18px,1.6vw,22px)/1.2 var(--sans);text-transform:uppercase;letter-spacing:.02em}
+.ya-card p{margin-top:12px;line-height:1.75;color:rgba(248,249,250,.78)}
+.ya-hl{border-color:#A9C1EA;background:linear-gradient(160deg,#1E4D96,#0B2D6B)}
+.ya-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);align-items:center}
+.ya-list{list-style:none;display:grid;gap:10px}
+.ya-list li{padding:16px 20px 16px 52px;position:relative;border-radius:12px;background:rgba(248,249,250,.05);border:1px solid rgba(169,193,234,.18);line-height:1.5}
+.ya-list li:before{content:"";position:absolute;left:20px;top:50%;width:14px;height:8px;margin-top:-6px;border-left:2px solid #A9C1EA;border-bottom:2px solid #A9C1EA;transform:rotate(-45deg)}
+.ya-weeks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:44px}
+.ya-week{padding:26px;border-radius:14px;border:1px solid rgba(169,193,234,.22);background:rgba(248,249,250,.03)}
+.ya-week span{display:inline-block;padding:7px 12px;border-radius:999px;background:#A9C1EA;color:#01163C;font:700 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.ya-week h3{margin-top:18px;font:700 17px/1.25 var(--sans);text-transform:uppercase}
+.ya-week p{margin-top:10px;line-height:1.7;color:rgba(248,249,250,.75);font-size:15px}
+.ya-tags{display:flex;flex-wrap:wrap;gap:10px}
+.ya-tags span{padding:14px 20px;border-radius:999px;border:1px solid rgba(169,193,234,.35);font:500 14px/1 var(--sans)}
+.ya-cta{text-align:center;padding:clamp(80px,10vw,140px) var(--pad);background:radial-gradient(ellipse at 50% 100%,#1E4D96 0%,#0B2D6B 40%,#01163C 80%)}
+.ya-cta .ya-h2,.ya-cta .ya-p{margin-left:auto;margin-right:auto}
+@media(max-width:960px){.ya-grid3,.ya-grid2,.ya-split{grid-template-columns:1fr}.ya-weeks{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.ya-weeks{grid-template-columns:1fr}}
 @media(max-width:900px){.team-wrap{grid-template-columns:1fr}.team-ph{max-width:520px}.tcard dl{grid-template-columns:1fr 1fr}}
 .pcard .ic svg{stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
 .pcard .ic{width:46px;height:46px;border-radius:13px}
