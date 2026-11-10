@@ -1,7 +1,26 @@
 {
- "generated": "2026-11-09T21:36:32.140Z",
- "count": 13,
+ "generated": "2026-11-10T00:44:00.293Z",
+ "count": 14,
  "yachts": [
+  {
+   "slug": "princess-y85-2021-singapore",
+   "type": "sale",
+   "title": "Princess Y85",
+   "builder": "Princess Yachts",
+   "model": "Y85",
+   "badge": "New Listing",
+   "image": "/images/yachts/princess-y85-2021-singapore/01.webp",
+   "thumb": "/images/yachts/princess-y85-2021-singapore/01-800.webp",
+   "length": "26.21 m / 86 ft",
+   "year": "2021",
+   "location": "Singapore",
+   "price": "€ 5,300,000",
+   "original_price": "",
+   "price_eur": 5300000,
+   "guests": "",
+   "cabins": "4",
+   "updated": "2026-11-10"
+  },
   {
    "slug": "sunreef-80-eco",
    "type": "sale",

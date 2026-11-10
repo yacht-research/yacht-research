@@ -547,7 +547,49 @@ body.menu-open{overflow:hidden}
 .menu a{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .6s var(--ease)}
 body.menu-open .menu a{opacity:1;transform:none}
 body.menu-open .menu a:nth-child(2){transition-delay:.04s}body.menu-open .menu a:nth-child(3){transition-delay:.08s}body.menu-open .menu a:nth-child(4){transition-delay:.12s}body.menu-open .menu a:nth-child(5){transition-delay:.16s}body.menu-open .menu a:nth-child(6){transition-delay:.2s}body.menu-open .menu a:nth-child(7){transition-delay:.24s}body.menu-open .menu a:nth-child(8){transition-delay:.28s}body.menu-open .menu a:nth-child(9){transition-delay:.32s}
-.menu{gap:4px;padding-top:90px;overflow-y:auto}
-.menu a{line-height:1.15;padding:6px 0;border-bottom:1px solid var(--line-2)}
+/* menu : commence sous la barre, défile si l'écran est petit, jamais de lignes superposées */
+.menu{gap:0;justify-content:flex-start;padding:96px var(--pad) 40px;overflow-y:auto;overscroll-behavior:contain}
+.menu>a:first-child{margin-top:auto}.menu>a:last-child{margin-bottom:auto}
+.menu{scrollbar-width:none}
+.menu a{font-size:clamp(21px,min(7vw,3.9svh),52px);line-height:1.2;padding:.32em 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+.menu a.menu-cta{align-self:flex-start;margin-top:26px;border:0;padding:16px 30px;font:600 12px/1 var(--sans);letter-spacing:.26em;white-space:nowrap}
+body.menu-open .menu a:nth-child(10){transition-delay:.36s}body.menu-open .menu a:nth-child(11){transition-delay:.4s}
+/* bouton menu : 3 traits */
+.burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:21px}.burger i:nth-child(3){top:27px}
+body.menu-open .burger i:nth-child(1){top:21px;transform:rotate(45deg)}
+body.menu-open .burger i:nth-child(2){opacity:0}
+body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
+/* texte doré des titres animés : le dégradé est porté par chaque mot, il glisse avec lui (plus d'apparition d'un coup) */
+.split-words .acc{background:none;color:inherit;-webkit-background-clip:border-box;background-clip:border-box}
+.split-words .acc .wd>span{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+/* bandeau off-market en haut de Buy / Charter : texte lisible quelle que soit la photo */
+.offm-top{padding-top:clamp(30px,4vw,56px);padding-bottom:0}
+.offm-top .stick{min-height:auto;padding:clamp(56px,7vw,96px) 0}
+.offm-top .bgimg:after{background:linear-gradient(180deg,rgba(7,7,7,.72),rgba(7,7,7,.8)),radial-gradient(ellipse at center,rgba(7,7,7,.2),rgba(7,7,7,.6) 80%)}
+.offm-top .in{text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.offm-top h2{margin:18px 0 18px;font-size:clamp(34px,5vw,72px)}
+.offm-top .lead{color:rgba(243,238,228,.88)}
+.offm-top .ctas{display:flex;flex-wrap:wrap;gap:12px}
+/* bas des bandeaux photo : pas de liseré quand on zoome */
+.phero:before,.yp-hero:before{content:"";position:absolute;left:0;right:0;bottom:-1px;height:6px;background:var(--black);z-index:1;pointer-events:none}
+/* fondateurs */
+.team-wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,80px);align-items:center}
+.team-ph{border-radius:calc(var(--r) + 6px);overflow:hidden;aspect-ratio:4/5;background:#ececec}
+.team-ph img{width:100%;height:100%;object-fit:cover}
+.team-cards{display:grid;gap:16px;margin-top:34px}
+.tcard{border:1px solid var(--line);border-radius:var(--r);padding:clamp(20px,2.4vw,30px);background:rgba(255,255,255,.02)}
+.tcard-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px}
+.tcard h4{font:400 clamp(24px,2.4vw,32px)/1.1 var(--sans);text-transform:uppercase;letter-spacing:.02em}
+.trole{font:italic 400 19px/1.3 var(--serif);color:var(--gold);margin-top:4px}
+.tcard>p{color:rgba(243,238,228,.75);line-height:1.7}
+.tcard dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2)}
+.tcard dt{font:600 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.tcard dd{margin:0;font-size:14px;color:var(--cream)}
+.tli{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.3s}
+.tli svg{width:17px;height:17px;fill:var(--cream)}
+.tli:hover{border-color:var(--gold);background:var(--gold)}.tli:hover svg{fill:var(--black)}
+.team-yca{margin-top:26px;color:rgba(243,238,228,.75)}
+.team-yca a{color:var(--gold);border-bottom:1px solid rgba(201,168,76,.4)}
+@media(max-width:900px){.team-wrap{grid-template-columns:1fr}.team-ph{max-width:520px}.tcard dl{grid-template-columns:1fr 1fr}}
 .pcard .ic svg{stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
 .pcard .ic{width:46px;height:46px;border-radius:13px}

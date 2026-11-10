@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '6'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '8'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -29,10 +29,11 @@ const NAV = `<nav id="nav">
   </ul>
   <div class="nav-r">
     <a href="/yacht-research-form" class="btn btn-gold">Enquire <i>→</i></a>
-    <button class="burger" aria-label="Menu" id="burger"><i></i><i></i></button>
+    <button class="burger" aria-label="Menu" id="burger"><i></i><i></i><i></i></button>
   </div>
 </nav>
 <div class="menu" id="menu">
+  <a href="/">Home</a>
   <a href="/listings">Yachts <em>for sale</em></a>
   <a href="/charter">Charter</a>
   <a href="/yacht-research-form">Sell <em>your yacht</em></a>
@@ -42,6 +43,7 @@ const NAV = `<nav id="nav">
   <a href="/recruitment">Careers</a>
   <a href="/#newsletter"><em>Newsletter</em></a>
   <a href="/#contact">Contact</a>
+  <a href="/yacht-research-form" class="btn btn-gold menu-cta">Enquire now <i>→</i></a>
 </div>`;
 
 // ---------------------------------------------------------- pied de page
@@ -139,14 +141,38 @@ function catalogue(type) {
 </section>`;
 }
 
-const OFFMARKET = (img) => `<section class="offm offm-s">
+// Bandeau « off-market » placé juste sous le titre de Buy et Charter (comme sur l'ancien site)
+const OFFMARKET = (img, charter) => `<section class="offm offm-s offm-top">
   <div class="stick">
     <div class="bgimg"><img src="${U(img)}" alt="" loading="lazy"></div>
     <div class="in">
-      <p class="eyebrow rv">Off-market worldwide</p>
-      <h2 class="t-l split-words">Thousands of vessels, <span class="acc">one message</span></h2>
-      <p class="lead rv">Discreet listings and private acquisitions. Tell us what you are looking for and we search the whole market for you, including yachts never advertised.</p>
-      <div class="ctas rv" style="justify-content:center"><a href="/yacht-research-form" class="btn btn-gold">Start a search <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost">Send us a message</a></div>
+      <p class="eyebrow rv">Exclusive access</p>
+      <h2 class="t-l split-words">Off-market yachts <span class="acc">worldwide</span></h2>
+      <p class="lead rv">Thousands of vessels, one message. ${charter ? 'Beyond the yachts listed below, we can access charter yachts that are never publicly advertised, in every destination.' : 'Beyond the yachts listed below, we have access to discreet listings and private sales that are never publicly advertised. Tell us what you are looking for.'}</p>
+      <div class="ctas rv" style="justify-content:center"><a href="/yacht-research-form?project=${charter ? 'charter' : 'buy'}" class="btn btn-gold">Send us a request <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost">WhatsApp</a></div>
+    </div>
+  </div>
+</section>`;
+
+// Les fondateurs (accueil + Why Us)
+const LI_SVG = '<svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>';
+const TEAM = `<section class="team" id="team">
+  <div class="team-wrap">
+    <div class="team-ph clip"><img src="/images/team/founders.webp" alt="Mathis Y. and Antoine E., founders of Yacht Research" width="1000" height="1250" loading="lazy"></div>
+    <div class="team-txt">
+      <p class="eyebrow rv">The founders</p>
+      <h2 class="t-l split-words" style="margin-top:22px">The people <span class="acc">behind the search</span></h2>
+      <div class="team-cards">
+        ${[
+          ['Mathis Y.', 'Founder &amp; Yacht Broker', 'Raised between Brittany and Paris, Mathis built a close bond with yachting through summers and first connections on the French Riviera: Cannes, Antibes, Monaco and Saint-Tropez.', 'Off-market, events and charter', 'https://www.linkedin.com/in/mathis-ybs-bb20483b7'],
+          ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a yacht broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
+        ].map(([n, r, bio, sp, li], i) => `<article class="tcard rv${i ? ' d1' : ''}">
+          <div class="tcard-h"><div><h4>${n}</h4><p class="trole">${r}</p></div><a class="tli" href="${li}" target="_blank" rel="noopener" aria-label="${n} on LinkedIn">${LI_SVG}</a></div>
+          <p>${bio}</p>
+          <dl><div><dt>Based</dt><dd>France &amp; UAE</dd></div><div><dt>Languages</dt><dd>French, English, Spanish</dd></div><div><dt>Speciality</dt><dd>${sp}</dd></div></dl>
+        </article>`).join('')}
+      </div>
+      <p class="team-yca rv">Mathis and Antoine are also the founders of <a href="https://yachtclubacademy.com" target="_blank" rel="noopener">Yacht Club Academy <i>→</i></a></p>
     </div>
   </div>
 </section>`;
@@ -160,7 +186,7 @@ pages.push({
   desc: 'Browse luxury motor and sailing yachts for sale, personally vetted by Yacht Research. Off-market opportunities and buyer representation worldwide.',
   preload: U('photo-1569263979104-865ab7cd8d13'),
   body: hero({ img: 'photo-1569263979104-865ab7cd8d13', eyebrow: 'Listings', title: 'Yachts <span class="acc">for sale</span>', lead: 'A curated selection of motor and sailing yachts. Every listing is personally vetted by our brokers, with off-market opportunities available on request.' })
-    + catalogue('sale') + OFFMARKET('photo-1592285081254-0440a6601fea')
+    + OFFMARKET('photo-1592285081254-0440a6601fea') + catalogue('sale')
 });
 
 pages.push({
@@ -169,7 +195,7 @@ pages.push({
   desc: 'Crewed luxury yacht charters in the Mediterranean, Dubai and the Gulf, the Caribbean and the Indian Ocean, at preferential rates. Yacht Research.',
   preload: U('photo-1672939113905-b02ef5db7203'),
   body: hero({ img: 'photo-1672939113905-b02ef5db7203', eyebrow: 'Charter', title: 'Yachts <span class="acc">for charter</span>', lead: 'Weekly and day charters with hand-picked crews, at preferential rates. We select the yacht, the crew and the itinerary around you.' })
-    + catalogue('charter') + OFFMARKET('photo-1752884991178-c767ae83fb6b')
+    + OFFMARKET('photo-1528154291023-a6525fabe5b4', true) + catalogue('charter')
 });
 
 pages.push({
@@ -200,7 +226,7 @@ pages.push({
     ].map(([n, t, p], i) => `<div class="pillar rv${i % 3 ? ' d' + (i % 3) : ''}"><b class="pnum">${n}</b><h4>${t}</h4><p>${p}</p></div>`).join('')}
   </div>
   <div class="ctas rv" style="margin-top:50px"><a href="/yacht-research-form" class="btn btn-gold">Enquire now <i>→</i></a><a href="/listings" class="btn btn-ghost">View yachts</a></div>
-</section>`
+</section>` + TEAM
 });
 
 pages.push({
@@ -325,7 +351,7 @@ pages.push({
           ['Yacht Acquisition', 'Buy a yacht', 'Private acquisition, new or pre-owned', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'],
           ['Sell Your Yacht', 'Sell your yacht', 'On-market or discreet off-market sale', '<path d="M3 11.5V4.2A1.2 1.2 0 0 1 4.2 3h7.3l9.2 9.2a1.2 1.2 0 0 1 0 1.7l-6.8 6.8a1.2 1.2 0 0 1-1.7 0z"/><circle cx="7.8" cy="7.8" r="1.6"/>'],
           ['Charter', 'Charter', 'Find or place a charter vessel', '<circle cx="12" cy="9" r="3.6"/><path d="M12 2.2v1.6M5.2 9H3.6M20.4 9h-1.6M7.2 4.2l1.1 1.1M16.8 4.2l-1.1 1.1M2.5 16.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2M2.5 20.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2"/>'],
-          ['Partnership', 'Partnership', 'Broker collaboration or B2B network', '<circle cx="8.5" cy="12" r="5.5"/><circle cx="15.5" cy="12" r="5.5"/>'],
+          ['Partnership', 'Partnership', 'Broker collaboration or B2B network', '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5"/>'],
           ['Referral Programme', 'Referral programme', 'Earn commission on introductions', '<circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="5.5" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/>'],
           ['Bespoke Services', 'Bespoke services', 'Crew, refit, management and more', '<path d="M6.5 3.5h11l3.5 5.5-9 12-9-12z"/><path d="M3 9h18M12 21L8.6 9l1.6-5.5M12 21l3.4-12-1.6-5.5"/>']
         ].map(([v, t, d, ic]) => `<button type="button" class="pcard" data-value="${v}"><span class="ic"><svg viewBox="0 0 24 24">${ic}</svg></span><b>${t}</b><small>${d}</small></button>`).join('')}
@@ -490,6 +516,8 @@ console.log('✓ lib/shell.js');
 let idx = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8').replace(/\r\n/g, '\n');
 idx = idx.replace(/<nav id="nav">[\s\S]*?<\/nav>\n<div class="menu" id="menu">[\s\S]*?<\/div>/, NAV);
 idx = idx.replace(/<footer class="foot">[\s\S]*?<\/footer>\n<div class="wa-stack">[\s\S]*?<\/div>\n<div class="cookie" id="cookie"[\s\S]*?<\/div>\n<\/div>/, FOOTER);
+idx = idx.replace(/<!-- (?:WHY|TEAM) -->\n<section class="(?:why|team)" id="(?:why|team)">[\s\S]*?\n<\/section>/, '<!-- TEAM -->\n' + TEAM);
+idx = idx.replace('Access by appointment, under confidentiality.', 'Every request is handled in full confidentiality.');
 idx = idx.replace(/yr\.css\?v=\d+/, 'yr.css?v=' + V).replace(/yr\.js\?v=\d+/, 'yr.js?v=' + V);
 
 // Cartes yachts pré-remplies depuis content/yachts/index.json (lancer « node build.js » avant).
