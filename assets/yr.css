@@ -622,6 +622,22 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .ya-offer .ya-list{margin-top:20px}
 .ya-offer .ya-list li{padding:12px 16px 12px 46px;font-size:15px}
 .ya-offer .ya-list li:before{left:18px}
+/* photos de la page Academy */
+.ya-ebook{display:flex;gap:20px;align-items:center}
+.ya-ebook img{width:96px;height:auto;flex:none;border-radius:6px;box-shadow:0 14px 30px -10px rgba(0,0,0,.6);transform:rotate(-3deg)}
+.ya-ebook>div{min-width:0}
+.ya-gal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:48px}
+.ya-gal figure,.ya-int-ph figure{margin:0;position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/5;background:#0B2D6B}
+.ya-gal img,.ya-int-ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.ya-gal figure:hover img,.ya-int-ph figure:hover img{transform:scale(1.05)}
+.ya-gal figcaption,.ya-int-ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:36px 14px 13px;background:linear-gradient(transparent,rgba(1,22,60,.92));font:500 13px/1.35 var(--sans);color:#F8F9FA}
+.ya-int-ph figcaption b{display:block;font:600 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:#A9C1EA;margin-bottom:6px}
+.ya-int{margin-top:clamp(60px,7vw,100px)}
+.ya-int-ph{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ya-h3{margin-top:16px;font:800 clamp(26px,3.2vw,44px)/1.05 var(--sans);text-transform:uppercase}
+.ya-h3 em{font:italic 500 1.06em var(--serif);text-transform:none;color:#A9C1EA}
+@media(max-width:960px){.ya-gal{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.ya-gal{grid-template-columns:1fr 1fr}.ya-gal figure:last-child{display:none}.ya-ebook img{width:76px}}
 /* page Yacht Club Academy */
 .ya{background:#01163C;color:#F8F9FA}
 .ya-hero{position:relative;text-align:center;padding:calc(clamp(104px,13vh,140px) + 30px) var(--pad) clamp(70px,9vw,120px);background:radial-gradient(ellipse at 50% 0%,#1E4D96 0%,#0B2D6B 40%,#01163C 80%)}

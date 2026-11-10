@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '16'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '17'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -278,14 +278,14 @@ pages.push({
   <h2 class="ya-h2 split-words">The ebook is the first step. <em>Our coaching takes you all the way.</em></h2>
   <p class="ya-p rv">Start with the ebook to discover the profession at your own pace. When you are ready to make it your career, we work with you directly, from your first steps to your first deals.</p>
   <div class="ya-grid2 ya-offer">
-    <div class="ya-card rv"><p class="ya-k">Step 1 · The ebook</p><h3>Discover the profession</h3><p>An introduction to the Yacht Broker profession, in English and French.</p>
+    <div class="ya-card rv"><div class="ya-ebook"><img src="/images/yca/ebook-cover-760.webp" alt="Ebook: An introduction to the Yacht Broker profession" width="760" height="1180" loading="lazy"><div><p class="ya-k">Step 1 · The ebook</p><h3>Discover the profession</h3><p>An introduction to the Yacht Broker profession, in English and French.</p></div></div>
       <ul class="ya-list">
         <li>The yacht brokerage market and how off-market really works</li>
         <li>Outreach templates: messages, emails and call scripts</li>
         <li>The guide “How to find your first clients”</li>
         <li>A video masterclass and 5 bonus resources</li>
       </ul></div>
-    <div class="ya-card ya-hl rv d1"><p class="ya-k">Step 2 · Our coaching</p><h3>Become a Yacht Broker, with us</h3><p>Everything in the ebook, and much more: we guide you personally until you close your first deals.</p>
+    <div class="ya-card ya-hl rv d1"><p class="ya-k">Step 2 · Our coaching</p><h3>Become a Yacht Broker, with us</h3><p>Everything in the ebook, and much more: we guide you to close your first deals.</p>
       <ul class="ya-list">
         <li>The complete path: sales, charter, prospecting, negotiation and closing</li>
         <li>24/7 support on our private numbers</li>
@@ -319,13 +319,35 @@ pages.push({
   <p class="ya-p rv" style="margin-top:22px">We are ready to guide you, and a dedicated platform will bring everything together in one place: learning the profession, working on your first deals, a community of future brokers and sessions with industry experts. Payment in instalments is available, and a free 30-minute discovery call helps you choose the right path.</p>
 </section>
 
-<section class="ya-sec ya-split">
-  <div>
-    <p class="ya-k rv">In the field</p>
-    <h2 class="ya-h2 split-words">Built close to the boats <em>and the people</em></h2>
-    <p class="ya-p rv">Our journey started in Antibes, Cannes and Monaco, then continued in Dubai. We have been interviewed by Loïc Bourget in Paris and Marvin Ndiaye in Dubai, and we meet the industry where it happens.</p>
+<section class="ya-sec">
+  <div class="ya-split">
+    <div>
+      <p class="ya-k rv">In the field</p>
+      <h2 class="ya-h2 split-words">Built close to the boats <em>and the people</em></h2>
+      <p class="ya-p rv">Our journey started in Antibes, Cannes and Monaco, then continued in Dubai. We meet the industry where it happens: at the shows, on board and with the people who shape it.</p>
+    </div>
+    <div class="ya-tags rv"><span>Qatar Boat Show 2026</span><span>Dubai International Boat Show</span><span>Monaco Yacht Show</span><span>Cannes Yachting Festival</span><span>Abu Dhabi International Boat Show</span></div>
   </div>
-  <div class="ya-tags rv"><span>Qatar Boat Show 2026</span><span>Dubai</span><span>Maybourne Riviera, Monaco</span><span>Cannes Yachting Festival</span><span>Abu Dhabi International Boat Show</span></div>
+  <div class="ya-gal">
+    ${[
+      ['qatar', 'Qatar Boat Show 2026'],
+      ['monaco', 'Monaco'],
+      ['deck', 'Cannes Yachting Festival'],
+      ['dubai', 'Dubai Marina'],
+      ['sunset', 'On board at sunset']
+    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-800.webp" alt="${c}" width="800" height="1000" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('')}
+  </div>
+  <div class="ya-split ya-int">
+    <div>
+      <p class="ya-k rv">Our interviews</p>
+      <h3 class="ya-h3 split-words">They opened <em>their doors</em> to us</h3>
+      <p class="ya-p rv">We have talked with and been interviewed by recognised figures of the industry, sharing our vision of the profession and growing our international network.</p>
+    </div>
+    <div class="ya-int-ph">
+      <figure class="rv"><img src="/images/yca/interview-paris-800.webp" alt="Mathis and Antoine with Loïc Bourget in Paris" width="800" height="1000" loading="lazy"><figcaption><b>Paris</b> With Loïc Bourget, on his YouTube channel</figcaption></figure>
+      <figure class="rv d1"><img src="/images/yca/interview-dubai-800.webp" alt="Interview with Marvin Ndiaye in Dubai" width="800" height="1000" loading="lazy"><figcaption><b>Dubai</b> With Marvin Ndiaye, on YouTube and Instagram</figcaption></figure>
+    </div>
+  </div>
 </section>
 
 <section class="ya-cta">
