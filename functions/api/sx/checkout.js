@@ -45,7 +45,7 @@ export async function onRequestPost({ env, request }) {
     'line_items[0][price_data][product_data][name]': dep.product.slice(0, 200),
     'line_items[0][price_data][product_data][description]': `${dep.date} at ${dep.time} (Dubai time) · ${guests} guest${guests > 1 ? 's' : ''}`,
     success_url: origin + '/booking-confirmed?session_id={CHECKOUT_SESSION_ID}',
-    cancel_url: origin + '/charter?sx=cancelled#sx',
+    cancel_url: origin + '/shared-experiences?sx=cancelled#sx',
     expires_at: String(Math.floor(Date.now() / 1000) + 30 * 60),
     'payment_intent_data[description]': 'Yacht Research · ' + dep.product.slice(0, 150) + ' · ' + dep.date + ' ' + dep.time
   };

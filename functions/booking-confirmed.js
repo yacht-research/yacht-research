@@ -23,7 +23,7 @@ export async function onRequestGet({ env, request }) {
        <p class="lead">If you have been charged, contact us and we will sort it out right away.</p>`;
   const html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Booking | Yacht Research</title><meta name="robots" content="noindex">' + HEAD_ASSETS + '</head><body>' + NAV +
     '<section class="sx-ok" style="min-height:80vh;display:grid;align-content:center;padding:140px var(--pad) 60px">' + body +
-    '<div class="ctas" style="justify-content:center;margin-top:26px"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-gold">WhatsApp <i>→</i></a><a href="/charter" class="btn btn-ghost">Back to charter</a></div></section>' +
+    '<div class="ctas" style="justify-content:center;margin-top:26px"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-gold">WhatsApp <i>→</i></a><a href="/shared-experiences" class="btn btn-ghost">More experiences</a></div></section>' +
     FOOTER + SCRIPTS + '</body></html>';
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } });
 }

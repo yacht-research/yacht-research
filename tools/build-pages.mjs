@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '19'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '20'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -37,6 +37,7 @@ const NAV = `<nav id="nav">
   <a href="/">Home</a>
   <a href="/listings">Yachts <em>for sale</em></a>
   <a href="/charter">Charter</a>
+  <a href="/shared-experiences">Shared <em>experiences</em></a>
   <a href="/yacht-research-form">Sell <em>your yacht</em></a>
   <a href="/bespoke">Services</a>
   <a href="/why-us">Why us</a>
@@ -52,7 +53,7 @@ const NAV = `<nav id="nav">
 const FOOTER = `<footer class="foot">
   <div class="foot-top">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
-    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
+    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
     <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
@@ -105,9 +106,9 @@ ${SCRIPTS}${script ? '\n' + script : ''}
 }
 
 // Bandeau de titre commun aux pages intérieures
-function hero({ img, eyebrow, title, lead, ctas = '' }) {
+function hero({ img, src, eyebrow, title, lead, ctas = '' }) {
   return `<header class="phero">
-  ${img ? `<div class="hero-media" data-par="0.2"><img src="${U(img)}" alt="" fetchpriority="high"></div>` : ''}
+  ${img || src ? `<div class="hero-media" data-par="0.2"><img src="${src || U(img)}" alt="" fetchpriority="high"></div>` : ''}
   <div class="phero-in">
     <p class="eyebrow">${eyebrow}</p>
     <h1 class="t-xl phero-title">${title}</h1>
@@ -159,16 +160,54 @@ const OFFMARKET = (img, charter) => `<section class="offm offm-s offm-top">
 // Charter : nos tarifs sont des tarifs professionnels (B2B)
 const B2B_NOTE = `<div class="b2b-wrap"><div class="b2b-note rv"><span class="ic">◆</span><p><b>B2B rates.</b> As a yacht brokerage, we book directly with owners and operators at professional (B2B) rates. The prices shown on our site are usually lower than those advertised for the same yachts on other websites.</p></div></div>`;
 
-// Charter : sorties partagées réservables en ligne (portail partenaire Xclusive). Masqué tant que l'API n'est pas configurée.
-const SHARED_EXP = `<section class="sx" id="sx" hidden>
-  <div class="sx-head">
-    <p class="eyebrow rv">Book online · Dubai</p>
-    <h2 class="t-l split-words" style="margin-top:22px">Shared experiences <span class="acc">in Dubai</span></h2>
-    <p class="lead rv" style="margin-top:18px">Yacht tours, dinner cruises and boat parties, bookable by the seat. Live availability, instant confirmation, secure card payment.</p>
-    <p class="sx-msg" data-sx-note style="padding:8px 0 0"></p>
+// Sorties partagées à Dubaï (portail partenaire) : contenu fixe dans content/experiences.json,
+// horaires, disponibilités et prix remplis en direct par assets/sx.js.
+const XP = JSON.parse(fs.readFileSync(path.join(SITE, 'content/experiences.json'), 'utf8'));
+const yachtName = slug => { try { return JSON.parse(fs.readFileSync(path.join(SITE, 'content/yachts', slug + '.json'), 'utf8')).title; } catch (e) { return ''; } };
+const xesc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const XP_CARDS = XP.map(x => {
+  const ys = x.yachts.map(s => [s, yachtName(s)]).filter(([, n]) => n);
+  return `<article class="xp-card rv" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}" data-title="${xesc(x.title)}">
+    <div class="xp-media" data-imgs="${xesc(JSON.stringify(x.images))}">
+      <img src="${x.images[0]}-800.webp" srcset="${x.images[0]}-800.webp 800w, ${x.images[0]}.webp 1600w" sizes="(max-width:760px) 100vw, 560px" alt="${xesc(x.title)} in Dubai" width="800" height="533" loading="lazy">
+      <span class="xp-tag">${x.tag}</span>
+      ${x.images.length > 1 ? `<button type="button" class="xp-nav prev" aria-label="Previous photo">‹</button><button type="button" class="xp-nav next" aria-label="Next photo">›</button><span class="xp-count"><b>1</b>/${x.images.length}</span>` : ''}
+    </div>
+    <div class="xp-body">
+      <h3>${x.title}</h3>
+      <p class="xp-meta"><span>◷ ${x.duration}</span><span>⚲ ${x.base}</span>${x.note ? `<span>${x.note}</span>` : ''}</p>
+      <p class="xp-sum">${x.summary}</p>
+      <ul class="xp-hl">${x.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+      ${ys.length ? `<p class="xp-yacht">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}">${n}</a>`).join(' or ')}</p>` : ''}
+      <div class="xp-slots" data-slots><span class="xp-wait">Loading times…</span></div>
+      <div class="xp-foot"><p class="xp-price" data-price></p><span data-cta></span></div>
+    </div>
+  </article>`;
+}).join('\n  ');
+
+// Charter : encart en haut de page vers les sorties partagées
+const SX_TEASER = `<section class="sxt rv">
+  <a class="sxt-card" href="/shared-experiences">
+    <div class="sxt-img">${XP.slice(0, 3).map(x => `<img src="${x.images[0]}-800.webp" alt="" width="800" height="533" loading="lazy">`).join('')}</div>
+    <div class="sxt-txt">
+      <p class="eyebrow">New · Dubai</p>
+      <h2 class="t-m">Shared experiences, <span class="acc">by the seat</span></h2>
+      <p>Not chartering a whole yacht? Join a superyacht day, a yacht tour with BBQ, a sunset dinner cruise or a boat party. ${XP.length} experiences, live times and prices.</p>
+      <span class="btn btn-gold">See the experiences <i>→</i></span>
+    </div>
+  </a>
+</section>`;
+
+const SHARED_EXP = `<section class="sx" id="sx">
+  <div class="sx-bar">
+    <div class="sx-days" data-sx-days role="group" aria-label="Choose a date"></div>
+    <label class="field sx-date"><span>Other date</span><input type="date" data-sx-date></label>
   </div>
-  <div class="sx-bar"><label class="field"><span>Date</span><input type="date" data-sx-date></label></div>
-  <div class="sx-grid" data-sx-grid></div>
+  <p class="sx-msg" data-sx-note></p>
+  <div class="xp-grid" data-sx-grid>
+  ${XP_CARDS}
+  </div>
+  <div class="xp-more" data-sx-more hidden><h3 class="xp-more-h">Also available on this date</h3><div class="sx-grid" data-sx-more-grid></div></div>
 </section>
 <div class="sx-modal" id="sx-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sx-t">
   <form class="sx-form" novalidate>
@@ -185,7 +224,7 @@ const SHARED_EXP = `<section class="sx" id="sx" hidden>
     <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
-    <p class="yp-disc" style="margin:0">Card payment by Stripe. Your name, email and phone are shared with the operator for this booking only. Cancellation follows the operator's policy.</p>
+    <p class="yp-disc" style="margin:0">Secure card payment by Stripe. Your details are only used to arrange this experience. Free changes are subject to the cancellation policy of the experience.</p>
   </form>
 </div>`;
 
@@ -243,7 +282,17 @@ pages.push({
   desc: 'Crewed luxury yacht charters in the Mediterranean, Dubai and the Gulf, the Caribbean and the Indian Ocean, at preferential rates. Yacht Research.',
   preload: U('photo-1672939113905-b02ef5db7203'),
   body: hero({ img: 'photo-1672939113905-b02ef5db7203', eyebrow: 'Charter', title: 'Yachts <span class="acc">for charter</span>', lead: 'Weekly, day and hourly charters with hand-picked crews, at B2B rates. We select the yacht, the crew and the itinerary around you.' })
-    + B2B_NOTE + OFFMARKET('photo-1528154291023-a6525fabe5b4', true) + catalogue('charter') + SHARED_EXP,
+    + B2B_NOTE + SX_TEASER + OFFMARKET('photo-1528154291023-a6525fabe5b4', true) + catalogue('charter')
+});
+
+pages.push({
+  file: 'shared-experiences.html', canonical: '/shared-experiences',
+  title: 'Shared Yacht Experiences in Dubai | Yacht Tours, Dinner Cruises, Parties | Yacht Research',
+  desc: 'Book a seat on a yacht in Dubai: superyacht days, Dubai Marina yacht tours with BBQ, sunset and dinner cruises, boat parties and speedboat tours. Live times and prices.',
+  ogImage: 'https://yachtresearchgroup.com/images/experiences/superyacht-experience/01.webp',
+  preload: '/images/experiences/superyacht-experience/01.webp',
+  body: hero({ src: '/images/experiences/superyacht-experience/01.webp', eyebrow: 'Dubai · By the seat', title: 'Shared experiences <span class="acc">in Dubai</span>', lead: 'Superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties. No need to charter a whole yacht: book your seats, from a one-hour marina tour to an afternoon on a superyacht.', ctas: '<a href="#sx" class="btn btn-gold">See times and prices <i>→</i></a><a href="/charter" class="btn btn-ghost">Private charter</a>' })
+    + SHARED_EXP,
   script: `<script src="/assets/sx.js?v=${V}" defer></script>`
 });
 

@@ -11,6 +11,7 @@ export async function onRequest(context) {
     { url: '/', priority: '1.0', changefreq: 'weekly' },
     { url: '/listings', priority: '0.9', changefreq: 'weekly' },
     { url: '/charter', priority: '0.9', changefreq: 'weekly' },
+    { url: '/shared-experiences', priority: '0.9', changefreq: 'daily' },
     { url: '/why-us', priority: '0.8', changefreq: 'monthly' },
     { url: '/bespoke', priority: '0.8', changefreq: 'monthly' },
     { url: '/yacht-club-academy', priority: '0.7', changefreq: 'monthly' },

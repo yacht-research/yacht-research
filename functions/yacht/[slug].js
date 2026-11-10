@@ -121,7 +121,7 @@ function renderYachtPage(y, slug, base, origin) {
       '<script>(function(){var v=document.currentScript.previousElementSibling.querySelector("video");if(!("IntersectionObserver"in window))return;new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){var p=v.play();p&&p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})()</script></section>'
     : '';
   const brochure = y.brochure ? '<a href="' + esc(y.brochure) + '" class="btn btn-ghost" target="_blank" rel="noopener">Brochure <i>↓</i></a>' : '';
-  const enquire = '/yacht-research-form?yacht=' + encodeURIComponent(title);
+  const enquire = '/yacht-research-form?' + (isCharter ? 'project=charter&' : '') + 'yacht=' + encodeURIComponent(title);
 
   return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<title>' + esc(pageTitle) + '</title><meta name="description" content="' + esc(metaDesc) + '"><meta name="robots" content="index, follow"><meta name="theme-color" content="#070707">' +
