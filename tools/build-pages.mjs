@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '9'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '10'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -52,7 +52,7 @@ const FOOTER = `<footer class="foot">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
     <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
-    <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a></div>
+    <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">LinkedIn · Mathis Y.</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">LinkedIn · Antoine E.</a></div>
   </div>
   <div class="foot-bot"><span>© 2026 Yacht Research Group · Worldwide</span><span><a href="/privacy-policy">Privacy policy</a> · Photography: Unsplash</span></div>
 </footer>
@@ -180,9 +180,10 @@ const TEAM = `<section class="team" id="team">
         </article>`).join('')}
       </div>
       <a class="yca-card rv" href="https://yachtclubacademy.com/en/" target="_blank" rel="noopener">
+        <img class="yca-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="88" height="60" loading="lazy">
         <span class="yca-k">Also founded by Mathis &amp; Antoine</span>
-        <b>Yacht Club <span class="acc">Academy</span></b>
-        <span class="yca-p">Our academy for those who want to become yacht brokers: the off-market world, the method professionals use and a 30-day plan to find your first clients.</span>
+        <b>Yacht Club <em>Academy</em></b>
+        <span class="yca-p">Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.</span>
         <span class="yca-go">Visit yachtclubacademy.com <i>→</i></span>
       </a>
     </div>
@@ -527,7 +528,7 @@ console.log('✓ lib/shell.js');
 // index.html : même en-tête / pied de page, version des ressources
 let idx = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8').replace(/\r\n/g, '\n');
 idx = idx.replace(/<nav id="nav">[\s\S]*?<\/nav>\n<div class="menu" id="menu">[\s\S]*?<\/div>/, NAV);
-idx = idx.replace(/<footer class="foot">[\s\S]*?<\/footer>\n<div class="wa-stack">[\s\S]*?<\/div>\n<div class="cookie" id="cookie"[\s\S]*?<\/div>\n<\/div>/, FOOTER);
+idx = idx.replace(/<footer class="foot">[\s\S]*?<\/footer>\s*<div class="wa-stack">[\s\S]*?<\/div>\s*<div class="cookie" id="cookie"[\s\S]*?<\/div>\s*<\/div>/, FOOTER);
 idx = idx.replace(/<!-- (?:WHY|TEAM) -->\n<section class="(?:why|team)" id="(?:why|team)">[\s\S]*?\n<\/section>/, '<!-- TEAM -->\n' + TEAM);
 idx = idx.replace('Access by appointment, under confidentiality.', 'Every request is handled in full confidentiality.');
 idx = idx.replace(/yr\.css\?v=\d+/, 'yr.css?v=' + V).replace(/yr\.js\?v=\d+/, 'yr.js?v=' + V);

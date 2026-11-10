@@ -592,15 +592,19 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .tcard dt{font:600 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
 .tcard dd{margin:0;font-size:14px;color:var(--cream)}
 .tli{display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:10px 18px 10px 12px;border-radius:999px;border:1px solid rgba(201,168,76,.45);font:500 13px/1 var(--sans);color:var(--cream);transition:.3s}
-.tli svg{width:16px;height:16px;fill:#0a66c2;background:#fff;border-radius:3px;padding:2px;box-sizing:content-box}
+.tli svg{width:16px;height:16px;fill:var(--gold)}
 .tli i{font-style:normal;color:var(--gold)}
 .tli:hover{border-color:var(--gold);background:rgba(201,168,76,.12)}
-.yca-card{display:block;margin-top:16px;padding:clamp(22px,2.6vw,32px);border-radius:var(--r);border:1px solid rgba(201,168,76,.55);background:linear-gradient(135deg,rgba(201,168,76,.16),rgba(201,168,76,.03) 60%);transition:.35s}
-.yca-card:hover{border-color:var(--gold);transform:translateY(-3px)}
-.yca-k{display:block;font:600 10px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
-.yca-card b{display:block;margin:12px 0 10px;font:300 clamp(28px,3vw,40px)/1.1 var(--sans);text-transform:uppercase;letter-spacing:.02em;color:var(--cream)}
-.yca-p{display:block;color:rgba(243,238,228,.78);line-height:1.7}
-.yca-go{display:inline-block;margin-top:16px;font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+/* carte Yacht Club Academy aux couleurs de YCA (bleu marine, bleu ciel, blanc nacré) */
+.yca-card{display:block;position:relative;overflow:hidden;margin-top:16px;padding:clamp(24px,2.8vw,36px);border-radius:14px;color:#F8F9FA;background:radial-gradient(ellipse at 80% 0%,#1E4D96 0%,#0B2D6B 38%,#01163C 78%);border:1px solid rgba(169,193,234,.35);box-shadow:0 18px 40px -18px rgba(1,22,60,.6);transition:.35s}
+.yca-card:hover{transform:translateY(-3px);border-color:#A9C1EA}
+.yca-logo{display:block;height:60px;width:auto;margin-bottom:16px}
+.yca-k{display:block;font:600 10px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:#A9C1EA}
+.yca-card b{display:block;margin:12px 0 10px;font:800 clamp(26px,2.8vw,38px)/1.05 var(--sans);text-transform:uppercase;letter-spacing:.01em;color:#F8F9FA}
+.yca-card b em{font:italic 500 1.08em var(--serif);text-transform:none;color:#A9C1EA}
+.yca-p{display:block;color:rgba(248,249,250,.82);line-height:1.7}
+.yca-go{display:inline-block;margin-top:20px;padding:13px 22px;border-radius:999px;background:#F8F9FA;color:#01163C;font:700 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.yca-card:hover .yca-go{background:#A9C1EA}
 @media(max-width:900px){.team-wrap{grid-template-columns:1fr}.team-ph{max-width:520px}.tcard dl{grid-template-columns:1fr 1fr}}
 .pcard .ic svg{stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
 .pcard .ic{width:46px;height:46px;border-radius:13px}
