@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-10T05:13:45.822Z",
- "count": 19,
+ "generated": "2026-11-10T06:16:09.923Z",
+ "count": 20,
  "yachts": [
   {
    "slug": "princess-y85-2021-singapore",
@@ -19,6 +19,44 @@
    "price_eur": 5300000,
    "guests": "",
    "cabins": "4",
+   "updated": "2026-11-10"
+  },
+  {
+   "slug": "gulf-craft-majesty-48-abu-dhabi",
+   "type": "charter",
+   "title": "Gulf Craft Majesty 48",
+   "builder": "Gulf Craft",
+   "model": "Majesty 48",
+   "badge": "Charter Ready",
+   "image": "/images/yachts/gulf-craft-majesty-48-abu-dhabi/01.webp",
+   "thumb": "/images/yachts/gulf-craft-majesty-48-abu-dhabi/01-800.webp",
+   "length": "14.6 m / 48 ft",
+   "year": "",
+   "location": "Abu Dhabi, UAE",
+   "price": "AED 3,000 for 4 hours",
+   "original_price": "",
+   "price_eur": 750,
+   "guests": "12",
+   "cabins": "2",
+   "updated": "2026-11-10"
+  },
+  {
+   "slug": "poco-loco-90ft-2023-dubai",
+   "type": "charter",
+   "title": "Poco Loco",
+   "builder": "Al Kous Marine",
+   "model": "90ft party yacht",
+   "badge": "Charter Ready",
+   "image": "/images/yachts/poco-loco-90ft-2023-dubai/01.webp",
+   "thumb": "/images/yachts/poco-loco-90ft-2023-dubai/01-800.webp",
+   "length": "27.4 m / 90 ft",
+   "year": "2023",
+   "location": "Dubai, UAE",
+   "price": "AED 2,450 per hour",
+   "original_price": "",
+   "price_eur": 613,
+   "guests": "75",
+   "cabins": "",
    "updated": "2026-11-10"
   },
   {
@@ -57,25 +95,6 @@
    "price_eur": null,
    "guests": "50",
    "cabins": "5",
-   "updated": "2026-11-10"
-  },
-  {
-   "slug": "gulf-craft-majesty-48-abu-dhabi",
-   "type": "charter",
-   "title": "Gulf Craft Majesty 48",
-   "builder": "Gulf Craft",
-   "model": "Majesty 48",
-   "badge": "Charter Ready",
-   "image": "/images/yachts/gulf-craft-majesty-48-abu-dhabi/01.webp",
-   "thumb": "/images/yachts/gulf-craft-majesty-48-abu-dhabi/01-800.webp",
-   "length": "14.6 m / 48 ft",
-   "year": "",
-   "location": "Abu Dhabi, UAE",
-   "price": "",
-   "original_price": "",
-   "price_eur": null,
-   "guests": "12",
-   "cabins": "2",
    "updated": "2026-11-10"
   },
   {

@@ -114,6 +114,12 @@ function renderYachtPage(y, slug, base, origin) {
     ? '<section class="yp-sec" style="padding-right:0"><div class="head" style="padding-right:var(--pad)"><div><p class="eyebrow rv">Gallery</p><h2 class="t-l split-words yp-h2">On <span class="acc">board</span></h2></div><div class="rail-ui"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div></div>' +
       '<div class="rail yp-gal">' + [y.image].concat(gallery).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(g) + '" alt="' + esc(title) + ' photo ' + (i + 1) + '" loading="lazy"></button>').join('') + '</div><div class="progress" style="margin-right:var(--pad)"><i></i></div></section>'
     : '';
+  // Vidéo courte (muette, en boucle, lancée seulement quand elle arrive à l'écran ; rien n'est chargé avant)
+  const videoHTML = y.video
+    ? '<section class="yp-sec yp-film"><p class="eyebrow rv">The film</p><h2 class="t-l split-words yp-h2">Step <span class="acc">aboard</span></h2>' +
+      '<div class="yp-film-box rv"><video src="' + esc(y.video) + '"' + (y.video_poster ? ' poster="' + esc(y.video_poster) + '"' : '') + ' muted loop playsinline preload="none" controls aria-label="' + esc(title) + ' video tour"></video></div>' +
+      '<script>(function(){var v=document.currentScript.previousElementSibling.querySelector("video");if(!("IntersectionObserver"in window))return;new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){var p=v.play();p&&p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})()</script></section>'
+    : '';
   const brochure = y.brochure ? '<a href="' + esc(y.brochure) + '" class="btn btn-ghost" target="_blank" rel="noopener">Brochure <i>↓</i></a>' : '';
   const enquire = '/yacht-research-form?yacht=' + encodeURIComponent(title);
 
@@ -138,7 +144,7 @@ function renderYachtPage(y, slug, base, origin) {
     '<a href="' + enquire + '" class="btn btn-gold">' + (isCharter ? 'Enquire about this charter' : 'Enquire about this yacht') + ' <i>→</i></a>' +
     '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
     '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>' +
-    specsHTML + galHTML +
+    videoHTML + specsHTML + galHTML +
     '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="arrow-link rv">View all <span>→</span></a></div>' +
     '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>' +
     '<div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>' +

@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '18'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '19'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -156,6 +156,39 @@ const OFFMARKET = (img, charter) => `<section class="offm offm-s offm-top">
   </div>
 </section>`;
 
+// Charter : nos tarifs sont des tarifs professionnels (B2B)
+const B2B_NOTE = `<div class="b2b-wrap"><div class="b2b-note rv"><span class="ic">◆</span><p><b>B2B rates.</b> As a yacht brokerage, we book directly with owners and operators at professional (B2B) rates. The prices shown on our site are usually lower than those advertised for the same yachts on other websites.</p></div></div>`;
+
+// Charter : sorties partagées réservables en ligne (portail partenaire Xclusive). Masqué tant que l'API n'est pas configurée.
+const SHARED_EXP = `<section class="sx" id="sx" hidden>
+  <div class="sx-head">
+    <p class="eyebrow rv">Book online · Dubai</p>
+    <h2 class="t-l split-words" style="margin-top:22px">Shared experiences <span class="acc">in Dubai</span></h2>
+    <p class="lead rv" style="margin-top:18px">Yacht tours, dinner cruises and boat parties, bookable by the seat. Live availability, instant confirmation, secure card payment.</p>
+    <p class="sx-msg" data-sx-note style="padding:8px 0 0"></p>
+  </div>
+  <div class="sx-bar"><label class="field"><span>Date</span><input type="date" data-sx-date></label></div>
+  <div class="sx-grid" data-sx-grid></div>
+</section>
+<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sx-t">
+  <form class="sx-form" novalidate>
+    <button type="button" class="sx-x" aria-label="Close">×</button>
+    <h3 id="sx-t" data-sx-title></h3>
+    <p class="sx-meta" data-sx-when style="margin:0"></p>
+    <div class="sx-row">
+      <label class="field"><span data-sx-a>Adults</span><select name="adults">${Array.from({ length: 21 }, (_, i) => `<option${i === 2 ? ' selected' : ''}>${i}</option>`).join('')}</select></label>
+      <label class="field"><span data-sx-c>Children</span><select name="children">${Array.from({ length: 21 }, (_, i) => `<option>${i}</option>`).join('')}</select></label>
+    </div>
+    <label class="field"><span>Full name</span><input name="name" autocomplete="name" maxlength="32" required></label>
+    <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="64" required></label>
+    <label class="field"><span>Phone (with country code)</span><input name="phone" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" required></label>
+    <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
+    <p class="sx-err" aria-live="polite"></p>
+    <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
+    <p class="yp-disc" style="margin:0">Card payment by Stripe. Your name, email and phone are shared with the operator for this booking only. Cancellation follows the operator's policy.</p>
+  </form>
+</div>`;
+
 // Les fondateurs (accueil + Why Us)
 const LI_SVG = '<svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>';
 const TEAM = `<section class="team" id="team">
@@ -209,8 +242,9 @@ pages.push({
   title: 'Luxury Yacht Charter | Mediterranean, Dubai, Caribbean | Yacht Research',
   desc: 'Crewed luxury yacht charters in the Mediterranean, Dubai and the Gulf, the Caribbean and the Indian Ocean, at preferential rates. Yacht Research.',
   preload: U('photo-1672939113905-b02ef5db7203'),
-  body: hero({ img: 'photo-1672939113905-b02ef5db7203', eyebrow: 'Charter', title: 'Yachts <span class="acc">for charter</span>', lead: 'Weekly and day charters with hand-picked crews, at preferential rates. We select the yacht, the crew and the itinerary around you.' })
-    + OFFMARKET('photo-1528154291023-a6525fabe5b4', true) + catalogue('charter')
+  body: hero({ img: 'photo-1672939113905-b02ef5db7203', eyebrow: 'Charter', title: 'Yachts <span class="acc">for charter</span>', lead: 'Weekly, day and hourly charters with hand-picked crews, at B2B rates. We select the yacht, the crew and the itinerary around you.' })
+    + B2B_NOTE + OFFMARKET('photo-1528154291023-a6525fabe5b4', true) + catalogue('charter') + SHARED_EXP,
+  script: `<script src="/assets/sx.js?v=${V}" defer></script>`
 });
 
 pages.push({

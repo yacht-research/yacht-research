@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://images.unsplash.com">
 <link rel="preload" as="image" href="https://images.unsplash.com/photo-1672939113905-b02ef5db7203?auto=format&fit=crop&w=1800&q=70" fetchpriority="high">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=18">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=19">
 </head>
 <body>
 <nav id="nav">
@@ -59,10 +59,10 @@
   <div class="phero-in">
     <p class="eyebrow">Charter</p>
     <h1 class="t-xl phero-title">Yachts <span class="acc">for charter</span></h1>
-    <p class="lead phero-lead">Weekly and day charters with hand-picked crews, at preferential rates. We select the yacht, the crew and the itinerary around you.</p>
+    <p class="lead phero-lead">Weekly, day and hourly charters with hand-picked crews, at B2B rates. We select the yacht, the crew and the itinerary around you.</p>
     
   </div>
-</header><section class="offm offm-s offm-top">
+</header><div class="b2b-wrap"><div class="b2b-note rv"><span class="ic">◆</span><p><b>B2B rates.</b> As a yacht brokerage, we book directly with owners and operators at professional (B2B) rates. The prices shown on our site are usually lower than those advertised for the same yachts on other websites.</p></div></div><section class="offm offm-s offm-top">
   <div class="stick">
     <div class="bgimg"><img src="https://images.unsplash.com/photo-1528154291023-a6525fabe5b4?auto=format&fit=crop&w=1800&q=70" alt="" loading="lazy"></div>
     <div class="in">
@@ -83,7 +83,34 @@
   </div>
   <div class="cat-bar rv"><div class="chips" data-f="loc"><button data-v="" class="on">All destinations</button><button data-v="Mediterranean">Mediterranean</button><button data-v="Dubai">Dubai &amp; Gulf</button><button data-v="Caribbean">Caribbean</button><button data-v="Indian Ocean">Indian Ocean</button></div><p class="cat-count"><b data-count-out>…</b> charter yachts <button class="cat-reset" type="button">Reset</button></p></div>
   <div class="cat-grid" data-grid><p class="cat-empty">Loading…</p></div>
+</section><section class="sx" id="sx" hidden>
+  <div class="sx-head">
+    <p class="eyebrow rv">Book online · Dubai</p>
+    <h2 class="t-l split-words" style="margin-top:22px">Shared experiences <span class="acc">in Dubai</span></h2>
+    <p class="lead rv" style="margin-top:18px">Yacht tours, dinner cruises and boat parties, bookable by the seat. Live availability, instant confirmation, secure card payment.</p>
+    <p class="sx-msg" data-sx-note style="padding:8px 0 0"></p>
+  </div>
+  <div class="sx-bar"><label class="field"><span>Date</span><input type="date" data-sx-date></label></div>
+  <div class="sx-grid" data-sx-grid></div>
 </section>
+<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sx-t">
+  <form class="sx-form" novalidate>
+    <button type="button" class="sx-x" aria-label="Close">×</button>
+    <h3 id="sx-t" data-sx-title></h3>
+    <p class="sx-meta" data-sx-when style="margin:0"></p>
+    <div class="sx-row">
+      <label class="field"><span data-sx-a>Adults</span><select name="adults"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option></select></label>
+      <label class="field"><span data-sx-c>Children</span><select name="children"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option></select></label>
+    </div>
+    <label class="field"><span>Full name</span><input name="name" autocomplete="name" maxlength="32" required></label>
+    <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="64" required></label>
+    <label class="field"><span>Phone (with country code)</span><input name="phone" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" required></label>
+    <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
+    <p class="sx-err" aria-live="polite"></p>
+    <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
+    <p class="yp-disc" style="margin:0">Card payment by Stripe. Your name, email and phone are shared with the operator for this booking only. Cancellation follows the operator's policy.</p>
+  </form>
+</div>
 <footer class="foot">
   <div class="foot-top">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
@@ -101,6 +128,7 @@
   <p>We use cookies for basic site functionality and to improve your experience. See our <a href="/privacy-policy">Privacy Policy</a>.</p>
   <div><button data-consent="declined">Decline</button><button class="ok" data-consent="accepted">Accept</button></div>
 </div>
-<script src="/assets/yr.js?v=18" defer></script>
+<script src="/assets/yr.js?v=19" defer></script>
+<script src="/assets/sx.js?v=19" defer></script>
 </body>
 </html>

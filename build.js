@@ -15,7 +15,9 @@ const optMap = fs.existsSync(optMapFile) ? JSON.parse(fs.readFileSync(optMapFile
 function toEur(p) {
   if (!p) return null;
   const s = String(p).toUpperCase();
-  const n = parseFloat(s.replace(/\(.*?\)/g, '').replace(/[^0-9.]/g, ''));
+  // premier montant seulement : "AED 3,000 for 4 hours" → 3000 ; "€ 150 000" → 150000
+  const m = s.replace(/\(.*?\)/g, '').match(/\d{1,3}(?:[ ,  ]\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?/);
+  const n = m ? parseFloat(m[0].replace(/[ ,  ]/g, '')) : 0;
   if (!n) return null;
   if (s.includes('AED') || s.includes('DH')) return Math.round(n * 0.25);
   if (s.includes('£') || s.includes('GBP')) return Math.round(n * 1.17);
