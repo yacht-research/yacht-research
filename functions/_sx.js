@@ -25,6 +25,12 @@ export function markup(env) {
 }
 
 // Prix public = tarif B2B + marge, arrondi à l'AED supérieur (montants en fils : 100 = 1 AED)
+export function cardFeeMinor(retailMinorAmount, env) {
+  const p = env.SX_CARD_FEE_PCT === undefined || env.SX_CARD_FEE_PCT === '' ? 3 : Number(env.SX_CARD_FEE_PCT);
+  return p > 0 && p < 10 ? Math.ceil((retailMinorAmount * p) / 100 / 100) * 100 : 0;
+}
+export function cardFeePct(env) { const p = env.SX_CARD_FEE_PCT === undefined || env.SX_CARD_FEE_PCT === '' ? 3 : Number(env.SX_CARD_FEE_PCT); return p > 0 && p < 10 ? p : 0; }
+
 export function retailMinor(b2bMinor, env) {
   return Math.ceil((b2bMinor * (1 + markup(env))) / 100) * 100;
 }

@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '23'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '24'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -27,7 +27,7 @@ const NAV = `<nav id="nav">
     <li><a href="/yacht-club-academy" class="yca-link">Academy</a></li>
     <li><a href="/partnerships">Partners</a></li>
     <li><a href="/recruitment">Careers</a></li>
-    <li><a href="/#newsletter" class="gold-link">Newsletter</a></li>
+    <li><a href="/contact" class="gold-link">Contact</a></li>
   </ul>
   <div class="nav-r">
     <a href="/yacht-research-form" class="btn btn-gold">Enquire <i>→</i></a>
@@ -45,8 +45,8 @@ const NAV = `<nav id="nav">
   <a href="/yacht-club-academy" class="yca-link">Yacht Club <em>Academy</em></a>
   <a href="/partnerships">Partners <em>&amp; referrals</em></a>
   <a href="/recruitment">Careers</a>
-  <a href="/#contact">Contact</a>
-  <a href="/#newsletter"><em>Newsletter</em></a>
+  <a href="/contact">Contact</a>
+  <a href="/contact#newsletter"><em>Newsletter</em></a>
   <a href="/yacht-research-form" class="btn btn-gold menu-cta">Enquire now <i>→</i></a>
 </div>`;
 
@@ -230,8 +230,10 @@ const SX_MODAL = `<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-
     <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="64" required></label>
     <label class="field"><span>Phone (with country code)</span><input name="phone" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" required></label>
     <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
+    <p class="sx-fee" data-sx-fee></p>
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
+    <button type="button" class="sx-bank" data-sx-bank>Prefer a bank transfer? Request our bank details</button>
     <p class="yp-disc" style="margin:0">Secure card payment by Stripe. Your details are only used to arrange this experience. ${SX_POLICY}</p>
   </form>
 </div>`;
@@ -772,6 +774,97 @@ XP.forEach(x => pages.push({
   body: xpDetail(x),
   script: `<script src="/assets/sx.js?v=${V}" defer></script>`
 }));
+
+// Page Contact : les fondateurs à gauche, le formulaire à droite, la newsletter en bas
+const IG_SVG = '<svg viewBox="0 0 24 24" class="st"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>';
+const MAIL_SVG = '<svg viewBox="0 0 24 24" class="st"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
+const CONTACT_FORM = `<form class="cform" id="contactForm" novalidate>
+    <img class="ctp-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182">
+    <p class="eyebrow">Send an enquiry</p>
+    <p class="cform-sub">All enquiries are handled with the utmost discretion. Reply within 24 hours, in English or French.</p>
+    <div class="cgrid">
+      <label class="field"><span>Name</span><input name="name" type="text" placeholder="Your name" autocomplete="name" required></label>
+      <label class="field"><span>Phone</span><input name="phone" type="tel" placeholder="+971 50 000 0000" autocomplete="tel"></label>
+      <label class="field"><span>Email</span><input name="email" type="email" placeholder="your@email.com" autocomplete="email" required></label>
+      <label class="field"><span>Enquiry type</span><select name="type">
+        <option value="">Select enquiry type</option>
+        <option>Buy a Yacht</option><option>Sell My Yacht</option><option>Charter a Yacht</option>
+        <option>Bespoke Services</option><option>Partnership</option><option>Referral</option><option>Other</option>
+      </select></label>
+      <label class="field full"><span>Message</span><textarea name="message" rows="5" placeholder="Tell us about your requirements..."></textarea></label>
+    </div>
+    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label class="consent"><input type="checkbox" name="gdpr" required><span>I accept the <a href="/privacy-policy">Privacy Policy</a> and consent to Yacht Research processing my personal data.</span></label>
+    <button class="btn btn-gold" type="submit">Send enquiry <i>→</i></button>
+    <p class="cform-msg" aria-live="polite"></p>
+  </form>`;
+const NEWSLETTER = `<section id="newsletter">
+  <div class="news rv">
+    <div class="news-bg"><img src="${U('photo-1604737637145-48cc31d160eb', 1600)}" alt="" loading="lazy"></div>
+    <div class="news-in">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2 class="t-l" style="font-size:clamp(32px,4.6vw,64px);margin-top:18px">Stay <span class="acc">informed</span></h2>
+        <p class="lead" style="margin-top:16px">Exclusive listings, market insights and off-market opportunities, straight to your inbox.</p>
+      </div>
+      <form class="news-form">
+        <input type="text" name="firstname" placeholder="First name" aria-label="First name" autocomplete="given-name" required>
+        <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+        <button class="btn btn-gold" type="submit">Subscribe <i>→</i></button>
+        <p class="ok">✓ You are on the list. Welcome to Yacht Research.</p>
+      </form>
+    </div>
+  </div>
+</section>`;
+const FOUNDERS = [
+  ['Mathis Y.', 'Founder &amp; Yacht Broker', 'Raised between Brittany and Paris, Mathis built a close bond with yachting through summers and first connections on the French Riviera: Cannes, Antibes, Monaco and Saint-Tropez.', 'Off-market, events and charter', 'https://www.linkedin.com/in/mathis-ybs-bb20483b7'],
+  ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a yacht broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
+];
+pages.push({
+  file: 'contact.html', canonical: '/contact',
+  title: 'Contact Yacht Research | Yacht Brokers in Dubai &amp; France',
+  desc: 'Contact Mathis and Antoine, founders of Yacht Research: yacht sales, charter, off-market search and partnerships. WhatsApp UAE and France, reply within 24 hours in English or French.',
+  body: `<main class="ctp">
+  <div class="ctp-grid">
+    <div class="ctp-l">
+      <div class="ctp-card rv">
+        <div class="ctp-ph"><img src="/images/team/founders.webp" alt="Mathis Y. and Antoine E., founders of Yacht Research" width="1000" height="1250" fetchpriority="high"></div>
+        <div class="ctp-id">
+          <p class="eyebrow">Contact</p>
+          <h1 class="ctp-h1">Mathis Y. <span class="acc">&amp;</span> Antoine E.</h1>
+          <p class="ctp-role">Founders &amp; Yacht Brokers</p>
+          <p class="ctp-loc">⚲ France &amp; UAE · Available worldwide, 7 days a week</p>
+          <div class="ctp-soc">
+            <a href="${WA_UAE}" target="_blank" rel="noopener" aria-label="WhatsApp UAE">${WA_SVG}</a>
+            <a href="${WA_FR}" target="_blank" rel="noopener" aria-label="WhatsApp France">${WA_SVG}<small>FR</small></a>
+            <a href="https://www.instagram.com/yacht_research/" target="_blank" rel="noopener" aria-label="Instagram">${IG_SVG}</a>
+            <a href="${FOUNDERS[0][4]}" target="_blank" rel="noopener" aria-label="Mathis on LinkedIn">${LI_SVG}</a>
+            <a href="${FOUNDERS[1][4]}" target="_blank" rel="noopener" aria-label="Antoine on LinkedIn">${LI_SVG}</a>
+            <a href="mailto:contact@yachtresearchgroup.com" aria-label="Email">${MAIL_SVG}</a>
+          </div>
+        </div>
+      </div>
+      <div class="ctp-about rv">
+        <h2>About us</h2>
+        <p class="lead">Buying, selling or chartering a yacht should be simple. Send us <span class="acc">one message:</span> we search the whole market, including yachts never advertised, and guide you personally until the deal is done.</p>
+        <div class="ctp-team">${FOUNDERS.map(([n, r, bio, sp, li]) => `<article class="tcard">
+          <div class="tcard-h"><h4>${n}</h4><p class="trole">${r}</p></div>
+          <p>${bio}</p>
+          <dl><div><dt>Based</dt><dd>France &amp; UAE</dd></div><div><dt>Languages</dt><dd>FR, EN, ES</dd></div><div><dt>Speciality</dt><dd>${sp}</dd></div></dl>
+          <a class="tli" href="${li}" target="_blank" rel="noopener">${LI_SVG}<span>View ${n.split(' ')[0]}'s LinkedIn profile</span><i>↗</i></a>
+        </article>`).join('')}</div>
+      </div>
+      <div class="channels ctp-ch rv">
+        <a href="${WA_UAE}"><b>WhatsApp <em>UAE</em></b>+971 52 430 2425</a>
+        <a href="${WA_FR}"><b>WhatsApp <em>France</em></b>+33 7 45 53 28 09</a>
+        <a href="mailto:contact@yachtresearchgroup.com"><b>Email</b>contact@yachtresearchgroup.com</a>
+      </div>
+    </div>
+    <aside class="ctp-r">${CONTACT_FORM}</aside>
+  </div>
+</main>
+${NEWSLETTER}`
+});
 
 // ---------------------------------------------------------- écriture
 for (const p of pages) {

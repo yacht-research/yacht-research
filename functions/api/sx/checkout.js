@@ -1,6 +1,6 @@
 // POST /api/sx/checkout → vérifie la sortie, le prix et les données client, puis crée un paiement Stripe Checkout.
 // La réservation chez Xclusive n'est faite QU'APRÈS le paiement (webhook Stripe), avec le même prix B2B vérifié.
-import { json, xc, stripe, retailMinor, int, cleanPhone } from '../../_sx.js';
+import { json, xc, stripe, retailMinor, cardFeeMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
 export async function onRequestPost({ env, request }) {
   if (env.SX_BOOKINGS !== 'on' || !env.STRIPE_SECRET_KEY || !env.XCLUSIVE_API_KEY) return json({ error: 'bookings_closed' }, 503);
@@ -32,10 +32,10 @@ export async function onRequestPost({ env, request }) {
   if (!dry.ok) return json({ error: dry.code }, 409);
 
   // 4) paiement Stripe au prix public
-  const retail = retailMinor(b2b, env);
+  const retail = retailMinor(b2b, env), fee = cardFeeMinor(retail, env);
   const origin = new URL(request.url).origin;
   const guests = adults + children;
-  const meta = { departure_id, adults, children, b2b_minor: b2b, retail_minor: retail, name, phone, email, product: dep.product.slice(0, 200), date: dep.date, time: dep.time };
+  const meta = { departure_id, adults, children, b2b_minor: b2b, retail_minor: retail, card_fee_minor: fee, name, phone, email, product: dep.product.slice(0, 200), date: dep.date, time: dep.time };
   const p = {
     mode: 'payment',
     customer_email: email,
@@ -44,6 +44,13 @@ export async function onRequestPost({ env, request }) {
     'line_items[0][price_data][unit_amount]': String(retail),
     'line_items[0][price_data][product_data][name]': dep.product.slice(0, 200),
     'line_items[0][price_data][product_data][description]': `${dep.date} at ${dep.time} (Dubai time) · ${guests} guest${guests > 1 ? 's' : ''}`,
+    ...(fee ? {
+      'line_items[1][quantity]': '1',
+      'line_items[1][price_data][currency]': 'aed',
+      'line_items[1][price_data][unit_amount]': String(fee),
+      'line_items[1][price_data][product_data][name]': 'Card processing fee (' + cardFeePct(env) + '%)',
+      'line_items[1][price_data][product_data][description]': 'Charged by the card payment provider. No fee when paying by bank transfer.'
+    } : {}),
     success_url: origin + '/booking-confirmed?session_id={CHECKOUT_SESSION_ID}',
     cancel_url: origin + '/shared-experiences?sx=cancelled#sx',
     expires_at: String(Math.floor(Date.now() / 1000) + 30 * 60),

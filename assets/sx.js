@@ -100,7 +100,7 @@
       var a = +form.adults.value, c = +form.children.value;
       if (a + c < 1) { tot.textContent = '—'; return; }
       fetch('/api/sx/quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ departure_id: state.dep.id, adults: a, children: c }) })
-        .then(function (r) { return r.json(); }).then(function (q) { tot.textContent = q.total_aed ? aed(q.total_aed) : '—'; err.textContent = q.error ? (ERR[q.error] || 'Price unavailable for this selection.') : ''; });
+        .then(function (r) { return r.json(); }).then(function (q) { tot.textContent = q.total_aed ? aed(q.pay_aed || q.total_aed) : '—'; var fe = modal.querySelector('[data-sx-fee]'); if (fe) fe.textContent = q.card_fee_aed ? 'Includes ' + aed(q.card_fee_aed) + ' card processing fee (' + q.card_fee_pct + '%). No fee by bank transfer.' : ''; err.textContent = q.error ? (ERR[q.error] || 'Price unavailable for this selection.') : ''; });
     }, 250);
   }
 
@@ -131,6 +131,19 @@
         btn.disabled = false; btn.firstChild.textContent = 'Pay securely ';
         if (d.error === 'departure_unavailable' || d.error === 'booking_unavailable') load();
       }).catch(function () { err.textContent = 'Connection problem. Please try again.'; btn.disabled = false; btn.firstChild.textContent = 'Pay securely '; });
+  };
+
+  // Virement bancaire : demande envoyée à Yacht Research, qui répond avec les coordonnées bancaires et confirme la place à réception
+  var bank = modal.querySelector('[data-sx-bank]');
+  if (bank) bank.onclick = function () {
+    err.textContent = '';
+    if (form.name.value.trim().length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim()) || form.phone.value.trim().length < 6) { err.textContent = 'Please fill in your name, email and phone first.'; return; }
+    var a = +form.adults.value, c = +form.children.value;
+    var p = new URLSearchParams({ form_name: 'Bank Transfer Request', name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim(),
+      type: 'Shared experience (bank transfer)', message: (modal.querySelector('[data-sx-title]').textContent) + ' · ' + state.dep.date + ' ' + state.dep.time + ' · ' + a + ' adult(s), ' + c + ' child(ren) · departure #' + state.dep.id + ' · quoted ' + modal.querySelector('[data-sx-total]').textContent + ' (card total)', website: '', submitted_at: new Date().toLocaleString('fr-FR') });
+    fetch('https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec', { method: 'POST', body: p, mode: 'no-cors' }).catch(function () {});
+    bank.disabled = true;
+    err.textContent = 'Thank you. We will send you our bank details shortly; your seats are confirmed once the transfer is received.';
   };
 
   dateIn.onchange = load;

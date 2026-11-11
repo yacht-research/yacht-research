@@ -25,7 +25,7 @@ export async function onRequestPost({ env, request }) {
   const guests = Number(m.adults) + Number(m.children);
   const summary = {
     product: m.product, date: m.date, time: m.time, guests: String(guests), name: m.name, phone: m.phone, client_email: m.email,
-    paid_aed: (Number(m.retail_minor) / 100).toFixed(2), b2b_aed: (Number(m.b2b_minor) / 100).toFixed(2),
+    paid_aed: ((Number(m.retail_minor) + Number(m.card_fee_minor || 0)) / 100).toFixed(2), card_fee_aed: (Number(m.card_fee_minor || 0) / 100).toFixed(2), b2b_aed: (Number(m.b2b_minor) / 100).toFixed(2),
     margin_aed: ((Number(m.retail_minor) - Number(m.b2b_minor)) / 100).toFixed(2), stripe_session: s.id
   };
 

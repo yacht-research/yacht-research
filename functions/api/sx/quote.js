@@ -1,5 +1,5 @@
 // POST /api/sx/quote {departure_id, adults, children} → prix public total (AED)
-import { json, xc, retailMinor, int } from '../../_sx.js';
+import { json, xc, retailMinor, cardFeeMinor, cardFeePct, int } from '../../_sx.js';
 
 export async function onRequestPost({ env, request }) {
   let b; try { b = await request.json(); } catch (e) { return json({ error: 'invalid_body' }, 400); }
@@ -7,5 +7,6 @@ export async function onRequestPost({ env, request }) {
   if (!departure_id || adults === null || children === null || adults + children < 1 || adults + children > 20) return json({ error: 'invalid_guests' }, 400);
   const q = await xc(env, '/quote', { method: 'POST', body: { departure_id, adults, children, featured: false } });
   if (!q.ok) return json({ error: q.code }, q.status >= 500 ? 502 : 409);
-  return json({ departure_id, adults, children, total_aed: retailMinor(q.data.total_minor, env) / 100, currency: 'AED' });
+  const retail = retailMinor(q.data.total_minor, env), fee = cardFeeMinor(retail, env);
+  return json({ departure_id, adults, children, total_aed: retail / 100, card_fee_aed: fee / 100, card_fee_pct: cardFeePct(env), pay_aed: (retail + fee) / 100, currency: 'AED' });
 }

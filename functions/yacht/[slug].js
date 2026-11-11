@@ -153,14 +153,14 @@ function renderYachtPage(y, slug, base, origin) {
     '<h1 class="t-l yp-title">' + titleHTML(title) + '</h1>' +
     '<p class="yp-sub rv">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div></header>' +
     '<div class="yp-keys">' + keySpecs.map(s => '<div class="rv"><span>' + esc(s[0]) + '</span><b>' + esc(s[1]) + '</b></div>').join('') + '</div>' + calloutHTML +
-    '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + '</div>' +
+    '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + specsHTML.replace('<section class="yp-sec">', '<section class="yp-sec yp-specs-in">') + '</div>' +
     '<aside class="yp-card rv"><p class="eyebrow">' + (isCharter ? 'Charter rate' : 'Asking price') + '</p>' +
     (y.original_price ? '<p class="yp-was">' + esc(y.original_price) + '</p>' : '') +
     '<p class="yp-price">' + esc(price) + '</p>' + (y.price_note ? '<p class="yp-note">' + esc(y.price_note) + '</p>' : '<p class="yp-note">Taxes excluded unless stated · Subject to availability</p>') +
     '<a href="' + enquire + '" class="btn btn-gold">' + (isCharter ? 'Enquire about this charter' : 'Enquire about this yacht') + ' <i>→</i></a>' +
     '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
     '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>' +
-    videoHTML + specsHTML + galHTML +
+    videoHTML + galHTML +
     '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="arrow-link rv">View all <span>→</span></a></div>' +
     '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>'
     )) +
@@ -207,7 +207,7 @@ function charterBody(o) {
     '<p class="lx-price">' + esc(price) + '</p>' + (y.price_note ? '<p class="yp-note">' + esc(y.price_note) + '</p>' : '<p class="yp-note">Subject to availability</p>') +
     '<a href="' + enquire + '" class="btn btn-gold">Check availability <i>→</i></a>' +
     '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
-    '<ul class="lx-pts"><li>Reply within 24 hours, in English or French</li><li>No payment to request a quote</li><li>All enquiries handled with discretion</li></ul></aside>' +
+    '<ul class="lx-pts"><li>Reply within 24 hours, in English or French</li><li>Payment by bank transfer or card</li><li>No payment to request a quote</li><li>All enquiries handled with discretion</li></ul></aside>' +
     '</div></main>' +
     videoHTML + specsHTML + galHTML +
     '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More charters</p><h2 class="t-l split-words yp-h2">Similar <span class="acc">yachts</span></h2></div><a href="/charter" class="arrow-link rv">View all <span>→</span></a></div>' +
