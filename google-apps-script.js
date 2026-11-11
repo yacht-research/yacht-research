@@ -119,28 +119,37 @@ function saveToSheet(formName, data) {
   if (files.hasNext()) { ss = SpreadsheetApp.open(files.next()); } else { ss = SpreadsheetApp.create(SPREADSHEET_NAME); }
   let sheet = ss.getSheetByName(formName);
   if (!sheet) { sheet = ss.insertSheet(formName); }
-  // En-têtes : ceux déjà présents dans la feuille, sinon la liste prévue ; toute nouvelle info reçue ajoute sa colonne
+  // En-têtes : ceux déjà dans la feuille (on garde tes colonnes à toi, ex. « phone clean », « Whatsapp »),
+  // sinon la liste prévue. Une info reçue sans colonne ajoute la sienne à la fin.
   const norm = h => String(h).trim().toLowerCase().replace(/ /g, '_');
-  let headers = sheet.getLastRow() > 0
-    ? sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0].map(String).filter(h => h.trim() !== '')
-    : getHeaders(formName).slice();
+  const isNew = sheet.getLastRow() === 0;
+  const headers = isNew ? getHeaders(formName).slice()
+    : sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0].map(String);
+  if (isNew) {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]).setBackground('#0a0f1e').setFontColor('#c9a84c').setFontWeight('bold');
+    sheet.setFrozenRows(1);
+  }
   const known = headers.map(norm);
   Object.keys(data).forEach(k => {
     if (['form_name', 'submitted_at', 'website'].indexOf(k) > -1 || !String(data[k] || '').trim()) return;
-    if (known.indexOf(norm(k)) < 0) { headers.push(k); known.push(norm(k)); }
+    if (known.indexOf(norm(k)) < 0) {
+      headers.push(k); known.push(norm(k));
+      sheet.getRange(1, headers.length).setValue(k).setBackground('#0a0f1e').setFontColor('#c9a84c').setFontWeight('bold');
+    }
   });
-  sheet.getRange(1, 1, 1, headers.length).setValues([headers]).setBackground('#0a0f1e').setFontColor('#c9a84c').setFontWeight('bold');
-  if (sheet.getFrozenRows() === 0) sheet.setFrozenRows(1);
-  const row = headers.map(h => data[norm(h)] || data[h] || '');
-  row[0] = data.submitted_at || new Date().toLocaleString('fr-FR');
   // Première ligne vide de la colonne A (et non après les lignes vides pré-formatées de la feuille)
   const colA = sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 1), 1).getValues();
   let lastRow = colA.length;
   while (lastRow > 1 && String(colA[lastRow - 1][0]).trim() === '') lastRow--;
   const target = lastRow + 1;
   if (target > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 1);
-  sheet.getRange(target, 1, 1, row.length).setValues([row]);
-  if (target % 2 === 0) sheet.getRange(target,1,1,headers.length).setBackground('#f8f8f8');
+  // On n'écrit que la date et les colonnes reçues : tes colonnes calculées (formules) ne sont jamais touchées
+  sheet.getRange(target, 1).setValue(data.submitted_at || new Date().toLocaleString('fr-FR'));
+  headers.forEach((h, i) => {
+    if (i === 0) return;
+    const v = data[norm(h)] !== undefined ? data[norm(h)] : data[h];
+    if (v !== undefined && v !== '') sheet.getRange(target, i + 1).setValue(v);
+  });
 }
 
 function getHeaders(formName) {
