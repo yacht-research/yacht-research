@@ -2,6 +2,38 @@ const NOTIFICATION_EMAIL = 'mathis.yachtbroker@outlook.com';
 const SPREADSHEET_NAME   = 'Yacht Research — Form Submissions';
 const FROM_NAME          = 'Yacht Research';
 
+const SENDER_EMAIL       = 'contact@yachtresearchgroup.com';
+
+// Envoi des e-mails depuis contact@yachtresearchgroup.com via Brevo (domaine authentifié : moins d'indésirables).
+// La clé Brevo est dans Paramètres du projet → Propriétés du script → BREVO_API_KEY (jamais dans le code).
+// Sans clé, repli sur l'envoi Google habituel.
+function sendMail(o) {
+  const key = PropertiesService.getScriptProperties().getProperty('BREVO_API_KEY');
+  if (key) {
+    const payload = { sender: { name: o.name || FROM_NAME, email: SENDER_EMAIL }, to: [{ email: o.to }], subject: o.subject, htmlContent: o.htmlBody };
+    if (o.replyTo) payload.replyTo = { email: o.replyTo };
+    const r = UrlFetchApp.fetch('https://api.brevo.com/v3/smtp/email', { method: 'post', contentType: 'application/json', headers: { 'api-key': key, accept: 'application/json' }, payload: JSON.stringify(payload), muteHttpExceptions: true });
+    if (r.getResponseCode() < 300) return;
+    console.error('Brevo ' + r.getResponseCode() + ' ' + r.getContentText());
+  }
+  MailApp.sendEmail(o);
+}
+
+// À lancer une fois à la main (menu Exécuter) : supprime toutes les lignes de test « TEST Claude » / « ROBOT TEST » de chaque onglet
+function deleteTestRows() {
+  const files = DriveApp.getFilesByName(SPREADSHEET_NAME);
+  if (!files.hasNext()) return;
+  const ss = SpreadsheetApp.open(files.next());
+  let n = 0;
+  ss.getSheets().forEach(sh => {
+    const v = sh.getDataRange().getValues();
+    for (let r = v.length - 1; r >= 1; r--) {
+      if (v[r].some(c => /TEST Claude|ROBOT TEST/.test(String(c)))) { sh.deleteRow(r + 1); n++; }
+    }
+  });
+  console.log(n + ' ligne(s) de test supprimée(s)');
+}
+
 function doPost(e) {
   try {
     const data = e.parameter;
@@ -74,7 +106,7 @@ function sendConfirmationEmail(formName, data) {
     </div>
   </div>`;
 
-  MailApp.sendEmail({ to: data.email, subject: msg.emoji + ' ' + msg.subject, htmlBody: html, name: FROM_NAME, replyTo: NOTIFICATION_EMAIL });
+  sendMail({ to: data.email, subject: msg.emoji + ' ' + msg.subject, htmlBody: html, name: FROM_NAME, replyTo: SENDER_EMAIL });
 }
 
 // Confirmation de réservation envoyée au client, aux couleurs de Yacht Research (aucune mention de l'opérateur)
@@ -110,7 +142,7 @@ function sendBookingConfirmation(data) {
       <p style="color:#0a0f1e;font-size:15px;margin:0 0 2px;font-family:Georgia,serif;">The Yacht Research Team</p>
     </div>
   </div>`;
-  MailApp.sendEmail({ to: data.client_email, subject: '⛵ Booking confirmed — ' + (data.product || 'Yacht Research'), htmlBody: html, name: FROM_NAME, replyTo: NOTIFICATION_EMAIL });
+  sendMail({ to: data.client_email, subject: '⛵ Booking confirmed — ' + (data.product || 'Yacht Research'), htmlBody: html, name: FROM_NAME, replyTo: SENDER_EMAIL });
 }
 
 function saveToSheet(formName, data) {
@@ -173,7 +205,7 @@ function sendNotificationEmail(formName, data) {
     rows += `<tr><td style="padding:10px 16px;font-weight:600;color:#c9a84c;background:#0a0f1e;font-family:Arial,sans-serif;font-size:13px;border-bottom:1px solid #1a2540;">${key.charAt(0).toUpperCase()+key.slice(1).replace(/_/g,' ')}</td><td style="padding:10px 16px;color:#333;background:#fff;font-family:Arial,sans-serif;font-size:13px;border-bottom:1px solid #eee;">${value||'—'}</td></tr>`;
   });
   const html = `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #ddd;"><div style="background:#0a0f1e;padding:30px 24px;text-align:center;"><p style="color:#c9a84c;font-size:11px;letter-spacing:4px;text-transform:uppercase;margin:0 0 8px;">Yacht Research</p><h1 style="color:#fff;font-size:22px;margin:0;font-weight:300;">${emoji} ${formName}</h1><p style="color:rgba(255,255,255,0.4);font-size:11px;margin:10px 0 0;">${data.submitted_at||new Date().toLocaleString('fr-FR')}</p></div><table style="width:100%;border-collapse:collapse;">${rows}</table><div style="background:#f5f5f5;padding:16px 24px;text-align:center;"><p style="color:#999;font-size:11px;margin:0;">Soumis via yachtresearchgroup.com</p></div></div>`;
-  MailApp.sendEmail({ to: NOTIFICATION_EMAIL, subject: `${emoji} Yacht Research — Nouveau ${formName}`, htmlBody: html });
+  sendMail({ to: NOTIFICATION_EMAIL, subject: `${emoji} Yacht Research — Nouveau ${formName}`, htmlBody: html, replyTo: data.email || data.client_email || undefined });
 }
 
 function testScript() {
