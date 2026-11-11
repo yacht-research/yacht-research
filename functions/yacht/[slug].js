@@ -86,16 +86,22 @@ function renderYachtPage(y, slug, base, origin) {
     ? Object.keys(y.specs).map(k => ({ '@type': 'PropertyValue', name: k, value: String(y.specs[k]) }))
     : [{ '@type': 'PropertyValue', name: 'Length', value: y.length || '' }, { '@type': 'PropertyValue', name: 'Year Built', value: y.year || '' }];
   props.push({ '@type': 'PropertyValue', name: 'Location', value: location });
-  const schema = JSON.stringify({
+  let schema = () => JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Product', name: title, description: metaDesc, url: canonical,
     image: [image].concat(gallery.map(g => abs(g, base))),
     brand: { '@type': 'Brand', name: y.builder || 'Yacht Research' }, offers: offer, additionalProperty: props
   }).replace(/</g, '\\u003c');
+  const city = location.split(',')[0].trim();
+  const hourly = isCharter && /per hour/i.test(y.price || '') && digits;
+  if (hourly) { offer.price = Number(digits); offer.priceSpecification = { '@type': 'UnitPriceSpecification', price: Number(digits), priceCurrency: currency(y.price), unitText: 'HOUR' }; }
+  const faq = isCharter ? charterFaq(y, title, city, guests) : [];
+  const faqLD = faq.length ? '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }).replace(/</g, '\\u003c') + '</script>' : '';
   const crumbs = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: base + '/' },
       { '@type': 'ListItem', position: 2, name: isCharter ? 'Charter' : 'Yachts for sale', item: base + (isCharter ? '/charter' : '/listings') },
-      { '@type': 'ListItem', position: 3, name: title, item: canonical }]
+      ...(isCharter && city ? [{ '@type': 'ListItem', position: 3, name: city, item: base + '/charter?location=' + encodeURIComponent(city) }] : []),
+      { '@type': 'ListItem', position: isCharter && city ? 4 : 3, name: title, item: canonical }]
   });
 
   const keySpecs = [
@@ -137,9 +143,10 @@ function renderYachtPage(y, slug, base, origin) {
     '<link rel="canonical" href="' + canonical + '"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">' +
     '<meta property="og:type" content="product"><meta property="og:url" content="' + canonical + '"><meta property="og:title" content="' + esc(pageTitle) + '"><meta property="og:description" content="' + esc(metaDesc) + '"><meta property="og:image" content="' + esc(image) + '"><meta property="og:site_name" content="Yacht Research">' +
     '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="' + esc(image) + '">' +
-    '<script type="application/ld+json">' + schema + '</script><script type="application/ld+json">' + crumbs + '</script>' +
+    '<script type="application/ld+json">' + schema() + '</script>' + faqLD + '<script type="application/ld+json">' + crumbs + '</script>' +
     '<link rel="preload" as="image" href="' + esc(y.image || image) + '" fetchpriority="high">' + HEAD_ASSETS + '</head><body class="yp">' +
     NAV +
+    (isCharter ? charterBody({ y, slug, title, location, city, gallery, price, guests, description, calloutHTML, hlHTML, specsHTML, videoHTML, galHTML, brochure, enquire, faq }) : (
     '<header class="yp-hero"><div class="hero-media" data-par="0.2"><img src="' + esc(y.image || image) + '" alt="' + esc(title) + ' ' + esc(y.year || '') + ' for ' + what.toLowerCase() + '" fetchpriority="high"></div>' +
     '<div class="yp-hero-in"><p class="yp-crumb rv"><a href="/">Home</a> · <a href="' + (isCharter ? '/charter' : '/listings') + '">' + (isCharter ? 'Charter' : 'Yachts for sale') + '</a></p>' +
     '<span class="tag yp-tag">' + badgeLabel(y.badge, isCharter) + '</span>' +
@@ -155,9 +162,56 @@ function renderYachtPage(y, slug, base, origin) {
     '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>' +
     videoHTML + specsHTML + galHTML +
     '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="arrow-link rv">View all <span>→</span></a></div>' +
-    '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>' +
+    '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>'
+    )) +
     '<div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>' +
     FOOTER + SCRIPTS + '</body></html>';
+}
+
+// ---------- Fiche charter ----------
+function num(v) { const m = String(v || '').match(/^\s*(\d[\d,.]*)/); return m ? m[1] : ''; }
+function charterFaq(y, title, city, guests) {
+  const q = [];
+  if (y.price) q.push(['How much does it cost to charter ' + title + (city ? ' in ' + city : '') + '?', title + ' is available ' + y.price.replace(/^From/, 'from') + '.' + (y.price_note ? ' ' + y.price_note.replace(/\s*·\s*/g, '. ') + '.' : '')]);
+  if (guests) q.push(['How many guests can ' + title + ' take?', guests.replace(/^(\d+)/, 'Up to $1') + '.']);
+  if (y.location) q.push(['Where is ' + title + ' based?', title + ' is based in ' + y.location + '.']);
+  q.push(['How do I book ' + title + '?', 'Send us an enquiry or a WhatsApp message with your date, timing and number of guests. We reply within 24 hours, in English or French, with availability and a tailored quote.']);
+  return q;
+}
+function charterBody(o) {
+  const { y, slug, title, location, city, gallery, price, guests, description, calloutHTML, hlHTML, specsHTML, videoHTML, galHTML, brochure, enquire, faq } = o;
+  const imgs = [y.image].concat(gallery).filter(Boolean);
+  const t800 = g => /^\/images\/.*\.webp$/.test(g) ? g.replace(/\.webp$/, '-800.webp') : g;
+  const ft = (String(y.length || '').match(/(\d+)\s*ft/i) || [])[1];
+  const chips = [[num(guests), 'guests'], [ft, 'ft'], [num(pick(y.specs, /cabin/i)), 'cabins'], [num(pick(y.specs, /crew/i)), 'crew']].filter(c => c[0]);
+  const model = y.model || (title.indexOf(' - ') > -1 ? title.split(' - ')[1] : '');
+  const name = title.indexOf(' - ') > -1 ? title.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()) : title;
+  const paras = esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
+  const priceShort = price.replace(/^From\s+/i, '');
+  return '<main class="lx">' +
+    '<p class="lx-crumb"><a href="/">Home</a> · <a href="/charter">Charter</a>' + (city ? ' · <a href="/charter?location=' + encodeURIComponent(city) + '">' + esc(city) + '</a>' : '') + ' · <span>' + esc(name) + '</span></p>' +
+    '<div class="lx-top"><div><span class="tag yp-tag">Charter</span><h1 class="lx-h1">' + esc(name) + (model ? ' <em>' + esc(model) + '</em>' : '') + '</h1>' +
+    (location ? '<p class="lx-loc">⚲ ' + esc(location) + '</p>' : '') + '</div>' +
+    (chips.length ? '<div class="lx-chips">' + chips.map(c => '<div><b>' + esc(c[0]) + '</b><span>' + c[1] + '</span></div>').join('') + '</div>' : '') + '</div>' +
+    '<div class="lx-mosaic lx-n' + Math.min(imgs.length, 5) + '">' + imgs.slice(0, 5).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(i ? t800(g) : g) + '" alt="' + esc(name) + ' yacht charter' + (city ? ' ' + esc(city) : '') + ' photo ' + (i + 1) + '"' + (i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"') + '></button>').join('') +
+    (imgs.length > 1 ? '<button class="lx-all" type="button" onclick="this.parentNode.querySelector(\'.yp-shot\').click()">All ' + imgs.length + ' photos</button>' : '') + '</div>' +
+    '<div class="lx-body"><div class="lx-main">' +
+    '<section class="lx-sec"><h2>About ' + esc(name) + '</h2><div class="yp-desc">' + paras + '</div></section>' +
+    (calloutHTML ? '<div class="lx-callout">' + calloutHTML + '</div>' : '') +
+    (hlHTML ? '<section class="lx-sec lx-hl">' + hlHTML + '</section>' : '') +
+    '<section class="lx-sec"><h2>Rate</h2><div class="lx-grid"><div><span>From</span><b>' + esc(priceShort) + '</b></div>' + (city ? '<div><span>Departs from</span><b>' + esc(location) + '</b></div>' : '') + '<div><span>Rate type</span><b>Preferential B2B rate</b></div></div>' +
+    (y.price_note ? '<p class="lx-small">' + esc(y.price_note) + '</p>' : '') + '</section>' +
+    '<section class="lx-sec lx-faq"><h2>Questions</h2>' + faq.map(([q, a]) => '<details><summary>' + esc(q) + '</summary><p>' + esc(a) + '</p></details>').join('') + '</section>' +
+    '</div>' +
+    '<aside class="lx-book"><p class="eyebrow">Charter rate</p>' + (y.original_price ? '<p class="yp-was">' + esc(y.original_price) + '</p>' : '') +
+    '<p class="lx-price">' + esc(price) + '</p>' + (y.price_note ? '<p class="yp-note">' + esc(y.price_note) + '</p>' : '<p class="yp-note">Subject to availability</p>') +
+    '<a href="' + enquire + '" class="btn btn-gold">Check availability <i>→</i></a>' +
+    '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
+    '<ul class="lx-pts"><li>Reply within 24 hours, in English or French</li><li>No payment to request a quote</li><li>All enquiries handled with discretion</li></ul></aside>' +
+    '</div></main>' +
+    videoHTML + specsHTML + galHTML +
+    '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More charters</p><h2 class="t-l split-words yp-h2">Similar <span class="acc">yachts</span></h2></div><a href="/charter" class="arrow-link rv">View all <span>→</span></a></div>' +
+    '<div class="rail" data-yachts="charter" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>';
 }
 
 function notFound() {

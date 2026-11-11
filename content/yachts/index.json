@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-10T22:51:39.962Z",
+ "generated": "2026-11-11T03:00:09.742Z",
  "count": 51,
  "yachts": [
   {
@@ -32,7 +32,7 @@
    "thumb": "/images/yachts/asmaraty-g-100-superyacht-new-build/01-800.webp",
    "length": "30.5 m / 100 ft",
    "year": "New",
-   "location": "UAE & Qatar",
+   "location": "UAE",
    "price": "USD 3,800,000",
    "original_price": "",
    "price_eur": 3496000,
@@ -70,7 +70,7 @@
    "thumb": "/images/yachts/asmaraty-g-77-luxury-yacht-new-build/01-800.webp",
    "length": "23.7 m / 78 ft",
    "year": "New",
-   "location": "UAE & Qatar",
+   "location": "UAE",
    "price": "USD 1,900,000",
    "original_price": "",
    "price_eur": 1748000,
@@ -332,8 +332,8 @@
    "builder": "Maiora",
    "model": "92ft flybridge motor yacht",
    "badge": "Charter Ready",
-   "image": "/images/yachts/starlight-92ft-maiora-dubai/01.webp",
-   "thumb": "/images/yachts/starlight-92ft-maiora-dubai/01-800.webp",
+   "image": "/images/yachts/starlight-92ft-maiora-dubai/00.webp",
+   "thumb": "/images/yachts/starlight-92ft-maiora-dubai/00-800.webp",
    "length": "28.0 m / 92 ft",
    "year": "",
    "location": "Dubai, UAE",

@@ -97,6 +97,7 @@
   function badgeLabel(b, type){
     b = (b || '').toLowerCase();
     if (type === 'charter') return 'Charter';
+    if (b.indexOf('exclusive') > -1) return 'Exclusive price';
     if (b.indexOf('reduc') > -1 || b.indexOf('price') > -1) return 'Price reduced';
     if (b.indexOf('off') > -1) return 'Off market';
     if (b.indexOf('new') > -1) return 'New listing';
