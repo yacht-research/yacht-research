@@ -40,6 +40,9 @@ function getSocialFooter() {
     + '</div>';
 }
 
+// Résultats des appels Brevo de la requête en cours (renvoyés dans la réponse si debug=1, pour les tests)
+var BREVO_TRACE = [];
+
 // ─── ENVOI BREVO ────────────────────────────────────────────
 // replyTo : contact@ par défaut ; pour tes notifications, c'est l'e-mail du client (tu cliques « Répondre » et tu lui écris)
 function sendBrevoEmail(toEmail, toName, subject, htmlContent, replyTo) {
@@ -57,6 +60,7 @@ function sendBrevoEmail(toEmail, toName, subject, htmlContent, replyTo) {
     }),
     muteHttpExceptions: true
   });
+  BREVO_TRACE.push('email ' + toEmail + ' → ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 200));
   if (r.getResponseCode() >= 300) Logger.log('Brevo email ' + r.getResponseCode() + ': ' + r.getContentText());
 }
 
@@ -92,6 +96,7 @@ function addToBrevo(formName, data) {
       }),
       muteHttpExceptions: true
     });
+    BREVO_TRACE.push('contact list ' + listId + ' → ' + response.getResponseCode() + ' ' + response.getContentText().slice(0, 200));
     Logger.log('Brevo status: ' + response.getResponseCode());
     Logger.log('Brevo response: ' + response.getContentText());
   } catch(e) {
@@ -144,9 +149,11 @@ function doPost(e) {
       if (data.email) sendConfirmationEmail(formName, data);
       if (data.email) addToBrevo(formName, data);
     }
-    return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON);
+    var out = { status: 'success' };
+    if (data.debug === '1') { out.form = formName; out.key = !!BREVO_API_KEY; out.brevo = BREVO_TRACE; }
+    return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString(), brevo: BREVO_TRACE })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -368,7 +375,7 @@ function testScript() {
   var fakePost = { parameter: {
     form_name: 'Yacht Enquiry',
     name: 'Jean-Paul Dupont',
-    email: 'kmhugo789@gmail.com',
+    email: 'mathis.yachtbroker+test@outlook.com',
     type: 'Yacht Acquisition',
     budget: '1M - 3M',
     yacht_type: 'Motor Yacht',
