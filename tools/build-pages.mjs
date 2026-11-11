@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '26'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '27'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -22,6 +22,7 @@ const NAV = `<nav id="nav">
     <li><a href="/listings">Buy</a></li>
     <li><a href="/charter">Charter</a></li>
     <li><a href="/shared-experiences">Experiences</a></li>
+    <li><a href="/private-jet">Private Jet</a></li>
     <li><a href="/bespoke">Services</a></li>
     <li><a href="/why-us">Why Us</a></li>
     <li><a href="/yacht-club-academy" class="yca-link">Academy</a></li>
@@ -40,6 +41,7 @@ const NAV = `<nav id="nav">
   <a href="/charter">Charter</a>
   <a href="/shared-experiences">Shared <em>experiences</em></a>
   <a href="/yacht-research-form">Sell <em>your yacht</em></a>
+  <a href="/private-jet">Private <em>jet</em></a>
   <a href="/bespoke">Services</a>
   <a href="/why-us">Why us</a>
   <a href="/yacht-club-academy" class="yca-link">Yacht Club <em>Academy</em></a>
@@ -54,7 +56,7 @@ const NAV = `<nav id="nav">
 const FOOTER = `<footer class="foot">
   <div class="foot-top">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
-    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
+    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/private-jet">Private jet</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
     <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
@@ -515,6 +517,37 @@ pages.push({
     ].map(([img, t, p], i) => `<div class="bes"><div class="clip"><img data-par="0.08" src="${U(img, 900)}" alt="" loading="lazy"></div><div class="txt rv"><span class="num">0${i + 1}</span><h3>${t}</h3><p>${p}</p></div></div>`).join('')}
   </div>
   <div class="ctas rv" style="margin-top:50px;justify-content:center"><a href="/yacht-research-form" class="btn btn-gold">Discuss your needs <i>→</i></a></div>
+</section>`
+});
+
+pages.push({
+  file: 'private-jet.html', canonical: '/private-jet',
+  title: 'Private Jet Charter, Empty Legs & Private Flights Worldwide | Yacht Research',
+  desc: 'Private jet charter, empty-leg flights and private flights anywhere in the world, booked through the Yacht Research network. Contact us on WhatsApp UAE or France.',
+  preload: U('photo-1474302770737-173ee21bab63'),
+  body: hero({ img: 'photo-1474302770737-173ee21bab63', eyebrow: 'Private aviation', title: 'Fly <span class="acc">private</span>', lead: 'Private jets, empty legs and private flights, anywhere in the world, booked through our global network.', ctas: `<a href="${WA_UAE}" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp UAE <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp France</a>` })
+  + `<section class="manifesto" style="padding-top:clamp(70px,9vw,130px)">
+  <p class="big" id="manifesto">From one yacht to the next, <span class="acc">the journey matters too.</span> Thanks to our worldwide network, we book your private flight wherever you need to be.</p>
+  <p class="lead rv" style="margin-top:40px;max-width:760px">Tell us your route, dates and number of passengers. We look for the right aircraft, including empty-leg return flights when one fits your plans, and come back to you with options.</p>
+</section>
+<section style="padding-top:0">
+  <div class="bes-grid">
+    ${[
+      ['photo-1684838200815-36eef38f353c', 'Private jet charter', 'A private aircraft for your route and your schedule, for business or leisure.'],
+      ['photo-1770334618960-d246fc142297', 'Empty legs', 'Return and repositioning flights that can match your dates, when one is available.'],
+      ['photo-1768346564233-d71f37bd19b6', 'Private flights worldwide', 'Departures and destinations anywhere in the world, arranged through our network.'],
+      ['photo-1567899378494-47b22a2ae96a', 'Jet and yacht', 'Fly in and step aboard: one team to arrange your flight and your yacht charter.']
+    ].map(([img, t, p], i) => `<div class="bes"><div class="clip"><img data-par="0.08" src="${U(img, 900)}" alt="" loading="lazy"></div><div class="txt rv"><span class="num">0${i + 1}</span><h3>${t}</h3><p>${p}</p></div></div>`).join('')}
+  </div>
+</section>
+<section style="padding-top:0">
+  <div class="news rv">
+    <div class="news-bg"><img src="${U('photo-1474302770737-173ee21bab63', 1600)}" alt="" loading="lazy"></div>
+    <div class="news-in">
+      <div><p class="eyebrow">More information</p><h2 class="t-l" style="font-size:clamp(32px,4.6vw,64px);margin-top:18px">Where do you <span class="acc">want to fly?</span></h2></div>
+      <div><p class="lead">Send us your route, dates and number of passengers on WhatsApp. We reply in English and French.</p><div class="ctas" style="margin-top:24px"><a href="${WA_UAE}" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp UAE <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp France</a></div></div>
+    </div>
+  </div>
 </section>`
 });
 

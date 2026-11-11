@@ -807,6 +807,10 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 /* ---------- v22 : accueil 4 cartes, encart broker, rails, menu, expériences ---------- */
 .rail{overflow-y:hidden;overscroll-behavior-x:contain}
 .duo4 .panel{height:clamp(420px,62vh,640px)}
+.duo4 .panel-wide{grid-column:1/-1}
+.duo4 .panel-wide p{max-width:520px}
+@media(min-width:1301px) and (max-width:1500px){.nav-links{gap:20px}.nav-links a{letter-spacing:.16em}}
+@media(min-width:1301px) and (max-width:1400px){.nav-links{gap:15px}.nav-links a{letter-spacing:.12em;font-size:10.5px}}
 .bk-sec{padding-top:0}
 .bk{display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,4vw,60px);flex-wrap:wrap;border:1px solid rgba(201,168,76,.35);border-radius:calc(var(--r) + 6px);padding:clamp(28px,4.5vw,64px);background:radial-gradient(120% 140% at 0% 0%,rgba(201,168,76,.14),rgba(7,7,7,0) 60%),var(--black-2)}
 .bk-txt{max-width:720px}

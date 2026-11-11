@@ -1,5 +1,38 @@
 [
   {
+    "id": "harbour-tour",
+    "tag": "New",
+    "title": "Dubai Harbour 1-hour yacht tour",
+    "duration": "1 hour",
+    "base": "Dubai Harbour Yacht Club",
+    "names": [
+      "Dubai Harbour Tour",
+      "Dubai Harbour: 1-Hour Yacht Tour with Ain & JBR Views"
+    ],
+    "yachts": [
+      "x42-92ft-amsca-dubai"
+    ],
+    "summary": "New: one hour from Dubai Harbour along JBR, Ain Dubai and Dubai Marina on a 92ft yacht, with audio sightseeing commentary. Boarding is right beside the Dubai Harbour Yacht Club gate, so the walk is short.",
+    "highlights": [
+      "JBR and Ain Dubai views",
+      "Boarding beside the Yacht Club gate",
+      "Audio guide",
+      "92ft yacht"
+    ],
+    "images": [
+      "/images/experiences/harbour-tour/01",
+      "/images/experiences/harbour-tour/02"
+    ],
+    "from": 69,
+    "about": "A short, easy outing from Dubai Harbour on a 92ft yacht: one hour along JBR, Ain Dubai and Dubai Marina, with an audio guide. The boarding point is beside the Dubai Harbour Yacht Club gate, so arrival is quick and you spend more time on board. A good option when you have little time or are travelling with children.",
+    "meet": "Dubai Harbour, beside the Dubai Harbour Yacht Club gate. The exact berth is sent with your confirmation.",
+    "info": [
+      "Water served on board",
+      "Children welcome. Children under 3 travel free (please tell us when you book).",
+      "Please arrive 25 minutes before departure: the yacht leaves on time."
+    ]
+  },
+  {
     "id": "superyacht-experience",
     "tag": "Superyacht",
     "title": "Superyacht day on Stardom",
@@ -261,38 +294,6 @@
     "meet": "Dubai Harbour. The exact berth is sent with your confirmation.",
     "info": [
       "BBQ and soft drinks included",
-      "Children welcome. Children under 3 travel free (please tell us when you book).",
-      "Please arrive 25 minutes before departure: the yacht leaves on time."
-    ]
-  },
-  {
-    "id": "harbour-tour",
-    "tag": "Sightseeing",
-    "title": "Dubai Harbour 1-hour yacht tour",
-    "duration": "1 hour",
-    "base": "Dubai Harbour",
-    "names": [
-      "Dubai Harbour Tour"
-    ],
-    "yachts": [
-      "x42-92ft-amsca-dubai"
-    ],
-    "summary": "One hour from Dubai Harbour along JBR, Ain Dubai and Dubai Marina, with audio sightseeing commentary. An easy afternoon outing on a 92ft yacht.",
-    "highlights": [
-      "JBR and Ain Dubai",
-      "Audio guide",
-      "92ft yacht",
-      "Afternoon departures"
-    ],
-    "images": [
-      "/images/experiences/harbour-tour/01",
-      "/images/experiences/harbour-tour/02"
-    ],
-    "from": 69,
-    "about": "A short, easy outing from Dubai Harbour on a 92ft yacht: one hour along JBR, Ain Dubai and the entrance to Dubai Marina, with an audio guide. A good option when you have little time or are travelling with children.",
-    "meet": "Dubai Harbour. The exact berth is sent with your confirmation.",
-    "info": [
-      "Water served on board",
       "Children welcome. Children under 3 travel free (please tell us when you book).",
       "Please arrive 25 minutes before departure: the yacht leaves on time."
     ]

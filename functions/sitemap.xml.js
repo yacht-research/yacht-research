@@ -16,6 +16,7 @@ export async function onRequest(context) {
       .map(id => ({ url: '/shared-experiences/' + id, priority: '0.8', changefreq: 'weekly' })),
     { url: '/why-us', priority: '0.8', changefreq: 'monthly' },
     { url: '/bespoke', priority: '0.8', changefreq: 'monthly' },
+    { url: '/private-jet', priority: '0.7', changefreq: 'monthly' },
     { url: '/yacht-club-academy', priority: '0.7', changefreq: 'monthly' },
     { url: '/partnerships', priority: '0.7', changefreq: 'monthly' },
   { url: '/contact', priority: '0.7', changefreq: 'monthly' },
