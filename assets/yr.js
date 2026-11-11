@@ -161,14 +161,27 @@
     rail.addEventListener('scroll', railProg, { passive: true }); window.addEventListener('resize', railProg); railProg();
   });
 
-  // ---------- Galerie : agrandissement plein écran ----------
+  // ---------- Galerie plein écran : toutes les photos, flèches, clavier, glisser au doigt ----------
   var lb = $('#lb');
   if (lb) {
-    var lbImg = $('img', lb);
-    $$('.yp-shot').forEach(function(b){ b.addEventListener('click', function(){ lbImg.src = b.dataset.full; lb.hidden = false; document.body.style.overflow = 'hidden'; }); });
+    var lbImg = $('img', lb), shots = $$('.yp-shot'), urls = [], cur = 0;
+    shots.forEach(function(b){ if (urls.indexOf(b.dataset.full) < 0) urls.push(b.dataset.full); });
+    lb.insertAdjacentHTML('beforeend', '<button type="button" class="lb-nav lb-prev" aria-label="Previous photo">‹</button><button type="button" class="lb-nav lb-next" aria-label="Next photo">›</button><span class="lb-count"></span>');
+    var cnt = $('.lb-count', lb), multi = urls.length > 1;
+    if (!multi) lb.classList.add('lb-one');
+    function show(i){ cur = (i + urls.length) % urls.length; lbImg.src = urls[cur]; cnt.textContent = (cur + 1) + ' / ' + urls.length;
+      var n = new Image(); n.src = urls[(cur + 1) % urls.length]; }
+    function openLb(u){ show(Math.max(0, urls.indexOf(u))); lb.hidden = false; document.body.style.overflow = 'hidden'; }
     function closeLb(){ lb.hidden = true; lbImg.src = ''; document.body.style.overflow = ''; }
+    shots.forEach(function(b){ b.addEventListener('click', function(){ openLb(b.dataset.full); }); });
+    $('.lb-prev', lb).addEventListener('click', function(e){ e.stopPropagation(); show(cur - 1); });
+    $('.lb-next', lb).addEventListener('click', function(e){ e.stopPropagation(); show(cur + 1); });
+    lbImg.addEventListener('click', function(e){ e.stopPropagation(); if (multi) show(cur + 1); });
     lb.addEventListener('click', closeLb);
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+    document.addEventListener('keydown', function(e){ if (lb.hidden) return; if (e.key === 'Escape') closeLb(); else if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1); });
+    var tx = null;
+    lb.addEventListener('touchstart', function(e){ tx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', function(e){ if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; tx = null; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); }, { passive: true });
   }
 
   // ---------- Newsletter (même Google Apps Script que l'ancien site) ----------
@@ -185,7 +198,9 @@
 
   // ---------- Lien actif dans le menu ----------
   var here = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
-  $$('.nav-links a, #menu a').forEach(function(a){ var p = a.getAttribute('href') || ''; if (p.charAt(0) === '/' && p.indexOf('#') < 0 && p === here) a.classList.add('active'); });
+  var crumb = $('.yp-crumb a + a, .lx-crumb a + a');
+  if (/^\/yacht\//.test(here) && crumb) here = crumb.getAttribute('href');
+  $$('.nav-links a, #menu a').forEach(function(a){ var p = a.getAttribute('href') || ''; if (p.charAt(0) === '/' && p.indexOf('#') < 0 && p.length > 1 && (p === here || here.indexOf(p + '/') === 0) || (p === '/' && here === '/')) { a.classList.add('active'); a.setAttribute('aria-current', 'page'); } });
 
   // ---------- Catalogues (Listings / Charter) : filtres, tri, ?location= ----------
   var cat = $('#cat');
