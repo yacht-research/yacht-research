@@ -126,9 +126,14 @@ function saveToSheet(formName, data) {
   }
   const row = headers.map(h => data[h.toLowerCase().replace(/ /g,'_')] || data[h] || '');
   row[0] = data.submitted_at || new Date().toLocaleString('fr-FR');
-  sheet.appendRow(row);
-  const lastRow = sheet.getLastRow();
-  if (lastRow % 2 === 0) sheet.getRange(lastRow,1,1,headers.length).setBackground('#f8f8f8');
+  // Première ligne vide de la colonne A (et non après les lignes vides pré-formatées de la feuille)
+  const colA = sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 1), 1).getValues();
+  let lastRow = colA.length;
+  while (lastRow > 0 && String(colA[lastRow - 1][0]).trim() === '') lastRow--;
+  const target = lastRow + 1;
+  if (target > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 1);
+  sheet.getRange(target, 1, 1, row.length).setValues([row]);
+  if (target % 2 === 0) sheet.getRange(target,1,1,headers.length).setBackground('#f8f8f8');
 }
 
 function getHeaders(formName) {
