@@ -6,6 +6,7 @@ function doPost(e) {
   try {
     const data = e.parameter;
     const formName = data.form_name || 'Unknown Form';
+    if (String(data.website || '').trim()) return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON); // robot (champ caché rempli)
     saveToSheet(formName, data);
     sendNotificationEmail(formName, data);
     if (formName === 'Shared Experience Booking') {
@@ -118,18 +119,24 @@ function saveToSheet(formName, data) {
   if (files.hasNext()) { ss = SpreadsheetApp.open(files.next()); } else { ss = SpreadsheetApp.create(SPREADSHEET_NAME); }
   let sheet = ss.getSheetByName(formName);
   if (!sheet) { sheet = ss.insertSheet(formName); }
-  const headers = getHeaders(formName);
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
-    sheet.getRange(1,1,1,headers.length).setBackground('#0a0f1e').setFontColor('#c9a84c').setFontWeight('bold');
-    sheet.setFrozenRows(1);
-  }
-  const row = headers.map(h => data[h.toLowerCase().replace(/ /g,'_')] || data[h] || '');
+  // En-têtes : ceux déjà présents dans la feuille, sinon la liste prévue ; toute nouvelle info reçue ajoute sa colonne
+  const norm = h => String(h).trim().toLowerCase().replace(/ /g, '_');
+  let headers = sheet.getLastRow() > 0
+    ? sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0].map(String).filter(h => h.trim() !== '')
+    : getHeaders(formName).slice();
+  const known = headers.map(norm);
+  Object.keys(data).forEach(k => {
+    if (['form_name', 'submitted_at', 'website'].indexOf(k) > -1 || !String(data[k] || '').trim()) return;
+    if (known.indexOf(norm(k)) < 0) { headers.push(k); known.push(norm(k)); }
+  });
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]).setBackground('#0a0f1e').setFontColor('#c9a84c').setFontWeight('bold');
+  if (sheet.getFrozenRows() === 0) sheet.setFrozenRows(1);
+  const row = headers.map(h => data[norm(h)] || data[h] || '');
   row[0] = data.submitted_at || new Date().toLocaleString('fr-FR');
   // Première ligne vide de la colonne A (et non après les lignes vides pré-formatées de la feuille)
   const colA = sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 1), 1).getValues();
   let lastRow = colA.length;
-  while (lastRow > 0 && String(colA[lastRow - 1][0]).trim() === '') lastRow--;
+  while (lastRow > 1 && String(colA[lastRow - 1][0]).trim() === '') lastRow--;
   const target = lastRow + 1;
   if (target > sheet.getMaxRows()) sheet.insertRowsAfter(sheet.getMaxRows(), 1);
   sheet.getRange(target, 1, 1, row.length).setValues([row]);
@@ -141,6 +148,9 @@ function getHeaders(formName) {
     'Contact Enquiry':         ['Date','name','phone','email','type','message'],
     'Partnership Inquiry':     ['Date','name','company','role','country','email','message'],
     'Recruitment Application': ['Date','name','position','email','experience'],
+    'Yacht Enquiry':           ['Date','name','email','phone','country','type','budget','yacht_type','market','message'],
+    'Newsletter':              ['Date','firstname','lastname','email'],
+    'Bank Transfer Request':   ['Date','name','email','phone','type','message'],
     'Shared Experience Booking': ['Date','status','product','date','time','guests','name','phone','client_email','paid_aed','b2b_aed','margin_aed','stripe_session'],
   };
   return map[formName] || ['Date','message'];

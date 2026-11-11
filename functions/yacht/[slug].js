@@ -147,12 +147,14 @@ function renderYachtPage(y, slug, base, origin) {
     '<link rel="preload" as="image" href="' + esc(y.image || image) + '" fetchpriority="high">' + HEAD_ASSETS + '</head><body class="yp">' +
     NAV +
     (isCharter ? charterBody({ y, slug, title, location, city, gallery, price, guests, description, calloutHTML, hlHTML, specsHTML, videoHTML, galHTML, brochure, enquire, faq }) : (
-    '<header class="yp-hero"><div class="hero-media" data-par="0.2"><img src="' + esc(y.image || image) + '" alt="' + esc(title) + ' ' + esc(y.year || '') + ' for ' + what.toLowerCase() + '" fetchpriority="high"></div>' +
-    '<div class="yp-hero-in"><p class="yp-crumb rv"><a href="/">Home</a> · <a href="' + (isCharter ? '/charter' : '/listings') + '">' + (isCharter ? 'Charter' : 'Yachts for sale') + '</a></p>' +
-    '<span class="tag yp-tag">' + badgeLabel(y.badge, isCharter) + '</span>' +
-    '<h1 class="t-l yp-title">' + titleHTML(title) + '</h1>' +
-    '<p class="yp-sub rv">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div></header>' +
-    '<div class="yp-keys">' + keySpecs.map(s => '<div class="rv"><span>' + esc(s[0]) + '</span><b>' + esc(s[1]) + '</b></div>').join('') + '</div>' + calloutHTML +
+    // Fiche à vendre : même disposition que les fiches charter (titre, chiffres clés, mosaïque de photos)
+    '<main class="lx lx-sale">' +
+    '<p class="lx-crumb yp-crumb"><a href="/">Home</a> · <a href="/listings">Yachts for sale</a> · <span>' + esc(title) + '</span></p>' +
+    '<div class="lx-top"><div><span class="tag yp-tag">' + badgeLabel(y.badge, isCharter) + '</span><h1 class="lx-h1">' + titleHTML(title) + '</h1>' +
+    '<p class="lx-loc">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div>' +
+    '<div class="lx-chips">' + keySpecs.map(s => '<div><b>' + esc(s[1]) + '</b><span>' + esc(s[0]) + '</span></div>').join('') + '</div></div>' +
+    mosaic([y.image || image].concat(gallery), title + ' ' + (y.year || '') + ' for sale') +
+    '</main>' + calloutHTML +
     '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + specsHTML.replace('<section class="yp-sec">', '<section class="yp-sec yp-specs-in">') + '</div>' +
     '<aside class="yp-card rv"><p class="eyebrow">' + (isCharter ? 'Charter rate' : 'Asking price') + '</p>' +
     (y.original_price ? '<p class="yp-was">' + esc(y.original_price) + '</p>' : '') +
@@ -166,6 +168,14 @@ function renderYachtPage(y, slug, base, origin) {
     )) +
     '<div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>' +
     FOOTER + SCRIPTS + '</body></html>';
+}
+
+// Mosaïque de 5 photos max + bouton « All N photos » (ouvre la galerie plein écran)
+function mosaic(list, alt) {
+  const imgs = list.filter(Boolean).filter((g, i, a) => a.indexOf(g) === i);
+  const t800 = g => /^\/images\/.*\.webp$/.test(g) ? g.replace(/\.webp$/, '-800.webp') : g;
+  return '<div class="lx-mosaic lx-n' + Math.min(imgs.length, 5) + '">' + imgs.slice(0, 5).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(i ? t800(g) : g) + '" alt="' + esc(alt) + ' photo ' + (i + 1) + '"' + (i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"') + '></button>').join('') +
+    (imgs.length > 1 ? '<button class="lx-all" type="button" onclick="this.parentNode.querySelector(\'.yp-shot\').click()">All ' + imgs.length + ' photos</button>' : '') + '</div>';
 }
 
 // ---------- Fiche charter ----------
