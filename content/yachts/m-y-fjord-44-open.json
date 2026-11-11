@@ -42,9 +42,10 @@
   "seo_title": "M/Y Fjord 44 Open for Sale | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1yz1MGXb8Es5EIzqZgMy4ZkxNS0_U0znL/view?usp=drivesdk",
   "published": true,
-  "image": "/images/yachts/m-y-fjord-44-open/01.webp",
-  "thumb": "/images/yachts/m-y-fjord-44-open/01-800.webp",
+  "image": "/images/opt/fjord-44-open-cta.webp",
+  "thumb": "/images/opt/fjord-44-open-cta-800.webp",
   "gallery": [
+    "/images/yachts/m-y-fjord-44-open/01.webp",
     "/images/yachts/m-y-fjord-44-open/02.webp",
     "/images/yachts/m-y-fjord-44-open/03.webp",
     "/images/yachts/m-y-fjord-44-open/04.webp",

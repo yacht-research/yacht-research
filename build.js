@@ -39,6 +39,11 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'in
   const badge = y.badge || '';
   const type = y.listing_type || (/charter/i.test(badge) ? 'charter' : 'sale');
   const opt = optMap[y.image] || {};
+  // Photos des cartes à faire défiler (vignettes 800 px quand elles existent) : yachts à vendre
+  const small = u => { const t = String(u || '').replace(/\.webp$/, '-800.webp'); return t !== u && fs.existsSync(path.join(__dirname, t)) ? t : u; };
+  const photos = type === 'sale'
+    ? [y.thumb || y.image, ...(y.gallery || []).map(small)].filter((u, i, a) => u && a.indexOf(u) === i).slice(0, 10)
+    : [];
   const guests = pick(y.specs, /guest/i);
   const cabinsField = pick(y.specs, /^cabins?$/i);
   yachts.push({
@@ -49,6 +54,7 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'in
     badge,
     image: opt.full || y.image || '',
     thumb: y.thumb || opt.thumb || y.image || '',
+    ...(photos.length > 1 ? { photos } : {}),
     length: y.length || '',
     year: y.year || '',
     location: y.location || '',

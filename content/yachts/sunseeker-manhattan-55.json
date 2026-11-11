@@ -40,9 +40,10 @@
   "seo_title": "Sunseeker Manhattan 55 for Sale | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1cFV8_bqPocmDLKh-vI6FGcnZa7CAgYTn/view?usp=drive_link",
   "published": true,
-  "image": "/images/yachts/sunseeker-manhattan-55/01.webp",
-  "thumb": "/images/yachts/sunseeker-manhattan-55/01-800.webp",
+  "image": "/images/opt/sunseeker-manhattan-55.webp",
+  "thumb": "/images/opt/sunseeker-manhattan-55-800.webp",
   "gallery": [
+    "/images/yachts/sunseeker-manhattan-55/01.webp",
     "/images/yachts/sunseeker-manhattan-55/02.webp",
     "/images/yachts/sunseeker-manhattan-55/03.webp"
   ],

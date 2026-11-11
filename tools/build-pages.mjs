@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '27'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '28'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -172,7 +172,7 @@ const yachtName = slug => { try { return JSON.parse(fs.readFileSync(path.join(SI
 const xesc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 const xpCard = (x, detail) => {
   const ys = x.yachts.map(s => [s, yachtName(s)]).filter(([, n]) => n);
-  return `<article class="xp-card rv${detail ? ' xp-solo' : ''}" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}" data-title="${xesc(x.title)}"${x.from ? ` data-from="${x.from}"` : ''}>
+  return `<article class="xp-card rv${detail ? ' xp-solo' : ''}${x.featured && !detail ? ' xp-feat' : ''}" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}" data-title="${xesc(x.title)}"${x.from ? ` data-from="${x.from}"` : ''}>
     <div class="xp-media" data-imgs="${xesc(JSON.stringify(x.images))}">
       <img src="${x.images[0]}-800.webp" srcset="${x.images[0]}-800.webp 800w, ${x.images[0]}.webp 1600w" sizes="(max-width:760px) 100vw, 560px" alt="${xesc(x.title)} in Dubai" width="800" height="533" loading="lazy">
       ${detail ? '' : `<a class="xp-hit" href="/shared-experiences/${x.id}" aria-label="${xesc(x.title)}: details"></a>`}
@@ -180,6 +180,7 @@ const xpCard = (x, detail) => {
       ${x.images.length > 1 ? `<button type="button" class="xp-nav prev" aria-label="Previous photo">‹</button><button type="button" class="xp-nav next" aria-label="Next photo">›</button><span class="xp-count"><b>1</b>/${x.images.length}</span>` : ''}
     </div>
     <div class="xp-body">
+      ${x.featured && !detail ? `<p class="xp-new">New experience</p>` : ''}
       <h3>${detail ? x.title : `<a href="/shared-experiences/${x.id}">${x.title}</a>`}</h3>
       <p class="xp-meta"><span>◷ ${x.duration}</span><span>⚲ ${x.base}</span>${x.note ? `<span>${x.note}</span>` : ''}</p>
       ${x.from ? `<p class="xp-from"><small>Starting from</small> <b>AED ${x.from}</b> <small>per guest</small></p>` : ''}

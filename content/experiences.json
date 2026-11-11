@@ -30,7 +30,8 @@
       "Water served on board",
       "Children welcome. Children under 3 travel free (please tell us when you book).",
       "Please arrive 25 minutes before departure: the yacht leaves on time."
-    ]
+    ],
+    "featured": true
   },
   {
     "id": "superyacht-experience",

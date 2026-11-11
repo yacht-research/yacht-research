@@ -35,7 +35,7 @@
     var slots = card.querySelector('[data-slots]'), price = card.querySelector('[data-price]'), cta = card.querySelector('[data-cta]');
     var fromEl = card.querySelector('.xp-from');
     card.classList.toggle('xp-off', !deps.length);
-    card.style.order = deps.length ? '0' : '1'; // les expériences disponibles ce jour-là d'abord
+    card.style.order = card.classList.contains('xp-feat') ? '-1' : deps.length ? '0' : '1'; // la nouveauté toujours en tête, puis les expériences disponibles ce jour-là
     if (fromEl) fromEl.hidden = !!deps.length; // le prix du jour remplace le prix indicatif
     if (!deps.length) { slots.innerHTML = '<span class="xp-wait">No departure on this date. Try another day.</span>'; price.innerHTML = ''; cta.innerHTML = ''; return; }
     var low = deps.map(function (d) { return d.from_aed; }).filter(Boolean);

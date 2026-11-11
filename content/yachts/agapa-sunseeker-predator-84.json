@@ -40,9 +40,10 @@
   "seo_title": "AGAPA - Sunseeker Predator 84 Yacht Charter | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1c4aoYwgBcQ_b--nn7Q8HbEnAImIYKKxs/view?usp=drive_link",
   "published": true,
-  "image": "/images/yachts/agapa-sunseeker-predator-84/01.webp",
-  "thumb": "/images/yachts/agapa-sunseeker-predator-84/01-800.webp",
+  "image": "/images/opt/charter-agapa.webp",
+  "thumb": "/images/opt/charter-agapa-800.webp",
   "gallery": [
+    "/images/yachts/agapa-sunseeker-predator-84/01.webp",
     "/images/yachts/agapa-sunseeker-predator-84/02.webp",
     "/images/yachts/agapa-sunseeker-predator-84/03.webp",
     "/images/yachts/agapa-sunseeker-predator-84/04.webp",

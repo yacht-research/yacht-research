@@ -44,9 +44,10 @@
   "seo_title": "OCEAN ONE - Azimut Grande 36M Yacht Charter | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1Djmr5jM5L30P7Ib64aY3rXjhXXXbK-jR/view?usp=drivesdk",
   "published": true,
-  "image": "/images/yachts/ocean-one-azimut-grande-36m/01.webp",
-  "thumb": "/images/yachts/ocean-one-azimut-grande-36m/01-800.webp",
+  "image": "/images/opt/ocean-one.webp",
+  "thumb": "/images/opt/ocean-one-800.webp",
   "gallery": [
+    "/images/yachts/ocean-one-azimut-grande-36m/01.webp",
     "/images/yachts/ocean-one-azimut-grande-36m/02.webp",
     "/images/yachts/ocean-one-azimut-grande-36m/03.webp",
     "/images/yachts/ocean-one-azimut-grande-36m/04.webp",

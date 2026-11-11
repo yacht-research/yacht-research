@@ -42,9 +42,10 @@
   "seo_title": "Pearl 63 for Sale | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1nazUrDKxlCNpxBgxc9qv9o1qynzzsVI9/view?usp=drive_link",
   "published": true,
-  "image": "/images/yachts/pearl-63/01.webp",
-  "thumb": "/images/yachts/pearl-63/01-800.webp",
+  "image": "/images/opt/pearl-63.webp",
+  "thumb": "/images/opt/pearl-63-800.webp",
   "gallery": [
+    "/images/yachts/pearl-63/01.webp",
     "/images/yachts/pearl-63/02.webp",
     "/images/yachts/pearl-63/03.webp",
     "/images/yachts/pearl-63/04.webp",

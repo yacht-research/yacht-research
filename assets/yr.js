@@ -122,11 +122,35 @@
       (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
     var price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
     return '<a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
-      '<div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
+      '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
+      (y.photos ? '<button type="button" class="ph-nav prev" aria-label="Previous photo">‹</button><button type="button" class="ph-nav next" aria-label="Next photo">›</button><span class="ph-count"><b>1</b>/' + y.photos.length + '</span>' : '') + '</div>' +
       '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y) + '</h4>' + specs +
       '<div class="price">' + price + ' <i>→</i></div></div></a>';
   }
   window.YR = { card: card, observe: observe, esc: esc };
+
+  // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
+  function phStep(ph, d){
+    var imgs; try { imgs = JSON.parse(ph.dataset.imgs); } catch (e) { return; }
+    var i = ((+ph.dataset.i || 0) + d + imgs.length) % imgs.length;
+    ph.dataset.i = i; $('img', ph).src = imgs[i];
+    var b = $('.ph-count b', ph); if (b) b.textContent = i + 1;
+    var n = new Image(); n.src = imgs[(i + 1) % imgs.length];
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('.ph-nav');
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    phStep(btn.parentNode, btn.classList.contains('next') ? 1 : -1);
+  }, true);
+  var phX = null, phY = 0, phEl = null;
+  document.addEventListener('touchstart', function(e){ var ph = e.target.closest && e.target.closest('.ph[data-imgs]'); phEl = ph; if (ph) { phX = e.touches[0].clientX; phY = e.touches[0].clientY; } }, { passive: true });
+  document.addEventListener('touchend', function(e){
+    if (!phEl || phX === null) return;
+    var dx = e.changedTouches[0].clientX - phX, dy = e.changedTouches[0].clientY - phY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5 && !phEl.closest('.rail')) phStep(phEl, dx < 0 ? 1 : -1);
+    phX = null; phEl = null;
+  }, { passive: true });
 
   var targets = $$('[data-yachts]');
   if (targets.length) {

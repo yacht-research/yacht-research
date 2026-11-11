@@ -784,6 +784,19 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .xp-wa{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:99px;border:1px solid rgba(37,211,102,.45);font-size:12px;letter-spacing:.06em;color:#dff7e8;text-decoration:none}
 .xp-wa svg{width:15px;height:15px;fill:#25d366}
 .xp-wa:hover{background:rgba(37,211,102,.12)}
+.xp-feat{grid-column:1/-1;order:-1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 18px 60px rgba(201,168,92,.18)}
+.xp-feat.xp-off .xp-media img{filter:none}
+.offm .bgimg img{will-change:auto;backface-visibility:hidden}
+.offm .bgimg:after{inset:-2px}
+.card .ph-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:rgba(7,7,7,.55);color:#fff;font-size:24px;line-height:1;display:grid;place-items:center;cursor:pointer;opacity:.9;transition:background .3s}
+.card .ph-nav:hover{background:rgba(7,7,7,.85)}
+.card .ph-nav.prev{left:12px}.card .ph-nav.next{right:12px}
+.card .ph-count{position:absolute;right:14px;bottom:12px;z-index:2;font-size:12px;padding:4px 10px;border-radius:99px;background:rgba(7,7,7,.6);color:#fff}
+.card .ph[data-imgs] .tag{z-index:2}
+.card:hover .ph[data-imgs] img{transform:none}
+.xp-feat .xp-tag{background:var(--gold);color:#070707;font-weight:600}
+.xp-new{display:inline-block;margin:0 0 12px;padding:6px 14px;border-radius:99px;border:1px solid var(--gold);color:var(--gold-l);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+@media(min-width:900px){.xp-feat{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}.xp-feat .xp-media{aspect-ratio:auto;min-height:100%}.xp-feat .xp-body h3{font-size:clamp(28px,2.6vw,40px)}}
 .xp-grid-solo{grid-template-columns:minmax(0,760px);justify-content:center}
 .xpd{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(30px,5vw,80px);padding:clamp(60px,8vw,110px) var(--pad) 0;align-items:start}
 .xpd-info{border:1px solid var(--line);border-radius:var(--r);padding:clamp(22px,3vw,34px);background:var(--black-2)}
@@ -808,6 +821,7 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .rail{overflow-y:hidden;overscroll-behavior-x:contain}
 .duo4 .panel{height:clamp(420px,62vh,640px)}
 .duo4 .panel-wide{grid-column:1/-1}
+@media(min-width:1301px){nav{padding-left:clamp(20px,1.8vw,36px);padding-right:clamp(20px,1.8vw,36px)}}
 .duo4 .panel-wide p{max-width:520px}
 @media(min-width:1301px) and (max-width:1500px){.nav-links{gap:20px}.nav-links a{letter-spacing:.16em}}
 @media(min-width:1301px) and (max-width:1400px){.nav-links{gap:15px}.nav-links a{letter-spacing:.12em;font-size:10.5px}}
