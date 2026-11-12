@@ -24,21 +24,25 @@ const BREVO_LIST_IDS = {
   'Partnership Inquiry': 4,
 };
 
-// ─── FOOTER SOCIAL ───────────────────────────────────────────
-function getSocialFooter() {
-  return '<div style="background:#0a0f1e;padding:24px 32px;text-align:center;">'
-    + '<div style="text-align:center;margin-bottom:16px;">'
-    + '<a href="https://yachtresearchgroup.com" style="text-decoration:none;display:inline-block;margin:3px;"><span style="background:#1a2540;padding:8px 10px;font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;display:inline-block;">&#127760; Website</span></a>'
-    + '<a href="https://www.instagram.com/yacht_research/" style="text-decoration:none;display:inline-block;margin:3px;"><span style="background:#1a2540;padding:8px 10px;font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;display:inline-block;">&#128247; Instagram</span></a>'
-    + '<a href="https://wa.me/qr/5NK5SR22CXGNC1" style="text-decoration:none;display:inline-block;margin:3px;"><span style="background:#1a2540;padding:8px 10px;font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;display:inline-block;">&#128172; WhatsApp UAE</span></a>'
-    + '<a href="https://wa.me/message/CVQVHBO3GXLZP1" style="text-decoration:none;display:inline-block;margin:3px;"><span style="background:#1a2540;padding:8px 10px;font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;display:inline-block;">&#128172; WhatsApp FR</span></a>'
-    + '<a href="https://linktr.ee/yacht_research" style="text-decoration:none;display:inline-block;margin:3px;"><span style="background:#1a2540;padding:8px 10px;font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;display:inline-block;">&#128279; Linktree</span></a>'
-    + '</div>'
-    + '<div style="width:40px;height:1px;background:rgba(201,168,76,0.3);margin:0 auto 12px;"></div>'
-    + '<p style="color:rgba(255,255,255,0.3);font-size:10px;margin:0 0 6px;font-family:Arial,sans-serif;">&#169; ' + new Date().getFullYear() + ' Yacht Research &middot; <a href="https://yachtresearchgroup.com" style="color:#c9a84c;text-decoration:none;">yachtresearchgroup.com</a></p>'
-    + '<p style="color:rgba(255,255,255,0.15);font-size:9px;margin:0;font-family:Arial,sans-serif;">You received this email because you contacted Yacht Research.</p>'
-    + '</div>';
+// Formulaires qui ont une séquence Brevo : le 1er e-mail de la séquence remplace la confirmation du script.
+// Le script n'envoie sa confirmation qu'en SECOURS (Brevo n'a pas répondu, ou le contact était déjà dans la liste
+// et la séquence ne repartira pas).
+const SEQUENCE_FORMS = ['Contact Enquiry', 'Yacht Enquiry', 'Partnership Inquiry'];
+
+// ─── GABARIT DES E-MAILS (noir et or, comme le site) ─────────
+// <EMAIL-TEMPLATE> (généré par tools/emails/build.mjs : ne pas modifier à la main)
+var EMAIL_TEMPLATE = "<!DOCTYPE html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<meta name=\"x-apple-disable-message-reformatting\">\n<meta name=\"color-scheme\" content=\"dark light\">\n<meta name=\"supported-color-schemes\" content=\"dark light\">\n<title>%%SUBJECT%%</title>\n<link href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Jost:wght@300;400;500;600&display=swap\" rel=\"stylesheet\">\n<style>\nbody{margin:0;padding:0;background:#000000}\na{color:#e6cf8a}\nb,strong{color:#f3eee4;font-weight:600}\n@media (max-width:620px){\n  .wrap{width:100%!important}\n  .px{padding-left:22px!important;padding-right:22px!important}\n  .h1{font-size:30px!important;line-height:1.12!important}\n  .h1 em{font-size:34px!important}\n  .wa td{display:block!important;padding:5px 0!important}\n  .tiles td.tile{display:block!important;width:100%!important;padding:0 0 22px!important}\n  .yca-l,.yca-r{display:block!important;width:auto!important}\n  .yca-l{padding:22px 22px 0!important}\n  .soc{padding:0 2px!important;width:60px!important}\n  .soc a{font-size:8px!important;letter-spacing:.6px!important}\n}\n</style>\n</head>\n<body style=\"margin:0;padding:0;background:#000000;-webkit-text-size-adjust:100%\">\n<div style=\"display:none;max-height:0;overflow:hidden;opacity:0;color:#000000\">%%PRE%%&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#000000\" style=\"background:#000000\">\n<tr><td align=\"center\" style=\"padding:28px 12px 40px\">\n<table role=\"presentation\" class=\"wrap\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:600px\">\n\n<!-- Logo -->\n<tr><td align=\"center\" style=\"padding:6px 0 22px\"><a href=\"https://yachtresearchgroup.com\" target=\"_blank\"><img src=\"https://yachtresearchgroup.com/images/uploads/yacht-research-logo.png\" width=\"110\" height=\"110\" alt=\"Yacht Research\" style=\"display:block;width:110px;height:110px;border:0\"></a></td></tr>\n\n<!-- Carte -->\n<tr><td bgcolor=\"#0f0f0f\" style=\"background:#0f0f0f;border:1px solid #2a2519;border-radius:18px;overflow:hidden\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr><td style=\"padding:0;line-height:0\"><img src=\"%%HERO%%\" width=\"600\" alt=\"\" style=\"display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:18px 18px 0 0\"></td></tr>\n<tr><td class=\"px\" style=\"padding:40px 48px 8px\">\n<p style=\"margin:0 0 16px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#c9a84c\">%%EYEBROW%%</p>\n<h1 class=\"h1\" style=\"margin:0 0 26px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:36px;line-height:1.08;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:#f3eee4\">%%T1%% <em style=\"font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:40px;text-transform:none;letter-spacing:0;color:#e6cf8a\">%%T2%%</em></h1>\n<p style=\"margin:0 0 18px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:16px;color:#f3eee4\">Dear %%NAME%%,</p>\n%%BODY%%\n</td></tr>\n\n\n<tr><td align=\"center\" class=\"px\" style=\"padding:14px 48px 18px\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\" style=\"margin:6px auto 0\"><tr>\n<td align=\"center\" bgcolor=\"#c9a84c\" style=\"border-radius:999px;background:#c9a84c;background-image:linear-gradient(120deg,#9c7f32 0%,#e6cf8a 45%,#c9a84c 70%,#9c7f32 100%)\">\n<a href=\"%%CTA_URL%%\" target=\"_blank\" style=\"display:inline-block;padding:17px 36px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#070707;text-decoration:none;border-radius:999px\">%%CTA_LABEL%% &rarr;</a></td></tr></table></td></tr>\n<tr><td align=\"center\" style=\"padding:0 24px 40px\"><table role=\"presentation\" class=\"wa\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr><td align=\"center\" style=\"padding:0 5px\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n<td align=\"center\" style=\"border:1px solid #c9a84c;border-radius:999px\"><a href=\"https://wa.me/qr/5NK5SR22CXGNC1\" target=\"_blank\" style=\"display:inline-block;padding:12px 22px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a;text-decoration:none;white-space:nowrap\">WhatsApp UAE</a></td></tr></table></td><td align=\"center\" style=\"padding:0 5px\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n<td align=\"center\" style=\"border:1px solid #c9a84c;border-radius:999px\"><a href=\"https://wa.me/message/CVQVHBO3GXLZP1\" target=\"_blank\" style=\"display:inline-block;padding:12px 22px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a;text-decoration:none;white-space:nowrap\">WhatsApp France</a></td></tr></table></td></tr></table></td></tr>\n\n<!-- Discover -->\n<tr><td class=\"px\" style=\"padding:8px 40px 6px;border-top:1px solid #2a2519\">\n<p style=\"margin:30px 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#c9a84c;text-align:center\">Discover Yacht Research</p>\n<p style=\"margin:0 0 22px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:24px;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:#f3eee4;text-align:center\">More than <em style=\"font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:28px;text-transform:none;color:#e6cf8a\">brokerage</em></p>\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"tiles\"><tr><td class=\"tile\" valign=\"top\" width=\"50%\" style=\"width:50%;padding:0 8px 16px\">\n<a href=\"https://yachtresearchgroup.com/shared-experiences\" target=\"_blank\" style=\"text-decoration:none;display:block\">\n<img src=\"https://yachtresearchgroup.com/images/email/experiences.jpg\" width=\"244\" alt=\"Shared experiences\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px\">\n<p style=\"margin:12px 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c\">Dubai · By the seat</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.15;color:#f3eee4\">Shared experiences</p>\n<p style=\"margin:0 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#cfc8bb\">Superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties. Book your seats, no need to charter a whole yacht.</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a\">See the experiences &rarr;</p></a></td><td class=\"tile\" valign=\"top\" width=\"50%\" style=\"width:50%;padding:0 8px 16px\">\n<a href=\"https://yachtresearchgroup.com/charter\" target=\"_blank\" style=\"text-decoration:none;display:block\">\n<img src=\"https://images.unsplash.com/photo-1672939113905-b02ef5db7203?auto=format&fit=crop&w=560&h=360&q=70&fm=jpg\" width=\"244\" alt=\"Charter\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px\">\n<p style=\"margin:12px 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c\">Charter</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.15;color:#f3eee4\">Charter</p>\n<p style=\"margin:0 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#cfc8bb\">Day, weekly and hourly charters with hand-picked crews, at B2B rates.</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a\">Plan a charter &rarr;</p></a></td></tr><tr><td class=\"tile\" valign=\"top\" width=\"50%\" style=\"width:50%;padding:0 8px 16px\">\n<a href=\"https://yachtresearchgroup.com/private-jet\" target=\"_blank\" style=\"text-decoration:none;display:block\">\n<img src=\"https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=560&h=360&q=70&fm=jpg\" width=\"244\" alt=\"Private Jet\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px\">\n<p style=\"margin:12px 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c\">Worldwide · Private aviation</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.15;color:#f3eee4\">Private Jet</p>\n<p style=\"margin:0 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#cfc8bb\">Private jets, empty legs and private flights anywhere in the world, booked through our global network.</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a\">Fly private &rarr;</p></a></td><td class=\"tile\" valign=\"top\" width=\"50%\" style=\"width:50%;padding:0 8px 16px\">\n<a href=\"https://yachtresearchgroup.com/listings\" target=\"_blank\" style=\"text-decoration:none;display:block\">\n<img src=\"https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=560&h=360&q=70&fm=jpg\" width=\"244\" alt=\"Yachts for sale\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px\">\n<p style=\"margin:12px 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c\">Buy · Sell</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.15;color:#f3eee4\">Yachts for sale</p>\n<p style=\"margin:0 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#cfc8bb\">Off-market search, survey, sea trial and negotiation. We find the right yacht, not simply the first one available.</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a\">See the yachts &rarr;</p></a></td></tr></table>\n</td></tr>\n<!-- Yacht Club Academy -->\n<tr><td class=\"px\" style=\"padding:0 48px 36px\">\n<a href=\"https://yachtresearchgroup.com/yacht-club-academy\" target=\"_blank\" style=\"text-decoration:none;display:block\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border:1px solid #2a2519;border-radius:14px;background:#151412\"><tr>\n<td class=\"yca-l\" width=\"120\" align=\"center\" valign=\"middle\" style=\"padding:22px 6px 22px 22px\"><img src=\"https://yachtresearchgroup.com/images/email/yca-logo.png\" width=\"96\" alt=\"Yacht Club Academy\" style=\"display:block;width:96px;height:auto;border:0\"></td>\n<td class=\"yca-r\" valign=\"middle\" style=\"padding:20px 22px\">\n<p style=\"margin:0 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c9a84c\">Also founded by Mathis &amp; Antoine</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;font-size:22px;color:#f3eee4\">Yacht Club Academy</p>\n<p style=\"margin:0 0 8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#cfc8bb\">Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e6cf8a\">Discover the academy &rarr;</p>\n</td></tr></table></a>\n</td></tr>\n\n<!-- Signature -->\n<tr><td class=\"px\" bgcolor=\"#151412\" style=\"background:#151412;border-top:1px solid #2a2519;padding:28px 48px;border-radius:0 0 18px 18px\">\n<p style=\"margin:0 0 4px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:14px;color:#cfc8bb\">Warm regards,</p>\n<p style=\"margin:0 0 6px;font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-size:22px;color:#e6cf8a\">The Yacht Research Team</p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#c9a84c\">Dubai &middot; French Riviera &middot; Mediterranean</p>\n</td></tr>\n</table>\n</td></tr>\n\n<!-- Réseaux -->\n<tr><td align=\"center\" style=\"padding:34px 0 4px\">\n<p style=\"margin:0 0 16px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#c9a84c\">Follow us &amp; talk to us</p>\n<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr>\n<td align=\"center\" valign=\"top\" class=\"soc\" style=\"padding:0 7px;width:72px\">\n<a href=\"https://www.instagram.com/yacht_research/\" target=\"_blank\" style=\"text-decoration:none\"><img src=\"https://yachtresearchgroup.com/images/email/ic-instagram.png\" width=\"44\" height=\"44\" alt=\"Instagram\" style=\"display:block;width:44px;height:44px;border:0;margin:0 auto\"></a>\n<a href=\"https://www.instagram.com/yacht_research/\" target=\"_blank\" style=\"display:block;margin-top:8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8f897e;text-decoration:none;white-space:nowrap\">Instagram</a></td><td align=\"center\" valign=\"top\" class=\"soc\" style=\"padding:0 7px;width:72px\">\n<a href=\"https://wa.me/qr/5NK5SR22CXGNC1\" target=\"_blank\" style=\"text-decoration:none\"><img src=\"https://yachtresearchgroup.com/images/email/ic-whatsapp.png\" width=\"44\" height=\"44\" alt=\"WhatsApp UAE\" style=\"display:block;width:44px;height:44px;border:0;margin:0 auto\"></a>\n<a href=\"https://wa.me/qr/5NK5SR22CXGNC1\" target=\"_blank\" style=\"display:block;margin-top:8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8f897e;text-decoration:none;white-space:nowrap\">WhatsApp UAE</a></td><td align=\"center\" valign=\"top\" class=\"soc\" style=\"padding:0 7px;width:72px\">\n<a href=\"https://wa.me/message/CVQVHBO3GXLZP1\" target=\"_blank\" style=\"text-decoration:none\"><img src=\"https://yachtresearchgroup.com/images/email/ic-whatsapp.png\" width=\"44\" height=\"44\" alt=\"WhatsApp FR\" style=\"display:block;width:44px;height:44px;border:0;margin:0 auto\"></a>\n<a href=\"https://wa.me/message/CVQVHBO3GXLZP1\" target=\"_blank\" style=\"display:block;margin-top:8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8f897e;text-decoration:none;white-space:nowrap\">WhatsApp FR</a></td><td align=\"center\" valign=\"top\" class=\"soc\" style=\"padding:0 7px;width:72px\">\n<a href=\"https://yachtresearchgroup.com\" target=\"_blank\" style=\"text-decoration:none\"><img src=\"https://yachtresearchgroup.com/images/email/ic-web.png\" width=\"44\" height=\"44\" alt=\"Website\" style=\"display:block;width:44px;height:44px;border:0;margin:0 auto\"></a>\n<a href=\"https://yachtresearchgroup.com\" target=\"_blank\" style=\"display:block;margin-top:8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8f897e;text-decoration:none;white-space:nowrap\">Website</a></td><td align=\"center\" valign=\"top\" class=\"soc\" style=\"padding:0 7px;width:72px\">\n<a href=\"https://linktr.ee/yacht_research\" target=\"_blank\" style=\"text-decoration:none\"><img src=\"https://yachtresearchgroup.com/images/email/ic-link.png\" width=\"44\" height=\"44\" alt=\"Linktree\" style=\"display:block;width:44px;height:44px;border:0;margin:0 auto\"></a>\n<a href=\"https://linktr.ee/yacht_research\" target=\"_blank\" style=\"display:block;margin-top:8px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8f897e;text-decoration:none;white-space:nowrap\">Linktree</a></td>\n</tr></table>\n</td></tr>\n<tr><td align=\"center\" style=\"padding:24px 20px 0\">\n<p style=\"margin:0 0 6px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:11px;color:#8f897e\">&copy; Yacht Research Group &middot; <a href=\"https://yachtresearchgroup.com\" style=\"color:#c9a84c;text-decoration:none\">yachtresearchgroup.com</a></p>\n<p style=\"margin:0;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:10px;color:#5f5a52\">You received this email because you contacted Yacht Research.</p>\n</td></tr>\n\n</table>\n</td></tr>\n</table>\n</body>\n</html>\n";
+var EMAIL_P_STYLE = "margin:0 0 18px;font-family:'Jost',Arial,Helvetica,sans-serif;font-size:15px;line-height:1.75;color:#cfc8bb";
+// </EMAIL-TEMPLATE>
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function emailP(html) { return '<p style="' + EMAIL_P_STYLE + '">' + html + '</p>'; }
+// o : subject, pre, eyebrow, t1, t2, hero, name, body (HTML), ctaLabel, ctaUrl
+function emailHtml(o) {
+  var v = { SUBJECT: o.subject, PRE: o.pre, EYEBROW: o.eyebrow, T1: o.t1, T2: o.t2, HERO: o.hero, NAME: o.name, BODY: o.body, CTA_LABEL: o.ctaLabel, CTA_URL: o.ctaUrl };
+  return EMAIL_TEMPLATE.replace(/%%(\w+)%%/g, function (m, k) { return v[k] != null ? v[k] : ''; });
 }
+function heroUrl(id) { return 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=1200&h=560&q=70&fm=jpg'; }
 
 // Résultats des appels Brevo de la requête en cours (renvoyés dans la réponse si debug=1, pour les tests)
 var BREVO_TRACE = [];
@@ -65,10 +69,22 @@ function sendBrevoEmail(toEmail, toName, subject, htmlContent, replyTo) {
 }
 
 // ─── AJOUT CONTACT BREVO ────────────────────────────────────
+// Renvoie 'new' (ajouté à la liste maintenant : la séquence Brevo part), 'already' (déjà dans la liste),
+// 'none' (pas de liste pour ce formulaire) ou 'error'
 function addToBrevo(formName, data) {
   try {
     var listId = BREVO_LIST_IDS[formName];
-    if (!listId) { Logger.log('No Brevo list for: ' + formName); return; }
+    if (!listId) { Logger.log('No Brevo list for: ' + formName); return 'none'; }
+    if (!BREVO_API_KEY) return 'error';
+    // Déjà dans la liste ? (alors Brevo ne relance pas la séquence)
+    var g = UrlFetchApp.fetch('https://api.brevo.com/v3/contacts/' + encodeURIComponent(data.email), {
+      headers: { 'api-key': BREVO_API_KEY }, muteHttpExceptions: true
+    });
+    var already = false;
+    if (g.getResponseCode() === 200) {
+      try { already = (JSON.parse(g.getContentText()).listIds || []).indexOf(listId) > -1; } catch (ex) {}
+    }
+    BREVO_TRACE.push('contact check → ' + g.getResponseCode() + (already ? ' (already in list ' + listId + ')' : ''));
     // Handle Newsletter (sends firstname/lastname) vs other forms (sends name)
     var firstName, lastName;
     if (data.firstname) {
@@ -99,8 +115,12 @@ function addToBrevo(formName, data) {
     BREVO_TRACE.push('contact list ' + listId + ' → ' + response.getResponseCode() + ' ' + response.getContentText().slice(0, 200));
     Logger.log('Brevo status: ' + response.getResponseCode());
     Logger.log('Brevo response: ' + response.getContentText());
+    if (response.getResponseCode() >= 300) return 'error';
+    return already ? 'already' : 'new';
   } catch(e) {
     Logger.log('Brevo error: ' + e);
+    BREVO_TRACE.push('contact error ' + e);
+    return 'error';
   }
 }
 
@@ -145,9 +165,11 @@ function doPost(e) {
     if (formName === 'Shared Experience Booking') {
       // Réservation payée sur le site : confirmation au client seulement si Xclusive l'a confirmée
       if (data.client_email && String(data.status || '').indexOf('CONFIRMED') === 0) sendBookingConfirmation(data);
-    } else {
-      if (data.email) sendConfirmationEmail(formName, data);
-      if (data.email) addToBrevo(formName, data);
+    } else if (data.email) {
+      var brevo = addToBrevo(formName, data);
+      // Séquence Brevo partie : son 1er e-mail suffit. Sinon (Newsletter, virement, ou Brevo en panne) : e-mail du script.
+      if (SEQUENCE_FORMS.indexOf(formName) < 0 || brevo !== 'new') sendConfirmationEmail(formName, data);
+      BREVO_TRACE.push('list: ' + brevo + ' / script confirmation: ' + (SEQUENCE_FORMS.indexOf(formName) < 0 || brevo !== 'new' ? 'sent' : 'skipped'));
     }
     var out = { status: 'success' };
     if (data.debug === '1') { out.form = formName; out.key = !!BREVO_API_KEY; out.brevo = BREVO_TRACE; }
@@ -165,7 +187,7 @@ function sendConfirmationEmail(formName, data) {
     'Contact Enquiry': {
       emoji: '⛵', subject: '📬 Your Enquiry | Yacht Research',
       intro: 'Thank you for reaching out to Yacht Research. We have received your enquiry and a member of our team will personally review it.',
-      body: 'You can expect to hear from us within <strong style="font-family:Arial,sans-serif;font-size:14px;">24 hours</strong>.<br><br>At Yacht Research, we work selectively with serious buyers, sellers, and charterers, providing discreet, expert guidance across Dubai, the French Riviera, and the Mediterranean.<br><br>In the meantime, feel free to explore our current listings and services at <a href="https://yachtresearchgroup.com" style="color:#c9a84c;font-family:Arial,sans-serif;font-size:14px;text-decoration:none;">yachtresearchgroup.com</a>, or reach out to us directly via WhatsApp for a faster response.',
+      body: 'You can expect to hear from us within <strong>24 hours</strong>.<br><br>At Yacht Research, we work selectively with serious buyers, sellers, and charterers, providing discreet, expert guidance across Dubai, the French Riviera, and the Mediterranean.<br><br>In the meantime, feel free to explore our current listings and services at <a href="https://yachtresearchgroup.com" style="color:#e6cf8a;text-decoration:none;">yachtresearchgroup.com</a>, or reach out to us directly via WhatsApp for a faster response.',
       closing: 'We look forward to assisting you in finding the perfect yacht.'
     },
     'Yacht Enquiry': {
@@ -204,66 +226,48 @@ function sendConfirmationEmail(formName, data) {
     emoji: '📬', subject: '📬 Message Received — Yacht Research',
     intro: 'Thank you for contacting Yacht Research.',
     body: 'We have received your message and will get back to you shortly.',
-    closing: 'Visit us at <a href="https://yachtresearchgroup.com" style="color:#c9a84c;">yachtresearchgroup.com</a>.'
+    closing: 'Visit us at <a href="https://yachtresearchgroup.com" style="color:#e6cf8a;">yachtresearchgroup.com</a>.'
   };
 
-  var html = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;">'
-    + '<div style="background:#0a0f1e;padding:40px 32px;text-align:center;">'
-    + '<p style="color:#c9a84c;font-size:10px;letter-spacing:5px;text-transform:uppercase;margin:0 0 12px;">Yacht Research</p>'
-    + '<h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:300;font-family:Georgia,serif;">The Art of Effortless Yachting</h1>'
-    + '<div style="width:40px;height:1px;background:#c9a84c;margin:20px auto 0;"></div>'
-    + '</div>'
-    + '<div style="background:#ffffff;padding:40px 32px;">'
-    + '<p style="color:#0a0f1e;font-size:16px;margin:0 0 16px;">Dear ' + firstName + ',</p>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 16px;">' + msg.intro + '</p>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 16px;">' + msg.body + '</p>'
-    + '<div style="width:40px;height:1px;background:#c9a84c;margin:28px 0;"></div>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 32px;">' + msg.closing + '</p>'
-    + '<div style="text-align:center;"><a href="https://yachtresearchgroup.com" style="background:#c9a84c;color:#0a0f1e;padding:14px 36px;text-decoration:none;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;display:inline-block;">Visit Our Website</a></div>'
-    + '</div>'
-    + '<div style="background:#f8f6f1;padding:28px 32px;border-top:1px solid #e0e0e0;">'
-    + '<p style="color:#0a0f1e;font-size:14px;margin:0 0 4px;">Warm regards,</p>'
-    + '<p style="color:#0a0f1e;font-size:15px;margin:0 0 2px;font-family:Georgia,serif;">The Yacht Research Team</p>'
-    + '<p style="color:#c9a84c;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin:4px 0 0;">Dubai · French Riviera · Mediterranean</p>'
-    + '</div>'
-    + getSocialFooter()
-    + '</div>';
+  // Présentation de chaque e-mail : rubrique, titre (normal / italique doré), photo, bouton
+  var SITE = 'https://yachtresearchgroup.com';
+  var looks = {
+    'Contact Enquiry':         ['Your enquiry', 'We have received', 'your enquiry', 'photo-1562281302-809108fd533c', 'Explore our yachts', SITE + '/listings'],
+    'Yacht Enquiry':           ['Your yacht enquiry', 'Thank you for', 'your enquiry', 'photo-1562281302-809108fd533c', 'Explore our yachts', SITE + '/listings'],
+    'Partnership Inquiry':     ['Partnership enquiry', 'Thank you for', 'your interest', 'photo-1752884991178-c767ae83fb6b', 'Discover our partnerships', SITE + '/partnerships'],
+    'Recruitment Application': ['Your application', 'Application', 'received', 'photo-1722502831572-2d12e8f30c59', 'Visit our website', SITE],
+    'Newsletter':              ['Newsletter', 'Welcome to', 'our newsletter', 'photo-1567899378494-47b22a2ae96a', 'Explore our yachts', SITE + '/listings'],
+    'Bank Transfer Request':   ['Bank transfer', 'Request', 'received', 'photo-1722502831572-2d12e8f30c59', 'See our experiences', SITE + '/shared-experiences']
+  };
+  var l = looks[formName] || ['Your message', 'Message', 'received', 'photo-1562281302-809108fd533c', 'Visit our website', SITE];
 
+  var body = [msg.intro].concat(msg.body.split('<br><br>')).concat([msg.closing]).map(emailP).join('');
+  var html = emailHtml({
+    subject: msg.subject.replace(/^\S+\s/, ''), pre: msg.intro, eyebrow: l[0], t1: l[1], t2: l[2], hero: heroUrl(l[3]),
+    name: esc((data.name || 'there').split(' ')[0]), body: body, ctaLabel: l[4], ctaUrl: l[5]
+  });
   sendBrevoEmail(data.email, data.name || '', msg.subject, html);
 }
 
 // ─── CONFIRMATION DE RÉSERVATION (sorties partagées payées sur le site) ────
 // Aux couleurs de Yacht Research, sans mention de l'opérateur
 function sendBookingConfirmation(data) {
-  var esc = function (s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-  var firstName = esc((data.name || 'there').split(' ')[0]);
   var paid = Number(data.paid_aed || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-  var row = function (k, v) { return '<tr><td style="padding:10px 0;color:#888;font-size:13px;border-bottom:1px solid #eee;">' + k + '</td><td style="padding:10px 0;color:#0a0f1e;font-size:14px;text-align:right;border-bottom:1px solid #eee;">' + v + '</td></tr>'; };
-  var html = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;">'
-    + '<div style="background:#0a0f1e;padding:40px 32px;text-align:center;">'
-    + '<p style="color:#c9a84c;font-size:10px;letter-spacing:5px;text-transform:uppercase;margin:0 0 12px;">Yacht Research</p>'
-    + '<h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:300;font-family:Georgia,serif;">Your booking is confirmed</h1>'
-    + '<div style="width:40px;height:1px;background:#c9a84c;margin:20px auto 0;"></div>'
-    + '</div>'
-    + '<div style="background:#ffffff;padding:40px 32px;">'
-    + '<p style="color:#0a0f1e;font-size:16px;margin:0 0 16px;">Dear ' + firstName + ',</p>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 24px;">Thank you for booking with Yacht Research. Your experience is confirmed. Here are the details:</p>'
-    + '<table style="width:100%;border-collapse:collapse;margin:0 0 28px;">'
+  var row = function (k, v) { return '<tr><td style="padding:12px 0;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;border-bottom:1px solid #2a2519;">' + k + '</td><td style="padding:12px 0;font-family:Arial,sans-serif;font-size:14px;color:#f3eee4;text-align:right;border-bottom:1px solid #2a2519;">' + v + '</td></tr>'; };
+  var body = emailP('Thank you for booking with Yacht Research. Your experience is confirmed. Here are the details:')
+    + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;border-top:1px solid #2a2519;">'
     + row('Experience', esc(data.product))
     + row('Date', esc(data.date) + ' at ' + esc(data.time) + ' (Dubai time)')
     + row('Guests', esc(data.guests))
     + row('Total paid', 'AED ' + esc(paid))
     + '</table>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 16px;">Our team will send you the meeting point and final details before your experience. Please bring a valid ID for each guest.</p>'
-    + '<p style="color:#555;font-size:14px;line-height:1.8;margin:0 0 32px;">For any question or change, simply reply to this email.</p>'
-    + '<div style="text-align:center;"><a href="https://yachtresearchgroup.com/charter" style="background:#c9a84c;color:#0a0f1e;padding:14px 36px;text-decoration:none;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;display:inline-block;">Discover our charters</a></div>'
-    + '</div>'
-    + '<div style="background:#f8f6f1;padding:28px 32px;border-top:1px solid #e0e0e0;">'
-    + '<p style="color:#0a0f1e;font-size:14px;margin:0 0 4px;">Warm regards,</p>'
-    + '<p style="color:#0a0f1e;font-size:15px;margin:0 0 2px;font-family:Georgia,serif;">The Yacht Research Team</p>'
-    + '</div>'
-    + getSocialFooter()
-    + '</div>';
+    + emailP('Our team will send you the meeting point and final details before your experience. Please bring a valid ID for each guest.')
+    + emailP('For any question or change, simply reply to this email.');
+  var html = emailHtml({
+    subject: 'Booking confirmed', pre: 'Your experience is confirmed: ' + esc(data.product) + ', ' + esc(data.date) + '.',
+    eyebrow: 'Booking confirmed', t1: 'Your booking', t2: 'is confirmed', hero: heroUrl('photo-1722502831572-2d12e8f30c59'),
+    name: esc((data.name || 'there').split(' ')[0]), body: body, ctaLabel: 'Discover our charters', ctaUrl: 'https://yachtresearchgroup.com/charter'
+  });
   sendBrevoEmail(data.client_email, data.name || '', '⛵ Booking confirmed | ' + (data.product || 'Yacht Research'), html);
 }
 

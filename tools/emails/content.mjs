@@ -9,6 +9,21 @@ export const AUTOMATIONS = [
   { list: 'Yacht Enquiry (#5)', name: 'Automation 1 - Yacht Enquiry', emails: ['yacht-1', 'yacht-2', 'yacht-3', 'yacht-4', 'yacht-5'], waits: ['', '2 days', '2 days', '2 days', '2 days'] },
 ];
 
+// Bloc « Discover Yacht Research » en bas de chaque e-mail (textes repris des cartes de l'accueil du site)
+const T = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=560&h=360&q=70&fm=jpg`;
+export const EXPLORE = [
+  { eyebrow: 'Dubai · By the seat', title: 'Shared experiences', url: '/shared-experiences', img: '/images/email/experiences.jpg',
+    text: 'Superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties. Book your seats, no need to charter a whole yacht.', link: 'See the experiences' },
+  { eyebrow: 'Charter', title: 'Charter', url: '/charter', img: T('photo-1672939113905-b02ef5db7203'),
+    text: 'Day, weekly and hourly charters with hand-picked crews, at B2B rates.', link: 'Plan a charter' },
+  { eyebrow: 'Worldwide · Private aviation', title: 'Private Jet', url: '/private-jet', img: T('photo-1474302770737-173ee21bab63'),
+    text: 'Private jets, empty legs and private flights anywhere in the world, booked through our global network.', link: 'Fly private' },
+  { eyebrow: 'Buy · Sell', title: 'Yachts for sale', url: '/listings', img: T('photo-1567899378494-47b22a2ae96a'),
+    text: 'Off-market search, survey, sea trial and negotiation. We find the right yacht, not simply the first one available.', link: 'See the yachts' },
+];
+export const YCA = { url: '/yacht-club-academy', kicker: 'Also founded by Mathis &amp; Antoine', link: 'Discover the academy',
+  text: 'Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.' };
+
 export const EMAILS = {
   'contact-1': {
     subject: '📬 We Have Received Your Enquiry | Yacht Research',
