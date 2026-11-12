@@ -229,6 +229,13 @@
     });
   });
 
+  // ---------- Lien vers une section d'une autre page (ex. /contact#newsletter) : on y descend bien à l'arrivée ----------
+  if (location.hash.length > 1) {
+    var hashGo = function(){ var t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView({ behavior: 'auto', block: 'start' }); };
+    setTimeout(hashGo, 60); // tout de suite, puis encore une fois quand les images ont fini de charger
+    if (document.readyState !== 'complete') window.addEventListener('load', function(){ setTimeout(hashGo, 60); });
+  }
+
   // ---------- Lien actif dans le menu ----------
   var here = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
   var crumb = $('.yp-crumb a + a, .lx-crumb a + a');
