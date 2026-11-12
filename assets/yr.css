@@ -934,3 +934,9 @@ html.lb-lock,html.lb-lock body{overflow:hidden!important;overscroll-behavior:non
 .nav-links a.active{color:var(--cream)}
 .split-words .acc .wd>span,.acc{padding-bottom:.32em}
 @media(min-width:641px){.lightbox img{max-width:calc(100vw - 190px);max-height:84vh}}
+
+/* Bateau vendu : étiquette « Sold » pleine (crème sur noir), photo un peu atténuée */
+.card-sold .tag,.lx-sale .yp-tag.is-sold{background:var(--cream);color:#070707;border-color:var(--cream)}
+.card-sold .ph img{filter:saturate(.75) brightness(.85)}
+.card-sold .price{color:var(--gold-l)}
+.yp-sold .yp-same{margin:4px 0 6px;color:rgba(243,238,228,.82);line-height:1.6}

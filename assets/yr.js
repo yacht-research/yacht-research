@@ -97,6 +97,7 @@
   function badgeLabel(b, type){
     b = (b || '').toLowerCase();
     if (type === 'charter') return 'Charter';
+    if (b.indexOf('sold') > -1) return 'Sold';
     if (b.indexOf('exclusive') > -1) return 'Exclusive price';
     if (b.indexOf('reduc') > -1 || b.indexOf('price') > -1) return 'Price reduced';
     if (b.indexOf('off') > -1) return 'Off market';
@@ -120,9 +121,10 @@
       '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
       (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
       (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
-    var price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
-    return '<a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
-      '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
+    var sold = y.type !== 'charter' && /sold/i.test(y.badge || '');
+    var price = sold ? 'Sold · Want the same?' : y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
+    return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
+      '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : sold ? ' sold' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
       (y.photos ? '<button type="button" class="ph-nav prev" aria-label="Previous photo">‹</button><button type="button" class="ph-nav next" aria-label="Next photo">›</button><span class="ph-count"><b>1</b>/' + y.photos.length + '</span>' : '') + '</div>' +
       '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y) + '</h4>' + specs +
       '<div class="price">' + price + ' <i>→</i></div></div></a>';
@@ -165,6 +167,7 @@
       targets.forEach(function(el){
         var ex = el.dataset.exclude || '';
         var list = data.yachts.filter(function(y){ return y.type === el.dataset.yachts && y.slug !== ex; });
+        list.sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); }); // vendus à la fin
         var lim = +el.dataset.limit || list.length;
         if (!list.length) return;
         el.innerHTML = list.slice(0, lim).map(card).join('');
@@ -270,7 +273,9 @@
         return true;
       });
       var k = st.sort;
+      var isSold = function(y){ return /sold/i.test(y.badge || '') ? 1 : 0; };
       list.sort(function(a, b){
+        if (isSold(a) !== isSold(b)) return isSold(a) - isSold(b); // les bateaux vendus toujours à la fin
         if (k === 'price-asc') return (a.price_eur || 9e15) - (b.price_eur || 9e15);
         if (k === 'year-desc') return yearN(b.year) - yearN(a.year);
         if (k === 'length-desc') return lenM(b.length) - lenM(a.length);
