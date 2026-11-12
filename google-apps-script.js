@@ -23,7 +23,7 @@ const BREVO_LIST_IDS = {
   'Yacht Enquiry':     5,
   'Partnership Inquiry': 4,
   // Demandes d'expériences partagées (horaire choisi sur /shared-experiences) : liste « Shared Experience Enquiry »
-  'Shared Experience Enquiry': null, // ← remplacer null par l'ID de la nouvelle liste Brevo
+  'Shared Experience Enquiry': 12,
 };
 
 // Formulaires qui ont une séquence Brevo : le 1er e-mail de la séquence remplace la confirmation du script.
