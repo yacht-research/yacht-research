@@ -159,7 +159,7 @@ function renderYachtPage(y, slug, base, origin) {
     '</main>' + calloutHTML +
     '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + specsHTML.replace('<section class="yp-sec">', '<section class="yp-sec yp-specs-in">') + '</div>' +
     (sold
-      ? '<aside class="yp-card yp-sold rv"><p class="eyebrow">Sold by Yacht Research</p><p class="yp-price">Sold</p><p class="yp-note">This yacht has found its new owner.</p>' +
+      ? '<aside class="yp-card yp-sold rv"><p class="eyebrow">Asking price</p>' + (y.price ? '<p class="yp-was">' + esc(y.price) + '</p>' : '') + '<p class="yp-price">Sold</p><p class="yp-note">This yacht has been sold.</p>' +
         '<p class="yp-same">Contact us if you want the same: we search on-market and off-market for a similar yacht, in confidence.</p>' +
         '<a href="/yacht-research-form?project=buy&yacht=' + encodeURIComponent('Looking for the same as ' + title) + '" class="btn btn-gold">Find me the same <i>→</i></a>' +
         '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' +
