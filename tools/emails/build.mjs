@@ -120,7 +120,7 @@ b,strong{color:${C.cream};font-weight:600}
 <!-- Carte -->
 <tr><td bgcolor="${C.card}" style="background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero}" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:18px 18px 0 0"></td></tr>` : ''}
+${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero.startsWith('/') ? base + e.hero : e.hero}" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:18px 18px 0 0"></td></tr>` : ''}
 <tr><td class="px" style="padding:40px 48px 8px">
 <p style="margin:0 0 16px;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:${C.gold}">${e.eyebrow}</p>
 <h1 class="h1" style="margin:0 0 26px;font-family:${SANS};font-size:36px;line-height:1.08;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${e.title[0]} <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:40px;text-transform:none;letter-spacing:0;color:${C.goldL}">${e.title[1]}</em></h1>

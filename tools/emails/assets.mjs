@@ -32,4 +32,8 @@ await sharp(fs.readFileSync(path.join(SITE_DIR, 'images/brand/yca-logo-white.svg
 await sharp(fs.readFileSync(path.join(SITE_DIR, 'images/experiences/superyacht-experience/01.webp')))
   .resize({ width: 560, height: 360, fit: 'cover' }).jpeg({ quality: 74, mozjpeg: true }).toFile(path.join(OUT, 'experiences.jpg'));
 
+// Grande photo d'en-tête de la séquence « expériences »
+await sharp(fs.readFileSync(path.join(SITE_DIR, 'images/experiences/superyacht-experience/01.webp')))
+  .resize({ width: 1200, height: 560, fit: 'cover' }).jpeg({ quality: 72, mozjpeg: true }).toFile(path.join(OUT, 'experiences-hero.jpg'));
+
 console.log('✓ images/email :', fs.readdirSync(OUT).join(', '));

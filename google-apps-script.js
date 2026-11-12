@@ -22,12 +22,14 @@ const BREVO_LIST_IDS = {
   'Contact Enquiry':   3,
   'Yacht Enquiry':     5,
   'Partnership Inquiry': 4,
+  // Demandes d'expériences partagées (horaire choisi sur /shared-experiences) : liste « Shared Experience Enquiry »
+  'Shared Experience Enquiry': null, // ← remplacer null par l'ID de la nouvelle liste Brevo
 };
 
 // Formulaires qui ont une séquence Brevo : le 1er e-mail de la séquence remplace la confirmation du script.
 // Le script n'envoie sa confirmation qu'en SECOURS (Brevo n'a pas répondu, ou le contact était déjà dans la liste
 // et la séquence ne repartira pas).
-const SEQUENCE_FORMS = ['Contact Enquiry', 'Yacht Enquiry', 'Partnership Inquiry'];
+const SEQUENCE_FORMS = ['Contact Enquiry', 'Yacht Enquiry', 'Partnership Inquiry', 'Shared Experience Enquiry'];
 
 // ─── GABARIT DES E-MAILS (noir et or, comme le site) ─────────
 // <EMAIL-TEMPLATE> (généré par tools/emails/build.mjs : ne pas modifier à la main)
@@ -219,6 +221,12 @@ function sendConfirmationEmail(formName, data) {
       intro: 'Thank you for choosing to pay your experience by bank transfer. We have received your request.',
       body: 'A member of our team will send you our bank details shortly. Your seats are confirmed once the transfer is received.<br><br>For any question, you can reply to this email or contact us directly via WhatsApp.',
       closing: 'We look forward to welcoming you on board.'
+    },
+    'Shared Experience Enquiry': {
+      emoji: '🛥️', subject: '🛥️ Your Experience Request | Yacht Research',
+      intro: 'Thank you for your request for <strong>' + esc(data.experience || 'a shared yacht experience in Dubai') + '</strong>. We have received it.',
+      body: 'A member of our team will check availability for you and confirm your seats directly by WhatsApp or email within <strong>24 hours</strong>.<br><br>For a faster answer, you can also message us on WhatsApp.',
+      closing: 'We look forward to welcoming you on board in Dubai.'
     }
   };
 
@@ -237,7 +245,8 @@ function sendConfirmationEmail(formName, data) {
     'Partnership Inquiry':     ['Partnership enquiry', 'Thank you for', 'your interest', 'photo-1752884991178-c767ae83fb6b', 'Discover our partnerships', SITE + '/partnerships'],
     'Recruitment Application': ['Your application', 'Application', 'received', 'photo-1722502831572-2d12e8f30c59', 'Visit our website', SITE],
     'Newsletter':              ['Newsletter', 'Welcome to', 'our newsletter', 'photo-1567899378494-47b22a2ae96a', 'Explore our yachts', SITE + '/listings'],
-    'Bank Transfer Request':   ['Bank transfer', 'Request', 'received', 'photo-1722502831572-2d12e8f30c59', 'See our experiences', SITE + '/shared-experiences']
+    'Bank Transfer Request':   ['Bank transfer', 'Request', 'received', 'photo-1722502831572-2d12e8f30c59', 'See our experiences', SITE + '/shared-experiences'],
+    'Shared Experience Enquiry': ['Shared experience', 'Request', 'received', 'photo-1722502831572-2d12e8f30c59', 'See all experiences', SITE + '/shared-experiences']
   };
   var l = looks[formName] || ['Your message', 'Message', 'received', 'photo-1562281302-809108fd533c', 'Visit our website', SITE];
 
@@ -284,6 +293,7 @@ function saveToSheet(formName, data) {
     'Partnership Inquiry':     ['Date','name','company','role','country','email','phone','message'],
     'Recruitment Application': ['Date','name','position','email','experience'],
     'Bank Transfer Request':   ['Date','name','phone','email','type','message'],
+    'Shared Experience Enquiry': ['Date','name','phone','email','experience','country','message'],
     'Shared Experience Booking': ['Date','status','product','date','time','guests','name','phone','client_email','paid_aed','card_fee_aed','b2b_aed','margin_aed','stripe_session'],
   };
   var norm = function (h) { return String(h).trim().toLowerCase().replace(/ /g, '_'); };
@@ -335,7 +345,7 @@ function saveToSheet(formName, data) {
 
 // ─── EMAIL ADMIN ─────────────────────────────────────────────
 function sendAdminEmail(formName, data) {
-  var emojis = {'Contact Enquiry':'📬','Yacht Enquiry':'⛵','Partnership Inquiry':'🤝','Recruitment Application':'💼','Newsletter':'📩','Bank Transfer Request':'🏦','Shared Experience Booking':'🎟️'};
+  var emojis = {'Contact Enquiry':'📬','Yacht Enquiry':'⛵','Partnership Inquiry':'🤝','Recruitment Application':'💼','Newsletter':'📩','Bank Transfer Request':'🏦','Shared Experience Enquiry':'🛥️','Shared Experience Booking':'🎟️'};
   var tag = emojis[formName] || '📬';
   var rows = '';
   var keys = Object.keys(data);
