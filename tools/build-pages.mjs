@@ -909,6 +909,14 @@ for (const p of pages) {
   console.log('✓ ' + p.file);
 }
 
+// Page 404 : sans elle, Cloudflare renvoie l'accueil (code 200) pour une adresse inconnue,
+// ce que Google voit comme des doublons et ce qui peut rester en cache à la place d'une image pas encore publiée
+fs.writeFileSync(path.join(SITE, '404.html'), page({
+  file: '404.html', canonical: '/', title: 'Page not found | Yacht Research', desc: 'This page does not exist or has moved.',
+  body: `<section style="min-height:80vh;display:grid;place-items:center;text-align:center"><div><p class="eyebrow">404</p><h1 class="t-l" style="margin:22px 0">This page is <span class="acc">no longer here</span></h1><p class="lead" style="margin:0 auto 30px;max-width:520px">The page you are looking for does not exist or has moved.</p><div class="ctas" style="justify-content:center"><a href="/" class="btn btn-gold">Back to home <i>→</i></a><a href="/listings" class="btn btn-ghost">View yachts</a></div></div></section>`
+}).replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex">').replace(/<link rel="canonical"[^>]*>\n?/, ''), 'utf8');
+console.log('✓ 404.html');
+
 // lib/shell.js pour la fonction /yacht/<slug>
 fs.writeFileSync(path.join(SITE, 'lib', 'shell.js'),
   '// En-tête, pied de page et ressources communs (généré par tools/build-pages.mjs : ne pas modifier à la main)\n' +
