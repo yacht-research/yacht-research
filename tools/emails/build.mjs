@@ -60,13 +60,14 @@ function explore(base) {
 <!-- Yacht Club Academy -->
 <tr><td class="px" style="padding:0 48px 36px">
 <a href="${SITE}${YCA.url}" target="_blank" style="text-decoration:none;display:block">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ${C.line};border-radius:14px;background:${C.card2}"><tr>
-<td class="yca-l" width="120" align="center" valign="middle" style="padding:22px 6px 22px 22px"><img src="${base}/images/email/yca-logo.png" width="96" alt="Yacht Club Academy" style="display:block;width:96px;height:auto;border:0"></td>
-<td class="yca-r" valign="middle" style="padding:20px 22px">
-<p style="margin:0 0 4px;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:${C.gold}">${YCA.kicker}</p>
-<p style="margin:0 0 6px;font-family:${SERIF};font-style:italic;font-weight:500;font-size:22px;color:${C.cream}">Yacht Club Academy</p>
-<p style="margin:0 0 8px;font-family:${SANS};font-size:13px;line-height:1.6;color:${C.text}">${YCA.text}</p>
-<p style="margin:0;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:${C.goldL}">${YCA.link} &rarr;</p>
+<!-- Couleurs de la carte YCA de l'accueil (bleu nuit, bleu clair, bouton blanc) -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0B2D6B" style="border:1px solid #3a5a8f;border-radius:14px;background:#0B2D6B;background-image:radial-gradient(ellipse at 80% 0%,#1E4D96 0%,#0B2D6B 38%,#01163C 78%)"><tr>
+<td style="padding:28px 28px 30px">
+<img src="${base}/images/email/yca-logo.png" width="88" alt="Yacht Club Academy" style="display:block;width:88px;height:auto;border:0;margin:0 0 18px">
+<p style="margin:0 0 12px;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:#A9C1EA">${YCA.kicker}</p>
+<p style="margin:0 0 12px;font-family:${SANS};font-size:28px;line-height:1.05;font-weight:800;text-transform:uppercase;color:#F8F9FA">Yacht Club <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:31px;text-transform:none;color:#A9C1EA">Academy</em></p>
+<p style="margin:0 0 20px;font-family:${SANS};font-size:14px;line-height:1.7;color:#d9dee7">${YCA.text}</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#F8F9FA" style="border-radius:999px;background:#F8F9FA;padding:13px 22px;font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#01163C">${YCA.link} &rarr;</td></tr></table>
 </td></tr></table></a>
 </td></tr>`;
 }
@@ -119,7 +120,7 @@ b,strong{color:${C.cream};font-weight:600}
 <!-- Carte -->
 <tr><td bgcolor="${C.card}" style="background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero}" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:18px 18px 0 0"></td></tr>` : ''}
+${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero.startsWith('/') ? base + e.hero : e.hero}" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:18px 18px 0 0"></td></tr>` : ''}
 <tr><td class="px" style="padding:40px 48px 8px">
 <p style="margin:0 0 16px;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:${C.gold}">${e.eyebrow}</p>
 <h1 class="h1" style="margin:0 0 26px;font-family:${SANS};font-size:36px;line-height:1.08;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${e.title[0]} <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:40px;text-transform:none;letter-spacing:0;color:${C.goldL}">${e.title[1]}</em></h1>

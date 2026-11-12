@@ -37,7 +37,8 @@
   daysEl.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(function (k) { var d = dubaiDate(k); return '<button type="button" data-d="' + d + '">' + label(d, k) + '</button>'; }).join('');
   daysEl.querySelectorAll('button').forEach(function (b) { b.onclick = function () { dateIn.value = b.dataset.d; load(); }; });
 
-  function enquireHref(title, dep) { return '/yacht-research-form?project=charter&yacht=' + encodeURIComponent(title + ' · ' + dep.date + ' ' + dep.time); }
+  // project=experience : la demande part comme « Shared Experience Enquiry » (son onglet, sa liste Brevo, sa séquence)
+  function enquireHref(title, dep) { return '/yacht-research-form?project=experience&yacht=' + encodeURIComponent(title + ' · ' + dep.date + ' ' + dep.time); }
 
   // Remplit une carte avec ses départs du jour
   function fill(card, title, deps) {
@@ -96,7 +97,7 @@
       cards.forEach(function (c) {
         c.querySelector('[data-slots]').innerHTML = '';
         c.querySelector('[data-price]').innerHTML = c.dataset.from ? '<small>From</small> ' + aed(c.dataset.from) + ' <small>per guest</small>' : '';
-        c.querySelector('[data-cta]').innerHTML = '<a class="btn btn-gold" href="/yacht-research-form?project=charter&yacht=' + encodeURIComponent(c.dataset.title) + '">Enquire <i>→</i></a>';
+        c.querySelector('[data-cta]').innerHTML = '<a class="btn btn-gold" href="/yacht-research-form?project=experience&yacht=' + encodeURIComponent(c.dataset.title) + '">Enquire <i>→</i></a>';
       });
     });
   }

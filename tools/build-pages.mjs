@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '31'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '32'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -694,7 +694,7 @@ pages.push({
   var cards = document.querySelectorAll('.pcard');
   function pick(c){ cards.forEach(function(x){ x.classList.remove('on'); }); c.classList.add('on'); selected = c.dataset.value; document.getElementById('msg-1').textContent = ''; }
   cards.forEach(function(c){ c.addEventListener('click', function(){ pick(c); }); });
-  var map = { buy: 'Yacht Acquisition', sell: 'Sell Your Yacht', charter: 'Charter', partnership: 'Partnership', referral: 'Referral Programme', bespoke: 'Bespoke Services' };
+  var map = { buy: 'Yacht Acquisition', sell: 'Sell Your Yacht', charter: 'Charter', experience: 'Charter', partnership: 'Partnership', referral: 'Referral Programme', bespoke: 'Bespoke Services' };
   if (map[preProject]) cards.forEach(function(c){ if (c.dataset.value === map[preProject]) pick(c); });
   if (preYacht && !selected) cards.forEach(function(c){ if (c.dataset.value === 'Yacht Acquisition') pick(c); });
 
@@ -742,8 +742,11 @@ pages.push({
     var fname = v('fname').trim(), lname = v('lname').trim(), email = v('email').trim();
     if (!fname || !email) { msg.textContent = 'Please fill in your name and email address.'; return; }
     var formName = (selected === 'Partnership' || selected === 'Referral Programme') ? 'Partnership Inquiry' : 'Yacht Enquiry';
+    // Venu d'un horaire d'expérience et toujours sur « Charter » : demande d'expérience (son onglet et sa séquence)
+    var isXp = preProject === 'experience' && selected === 'Charter';
+    if (isXp) formName = 'Shared Experience Enquiry';
     var params = new URLSearchParams({
-      website: v('honeypot'), form_name: formName,
+      website: v('honeypot'), form_name: formName, experience: isXp ? preYacht : '',
       name: fname + ' ' + lname, email: email, phone: v('phone').trim(), country: v('country').trim(),
       type: selected, budget: formData.budget || '', yacht_type: formData.yacht_type || '', market: formData.market || '',
       company: formData.company || '', role: formData.role || '', message: formData.message || '',

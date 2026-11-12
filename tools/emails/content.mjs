@@ -7,6 +7,7 @@ export const AUTOMATIONS = [
   { list: 'Contact Enquiry (#3)', name: 'Automation 3 - Contact Enquiry', emails: ['contact-1', 'contact-2', 'contact-3'], waits: ['', '2 days', '3 days'] },
   { list: 'Partnership Inquiry (#4)', name: 'Automation 2 - Partnership Inquiry', emails: ['partner-1', 'partner-2', 'partner-3'], waits: ['', '2 days', '3 days'] },
   { list: 'Yacht Enquiry (#5)', name: 'Automation 1 - Yacht Enquiry', emails: ['yacht-1', 'yacht-2', 'yacht-3', 'yacht-4', 'yacht-5'], waits: ['', '2 days', '2 days', '2 days', '2 days'] },
+  { list: 'Shared Experience Enquiry (nouvelle)', name: 'Automation 4 - Shared Experience Enquiry', emails: ['xp-1', 'xp-2', 'xp-3'], waits: ['', '2 days', '3 days'] },
 ];
 
 // Bloc « Discover Yacht Research » en bas de chaque e-mail (textes repris des cartes de l'accueil du site)
@@ -127,6 +128,39 @@ export const EMAILS = {
       ['International network', 'Our broker network spans Dubai, the French Riviera, Monaco, and beyond, giving us access to opportunities that are simply not available through single-market brokerages.'],
       ['End-to-end service', 'From the initial brief to post-purchase support, we remain your trusted point of contact throughout the transaction and beyond.']],
     cta: ['Contact our team', SITE + '/contact'],
+  },
+  // Séquence « expériences partagées » (nouvelle, 12/11/2026) : faits repris des pages du site (prix « à partir de », durées, annulation 48 h)
+  'xp-1': {
+    subject: '🛥️ We Have Received Your Experience Request',
+    preheader: 'We are checking availability and will confirm your seats by WhatsApp or email.',
+    eyebrow: 'Shared experience', title: ['Your request', 'is with us'], hero: '/images/email/experiences-hero.jpg',
+    paras: ['Thank you for your request for a shared yacht experience in Dubai. A member of our team is checking availability for your date and time, and will confirm your seats with you directly by WhatsApp or email within <b>24 hours</b>.',
+      'For a faster answer, you can message us on WhatsApp at any time.'],
+    sections: [
+      ['Free cancellation', 'Free cancellation up to 48 hours before departure. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.'],
+      ['On the day', 'We send you the meeting point and final details before your experience. Please bring a valid ID for each guest.']],
+    cta: ['See all experiences', SITE + '/shared-experiences'], whatsapp: true,
+  },
+  'xp-2': {
+    subject: '🛥️ More Ways to Enjoy Dubai From the Water',
+    preheader: 'Superyacht days, sunset dinner cruises, yacht tours with BBQ and night parties.',
+    eyebrow: 'Shared experiences', title: ['Dubai', 'from the water'], hero: U('photo-1722502831572-2d12e8f30c59'),
+    paras: ['Whether you have already sailed with us or are still choosing your date, here are some of the shared experiences you can book by the seat in Dubai, with no need to charter a whole yacht.'],
+    sections: [
+      ['Superyacht day on Stardom', '3 hours from Dubai Harbour on board a superyacht. From AED 371 per guest.'],
+      ['Sunset and dinner cruise', '1 h 30 from Dubai Marina at sunset, with dinner on board. From AED 170 per guest.'],
+      ['Dubai Marina yacht tour with BBQ', '2 to 3 hours from Dubai Marina with a BBQ on board. From AED 170 per guest.'],
+      ['Night yacht party', '4 hours from Dubai Marina. From AED 290 per guest.']],
+    cta: ['Choose your experience', SITE + '/shared-experiences'],
+  },
+  'xp-3': {
+    subject: '🛥️ The Yacht to Yourselves',
+    preheader: 'Private charters in Dubai, with hand-picked crews at B2B rates.',
+    eyebrow: 'Private charter', title: ['The yacht', 'to yourselves'], hero: U('photo-1567899378494-47b22a2ae96a'),
+    paras: ['Shared experiences are the easiest way to get on the water. If you would rather have the yacht to yourselves, we also arrange private charters in Dubai.',
+      'Day, weekly and hourly charters with hand-picked crews, at B2B rates. We select the yacht, the crew and the itinerary around you.'],
+    sections: [['Tell us your date', 'Send us your date, timing and number of guests by WhatsApp or through our website, and we reply within 24 hours, in English or French, with availability and a tailored quote.']],
+    cta: ['See our charters in Dubai', SITE + '/charter?location=Dubai'], whatsapp: true,
   },
   'yacht-5': {
     subject: '⛵ Ready to Move Forward?',
