@@ -1,0 +1,7 @@
+# Outils locaux : jamais publiés
+node_modules/
+tools/brochures/node_modules/
+.wrangler/
+# Variables locales (jamais publiees)
+.dev.vars
+partner-api-openapi.json

@@ -11,17 +11,32 @@ export async function onRequest(context) {
     { url: '/', priority: '1.0', changefreq: 'weekly' },
     { url: '/listings', priority: '0.9', changefreq: 'weekly' },
     { url: '/charter', priority: '0.9', changefreq: 'weekly' },
+    { url: '/shared-experiences', priority: '0.9', changefreq: 'daily' },
+    ...['superyacht-experience', 'sunseeker-experience', 'yacht-tour-bbq', 'breakfast-yacht-tour', 'dinner-cruise', 'yacht-party', 'harbour-bbq-tour', 'harbour-tour', 'marina-tour', 'speedboat-tour', 'ain-cruise']
+      .map(id => ({ url: '/shared-experiences/' + id, priority: '0.8', changefreq: 'weekly' })),
     { url: '/why-us', priority: '0.8', changefreq: 'monthly' },
     { url: '/bespoke', priority: '0.8', changefreq: 'monthly' },
+    { url: '/private-jet', priority: '0.7', changefreq: 'monthly' },
+    { url: '/yacht-club-academy', priority: '0.7', changefreq: 'monthly' },
     { url: '/partnerships', priority: '0.7', changefreq: 'monthly' },
+  { url: '/contact', priority: '0.7', changefreq: 'monthly' },
     { url: '/recruitment', priority: '0.6', changefreq: 'monthly' },
     { url: '/yacht-research-form', priority: '0.9', changefreq: 'weekly' },
     { url: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
   ];
 
-  // Single GitHub API call — no per-yacht requests to avoid rate limit
-  var yachtSlugs = [];
+  // 1) Index généré au build (seulement les yachts publiés, avec date de mise à jour)
+  var yachtSlugs = [], lastmods = {};
   try {
+    var idx = await context.env.ASSETS.fetch(new URL('/content/yachts/index.json', context.request.url));
+    if (idx.ok) {
+      var data = await idx.json();
+      (data.yachts || []).forEach(function (y) { yachtSlugs.push(y.slug); if (y.updated) lastmods[y.slug] = y.updated; });
+    }
+  } catch (e) {}
+
+  // 2) Secours : ancienne méthode (API GitHub) si l'index n'existe pas encore
+  if (!yachtSlugs.length) try {
     var apiRes = await fetch(
       'https://api.github.com/repos/yacht-research/yacht-research/contents/content/yachts?ref=main',
       {
@@ -36,7 +51,7 @@ export async function onRequest(context) {
       if (Array.isArray(files)) {
         for (var i = 0; i < files.length; i++) {
           if (files[i].name && files[i].name.endsWith('.json')) {
-            yachtSlugs.push(files[i].name.replace('.json', ''));
+            if (files[i].name !== 'index.json') yachtSlugs.push(files[i].name.replace('.json', ''));
           }
         }
       }
@@ -61,7 +76,7 @@ export async function onRequest(context) {
   for (var k = 0; k < yachtSlugs.length; k++) {
     xml += '  <url>\n';
     xml += '    <loc>' + baseUrl + '/yacht/' + yachtSlugs[k] + '</loc>\n';
-    xml += '    <lastmod>' + today + '</lastmod>\n';
+    xml += '    <lastmod>' + (lastmods[yachtSlugs[k]] || today) + '</lastmod>\n';
     xml += '    <changefreq>weekly</changefreq>\n';
     xml += '    <priority>0.8</priority>\n';
     xml += '  </url>\n\n';

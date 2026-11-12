@@ -1,13 +1,51 @@
 {
+  "slug": "sunseeker-manhattan-55",
   "title": "Sunseeker Manhattan 55",
+  "builder": "Sunseeker",
+  "model": "Manhattan 55",
+  "listing_type": "sale",
   "badge": "New Listing",
-  "image": "/images/uploads/sunseeker manhattan 55.png",
   "length": "17.21 m / 56.46 ft",
   "year": "2025",
   "location": "UAE",
   "price": "£ 2,270,968 (Landed Exc. Taxes)",
   "original_price": "",
-  "description": "This 2025 Sunseeker Manhattan 55 is a 17.21-meter British flybridge motor yacht powered by twin MAN i6-800 engines delivering a top speed of 32 knots and a range of 250 nautical miles.\n\nShe accommodates 6 guests across 3 en-suite cabins, including a full-beam master suite with full standing headroom. Her innovative powered glass cockpit window creates a seamless indoor-outdoor living space, while the class-leading flybridge with hardtop offers unrivalled deck volume for a yacht of this size.\n\nCurrently located in the UAE and available for immediate viewing. Contact us for full specifications and a private appointment.",
+  "specs": {
+    "Builder": "Sunseeker",
+    "Model": "Manhattan 55",
+    "Model year": "2025",
+    "Length overall": "17.21 m",
+    "Beam": "4.87 m (16 ft)",
+    "Weight": "27,000 kg",
+    "Engines": "Twin MAN i6-800 (2 × 800 PS), shaft",
+    "Max speed": "Up to 32 knots",
+    "Fuel capacity": "2,200 L (580 US gal)",
+    "Water capacity": "600 L",
+    "Black water": "150 L",
+    "Cabins": "3 + 1 crew cabin",
+    "Guests": "6 berths",
+    "Crew": "2 berths",
+    "Classification": "CE (Cat A)",
+    "Location": "UAE"
+  },
+  "highlights": [
+    "Beach club with platform seat, overhead shower and marine grill",
+    "Flybridge with hard top, electric canopy, BBQ and wet bar",
+    "Platinum Mediterranean package: tropical A/C, upgraded generator, stern thruster",
+    "Joystick docking system, dual station",
+    "Simrad navigation package with radar, autopilot and AIS",
+    "Master, VIP and twin cabins plus crew cabin"
+  ],
+  "description": "The 2025 Sunseeker Manhattan 55 offers owners a wide range of social spaces usually seen on larger yachts. Extensive curved glass and stainless-steel detailing define her exterior, and the galley flows onto the main deck for a seamless transition from indoors to outdoors.\n\nAt the stern, the bathing platform and beach club offer a built-in marine grill, an overhead shower and fold-down seating. Up top, the flybridge has a hard top with retractable canopies, a helm station, a BBQ, a wet bar and a sunbed.\n\nShe sleeps 6 guests in 3 cabins: a master with island berth and en-suite, a VIP with en-suite and a twin cabin, plus a crew cabin for 2. Twin MAN i6-800 engines give up to 32 knots. This yacht comes with the Platinum Mediterranean package, a joystick docking system and a full Simrad navigation package.\n\nLocated in the UAE. Contact us for the full specification and a private viewing.",
+  "seo_title": "Sunseeker Manhattan 55 for Sale | Yacht Research",
   "brochure": "https://drive.google.com/file/d/1cFV8_bqPocmDLKh-vI6FGcnZa7CAgYTn/view?usp=drive_link",
-  "published": true
+  "published": true,
+  "image": "/images/opt/sunseeker-manhattan-55.webp",
+  "thumb": "/images/opt/sunseeker-manhattan-55-800.webp",
+  "gallery": [
+    "/images/yachts/sunseeker-manhattan-55/01.webp",
+    "/images/yachts/sunseeker-manhattan-55/02.webp",
+    "/images/yachts/sunseeker-manhattan-55/03.webp"
+  ],
+  "updated": "2026-11-11"
 }

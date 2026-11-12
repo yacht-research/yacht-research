@@ -2,997 +2,194 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <meta name="robots" content="index, follow">
-<meta name="referrer" content="no-referrer-when-downgrade">
-<title>Enquiry Form | Yacht Research | Buy, Sell, Charter a Yacht</title>
-<meta name="description" content="Submit your yacht enquiry to Yacht Research. Buy a yacht, sell your yacht, charter, partnership or bespoke services. Our team responds personally within 24 hours.">
-<meta name="keywords" content="yacht enquiry form, yacht research enquiry, contact yacht broker, buy a yacht enquiry, sell my yacht, yacht charter request, yacht research group contact">
-<meta name="author" content="Yacht Research">
-<link rel="canonical" href="https://yachtresearchgroup.com/yacht-research-form.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://yachtresearchgroup.com/yacht-research-form.html">
-<meta property="og:title" content="Enquiry Form | Yacht Research">
-<meta property="og:description" content="Submit your yacht enquiry. Buy, sell, charter or partner with Yacht Research. Personal response within 24 hours.">
-<meta property="og:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
-<meta property="og:site_name" content="Yacht Research">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Enquiry Form | Yacht Research">
-<meta name="twitter:description" content="Submit your yacht enquiry. Buy, sell, charter or partner with Yacht Research.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yacht-research/yacht-research/main/images/uploads/hero-yacht-BzzzVtkx.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Yacht Research Enquiry Form","url":"https://yachtresearchgroup.com/yacht-research-form.html","description":"Submit your yacht enquiry to Yacht Research. Buy, sell, charter or explore a partnership.","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://yachtresearchgroup.com"},{"@type":"ListItem","position":2,"name":"Enquiry Form","item":"https://yachtresearchgroup.com/yacht-research-form.html"}]}}</script>
-  <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title">Yacht Research — Enquiry Form</title>
+<title>Enquiry | Buy, Sell or Charter a Yacht | Yacht Research</title>
+<meta name="description" content="Tell us about your yacht project: purchase, sale, charter, partnership or bespoke services. Personally handled by Yacht Research within 24 hours.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#070707">
+<link rel="canonical" href="https://yachtresearchgroup.com/yacht-research-form">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0a0f1e;
-    --navy-mid: #111827;
-    --navy-light: #1a2540;
-    --gold: #c9a84c;
-    --gold-light: #e8c96d;
-    --cream: #f8f5ef;
-    --text: #2c2c2c;
-    --muted: #7a7a7a;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--navy);
-    font-family: 'Montserrat', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* Custom cursor */
-  .cursor {
-    width: 8px; height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-  }
-  .cursor-ring {
-    width: 32px; height: 32px;
-    border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.15s ease;
-  }
-
-  /* Background */
-  .bg-grid {
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
-
-  .bg-glow {
-    position: fixed;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-    border-radius: 50%;
-    top: -100px; right: -100px;
-    pointer-events: none;
-  }
-
-  /* Layout */
-  .page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 60px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards;
-  }
-
-  .header-eyebrow {
-    color: var(--gold);
-    font-size: 10px;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .header h1 {
-    color: #fff;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 300;
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-
-  .header h1 em { color: var(--gold); font-style: italic; }
-
-  .gold-line {
-    width: 48px; height: 1px;
-    background: var(--gold);
-    margin: 20px auto;
-  }
-
-  .header p {
-    color: rgba(255,255,255,0.4);
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  /* Progress bar */
-  .progress-wrap {
-    width: 100%;
-    max-width: 640px;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s ease forwards;
-  }
-
-  .progress-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .progress-label {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.2);
-    transition: color 0.3s;
-  }
-  .progress-label.active { color: var(--gold); }
-
-  .progress-track {
-    height: 1px;
-    background: rgba(255,255,255,0.1);
-    position: relative;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-    box-shadow: 0 0 12px rgba(201,168,76,0.5);
-  }
-
-  /* Form card */
-  .form-card {
-    width: 100%;
-    max-width: 640px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 48px;
-    position: relative;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.3s ease forwards;
-  }
-
-  .form-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 40px; height: 1px;
-    background: var(--gold);
-  }
-
-  .form-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 1px; height: 40px;
-    background: var(--gold);
-  }
-
-  /* Steps */
-  .step { display: none; opacity: 0; }
-  .step.active { display: block; animation: stepIn 0.38s ease forwards; }
-  .step.leaving { animation: stepOut 0.22s ease forwards; }
-
-  @keyframes stepIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes stepOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-8px); }
-  }
-
-  .step-title {
-    color: #fff;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 300;
-    margin-bottom: 8px;
-  }
-
-  .step-subtitle {
-    color: rgba(255,255,255,0.35);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-  }
-
-  /* Project type cards */
-  .project-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  .project-card {
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 20px;
-    cursor: none;
-    transition: all 0.25s ease;
-    position: relative;
-    background: transparent;
-  }
-
-  .project-card:hover {
-    border-color: rgba(201,168,76,0.5);
-    background: rgba(201,168,76,0.04);
-  }
-
-  .project-card.selected {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.08);
-  }
-
-  .project-card.selected::after {
-    content: '✓';
-    position: absolute;
-    top: 12px; right: 12px;
-    color: var(--gold);
-    font-size: 12px;
-  }
-
-  .project-card-icon {
-    font-size: 22px;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .project-card-title {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-
-  .project-card-desc {
-    color: rgba(255,255,255,0.35);
-    font-size: 11px;
-    line-height: 1.5;
-  }
-
-  /* Inputs */
-  .field { margin-bottom: 24px; }
-
-  .field label {
-    display: block;
-    color: var(--gold);
-    font-size: 9px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .field input,
-  .field select,
-  .field textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(201,168,76,0.2);
-    color: #fff;
-    padding: 14px 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    appearance: none;
-    cursor: none;
-  }
-
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.04);
-  }
-
-  .field input::placeholder,
-  .field textarea::placeholder {
-    color: rgba(255,255,255,0.2);
-  }
-
-  .field select option {
-    background: var(--navy);
-    color: #fff;
-  }
-
-  .field textarea { resize: none; height: 100px; }
-
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  /* Buttons */
-  .btn-next {
-    width: 100%;
-    background: var(--gold);
-    color: var(--navy);
-    border: none;
-    padding: 18px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    cursor: none;
-    transition: all 0.25s ease;
-    margin-top: 8px;
-  }
-
-  .btn-next:hover {
-    background: var(--gold-light);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(201,168,76,0.25);
-  }
-
-  .btn-back {
-    background: transparent;
-    color: rgba(255,255,255,0.35);
-    border: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    cursor: none;
-    margin-top: 16px;
-    display: block;
-    text-align: center;
-    width: 100%;
-    padding: 8px;
-    transition: color 0.2s;
-  }
-  .btn-back:hover { color: rgba(255,255,255,0.7); }
-
-  /* Success screen */
-  .success-screen {
-    text-align: center;
-    padding: 20px 0;
-    display: none;
-  }
-
-  .success-icon {
-    width: 72px; height: 72px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 32px;
-    font-size: 28px;
-  }
-
-  .success-screen h2 {
-    color: #fff;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    margin-bottom: 12px;
-  }
-
-  .success-screen p {
-    color: rgba(255,255,255,0.4);
-    font-size: 12px;
-    line-height: 1.8;
-    margin-bottom: 32px;
-  }
-
-  /* Footer links */
-      margin-top: 48px;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.5s ease forwards;
-  }
-
-  .footer-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.3);
-    text-decoration: none;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    padding: 10px 16px;
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-  .footer-link:hover { color: var(--gold); border-color: rgba(201,168,76,0.3); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 600px) {
-    .form-card { padding: 32px 24px; }
-    .project-grid { grid-template-columns: 1fr; }
-    .field-row { grid-template-columns: 1fr; }
-  }
-
-/* ─── COOKIE BANNER ─────────────────────────────────────────── */
-#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid #1a2540;padding:20px 40px;z-index:99999;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s ease;}
-#cookie-banner.visible{transform:translateY(0);}
-#cookie-banner p{color:rgba(255,255,255,0.6);font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:1px;line-height:1.7;margin:0;flex:1;min-width:200px;}
-#cookie-banner a{color:#c9a84c;text-decoration:underline;}
-.cookie-buttons{display:flex;gap:12px;flex-shrink:0;}
-#cookie-accept{background:#c9a84c;color:#0a0f1e;border:none;padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;}
-#cookie-decline{background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:10px 24px;font-family:Montserrat,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
-#cookie-decline:hover{color:rgba(255,255,255,0.7);}
-
-/* ── NAVIGATION ── */
-
-
-
-
-
-
-
-
-
-
-@media(max-width:1024px){
-  
-  #navbar ul, #navbar > a[href="/yacht-research-form.html"]{display:none!important;}
-  
-  #navbar{padding:16px 24px!important;}
-}
-@media(max-width:1024px){.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
-footer{background:#060a14;padding:60px 60px 40px;border-top:1px solid rgba(201,168,76,0.15);}
-.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
-.footer-bottom p{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
-.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(201,168,76,0.5);}
-@media(max-width:1024px){footer{padding:40px 24px 30px;}.footer-bottom{flex-direction:column;gap:12px;text-align:center;}}
-
-.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:32px 24px;}
-.footer-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.3);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;padding:10px 16px;border:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
-.footer-link:hover{color:#c9a84c;border-color:rgba(201,168,76,0.3);}
-@media(max-width:640px){.footer-links{gap:10px;}.footer-link{font-size:9px;letter-spacing:1px;padding:10px 12px;}}
-
-
-
-
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.15);}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;}
-.nav-logo span{color:#c9a84c;}
-.nav-center{display:flex;align-items:center;gap:0;max-width:min(620px,calc(100vw - 380px));overflow:hidden;}
-.nav-scroll-btn{background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 8px;line-height:1;transition:color 0.2s,opacity 0.35s ease;flex-shrink:0;opacity:0;pointer-events:none;}
-.nav-scroll-btn.shown{opacity:1;pointer-events:auto;}
-#navRight{opacity:1;pointer-events:auto;}
-.nav-scroll-btn:hover{color:#c9a84c;}
-.nav-links{display:flex;gap:28px;list-style:none;overflow-x:auto;white-space:nowrap;scrollbar-width:none;flex:1;min-width:0;}
-.nav-links::-webkit-scrollbar{display:none;}
-.nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.3s;}
-.nav-links a:hover,.nav-links a.active{color:#c9a84c;}
-.nav-cta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;border:1px solid #c9a84c;padding:10px 22px;text-decoration:none;transition:all 0.3s;flex-shrink:0;margin-left:24px;}
-.nav-cta:hover{background:#c9a84c;color:#0a0f1e;}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1000;}
-.hamburger span{width:24px;height:1px;background:#fff;transition:all 0.35s ease;display:block;transform-origin:center;}
-.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
-.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{position:fixed;inset:0;background:#0a0f1e;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transform:translateX(100%);transition:transform 0.4s ease;}
-.mobile-menu.open{transform:translateX(0);}
-body.menu-open{overflow:hidden;touch-action:none;}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:#fff;text-decoration:none;letter-spacing:2px;transition:color 0.3s;}
-.mobile-menu a:hover{color:#c9a84c;}
-.mobile-menu .mob-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#0a0f1e;background:#c9a84c;padding:16px 40px;text-decoration:none;}
-.mobile-menu .mob-newsletter{font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;text-decoration:none;}
-@media(max-width:1024px){nav{padding:16px 24px;}.nav-center,.nav-cta{display:none;}.hamburger{display:flex;}}
-</style>
-
-<script>
-(function(){
-  fetch('/content/seo/yacht-research-form.json?v='+Date.now())
-    .then(function(r){return r.ok?r.json():null;})
-    .then(function(s){
-      if(!s) return;
-      if(s.title){
-        document.title=s.title;
-        var og=document.querySelector('meta[property="og:title"]');if(og)og.setAttribute('content',s.title);
-        var tw=document.querySelector('meta[name="twitter:title"]');if(tw)tw.setAttribute('content',s.title);
-      }
-      if(s.description){
-        var m=document.querySelector('meta[name="description"]');if(m)m.setAttribute('content',s.description);
-        var ogd=document.querySelector('meta[property="og:description"]');if(ogd)ogd.setAttribute('content',s.description);
-      }
-    }).catch(function(){});
-})();
-</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yachtresearchgroup.com/yacht-research-form">
+<meta property="og:title" content="Enquiry | Buy, Sell or Charter a Yacht | Yacht Research">
+<meta property="og:description" content="Tell us about your yacht project: purchase, sale, charter, partnership or bespoke services. Personally handled by Yacht Research within 24 hours.">
+<meta property="og:image" content="https://yachtresearchgroup.com/images/uploads/hero-yacht-BzzzVtkx.jpg">
+<meta property="og:site_name" content="Yacht Research">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=31">
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="/" onclick="toggleMenu()">Home</a>
-  <a href="/#yachts" onclick="toggleMenu()">Buy</a>
-  <a href="/listings.html" onclick="toggleMenu()">Listings</a>
-  <a href="/charter.html" onclick="toggleMenu()">Charter</a>
-  <a href="/why-us.html" onclick="toggleMenu()">Why Us</a>
-  <a href="/bespoke.html" onclick="toggleMenu()">Services</a>
-  <a href="/partnerships.html" onclick="toggleMenu()">Partnerships</a>
-  <a href="/recruitment.html" onclick="toggleMenu()">Recruitment</a>
-  <a href="/#contact" onclick="toggleMenu()">Contact</a>
-  <a href="/yacht-research-form.html" onclick="toggleMenu()" class="mob-cta">Enquire Now</a>
-  <a href="/#newsletter-section" onclick="toggleMenu()" class="mob-newsletter">Newsletter</a>
-</div>
-<nav>
-  <a href="/" class="nav-logo" translate="no">Yacht <span>Research</span></a>
-  <div class="nav-center">
-    <button class="nav-scroll-btn" id="navLeft" onclick="scrollNav(-1)">&#8592;</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/#yachts">Buy</a></li>
-      <li><a href="/listings.html">Listings</a></li>
-      <li><a href="/charter.html">Charter</a></li>
-      <li><a href="/why-us.html">Why Us</a></li>
-      <li><a href="/bespoke.html">Services</a></li>
-      <li><a href="/partnerships.html">Partnerships</a></li>
-      <li><a href="/recruitment.html">Recruitment</a></li>
-      <li><a href="/#contact">Contact</a></li>
-      <li><a href="/#newsletter-section" style="color:#c9a84c;">Newsletter</a></li>
-    </ul>
-    <button class="nav-scroll-btn" id="navRight" onclick="scrollNav(1)">&#8594;</button>
+<nav id="nav">
+  <a href="/" class="logo" translate="no"><img src="/images/brand/emblem.webp" alt="Yacht Research" width="74" height="40"><span>Yacht Research<small>Group</small></span></a>
+  <ul class="nav-links">
+    <li><a href="/listings">Buy</a></li>
+    <li><a href="/charter">Charter</a></li>
+    <li><a href="/shared-experiences">Experiences</a></li>
+    <li><a href="/private-jet">Private Jet</a></li>
+    <li><a href="/bespoke">Services</a></li>
+    <li><a href="/why-us">Why Us</a></li>
+    <li><a href="/yacht-club-academy" class="yca-link">Academy</a></li>
+    <li><a href="/partnerships">Partners</a></li>
+    <li><a href="/recruitment">Careers</a></li>
+    <li><a href="/contact" class="gold-link">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <a href="/yacht-research-form" class="btn btn-gold">Enquire <i>→</i></a>
+    <button class="burger" aria-label="Menu" id="burger"><i></i><i></i><i></i></button>
   </div>
-  <a href="/yacht-research-form.html" class="nav-cta">Enquire Now</a>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
-<div style="height:56px;"></div>
-
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
-
-<div class="page">
-
-  <div class="header">
-    <span class="header-eyebrow">Yacht Research</span>
-    <h1>Your Enquiry,<br><em>Personally Handled</em></h1>
-    <div class="gold-line"></div>
-    <p>Dubai · French Riviera · Mediterranean</p>
-  </div>
-
-  <div class="progress-wrap">
-    <div class="progress-labels">
-      <span class="progress-label active" id="pl-1">01 Project</span>
-      <span class="progress-label" id="pl-2">02 Details</span>
-      <span class="progress-label" id="pl-3">03 Contact</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill" style="width:33%"></div>
-    </div>
-  </div>
-
-  <div class="form-card">
-
-    <!-- STEP 1 — Project Type -->
-    <div class="step active" id="step-1">
-      <h2 class="step-title">What is your project&#160;?</h2>
-      <p class="step-subtitle">Select one option</p>
-
-      <div class="project-grid">
-        <div class="project-card" data-value="Yacht Acquisition" onclick="selectCard(this)">
-          <span class="project-card-icon">⛵</span>
-          <p class="project-card-title">Buy a Yacht</p>
-          <p class="project-card-desc">Private acquisition, new or pre-owned</p>
-        </div>
-        <div class="project-card" data-value="Sell Your Yacht" onclick="selectCard(this)">
-          <span class="project-card-icon">💰</span>
-          <p class="project-card-title">Sell Your Yacht</p>
-          <p class="project-card-desc">On-market or discreet off-market sale</p>
-        </div>
-        <div class="project-card" data-value="Charter" onclick="selectCard(this)">
-          <span class="project-card-icon">🌊</span>
-          <p class="project-card-title">Charter</p>
-          <p class="project-card-desc">Find or place a charter vessel</p>
-        </div>
-        <div class="project-card" data-value="Partnership" onclick="selectCard(this)">
-          <span class="project-card-icon">🤝</span>
-          <p class="project-card-title">Partnership</p>
-          <p class="project-card-desc">Broker collaboration or B2B network</p>
-        </div>
-        <div class="project-card" data-value="Referral Programme" onclick="selectCard(this)">
-          <span class="project-card-icon">🔗</span>
-          <p class="project-card-title">Referral Programme</p>
-          <p class="project-card-desc">Earn commission on introductions</p>
-        </div>
-        <div class="project-card" data-value="Bespoke Services" onclick="selectCard(this)">
-          <span class="project-card-icon">✨</span>
-          <p class="project-card-title">Bespoke Services</p>
-          <p class="project-card-desc">Crew, refit, management & more</p>
-        </div>
-      </div>
-
-      <button class="btn-next" onclick="nextStep(1)">Continue →</button>
-    </div>
-
-    <!-- STEP 2 — Project Details -->
-    <div class="step" id="step-2">
-      <h2 class="step-title">Tell us more</h2>
-      <p class="step-subtitle">Help us understand your requirements</p>
-
-      <div id="dynamic-fields"></div>
-
-      <button class="btn-next" onclick="nextStep(2)">Continue →</button>
-      <button class="btn-back" onclick="prevStep(2)">← Back</button>
-    </div>
-
-    <!-- STEP 3 — Contact Info -->
-    <!-- Honeypot anti-spam: invisible for humans, bots will fill it -->
-    <input type="text" id="honeypot" name="website" style="display:none;position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
-    <div class="step" id="step-3">
-      <h2 class="step-title">Your contact details</h2>
-      <p class="step-subtitle">We'll reach out within 24 hours</p>
-
-      <div class="field-row">
-        <div class="field">
-          <label>First Name *</label>
-          <input type="text" id="fname" placeholder="Jean-Paul">
-        </div>
-        <div class="field">
-          <label>Last Name *</label>
-          <input type="text" id="lname" placeholder="Dupont">
-        </div>
-      </div>
-      <div class="field">
-        <label>Email Address *</label>
-        <input type="email" id="email" placeholder="your@email.com">
-      </div>
-      <div class="field">
-        <label>Phone / WhatsApp</label>
-        <input type="tel" id="phone" placeholder="+971 50 000 0000">
-      </div>
-      <div class="field">
-        <label>Country</label>
-        <input type="text" id="country" placeholder="UAE, France, Monaco...">
-      </div>
-
-      <div style="margin-bottom:20px;">
-      <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.5;">
-        <input type="checkbox" id="gdprConsent" required style="margin-top:3px;accent-color:#c9a84c;width:16px;height:16px;flex-shrink:0;">
-        <span>I accept the <a href="/privacy-policy" style="color:#c9a84c;text-decoration:underline;">Privacy Policy</a> and consent to Yacht Research processing my personal data to respond to my enquiry.</span>
-      </label>
-    </div>
-    <button class="btn-next" id="submitBtn" onclick="submitForm()">Send Enquiry →</button>
-      <button class="btn-back" onclick="prevStep(3)">← Back</button>
-    </div>
-
-    <!-- SUCCESS -->
-    <div class="success-screen" id="success">
-      <div class="success-icon">⛵</div>
-      <h2>Enquiry Received</h2>
-      <div class="gold-line"></div>
-      <p>Thank you for reaching out to Yacht Research.<br>A member of our team will contact you personally<br>within 24 hours.</p>
-      <a href="https://yachtresearchgroup.com/listings.html" class="btn-next" style="display:block;text-align:center;text-decoration:none;padding:18px;">
-        Explore Our Yachts →
-      </a>
-    </div>
-
-  </div>
-
-  <!-- Footer links -->
-
-
+<div class="menu" id="menu">
+  <a href="/">Home</a>
+  <a href="/listings">Yachts <em>for sale</em></a>
+  <a href="/charter">Charter</a>
+  <a href="/shared-experiences">Shared <em>experiences</em></a>
+  <a href="/yacht-research-form?project=sell">Sell <em>your yacht</em></a>
+  <a href="/private-jet">Private <em>jet</em></a>
+  <a href="/bespoke">Services</a>
+  <a href="/why-us">Why us</a>
+  <a href="/yacht-club-academy" class="yca-link">Yacht Club <em>Academy</em></a>
+  <a href="/partnerships">Partners <em>&amp; referrals</em></a>
+  <a href="/recruitment">Careers</a>
+  <a href="/contact">Contact</a>
+  <a href="/contact#newsletter"><em>Newsletter</em></a>
+  <a href="/yacht-research-form" class="btn btn-gold menu-cta">Enquire now <i>→</i></a>
 </div>
-
-<script>
-// ── CONFIG ───────────────────────────────────────────────────
-// Toutes les clés API sont gérées côté serveur dans Google Apps Script
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
-
-// ── STATE ────────────────────────────────────────────────────
-let selectedProjects = [];
-let formData = {};
-
-// ── CURSOR ───────────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-  setTimeout(() => {
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-  }, 60);
-});
-
-// ── PROJECT CARDS ─────────────────────────────────────────────
-function selectCard(el) {
-  document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedProjects = [el.dataset.value];
-}
-
-// ── DYNAMIC FIELDS ────────────────────────────────────────────
-function buildDynamicFields() {
-  const container = document.getElementById('dynamic-fields');
-  const project = selectedProjects[0] || '';
-  const isYacht = ['Yacht Acquisition','Sell Your Yacht','Charter','Bespoke Services'].includes(project);
-  const isPartnership = ['Partnership','Referral Programme'].includes(project);
-
-  let html = '';
-
-  if (isYacht) {
-    html += `
-    <div class="field">
-      <label>Budget Range</label>
-      <select id="budget">
-        <option value="">Select a range</option>
-        <option>Under €500K</option>
-        <option>€500K – €1M</option>
-        <option>€1M – €3M</option>
-        <option>€3M – €10M</option>
-        <option>€10M+</option>
-        <option>Price on Request</option>
-      </select>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Yacht Type</label>
-        <select id="yacht_type">
-          <option value="">Any</option>
-          <option>Motor Yacht</option>
-          <option>Sailing Yacht</option>
-          <option>Catamaran</option>
-          <option>Superyacht (30m+)</option>
-          <option>Open / Sport</option>
-        </select>
+<header class="phero">
+  
+  <div class="phero-in">
+    <p class="eyebrow">Yacht Research</p>
+    <h1 class="t-xl phero-title">Your enquiry, <span class="acc">personally handled</span></h1>
+    <p class="lead phero-lead">Available worldwide. A member of our team replies within 24 hours, in English or French.</p>
+    
+  </div>
+</header><section class="wiz-wrap" style="padding-top:0">
+  <div class="wiz rv">
+    <div class="wiz-prog"><span class="on" data-pl="1">01 Project</span><span data-pl="2">02 Details</span><span data-pl="3">03 Contact</span><i><b id="progressFill" style="width:33%"></b></i></div>
+    <div class="wstep active" id="step-1">
+      <h2 class="wiz-title">What is your <span class="acc">project?</span></h2>
+      <p class="cform-sub">Select one option</p>
+      <div class="pgrid">
+        <button type="button" class="pcard" data-value="Yacht Acquisition"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/></svg></span><b>Buy a yacht</b><small>Private acquisition, new or pre-owned</small></button><button type="button" class="pcard" data-value="Sell Your Yacht"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 11.5V4.2A1.2 1.2 0 0 1 4.2 3h7.3l9.2 9.2a1.2 1.2 0 0 1 0 1.7l-6.8 6.8a1.2 1.2 0 0 1-1.7 0z"/><circle cx="7.8" cy="7.8" r="1.6"/></svg></span><b>Sell your yacht</b><small>On-market or discreet off-market sale</small></button><button type="button" class="pcard" data-value="Charter"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.6"/><path d="M12 2.2v1.6M5.2 9H3.6M20.4 9h-1.6M7.2 4.2l1.1 1.1M16.8 4.2l-1.1 1.1M2.5 16.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2M2.5 20.5c1.6 0 1.6-1.2 3.2-1.2s1.6 1.2 3.2 1.2 1.6-1.2 3.1-1.2 1.6 1.2 3.2 1.2 1.6-1.2 3.2-1.2 1.6 1.2 3.1 1.2"/></svg></span><b>Charter</b><small>Find or place a charter vessel</small></button><button type="button" class="pcard" data-value="Partnership"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5"/></svg></span><b>Partnership</b><small>Broker collaboration or B2B network</small></button><button type="button" class="pcard" data-value="Referral Programme"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="5.5" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/></svg></span><b>Referral programme</b><small>Earn commission on introductions</small></button><button type="button" class="pcard" data-value="Bespoke Services"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6.5 3.5h11l3.5 5.5-9 12-9-12z"/><path d="M3 9h18M12 21L8.6 9l1.6-5.5M12 21l3.4-12-1.6-5.5"/></svg></span><b>Bespoke services</b><small>Crew, refit, management and more</small></button>
       </div>
-      <div class="field">
-        <label>Preferred Market</label>
-        <select id="market">
-          <option value="">Any</option>
-          <option>Dubai / UAE</option>
-          <option>French Riviera</option>
-          <option>Mediterranean</option>
-          <option>Atlantic</option>
-          <option>Worldwide</option>
-        </select>
-      </div>
-    </div>`;
-  }
-
-  if (isPartnership) {
-    html += `
-    <div class="field">
-      <label>Company / Brokerage</label>
-      <input type="text" id="company" placeholder="Your company name">
+      <p class="cform-msg" id="msg-1"></p>
+      <div class="wiz-nav"><button type="button" class="btn btn-gold" data-next="1">Continue <i>→</i></button></div>
     </div>
-    <div class="field">
-      <label>Role</label>
-      <input type="text" id="role" placeholder="Yacht Broker, Concierge, Real Estate...">
-    </div>`;
-  }
-
-  html += `
-  <div class="field">
-    <label>Message</label>
-    <textarea id="message" placeholder="Tell us more about your project, timeline, or any specific requirements..."></textarea>
-  </div>`;
-
-  container.innerHTML = html;
-}
-
-// ── NAVIGATION ────────────────────────────────────────────────
-function goStep(fromId, toId, fillPct, plIdx) {
-  var curr = document.getElementById(fromId);
-  var next = document.getElementById(toId);
-  if(!curr||!next) return;
-  curr.classList.add('leaving');
-  setTimeout(function(){
-    curr.classList.remove('active','leaving');
-    next.classList.add('active');
-    if(fillPct) document.getElementById('progressFill').style.width = fillPct;
-    if(plIdx !== undefined){
-      ['pl-1','pl-2','pl-3'].forEach(function(id,i){
-        var el=document.getElementById(id);
-        if(el) el.classList.toggle('active', i < plIdx);
-      });
-    }
-  }, 230);
-}
-
-function nextStep(from) {
-  if (from === 1) {
-    if (selectedProjects.length === 0) {
-      alert('Please select at least one option.');
-      return;
-    }
-    buildDynamicFields();
-  }
-
-  if (from === 2) {
-    formData.message = document.getElementById('message')?.value || '';
-    formData.budget = document.getElementById('budget')?.value || '';
-    formData.yacht_type = document.getElementById('yacht_type')?.value || '';
-    formData.market = document.getElementById('market')?.value || '';
-    formData.company = document.getElementById('company')?.value || '';
-    formData.role = document.getElementById('role')?.value || '';
-  }
-
-  const fills = { 1: '33%', 2: '66%', 3: '100%' };
-  goStep('step-' + from, 'step-' + (from + 1), fills[from], from);
-}
-
-function prevStep(from) {
-  const fills = { 2: '33%', 3: '66%' };
-  goStep('step-' + from, 'step-' + (from - 1), fills[from], undefined);
-}
-
-// ── SUBMIT ────────────────────────────────────────────────────
-function submitForm() {
-  // GDPR check
-  const gdpr = document.getElementById('gdprConsent');
-  if (gdpr && !gdpr.checked) {
-    alert('Please accept the Privacy Policy to continue.');
-    return;
-  }
-  const fname = document.getElementById('fname').value.trim();
-  const lname = document.getElementById('lname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const country = document.getElementById('country').value.trim();
-
-  if (!fname || !email) {
-    alert('Please fill in your name and email address.');
-    return;
-  }
-
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-
-  const projectType = selectedProjects.join(', ');
-  const name = fname + ' ' + lname;
-
-  // Map selected project to form_name
-  const project = selectedProjects[0] || '';
-  let formName = 'Yacht Enquiry';
-  if (project === 'Partnership' || project === 'Referral Programme') formName = 'Partnership Inquiry';
-  else if (project === 'Bespoke Services') formName = 'Yacht Enquiry';
-
-
-
-  // Fire and forget — do not await, show success immediately
-  const honeypot = document.getElementById('honeypot') ? document.getElementById('honeypot').value : '';
-  const params = new URLSearchParams({
-    website: honeypot,
-    form_name: formName,
-    name, email, phone, country,
-    type: projectType,
-    budget: formData.budget || '',
-    yacht_type: formData.yacht_type || '',
-    market: formData.market || '',
-    company: formData.company || '',
-    role: formData.role || '',
-    message: formData.message || '',
-    submitted_at: new Date().toLocaleString('fr-FR')
-  });
-  fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});
-
-  // Show success immediately
-  var s3 = document.getElementById('step-3');
-  s3.classList.add('leaving');
-  setTimeout(function(){
-    s3.classList.remove('active','leaving');
-    document.getElementById('success').style.display = 'block';
-    document.getElementById('success').style.animation = 'stepIn 0.38s ease forwards';
-    document.getElementById('progressFill').style.width = '100%';
-  }, 230);
-}
-
-// ── CMS LOADER ────────────────────────────────────────────────
-async function loadCMSSettings() {
-  try {
-    const res = await fetch('/content/form-settings.json');
-    if (!res.ok) return;
-    const s = await res.json();
-    if (s.page_title) document.title = s.page_title;
-    if (s.logo_text) document.querySelector('.header-eyebrow').textContent = s.logo_text;
-    if (s.hero_line1 || s.hero_line2) {
-      const h1 = document.querySelector('.header h1');
-      if (h1) h1.innerHTML = (s.hero_line1||'Your Enquiry,') + '<br><em>' + (s.hero_line2||'Personally Handled') + '</em>';
-    }
-    if (s.location_sub) document.querySelector('.header p').textContent = s.location_sub;
-  } catch(e) {}
-}
-loadCMSSettings();
-</script>
-
-<!-- ─── COOKIE BANNER ─────────────────────────────────────────── -->
-<div id="cookie-banner">
-  <p>We use cookies to ensure basic website functionality and to improve your experience. By using our site, you acknowledge our <a href="/privacy-policy">Privacy Policy</a> and consent to our use of cookies.</p>
-  <div class="cookie-buttons">
-    <button id="cookie-decline">Decline</button>
-    <button id="cookie-accept">Accept</button>
+    <div class="wstep" id="step-2">
+      <h2 class="wiz-title">Tell us <span class="acc">more</span></h2>
+      <p class="cform-sub">Help us understand your requirements</p>
+      <div id="dynamic-fields" class="cgrid"></div>
+      <div class="wiz-nav"><button type="button" class="btn btn-ghost" data-prev="2">← Back</button><button type="button" class="btn btn-gold" data-next="2">Continue <i>→</i></button></div>
+    </div>
+    <input type="text" id="honeypot" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="wstep" id="step-3">
+      <h2 class="wiz-title">Your contact <span class="acc">details</span></h2>
+      <p class="cform-sub">We will reach out within 24 hours</p>
+      <div class="cgrid">
+        <label class="field"><span>First name *</span><input type="text" id="fname" placeholder="Jean-Paul" autocomplete="given-name"></label>
+        <label class="field"><span>Last name *</span><input type="text" id="lname" placeholder="Dupont" autocomplete="family-name"></label>
+        <label class="field"><span>Email address *</span><input type="email" id="email" placeholder="your@email.com" autocomplete="email"></label>
+        <label class="field"><span>Phone / WhatsApp</span><input type="tel" id="phone" placeholder="+971 50 000 0000" autocomplete="tel"></label>
+        <label class="field full"><span>Country</span><input type="text" id="country" placeholder="UAE, France, Monaco..." autocomplete="country-name"></label>
+      </div>
+      <label class="consent"><input type="checkbox" id="gdprConsent" required><span>I accept the <a href="/privacy-policy">Privacy Policy</a> and consent to Yacht Research processing my personal data to respond to my enquiry.</span></label>
+      <p class="cform-msg" id="msg-3"></p>
+      <div class="wiz-nav"><button type="button" class="btn btn-ghost" data-prev="3">← Back</button><button type="button" class="btn btn-gold" id="submitBtn">Send enquiry <i>→</i></button></div>
+    </div>
+    <div class="wstep" id="success">
+      <div class="wiz-done"><img src="/images/brand/emblem.webp" alt="" width="148" height="80"><h2 class="wiz-title">Enquiry <span class="acc">received</span></h2><p class="lead">Thank you for reaching out to Yacht Research. A member of our team will contact you personally within 24 hours.</p><div class="ctas" style="justify-content:center;margin-top:28px"><a href="/listings" class="btn btn-gold">Explore our yachts <i>→</i></a></div></div>
+    </div>
   </div>
-</div>
-<script>
-// ─── COOKIE BANNER ───────────────────────────────────────────
-(function(){
-  function getCookie(n){var v=document.cookie.split(';');for(var i=0;i<v.length;i++){var p=v[i].trim();if(p.indexOf(n+'=')===0)return p.substring(n.length+1);}return null;}
-  function setCookie(n,v,d){var e=new Date();e.setTime(e.getTime()+(d*24*60*60*1000));document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
-  var consent=getCookie('yr_cookie_consent');
-  if(!consent){setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('visible');},800);}
-  var a=document.getElementById('cookie-accept');
-  var d=document.getElementById('cookie-decline');
-  if(a)a.addEventListener('click',function(){setCookie('yr_cookie_consent','accepted',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
-  if(d)d.addEventListener('click',function(){setCookie('yr_cookie_consent','declined',365);document.getElementById('cookie-banner').style.transform='translateY(100%)';});
-})();
-</script>
-</div>
-<div style="background:#060a14;border-top:1px solid rgba(201,168,76,0.15);">
-  <div class="footer-links">
-    <a href="https://yachtresearchgroup.com" class="footer-link">🌐 Website</a>
-    <a href="https://www.instagram.com/yacht_research/" target="_blank" class="footer-link">📸 Instagram</a>
-    <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" class="footer-link">💬 WhatsApp UAE</a>
-    <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" class="footer-link">💬 WhatsApp FR</a>
-    <a href="https://linktr.ee/yacht_research" target="_blank" class="footer-link">🔗 All Links</a>
+</section>
+<footer class="foot">
+  <div class="foot-top">
+    <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
+    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/private-jet">Private jet</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form?project=sell">Sell your yacht</a></div>
+    <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/contact#newsletter">Newsletter</a></div>
+    <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="https://wa.me/qr/5NK5SR22CXGNC1">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
-</div>
-<footer>
-  <div class="footer-bottom">
-    <p><span id="yr-year"></span> Yacht Research. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy-policy" style="color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a></p>
-    <p class="footer-tagline">The Art of Effortless Yachting &#x1F6A5;</p>
-    <p style="color:rgba(255,255,255,0.2);font-size:9px;letter-spacing:1px;">DUBAI &middot; FRENCH RIVIERA &middot; MEDITERRANEAN</p>
-  </div>
+  <div class="foot-bot"><span>© 2026 Yacht Research Group · Worldwide</span><span><a href="/privacy-policy">Privacy policy</a> · Photography: Unsplash</span></div>
 </footer>
-<script>document.getElementById('yr-year').textContent='© '+new Date().getFullYear();</script>
-
-
+<div class="wa-stack">
+  <a class="wa" href="https://wa.me/qr/5NK5SR22CXGNC1" aria-label="WhatsApp UAE"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg><span>WhatsApp</span><b>UAE</b></a>
+  <a class="wa" href="https://wa.me/message/CVQVHBO3GXLZP1" aria-label="WhatsApp France"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg><span>WhatsApp</span><b>FR</b></a>
+</div>
+<div class="cookie" id="cookie" role="dialog" aria-label="Cookies">
+  <p>We use cookies for basic site functionality and to improve your experience. See our <a href="/privacy-policy">Privacy Policy</a>.</p>
+  <div><button data-consent="declined">Decline</button><button class="ok" data-consent="accepted">Accept</button></div>
+</div>
+<script src="/assets/yr.js?v=31" defer></script><script type="speculationrules">{"prerender":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
 <script>
-/* ── NAV JS ── */
-function scrollNav(d){var n=document.getElementById('navLinks');if(n)n.scrollTo({left:n.scrollLeft+d*200,behavior:'smooth'});setTimeout(syncArrows,300);}
-function syncArrows(){var n=document.getElementById('navLinks'),l=document.getElementById('navLeft'),r=document.getElementById('navRight');if(!n)return;if(l)l.classList.toggle('shown',n.scrollLeft>2);if(r)r.classList.toggle('shown',n.scrollLeft<n.scrollWidth-n.clientWidth-2);}
-function initNav(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(!n||!r)return;n.addEventListener('scroll',syncArrows);syncArrows();}
-window.addEventListener('load',function(){initNav();[200,500,1000].forEach(function(t){setTimeout(syncArrows,t);});});
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){initNav();setTimeout(syncArrows,200);});
-window.addEventListener('resize',function(){var n=document.getElementById('navLinks'),r=document.getElementById('navRight');if(n&&r){r.classList.toggle('shown',n.scrollWidth>n.clientWidth+2);}syncArrows();});
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');document.body.classList.toggle('menu-open');}
-var cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing'),mx=0,my=0,rx=0,ry=0;
-if(cur&&ring){document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});(function anim(){rx+=(mx-rx-16)*0.15;ry+=(my-ry-16)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();}
-/* cross-page scroll */
-document.querySelectorAll('a[href^="/#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();sessionStorage.setItem('scrollTo',a.getAttribute('href').substring(1));window.location.href='/';})});
+(function(){
+  // Même adresse et mêmes champs que l'ancienne page (Google Apps Script : Sheets, mails, Brevo)
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
+  var selected = '', formData = {};
+  var qs = new URLSearchParams(location.search), preYacht = qs.get('yacht') || '', preProject = (qs.get('project') || '').toLowerCase();
+  var cards = document.querySelectorAll('.pcard');
+  function pick(c){ cards.forEach(function(x){ x.classList.remove('on'); }); c.classList.add('on'); selected = c.dataset.value; document.getElementById('msg-1').textContent = ''; }
+  cards.forEach(function(c){ c.addEventListener('click', function(){ pick(c); }); });
+  var map = { buy: 'Yacht Acquisition', sell: 'Sell Your Yacht', charter: 'Charter', partnership: 'Partnership', referral: 'Referral Programme', bespoke: 'Bespoke Services' };
+  if (map[preProject]) cards.forEach(function(c){ if (c.dataset.value === map[preProject]) pick(c); });
+  if (preYacht && !selected) cards.forEach(function(c){ if (c.dataset.value === 'Yacht Acquisition') pick(c); });
+
+  function sel(id, label, opts){ return '<label class="field"><span>' + label + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option' + (i ? '' : ' value=""') + '>' + o + '</option>'; }).join('') + '</select></label>'; }
+  function buildDynamicFields(){
+    var p = selected, html = '';
+    var isYacht = ['Yacht Acquisition', 'Sell Your Yacht', 'Charter', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'].indexOf(p) > -1;
+    var isPartner = ['Partnership', 'Referral Programme'].indexOf(p) > -1;
+    if (isYacht) {
+      html += sel('budget', 'Budget range', ['Select a range', 'Under €500K', '€500K – €1M', '€1M – €3M', '€3M – €10M', '€10M+', 'Price on Request']).replace('class="field"', 'class="field full"');
+      html += sel('yacht_type', 'Yacht type', ['Any', 'Motor Yacht', 'Sailing Yacht', 'Catamaran', 'Superyacht (30m+)', 'Open / Sport']);
+      html += sel('market', 'Preferred market', ['Any', 'Dubai / UAE', 'French Riviera', 'Mediterranean', 'Atlantic', 'Worldwide']);
+    }
+    if (isPartner) {
+      html += '<label class="field"><span>Company / brokerage</span><input type="text" id="company" placeholder="Your company name"></label>';
+      html += '<label class="field"><span>Role</span><input type="text" id="role" placeholder="Yacht broker, concierge, real estate..."></label>';
+    }
+    html += '<label class="field full"><span>Message</span><textarea id="message" rows="5" placeholder="Tell us more about your project, timeline, or any specific requirements..."></textarea></label>';
+    var box = document.getElementById('dynamic-fields'), keep = formData.message;
+    box.innerHTML = html;
+    var m = document.getElementById('message');
+    if (keep) m.value = keep; else if (preYacht) m.value = 'Regarding: ' + preYacht + '\n';
+  }
+  function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
+  function go(from, to, pct){
+    document.getElementById(from).classList.remove('active');
+    document.getElementById(to).classList.add('active');
+    document.getElementById('progressFill').style.width = pct;
+    var n = parseInt(to.replace('step-', ''), 10) || 3;
+    document.querySelectorAll('[data-pl]').forEach(function(s){ s.classList.toggle('on', +s.dataset.pl <= n); });
+    var w = document.querySelector('.wiz'); var top = w.getBoundingClientRect().top + scrollY - 90; if (scrollY > top) scrollTo({ top: top, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-next]').forEach(function(b){ b.addEventListener('click', function(){
+    var f = +b.dataset.next;
+    if (f === 1) { if (!selected) { document.getElementById('msg-1').textContent = 'Please select one option.'; document.getElementById('msg-1').className = 'cform-msg err'; return; } buildDynamicFields(); }
+    if (f === 2) { formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role') }; }
+    go('step-' + f, 'step-' + (f + 1), f === 1 ? '66%' : '100%');
+  }); });
+  document.querySelectorAll('[data-prev]').forEach(function(b){ b.addEventListener('click', function(){
+    var f = +b.dataset.prev; go('step-' + f, 'step-' + (f - 1), f === 2 ? '33%' : '66%');
+  }); });
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    var msg = document.getElementById('msg-3'); msg.className = 'cform-msg err';
+    if (!document.getElementById('gdprConsent').checked) { msg.textContent = 'Please accept the Privacy Policy to continue.'; return; }
+    var fname = v('fname').trim(), lname = v('lname').trim(), email = v('email').trim();
+    if (!fname || !email) { msg.textContent = 'Please fill in your name and email address.'; return; }
+    var formName = (selected === 'Partnership' || selected === 'Referral Programme') ? 'Partnership Inquiry' : 'Yacht Enquiry';
+    var params = new URLSearchParams({
+      website: v('honeypot'), form_name: formName,
+      name: fname + ' ' + lname, email: email, phone: v('phone').trim(), country: v('country').trim(),
+      type: selected, budget: formData.budget || '', yacht_type: formData.yacht_type || '', market: formData.market || '',
+      company: formData.company || '', role: formData.role || '', message: formData.message || '',
+      submitted_at: new Date().toLocaleString('fr-FR')
+    });
+    fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});
+    document.querySelector('.wiz-prog').style.visibility = 'hidden';
+    go('step-3', 'success', '100%');
+  });
+})();
 </script>
 </body>
 </html>
