@@ -18,6 +18,15 @@
     m.querySelectorAll('.xp-nav').forEach(function (b) { b.onclick = function () { show(i + (b.classList.contains('next') ? 1 : -1)); }; });
   });
 
+  // Un clic n'importe où sur une carte (hors boutons et liens) ouvre la page de l'expérience
+  root.addEventListener('click', function (e) {
+    var c = e.target.closest('.xp-card');
+    if (!c || c.classList.contains('xp-solo') || !c.dataset.xp) return;
+    if (e.target.closest('a,button,input,select,textarea,label,summary')) return;
+    if (String(window.getSelection && window.getSelection()).length) return; // texte sélectionné : on ne bouge pas
+    location.href = '/shared-experiences/' + c.dataset.xp;
+  });
+
   function dubaiDate(add) { return new Date(Date.now() + 4 * 3600e3 + (add || 0) * 864e5).toISOString().slice(0, 10); }
   function label(iso, k) {
     if (k === 0) return 'Today'; if (k === 1) return 'Tomorrow';

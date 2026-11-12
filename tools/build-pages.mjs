@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '29'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '30'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -40,7 +40,7 @@ const NAV = `<nav id="nav">
   <a href="/listings">Yachts <em>for sale</em></a>
   <a href="/charter">Charter</a>
   <a href="/shared-experiences">Shared <em>experiences</em></a>
-  <a href="/yacht-research-form">Sell <em>your yacht</em></a>
+  <a href="/yacht-research-form?project=sell">Sell <em>your yacht</em></a>
   <a href="/private-jet">Private <em>jet</em></a>
   <a href="/bespoke">Services</a>
   <a href="/why-us">Why us</a>
@@ -56,7 +56,7 @@ const NAV = `<nav id="nav">
 const FOOTER = `<footer class="foot">
   <div class="foot-top">
     <div class="foot-brand"><a href="/" class="logo-full"><img class="foot-logo" src="/images/brand/logo-full.webp" alt="Yacht Research" width="220" height="182" loading="lazy"></a><p>The art of effortless yachting. Yacht sales, charter and bespoke services, worldwide.</p></div>
-    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/private-jet">Private jet</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form">Sell your yacht</a></div>
+    <div><h5>Explore</h5><a href="/listings">Yachts for sale</a><a href="/charter">Charter</a><a href="/shared-experiences">Shared experiences</a><a href="/private-jet">Private jet</a><a href="/bespoke">Bespoke services</a><a href="/yacht-research-form?project=sell">Sell your yacht</a></div>
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/#newsletter">Newsletter</a></div>
     <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
@@ -418,7 +418,7 @@ pages.push({
   <h2 class="ya-h2 split-words">The ebook is the first step. <em>Our coaching takes you all the way.</em></h2>
   <p class="ya-p rv">Start with the ebook to discover the profession at your own pace. When you are ready to make it your career, we work with you directly, from your first steps to your first deals.</p>
   <div class="ya-grid2 ya-offer">
-    <div class="ya-card rv"><div class="ya-ebook"><img src="/images/yca/ebook-cover-760.webp" alt="Ebook: An introduction to the Yacht Broker profession" width="760" height="1180" loading="lazy"><div><p class="ya-k">Step 1 · The ebook</p><h3>Discover the profession</h3><p>An introduction to the Yacht Broker profession, in English and French.</p></div></div>
+    <div class="ya-card rv"><div class="ya-ebook"><img src="/images/yca/ebook-cover-240.webp" alt="Ebook: An introduction to the Yacht Broker profession" width="240" height="373" decoding="async"><div><p class="ya-k">Step 1 · The ebook</p><h3>Discover the profession</h3><p>An introduction to the Yacht Broker profession, in English and French.</p></div></div>
       <ul class="ya-list">
         <li>The yacht brokerage market and how off-market really works</li>
         <li>Outreach templates: messages, emails and call scripts</li>
@@ -475,7 +475,7 @@ pages.push({
       ['deck', 'Cannes Yachting Festival'],
       ['dubai', 'Dubai Marina'],
       ['sunset', 'On board at sunset']
-    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-800.webp" alt="${c}" width="800" height="1000" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('')}
+    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-400.webp" srcset="/images/yca/${f}-400.webp 400w, /images/yca/${f}-800.webp 800w" sizes="(max-width:560px) 50vw, (max-width:960px) 33vw, 20vw" alt="${c}" width="800" height="1000" loading="lazy" decoding="async"><figcaption>${c}</figcaption></figure>`).join('')}
   </div>
   <div class="ya-split ya-int">
     <div>
@@ -484,8 +484,8 @@ pages.push({
       <p class="ya-p rv">We have been interviewed by well-known figures of entrepreneurship and online business, sharing our vision of yachting and of the Yacht Broker profession with their audiences.</p>
     </div>
     <div class="ya-int-ph">
-      <figure class="rv"><img src="/images/yca/interview-paris-800.webp" alt="Mathis and Antoine with Loïc Bourget in Paris" width="800" height="1000" loading="lazy"><figcaption><b>Paris</b> With Loïc Bourget, on his YouTube channel</figcaption></figure>
-      <figure class="rv d1"><img src="/images/yca/interview-dubai-800.webp" alt="Interview with Marvin Ndiaye in Dubai" width="800" height="1000" loading="lazy"><figcaption><b>Dubai</b> With Marvin Ndiaye, on YouTube and Instagram</figcaption></figure>
+      <figure class="rv"><img src="/images/yca/interview-paris-400.webp" srcset="/images/yca/interview-paris-400.webp 400w, /images/yca/interview-paris-800.webp 800w" sizes="(max-width:700px) 50vw, 400px" alt="Mathis and Antoine with Loïc Bourget in Paris" width="800" height="1000" loading="lazy" decoding="async"><figcaption><b>Paris</b> With Loïc Bourget, on his YouTube channel</figcaption></figure>
+      <figure class="rv d1"><img src="/images/yca/interview-dubai-400.webp" srcset="/images/yca/interview-dubai-400.webp 400w, /images/yca/interview-dubai-800.webp 800w" sizes="(max-width:700px) 50vw, 400px" alt="Interview with Marvin Ndiaye in Dubai" width="800" height="1000" loading="lazy" decoding="async"><figcaption><b>Dubai</b> With Marvin Ndiaye, on YouTube and Instagram</figcaption></figure>
     </div>
   </div>
 </section>

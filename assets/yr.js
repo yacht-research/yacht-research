@@ -145,6 +145,12 @@
   }, true);
   var phX = null, phY = 0, phEl = null;
   document.addEventListener('touchstart', function(e){ var ph = e.target.closest && e.target.closest('.ph[data-imgs]'); phEl = ph; if (ph) { phX = e.touches[0].clientX; phY = e.touches[0].clientY; } }, { passive: true });
+  // Glissement horizontal sur les photos d'une carte : la page ne défile pas en même temps
+  document.addEventListener('touchmove', function(e){
+    if (!phEl || phX === null || phEl.closest('.rail')) return;
+    var dx = e.touches[0].clientX - phX, dy = e.touches[0].clientY - phY;
+    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) e.preventDefault();
+  }, { passive: false });
   document.addEventListener('touchend', function(e){
     if (!phEl || phX === null) return;
     var dx = e.changedTouches[0].clientX - phX, dy = e.changedTouches[0].clientY - phY;
@@ -195,8 +201,11 @@
     if (!multi) lb.classList.add('lb-one');
     function show(i){ cur = (i + urls.length) % urls.length; lbImg.src = urls[cur]; cnt.textContent = (cur + 1) + ' / ' + urls.length;
       var n = new Image(); n.src = urls[(cur + 1) % urls.length]; }
-    function openLb(u){ show(Math.max(0, urls.indexOf(u))); lb.hidden = false; document.body.style.overflow = 'hidden'; }
-    function closeLb(){ lb.hidden = true; lbImg.src = ''; document.body.style.overflow = ''; }
+    function openLb(u){ show(Math.max(0, urls.indexOf(u))); lb.hidden = false; document.documentElement.classList.add('lb-lock'); }
+    function closeLb(){ lb.hidden = true; lbImg.src = ''; document.documentElement.classList.remove('lb-lock'); }
+    // Pas de défilement de la page derrière (doigt, molette)
+    lb.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive: false });
+    lb.addEventListener('wheel', function(e){ e.preventDefault(); }, { passive: false });
     shots.forEach(function(b){ b.addEventListener('click', function(){ openLb(b.dataset.full); }); });
     $('.lb-prev', lb).addEventListener('click', function(e){ e.stopPropagation(); show(cur - 1); });
     $('.lb-next', lb).addEventListener('click', function(e){ e.stopPropagation(); show(cur + 1); });
