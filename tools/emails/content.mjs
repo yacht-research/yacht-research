@@ -30,7 +30,7 @@ export const CAMPAIGNS = {
   'new-website': {
     subject: '✨ Our New Website Is Live',
     preheader: 'Shared yacht experiences, charters, yachts for sale and private jets, with many more yachts arriving in the coming days.',
-    eyebrow: 'Yacht Research', title: ['Our new website', 'is live'], hero: U('photo-1567899378494-47b22a2ae96a'),
+    eyebrow: 'Yacht Research', title: ['Our new website', 'is live'], hero: U('photo-1562281302-809108fd533c'), // même photo que le haut de l'accueil
     greet: 'Hello {{ contact.PRENOM | default : "there" }}',
     paras: ['We have just launched the new Yacht Research website, redesigned from the ground up to make it easier to find the right yacht, the right charter or the right experience on the water.',
       'Here is what you will find today, <b>and this is only the beginning</b>.'],
