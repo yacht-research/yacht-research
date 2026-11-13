@@ -29,18 +29,36 @@ export const YCA = { url: '/yacht-club-academy', kicker: 'Also founded by Mathis
 export const CAMPAIGNS = {
   'new-website': {
     subject: '✨ Our New Website Is Live',
-    preheader: 'Shared yacht experiences in Dubai, charters with photos and rates, yachts for sale and private jets.',
+    preheader: 'Shared yacht experiences, charters, yachts for sale and private jets, with many more yachts arriving in the coming days.',
     eyebrow: 'Yacht Research', title: ['Our new website', 'is live'], hero: U('photo-1567899378494-47b22a2ae96a'),
     greet: 'Hello {{ contact.PRENOM | default : "there" }}',
     paras: ['We have just launched the new Yacht Research website, redesigned from the ground up to make it easier to find the right yacht, the right charter or the right experience on the water.',
-      'Here is what is new.'],
-    sections: [
-      ['Shared experiences in Dubai', 'Book your seats on a shared yacht, with no need to charter a whole yacht: superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties, from AED 69 per guest. Live times and prices on the site.'],
-      ['Charter', 'Day, weekly and hourly charters with hand-picked crews, at B2B rates, now with photos, rates and details for every yacht.'],
-      ['Yachts for sale', 'Our current listings with full galleries, specifications and brochures, plus off-market opportunities on request.'],
-      ['Private jet', 'Private jets, empty legs and private flights anywhere in the world, booked through our global network.']],
+      'Here is what you will find today, <b>and this is only the beginning</b>.'],
+    sections: [], noTiles: true, tilesInBody: true,
+    stats: [['38', 'Yachts for charter'], ['11', 'Shared experiences'], ['69', 'AED per guest, from'], ['12', 'Yachts for sale']],
+    statsNote: ['And much more', 'to come in the next few days'],
+    soon: { kicker: 'Coming in the next few days', title: ['Many more', 'yachts to come'],
+      text: 'We are adding a large number of new yachts for sale and for charter, along with new shared experiences, in the coming days. Keep an eye on the site and on your inbox: <b>the best is yet to come</b>.' },
     cta: ['Visit the new website', SITE + '/?utm_source=brevo&utm_medium=email&utm_campaign=new-website'], whatsapp: true,
   },
+};
+
+// Versions de la campagne « nouveau site » à comparer (images seulement, rien n'est envoyé)
+const NW = CAMPAIGNS['new-website'];
+const NOVELTIES = [
+  { label: 'Dubai · By the seat', title: 'Shared experiences', url: '/shared-experiences', img: '/images/email/experiences-hero.jpg', link: 'See the experiences',
+    text: 'Book your seats on a shared yacht, with no need to charter a whole yacht: superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties, from AED 69 per guest. Live times and prices on the site.' },
+  { label: 'Charter', title: 'Every yacht, with photos and rates', url: '/charter', img: U('photo-1672939113905-b02ef5db7203'), link: 'Plan a charter',
+    text: 'Day, weekly and hourly charters with hand-picked crews, at B2B rates, now with photos, rates and details for every yacht.' },
+  { label: 'Buy · Sell', title: 'Yachts for sale', url: '/listings', img: U('photo-1592285081254-0440a6601fea'), link: 'See the yachts',
+    text: 'Our current listings with full galleries, specifications and brochures, plus off-market opportunities on request.' },
+  { label: 'Worldwide · Private aviation', title: 'Private jet', url: '/private-jet', img: U('photo-1474302770737-173ee21bab63'), link: 'Fly private',
+    text: 'Private jets, empty legs and private flights anywhere in the world, booked through our global network.' },
+];
+export const DRAFTS = {
+  'v3-chiffres-final': NW, // version retenue (13/11/2026)
+  'v2-photos': { ...NW, stats: null, tilesInBody: false, photoSections: NOVELTIES,
+    paras: ['We have just launched the new Yacht Research website, redesigned from the ground up to make it easier to find the right yacht, the right charter or the right experience on the water. Here is what is new.'] },
 };
 
 export const EMAILS = {

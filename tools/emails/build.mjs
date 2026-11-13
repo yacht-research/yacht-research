@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { EMAILS, AUTOMATIONS, EXPLORE, YCA, CAMPAIGNS } from './content.mjs';
+import { EMAILS, AUTOMATIONS, EXPLORE, YCA, CAMPAIGNS, DRAFTS } from './content.mjs';
 
 const SITE_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUT = path.join(SITE_DIR, 'email-preview');
@@ -47,16 +47,40 @@ const tile = (t, base) => {
 <p style="margin:0;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:${C.goldL}">${t.link} &rarr;</p></a></td>`;
 };
 
-function explore(base) {
+const tilesTable = base => {
   const rows = [];
   for (let i = 0; i < EXPLORE.length; i += 2) rows.push(`<tr>${tile(EXPLORE[i], base)}${EXPLORE[i + 1] ? tile(EXPLORE[i + 1], base) : '<td></td>'}</tr>`);
-  return `
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="tiles">${rows.join('')}</table>`;
+};
+
+// Chiffres clés (ex. campagne « nouveau site ») : [chiffre, libellé]
+const statsRow = stats => `<tr><td class="px" style="padding:4px 40px 30px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="stats"><tr>${stats.map(([n, l]) => `<td class="st" align="center" valign="top" width="${Math.floor(100 / stats.length)}%" style="padding:18px 6px;border:1px solid ${C.line};border-radius:12px">
+<p style="margin:0 0 6px;font-family:${SERIF};font-style:italic;font-weight:500;font-size:34px;line-height:1;color:${C.goldL}">${n}</p>
+<p style="margin:0;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:${C.text}">${l}</p></td>`).join('<td style="width:8px;font-size:0">&nbsp;</td>')}</tr></table></td></tr>`;
+
+// Une nouveauté avec grande photo : { img, label, title, text, url, link }
+const photoSection = (s, base) => `<tr><td class="px" style="padding:0 40px 34px">
+<a href="${SITE}${s.url}" target="_blank" style="text-decoration:none;display:block">
+<img src="${s.img.startsWith('/') ? base + s.img : s.img}" width="520" alt="${s.title}" style="display:block;width:100%;height:auto;border:0;border-radius:14px">
+<p style="margin:18px 0 6px;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:${C.gold}">${s.label}</p>
+<p style="margin:0 0 8px;font-family:${SERIF};font-style:italic;font-weight:500;font-size:26px;line-height:1.15;color:${C.cream}">${s.title}</p>
+<p style="margin:0 0 10px;font-family:${SANS};font-size:15px;line-height:1.7;color:${C.text}">${s.text}</p>
+<p style="margin:0;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:${C.goldL}">${s.link} &rarr;</p></a></td></tr>`;
+
+// Encadré « ce n'est que le début » : { kicker, title: [normal, italique], text }
+const soonBox = s => `<tr><td class="px" style="padding:6px 40px 30px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ${C.gold};border-radius:14px;background:${C.card2}"><tr><td align="center" style="padding:26px 26px 28px">
+<p style="margin:0 0 10px;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:${C.gold}">${s.kicker}</p>
+<p style="margin:0 0 12px;font-family:${SANS};font-size:22px;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${s.title[0]} <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:26px;text-transform:none;color:${C.goldL}">${s.title[1]}</em></p>
+<p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.7;color:${C.text}">${s.text}</p></td></tr></table></td></tr>`;
+
+function explore(base, noTiles) {
+  return `${noTiles ? '' : `
 <!-- Discover -->
 <tr><td class="px" style="padding:8px 40px 6px;border-top:1px solid ${C.line}">
 <p style="margin:30px 0 6px;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:${C.gold};text-align:center">Discover Yacht Research</p>
 <p style="margin:0 0 22px;font-family:${SANS};font-size:24px;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream};text-align:center">More than <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:28px;text-transform:none;color:${C.goldL}">brokerage</em></p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="tiles">${rows.join('')}</table>
-</td></tr>
+${tilesTable(base)}
+</td></tr>`}
 <!-- Yacht Club Academy -->
 <tr><td class="px" style="padding:0 48px 36px">
 <a href="${SITE}${YCA.url}" target="_blank" style="text-decoration:none;display:block">
@@ -103,6 +127,7 @@ b,strong{color:${C.cream};font-weight:600}
   .tiles td.tile{display:block!important;width:100%!important;padding:0 0 22px!important}
   .yca-l,.yca-r{display:block!important;width:auto!important}
   .yca-l{padding:22px 22px 0!important}
+  .stats td.st{display:inline-block!important;width:44%!important;margin:0 0 8px!important}
   .soc{padding:0 2px!important;width:60px!important}
   .soc a{font-size:8px!important;letter-spacing:.6px!important}
 }
@@ -127,11 +152,16 @@ ${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero.startsWit
 <p style="margin:0 0 18px;font-family:${SANS};font-size:16px;color:${C.cream}">${e.greet || opts.greet},</p>
 ${body}
 </td></tr>
+${e.stats ? statsRow(e.stats) : ''}
+${e.statsNote ? `<tr><td class="px" align="center" style="padding:0 40px 30px;text-align:center"><p style="margin:0;font-family:${SANS};font-size:26px;line-height:1.25;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${e.statsNote[0]}<br><em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:32px;text-transform:none;color:${C.goldL}">${e.statsNote[1]}</em></p></td></tr>` : ''}
+${e.photoSections ? e.photoSections.map(s => photoSection(s, base)).join('') : ''}
+${e.tilesInBody ? `<tr><td class="px" style="padding:6px 40px 10px">${tilesTable(base)}</td></tr>` : ''}
+${e.soon ? soonBox(e.soon) : ''}
 ${e.sections && e.sections.length ? `<tr><td class="px" style="padding:6px 48px 24px"><div style="width:44px;height:1px;background:${C.gold};font-size:0;line-height:0">&nbsp;</div></td></tr>` : ''}
 ${sections}
 <tr><td align="center" class="px" style="padding:14px 48px ${e.whatsapp ? '18px' : '40px'}">${goldBtn(e.cta[0], e.cta[1])}</td></tr>
 ${e.whatsapp ? `<tr><td align="center" style="padding:0 24px 40px"><table role="presentation" class="wa" cellpadding="0" cellspacing="0" border="0" align="center"><tr>${ghostBtn('WhatsApp UAE', WA_UAE)}${ghostBtn('WhatsApp France', WA_FR)}</tr></table></td></tr>` : ''}
-${explore(base)}
+${explore(base, e.noTiles)}
 
 <!-- Signature -->
 <tr><td class="px" bgcolor="${C.card2}" style="background:${C.card2};border-top:1px solid ${C.line};padding:28px 48px;border-radius:0 0 18px 18px">
@@ -169,6 +199,9 @@ fs.mkdirSync(OUT, { recursive: true });
 const noindex = h => h.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"');
 for (const [id, e] of Object.entries(EMAILS)) fs.writeFileSync(path.join(OUT, id + '.html'), noindex(render(e, { ...BREVO, base: '' })), 'utf8');
 for (const [id, e] of Object.entries(CAMPAIGNS)) fs.writeFileSync(path.join(OUT, 'campaign-' + id + '.html'), noindex(render(e, { ...BREVO, base: '' })), 'utf8');
+// Versions à comparer (images en ligne) : --drafts "<dossier>"
+const di = process.argv.indexOf('--drafts');
+if (di > -1) for (const [id, e] of Object.entries(DRAFTS)) fs.writeFileSync(path.join(process.argv[di + 1], id + '.html'), render(e, { ...BREVO, base: SITE }), 'utf8');
 
 const cards = AUTOMATIONS.map(a => `<section><h2>${a.name}</h2><p class="m">Déclenchée par l'ajout à la liste ${a.list}</p><div class="row">` +
   a.emails.map((id, i) => `<div class="mail"><p class="k">${i === 0 ? 'Tout de suite' : 'Après ' + a.waits[i].replace('days', 'jours')}</p><p class="s">${EMAILS[id].subject}</p>
