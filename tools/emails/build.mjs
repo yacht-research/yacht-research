@@ -54,9 +54,15 @@ const tilesTable = base => {
 };
 
 // Chiffres clés (ex. campagne « nouveau site ») : [chiffre, libellé]
-const statsRow = stats => `<tr><td class="px" style="padding:4px 40px 30px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="stats"><tr>${stats.map(([n, l]) => `<td class="st" align="center" valign="top" width="${Math.floor(100 / stats.length)}%" style="padding:18px 6px;border:1px solid ${C.line};border-radius:12px">
-<p style="margin:0 0 6px;font-family:${SERIF};font-style:italic;font-weight:500;font-size:34px;line-height:1;color:${C.goldL}">${n}</p>
-<p style="margin:0;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:${C.text}">${l}</p></td>`).join('<td style="width:8px;font-size:0">&nbsp;</td>')}</tr></table></td></tr>`;
+// Toujours en grille 2 x 2 (Gmail sur téléphone n'applique pas toujours les règles mobiles : 4 colonnes y devenaient illisibles)
+const statCell = ([n, l]) => `<td class="st" align="center" valign="top" width="48%" style="width:48%;padding:18px 8px;border:1px solid ${C.line};border-radius:12px">
+<p style="margin:0 0 6px;font-family:${SERIF};font-style:italic;font-weight:500;font-size:36px;line-height:1;white-space:nowrap;color:${C.goldL}">${n}</p>
+<p style="margin:0;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:${C.text}">${l}</p></td>`;
+const statsRow = stats => {
+  const rows = [];
+  for (let i = 0; i < stats.length; i += 2) rows.push(`<tr>${statCell(stats[i])}<td style="width:4%;font-size:0">&nbsp;</td>${stats[i + 1] ? statCell(stats[i + 1]) : '<td></td>'}</tr>`);
+  return `<tr><td class="px" style="padding:4px 40px 30px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="stats">${rows.join('<tr><td colspan="3" style="height:10px;font-size:0;line-height:0">&nbsp;</td></tr>')}</table></td></tr>`;
+};
 
 // Une nouveauté avec grande photo : { img, label, title, text, url, link }
 const photoSection = (s, base) => `<tr><td class="px" style="padding:0 40px 34px">
@@ -84,15 +90,8 @@ ${tilesTable(base)}
 <!-- Yacht Club Academy -->
 <tr><td class="px" style="padding:0 48px 36px">
 <a href="${SITE}${YCA.url}" target="_blank" style="text-decoration:none;display:block">
-<!-- Couleurs de la carte YCA de l'accueil (bleu nuit, bleu clair, bouton blanc) -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0B2D6B" style="border:1px solid #3a5a8f;border-radius:14px;background:#0B2D6B;background-image:radial-gradient(ellipse at 80% 0%,#1E4D96 0%,#0B2D6B 38%,#01163C 78%)"><tr>
-<td style="padding:28px 28px 30px">
-<img src="${base}/images/email/yca-logo.png" width="88" alt="Yacht Club Academy" style="display:block;width:88px;height:auto;border:0;margin:0 0 18px">
-<p style="margin:0 0 12px;font-family:${SANS};font-size:10px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:#A9C1EA">${YCA.kicker}</p>
-<p style="margin:0 0 12px;font-family:${SANS};font-size:28px;line-height:1.05;font-weight:800;text-transform:uppercase;color:#F8F9FA">Yacht Club <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:31px;text-transform:none;color:#A9C1EA">Academy</em></p>
-<p style="margin:0 0 20px;font-family:${SANS};font-size:14px;line-height:1.7;color:#d9dee7">${YCA.text}</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#F8F9FA" style="border-radius:999px;background:#F8F9FA;padding:13px 22px;font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#01163C">${YCA.link} &rarr;</td></tr></table>
-</td></tr></table></a>
+<!-- Carte YCA en image (rendue depuis la carte de l'accueil) : Gmail en mode nuit inverse les couleurs du texte mais jamais les images -->
+<img src="${base}/images/email/yca-card.png" width="400" alt="Yacht Club Academy, also founded by Mathis &amp; Antoine. Our academy for those who want to become Yacht Brokers. Discover the academy" style="display:block;width:100%;max-width:400px;height:auto;border:0;margin:0 auto"></a>
 </td></tr>`;
 }
 
@@ -127,7 +126,6 @@ b,strong{color:${C.cream};font-weight:600}
   .tiles td.tile{display:block!important;width:100%!important;padding:0 0 22px!important}
   .yca-l,.yca-r{display:block!important;width:auto!important}
   .yca-l{padding:22px 22px 0!important}
-  .stats td.st{display:inline-block!important;width:44%!important;margin:0 0 8px!important}
   .soc{padding:0 2px!important;width:60px!important}
   .soc a{font-size:8px!important;letter-spacing:.6px!important}
 }
@@ -140,7 +138,7 @@ b,strong{color:${C.cream};font-weight:600}
 <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px">
 
 <!-- Logo -->
-<tr><td align="center" style="padding:6px 0 22px"><a href="${SITE}" target="_blank"><img src="${LOGO}" width="110" height="110" alt="Yacht Research" style="display:block;width:110px;height:110px;border:0"></a></td></tr>
+<tr><td align="center" style="padding:6px 0 22px"><a href="${SITE}" target="_blank"><img src="${SITE}/images/email/logo-yr.png" width="120" height="100" alt="Yacht Research" style="display:block;width:120px;height:100px;border:0"></a></td></tr>
 
 <!-- Carte -->
 <tr><td bgcolor="${C.card}" style="background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden">
