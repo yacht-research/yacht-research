@@ -153,6 +153,7 @@ ${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero.startsWit
 ${body}
 </td></tr>
 ${e.stats ? statsRow(e.stats) : ''}
+${e.statsNote ? `<tr><td class="px" align="center" style="padding:0 40px 30px;text-align:center"><p style="margin:0;font-family:${SANS};font-size:26px;line-height:1.25;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${e.statsNote[0]}<br><em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:32px;text-transform:none;color:${C.goldL}">${e.statsNote[1]}</em></p></td></tr>` : ''}
 ${e.photoSections ? e.photoSections.map(s => photoSection(s, base)).join('') : ''}
 ${e.tilesInBody ? `<tr><td class="px" style="padding:6px 40px 10px">${tilesTable(base)}</td></tr>` : ''}
 ${e.soon ? soonBox(e.soon) : ''}

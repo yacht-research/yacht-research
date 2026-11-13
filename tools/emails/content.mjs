@@ -36,6 +36,7 @@ export const CAMPAIGNS = {
       'Here is what you will find today, <b>and this is only the beginning</b>.'],
     sections: [], noTiles: true, tilesInBody: true,
     stats: [['38', 'Yachts for charter'], ['11', 'Shared experiences'], ['69', 'AED per guest, from'], ['12', 'Yachts for sale']],
+    statsNote: ['And much more', 'to come in the next few days'],
     soon: { kicker: 'Coming in the next few days', title: ['Many more', 'yachts to come'],
       text: 'We are adding a large number of new yachts for sale and for charter, along with new shared experiences, in the coming days. Keep an eye on the site and on your inbox: <b>the best is yet to come</b>.' },
     cta: ['Visit the new website', SITE + '/?utm_source=brevo&utm_medium=email&utm_campaign=new-website'], whatsapp: true,
