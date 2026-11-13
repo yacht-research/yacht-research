@@ -89,7 +89,7 @@ ${tilesTable(base)}
 </td></tr>`}
 <!-- Yacht Club Academy -->
 <tr><td class="px" style="padding:0 48px 36px">
-<a href="${SITE}${YCA.url}" target="_blank" style="text-decoration:none;display:block">
+<a href="${YCA.url.startsWith('http') ? YCA.url : SITE + YCA.url}" target="_blank" style="text-decoration:none;display:block">
 <!-- Carte YCA en image (rendue depuis la carte de l'accueil) : Gmail en mode nuit inverse les couleurs du texte mais jamais les images -->
 <img src="${base}/images/email/yca-card.png" width="400" alt="Yacht Club Academy, also founded by Mathis &amp; Antoine. Our academy for those who want to become Yacht Brokers. Discover the academy" style="display:block;width:100%;max-width:400px;height:auto;border:0;margin:0 auto"></a>
 </td></tr>`;
