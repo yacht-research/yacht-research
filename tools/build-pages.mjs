@@ -12,6 +12,20 @@ import { fileURLToPath } from 'node:url';
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const V = '34'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
+
+// Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
+// Dans les navigateurs intégrés (Facebook, Instagram), qui démarrent sans cache, le chargement « à la demande »
+// laissait des blocs noirs le temps que chaque photo arrive. Les photos plus bas restent chargées à la demande.
+// (Pas de versions réduites pour téléphone : mesuré, la plupart des photos y sont recadrées et agrandies, elles ont besoin de leur taille.)
+const EAGER = 6;
+function responsiveImages(html) {
+  let n = 0;
+  return html.replace(/<img\b[^>]*>/g, tag => {
+    if (n >= EAGER) return tag;
+    n++;
+    return tag.replace(/\sloading="lazy"/, '');
+  });
+}
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
 
@@ -919,16 +933,16 @@ ${NEWSLETTER}`
 
 // ---------------------------------------------------------- écriture
 for (const p of pages) {
-  fs.writeFileSync(path.join(SITE, p.file), page(p), 'utf8');
+  fs.writeFileSync(path.join(SITE, p.file), responsiveImages(page(p)), 'utf8');
   console.log('✓ ' + p.file);
 }
 
 // Page 404 : sans elle, Cloudflare renvoie l'accueil (code 200) pour une adresse inconnue,
 // ce que Google voit comme des doublons et ce qui peut rester en cache à la place d'une image pas encore publiée
-fs.writeFileSync(path.join(SITE, '404.html'), page({
+fs.writeFileSync(path.join(SITE, '404.html'), responsiveImages(page({
   file: '404.html', canonical: '/', title: 'Page not found | Yacht Research', desc: 'This page does not exist or has moved.',
   body: `<section style="min-height:80vh;display:grid;place-items:center;text-align:center"><div><p class="eyebrow">404</p><h1 class="t-l" style="margin:22px 0">This page is <span class="acc">no longer here</span></h1><p class="lead" style="margin:0 auto 30px;max-width:520px">The page you are looking for does not exist or has moved.</p><div class="ctas" style="justify-content:center"><a href="/" class="btn btn-gold">Back to home <i>→</i></a><a href="/listings" class="btn btn-ghost">View yachts</a></div></div></section>`
-}).replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex">').replace(/<link rel="canonical"[^>]*>\n?/, ''), 'utf8');
+}).replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex">').replace(/<link rel="canonical"[^>]*>\n?/, '')), 'utf8');
 console.log('✓ 404.html');
 
 // lib/shell.js pour la fonction /yacht/<slug>
@@ -968,5 +982,5 @@ const yIndex = JSON.parse(fs.readFileSync(path.join(SITE, 'content', 'yachts', '
 const cardsFor = (type, lim) => yIndex.filter(y => y.type === type).slice(0, lim).map(card).join('');
 idx = idx.replace(/(<div class="rail" data-yachts="sale"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/, (m, a, b) => a + cardsFor('sale', 10) + b);
 idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n<\/section>)/, (m, a, b) => a + cardsFor('charter', 8) + b);
-fs.writeFileSync(path.join(SITE, 'index.html'), idx, 'utf8');
+fs.writeFileSync(path.join(SITE, 'index.html'), responsiveImages(idx), 'utf8');
 console.log('✓ index.html (en-tête et pied de page)');
