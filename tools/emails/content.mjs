@@ -25,6 +25,24 @@ export const EXPLORE = [
 export const YCA = { url: '/yacht-club-academy', kicker: 'Also founded by Mathis &amp; Antoine', link: 'Discover the academy',
   text: 'Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.' };
 
+// Campagnes ponctuelles (envoyées une fois depuis Brevo > Campagnes, pas dans une automatisation)
+export const CAMPAIGNS = {
+  'new-website': {
+    subject: '✨ Our New Website Is Live',
+    preheader: 'Shared yacht experiences in Dubai, charters with photos and rates, yachts for sale and private jets.',
+    eyebrow: 'Yacht Research', title: ['Our new website', 'is live'], hero: U('photo-1567899378494-47b22a2ae96a'),
+    greet: 'Hello {{ contact.PRENOM | default : "there" }}',
+    paras: ['We have just launched the new Yacht Research website, redesigned from the ground up to make it easier to find the right yacht, the right charter or the right experience on the water.',
+      'Here is what is new.'],
+    sections: [
+      ['Shared experiences in Dubai', 'Book your seats on a shared yacht, with no need to charter a whole yacht: superyacht days, yacht tours with BBQ, sunset dinner cruises and boat parties, from AED 69 per guest. Live times and prices on the site.'],
+      ['Charter', 'Day, weekly and hourly charters with hand-picked crews, at B2B rates, now with photos, rates and details for every yacht.'],
+      ['Yachts for sale', 'Our current listings with full galleries, specifications and brochures, plus off-market opportunities on request.'],
+      ['Private jet', 'Private jets, empty legs and private flights anywhere in the world, booked through our global network.']],
+    cta: ['Visit the new website', SITE + '/?utm_source=brevo&utm_medium=email&utm_campaign=new-website'], whatsapp: true,
+  },
+};
+
 export const EMAILS = {
   'contact-1': {
     subject: '📬 We Have Received Your Enquiry | Yacht Research',

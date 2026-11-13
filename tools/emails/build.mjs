@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { EMAILS, AUTOMATIONS, EXPLORE, YCA } from './content.mjs';
+import { EMAILS, AUTOMATIONS, EXPLORE, YCA, CAMPAIGNS } from './content.mjs';
 
 const SITE_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUT = path.join(SITE_DIR, 'email-preview');
@@ -124,7 +124,7 @@ ${e.hero ? `<tr><td style="padding:0;line-height:0"><img src="${e.hero.startsWit
 <tr><td class="px" style="padding:40px 48px 8px">
 <p style="margin:0 0 16px;font-family:${SANS};font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:${C.gold}">${e.eyebrow}</p>
 <h1 class="h1" style="margin:0 0 26px;font-family:${SANS};font-size:36px;line-height:1.08;font-weight:300;letter-spacing:.5px;text-transform:uppercase;color:${C.cream}">${e.title[0]} <em style="font-family:${SERIF};font-style:italic;font-weight:500;font-size:40px;text-transform:none;letter-spacing:0;color:${C.goldL}">${e.title[1]}</em></h1>
-<p style="margin:0 0 18px;font-family:${SANS};font-size:16px;color:${C.cream}">${opts.greet},</p>
+<p style="margin:0 0 18px;font-family:${SANS};font-size:16px;color:${C.cream}">${e.greet || opts.greet},</p>
 ${body}
 </td></tr>
 ${e.sections && e.sections.length ? `<tr><td class="px" style="padding:6px 48px 24px"><div style="width:44px;height:1px;background:${C.gold};font-size:0;line-height:0">&nbsp;</div></td></tr>` : ''}
@@ -168,6 +168,7 @@ const BREVO = { greet: 'Dear {{contact.PRENOM}}', unsubscribe: true };
 fs.mkdirSync(OUT, { recursive: true });
 const noindex = h => h.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"');
 for (const [id, e] of Object.entries(EMAILS)) fs.writeFileSync(path.join(OUT, id + '.html'), noindex(render(e, { ...BREVO, base: '' })), 'utf8');
+for (const [id, e] of Object.entries(CAMPAIGNS)) fs.writeFileSync(path.join(OUT, 'campaign-' + id + '.html'), noindex(render(e, { ...BREVO, base: '' })), 'utf8');
 
 const cards = AUTOMATIONS.map(a => `<section><h2>${a.name}</h2><p class="m">Déclenchée par l'ajout à la liste ${a.list}</p><div class="row">` +
   a.emails.map((id, i) => `<div class="mail"><p class="k">${i === 0 ? 'Tout de suite' : 'Après ' + a.waits[i].replace('days', 'jours')}</p><p class="s">${EMAILS[id].subject}</p>
@@ -175,6 +176,7 @@ const cards = AUTOMATIONS.map(a => `<section><h2>${a.name}</h2><p class="m">Déc
 fs.writeFileSync(path.join(OUT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>E-mails Brevo · aperçu</title>
 <style>body{margin:0;background:#1b1a18;color:#f3eee4;font:15px/1.5 system-ui,Segoe UI,sans-serif;padding:24px}h1{font-weight:400;margin:0 0 6px}h2{color:#e6cf8a;font-weight:500;margin:34px 0 2px}.m{color:#9b958a;margin:0 0 14px}.row{display:flex;gap:18px;overflow-x:auto;padding-bottom:12px}.mail{flex:0 0 400px}.k{color:#c9a84c;font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin:0}.s{margin:2px 0 8px;font-weight:600}iframe{width:400px;height:760px;border:1px solid #333;border-radius:12px;background:#070707}.l{font-size:12px;color:#9b958a}.l a{color:#e6cf8a}@media(max-width:600px){.mail{flex-basis:92vw}iframe{width:92vw}}</style></head>
 <body><h1>E-mails des séquences Brevo</h1><p class="m">Aperçu au design du site. Les textes sont ceux de tes automatisations actuelles. Faire défiler chaque ligne de gauche à droite.</p>${cards}
+<h2>Campagnes</h2><p class="m">À envoyer une seule fois depuis Brevo &gt; Campagnes.</p><div class="row">${Object.entries(CAMPAIGNS).map(([id, e]) => `<div class="mail"><p class="k">Campagne</p><p class="s">${e.subject}</p><iframe src="campaign-${id}.html" loading="lazy" title="${id}"></iframe></div>`).join('')}</div>
 <h2>E-mails envoyés par le script</h2><p class="m">Newsletter, virement, réservation, et secours si Brevo ne répond pas.</p><div class="row"><div class="mail"><p class="k">Exemple</p><p class="s">📩 Welcome to the Yacht Research Newsletter</p><iframe src="script-newsletter.html" loading="lazy" title="script"></iframe></div><div class="mail"><p class="k">Réservation payée (exemple)</p><p class="s">⛵ Booking confirmed</p><iframe src="script-booking.html" loading="lazy" title="booking"></iframe></div></div></body></html>`, 'utf8');
 
 // 2) Gabarit des e-mails du script (images en adresse complète du site)
@@ -217,6 +219,13 @@ if (pcIdx > -1) {
       guide += `  E-mail ${i + 1} (${i === 0 ? 'tout de suite' : 'après ' + a.waits[i].replace('days', 'jours')})  objet : ${e.subject}\r\n`;
     });
     guide += '\r\n';
+  }
+  const cdir = path.join(PC, 'Campagnes');
+  fs.rmSync(cdir, { recursive: true, force: true }); fs.mkdirSync(cdir, { recursive: true });
+  guide += `CAMPAGNES (\u00e0 envoyer une fois : Brevo > Campagnes > Cr\u00e9er > \u00ab Coder votre propre e-mail \u00bb)\r\n`;
+  for (const [id, e] of Object.entries(CAMPAIGNS)) {
+    fs.writeFileSync(path.join(cdir, `${clean(e.subject)}.html`), render(e, { ...BREVO, base: SITE }), 'utf8');
+    guide += `  ${clean(e.subject)}  objet : ${e.subject}\r\n`;
   }
   fs.writeFileSync(path.join(PC, 'LISEZ-MOI.txt'), '\ufeff' + guide, 'utf8');
   console.log('✓ dossier PC : ' + PC);

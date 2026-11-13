@@ -36,6 +36,7 @@ function abs(u, base) {
 function badgeLabel(b, isCharter) {
   b = (b || '').toLowerCase();
   if (isCharter) return 'Charter';
+  if (b.includes('sold')) return 'Sold';
   if (b.includes('exclusive')) return 'Exclusive price';
   if (b.includes('reduc') || b.includes('price')) return 'Price reduced';
   if (b.includes('off')) return 'Off market';
@@ -77,10 +78,11 @@ function renderYachtPage(y, slug, base, origin) {
   const description = y.description || (title + ' is ' + (y.year ? 'a ' + y.year + ' ' : 'a ') + 'yacht' + (y.length ? ' of ' + y.length : '') + ' available for ' + what.toLowerCase() + ' through Yacht Research' + (location ? ', located in ' + location : '') + '. Contact our team for the full specification and viewing arrangements.');
   const guests = pick(y.specs, /guest/i);
   const price = y.price || 'Price on request';
+  const sold = !isCharter && /sold/i.test(y.badge || ''); // vendu : étiquette « Sold » et « Contact us if you want the same »
 
   // Données structurées (Google)
   const digits = (y.price || '').replace(/\(.*?\)/g, '').replace(/[^0-9]/g, '');
-  const offer = { '@type': 'Offer', priceCurrency: currency(y.price), availability: 'https://schema.org/InStock', url: canonical, seller: { '@type': 'Organization', name: 'Yacht Research', url: base } };
+  const offer = { '@type': 'Offer', priceCurrency: currency(y.price), availability: sold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', url: canonical, seller: { '@type': 'Organization', name: 'Yacht Research', url: base } };
   if (digits && !isCharter) offer.price = Number(digits);
   const props = y.specs && typeof y.specs === 'object'
     ? Object.keys(y.specs).map(k => ({ '@type': 'PropertyValue', name: k, value: String(y.specs[k]) }))
@@ -150,18 +152,24 @@ function renderYachtPage(y, slug, base, origin) {
     // Fiche à vendre : même disposition que les fiches charter (titre, chiffres clés, mosaïque de photos)
     '<main class="lx lx-sale">' +
     '<p class="lx-crumb yp-crumb"><a href="/">Home</a> · <a href="/listings">Yachts for sale</a> · <span>' + esc(title) + '</span></p>' +
-    '<div class="lx-top"><div><span class="tag yp-tag">' + badgeLabel(y.badge, isCharter) + '</span><h1 class="lx-h1">' + titleHTML(title) + '</h1>' +
+    '<div class="lx-top"><div><span class="tag yp-tag' + (sold ? ' is-sold' : '') + '">' + badgeLabel(y.badge, isCharter) + '</span><h1 class="lx-h1">' + titleHTML(title) + '</h1>' +
     '<p class="lx-loc">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div>' +
     '<div class="lx-chips">' + keySpecs.map(s => '<div><b>' + esc(s[1]) + '</b><span>' + esc(s[0]) + '</span></div>').join('') + '</div></div>' +
     mosaic([y.image || image].concat(gallery), title + ' ' + (y.year || '') + ' for sale') +
     '</main>' + calloutHTML +
     '<section class="yp-main"><div class="yp-text"><p class="eyebrow rv">About this yacht</p><div class="yp-desc rv">' + esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('') + '</div>' + hlHTML + specsHTML.replace('<section class="yp-sec">', '<section class="yp-sec yp-specs-in">') + '</div>' +
-    '<aside class="yp-card rv"><p class="eyebrow">' + (isCharter ? 'Charter rate' : 'Asking price') + '</p>' +
+    (sold
+      ? '<aside class="yp-card yp-sold rv"><p class="eyebrow">Asking price</p>' + (y.price ? '<p class="yp-was">' + esc(y.price) + '</p>' : '') + '<p class="yp-price">Sold</p><p class="yp-note">This yacht has been sold.</p>' +
+        '<p class="yp-same">Contact us if you want the same: we search on-market and off-market for a similar yacht, in confidence.</p>' +
+        '<a href="/yacht-research-form?project=buy&yacht=' + encodeURIComponent('Looking for the same as ' + title) + '" class="btn btn-gold">Find me the same <i>→</i></a>' +
+        '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' +
+        '<p class="yp-disc">Reply within 24 hours, in English or French.</p></aside></section>'
+      : '<aside class="yp-card rv"><p class="eyebrow">' + (isCharter ? 'Charter rate' : 'Asking price') + '</p>' +
     (y.original_price ? '<p class="yp-was">' + esc(y.original_price) + '</p>' : '') +
     '<p class="yp-price">' + esc(price) + '</p>' + (y.price_note ? '<p class="yp-note">' + esc(y.price_note) + '</p>' : '<p class="yp-note">Taxes excluded unless stated · Subject to availability</p>') +
     '<a href="' + enquire + '" class="btn btn-gold">' + (isCharter ? 'Enquire about this charter' : 'Enquire about this yacht') + ' <i>→</i></a>' +
     '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
-    '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>' +
+    '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>') +
     videoHTML + galHTML +
     '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="arrow-link rv">View all <span>→</span></a></div>' +
     '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>'
