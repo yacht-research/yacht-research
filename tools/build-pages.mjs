@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '33'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '34'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 const WA_UAE = 'https://wa.me/qr/5NK5SR22CXGNC1', WA_FR = 'https://wa.me/message/CVQVHBO3GXLZP1';
 const WA_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1a16 16 0 0 1-1.6-.6c-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.2.5.2.5.4.1.1.1.8-.2 1.5z"/></svg>';
@@ -131,7 +131,7 @@ function catalogue(type) {
     : [['', 'Any'], ['10000', '€10k / wk'], ['20000', '€20k / wk'], ['50000', '€50k / wk'], ['100000', '€100k / wk'], ['200000', '€200k / wk'], ['500000', '€500k / wk']];
   const opts = a => a.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
   const chips = sale
-    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="offmarket">Off market</button></div>`
+    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="offmarket">Off market</button><button data-v="sold">Sold</button></div>`
     : `<div class="chips" data-f="loc"><button data-v="" class="on">All destinations</button><button data-v="Mediterranean">Mediterranean</button><button data-v="Dubai">Dubai &amp; Gulf</button><button data-v="Caribbean">Caribbean</button><button data-v="Indian Ocean">Indian Ocean</button></div>`;
   return `<section class="cat" id="cat" data-cat="${type}">
   <div class="filters rv">
@@ -144,7 +144,7 @@ function catalogue(type) {
       ? [['price-desc', 'Price: high to low'], ['price-asc', 'Price: low to high'], ['year-desc', 'Newest first'], ['length-desc', 'Largest first']]
       : [['price-desc', 'Rate: high to low'], ['price-asc', 'Rate: low to high'], ['length-desc', 'Largest first']])}</select></label>
   </div>
-  <div class="cat-bar rv">${chips}<p class="cat-count"><b data-count-out>…</b> ${sale ? 'yachts for sale' : 'charter yachts'} <button class="cat-reset" type="button">Reset</button></p></div>
+  <div class="cat-bar rv">${chips}<p class="cat-count"><b data-count-out>…</b> ${sale ? '<span data-count-label>yachts for sale</span><span data-sold-out></span>' : 'charter yachts'} <button class="cat-reset" type="button">Reset</button></p></div>
   <div class="cat-grid" data-grid><p class="cat-empty">Loading…</p></div>
 </section>`;
 }

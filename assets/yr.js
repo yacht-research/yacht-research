@@ -258,7 +258,7 @@
     };
     var lenM = function(l){ var s = String(l || ''), m = s.match(/([\d.,]+)\s*m\b/i); if (m) return parseFloat(m[1].replace(',', '.')); var f = s.match(/([\d.]+)\s*ft/i); return f ? parseFloat(f[1]) * 0.3048 : 0; };
     var yearN = function(y){ var m = String(y || '').match(/(19|20)\d\d/); return m ? +m[0] : 0; };
-    var tagOf = function(b){ b = (b || '').toLowerCase(); return b.indexOf('reduc') > -1 || b.indexOf('price') > -1 ? 'reduced' : b.indexOf('off') > -1 ? 'offmarket' : b.indexOf('new') > -1 ? 'new' : 'sale'; };
+    var tagOf = function(b){ b = (b || '').toLowerCase(); return b.indexOf('sold') > -1 ? 'sold' : b.indexOf('reduc') > -1 || b.indexOf('price') > -1 ? 'reduced' : b.indexOf('off') > -1 ? 'offmarket' : b.indexOf('new') > -1 ? 'new' : 'sale'; };
     var qloc = new URLSearchParams(location.search).get('location');
     if (qloc) { st.loc = /indian/i.test(qloc) ? 'Indian Ocean' : /dubai|gulf/i.test(qloc) ? 'Dubai' : /carib/i.test(qloc) ? 'Caribbean' : /med/i.test(qloc) ? 'Mediterranean' : ''; }
     function render(){
@@ -281,7 +281,11 @@
         if (k === 'length-desc') return lenM(b.length) - lenM(a.length);
         return (b.price_eur || 0) - (a.price_eur || 0);
       });
-      countOut.textContent = list.length;
+      // les vendus ne comptent pas dans « yachts for sale » : « 12 yachts for sale · 1 sold », ou « 1 sold » avec le filtre Sold
+      var nSold = list.filter(isSold).length, nSale = list.length - nSold, soldOut = $('[data-sold-out]', cat), label = $('[data-count-label]', cat);
+      countOut.textContent = nSale || !nSold ? nSale : nSold;
+      if (label) label.textContent = nSale || !nSold ? 'yachts for sale' : 'sold';
+      if (soldOut) soldOut.textContent = nSale && nSold ? ' · ' + nSold + ' sold' : '';
       grid.innerHTML = list.length ? list.map(card).join('') : '<p class="cat-empty">No yacht matches these filters yet. <a href="/yacht-research-form">Tell us what you are looking for</a> and we will search the off-market for you.</p>';
       $$('.card', grid).forEach(function(c){ c.classList.add('is-in'); });
     }
