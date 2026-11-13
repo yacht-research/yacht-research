@@ -22,7 +22,7 @@ export const EXPLORE = [
   { eyebrow: 'Buy · Sell', title: 'Yachts for sale', url: '/listings', img: T('photo-1567899378494-47b22a2ae96a'),
     text: 'Off-market search, survey, sea trial and negotiation. We find the right yacht, not simply the first one available.', link: 'See the yachts' },
 ];
-export const YCA = { url: '/yacht-club-academy', kicker: 'Also founded by Mathis &amp; Antoine', link: 'Discover the academy',
+export const YCA = { url: 'https://yachtclubacademy.com/en/?utm_source=yacht-research&utm_medium=email&utm_campaign=yca-card', // le site de l'académie (pas la page YCA du site Yacht Research) kicker: 'Also founded by Mathis &amp; Antoine', link: 'Discover the academy',
   text: 'Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.' };
 
 // Campagnes ponctuelles (envoyées une fois depuis Brevo > Campagnes, pas dans une automatisation)
