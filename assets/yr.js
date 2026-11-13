@@ -4,6 +4,18 @@
   var $ = function(s, r){ return (r || document).querySelector(s); };
   var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var nav = $('#nav');
+  // ---------- Hauteur d'écran figée au chargement (--vh, utilisée par yr.css) ----------
+  // Le navigateur intégré de Facebook redimensionne la page quand ses barres se cachent pendant le défilement :
+  // les blocs à hauteur « écran » changeaient de taille et la page sautait. On ne remet à jour qu'en cas de
+  // changement de largeur (rotation du téléphone, fenêtre redimensionnée sur ordinateur).
+  var VH = 0, VW = 0;
+  function setVh(){
+    if (window.innerWidth === VW && VH) return;
+    VW = window.innerWidth; VH = window.innerHeight;
+    var s = document.documentElement.style;
+    s.setProperty('--vh', (VH / 100) + 'px'); s.setProperty('--vh100', VH + 'px');
+  }
+  setVh(); window.addEventListener('resize', setVh);
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
 
   // ---------- Vitesse : une fois la page affichée, les images plus bas se chargent en fond ----------
@@ -369,7 +381,7 @@
   var ticking = false;
   function frame(){
     ticking = false;
-    var vh = window.innerHeight, y = window.scrollY;
+    var vh = VH || window.innerHeight, y = window.scrollY;
     if (nav) nav.classList.toggle('solid', y > 40);
     if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); return; }
     pars.forEach(function(el){
