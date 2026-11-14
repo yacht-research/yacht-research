@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '37'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '38'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -919,13 +919,13 @@ pages.push({
           <a class="tli" href="${li}" target="_blank" rel="noopener">${LI_SVG}<span>View ${n.split(' ')[0]}'s LinkedIn profile</span><i>↗</i></a>
         </article>`).join('')}</div>
       </div>
-      <div class="channels ctp-ch rv">
-        <a href="${WA_UAE}"><b>WhatsApp <em>UAE</em></b>+971 52 430 2425</a>
-        <a href="${WA_FR}"><b>WhatsApp <em>France</em></b>+33 7 45 53 28 09</a>
-        <a href="mailto:contact@yachtresearchgroup.com"><b>Email</b>contact@yachtresearchgroup.com</a>
-      </div>
     </div>
     <aside class="ctp-r">${CONTACT_FORM}</aside>
+  </div>
+  <div class="channels ctp-ch rv">
+    <a href="${WA_UAE}"><b>WhatsApp <em>UAE</em></b>+971 52 430 2425</a>
+    <a href="${WA_FR}"><b>WhatsApp <em>France</em></b>+33 7 45 53 28 09</a>
+    <a href="mailto:contact@yachtresearchgroup.com"><b>Email</b>contact@yachtresearchgroup.com</a>
   </div>
 </main>
 ${NEWSLETTER}`
@@ -973,7 +973,7 @@ function card(y, i) {
   if (y.type === 'charter' && y.title.includes(' - ')) sub = y.title.split(' - ').slice(1).join(' - ') + (y.location ? ' · ' + y.location : '');
   const specs = y.type === 'charter' ? '' : '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
     (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
-    (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
+    (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (l => '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>')((y.location || '—').split(',')[0].trim())) + '</div>';
   const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
   return '\n    <a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '"><div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
     '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';

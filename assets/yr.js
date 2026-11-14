@@ -132,7 +132,7 @@
     var specs = y.type === 'charter' ? '' :
       '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
       (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
-      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
+      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (function(l){ return '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>'; })((y.location || '—').split(',')[0].trim())) + '</div>';
     var sold = y.type !== 'charter' && /sold/i.test(y.badge || '');
     var price = sold ? '<span>' + (y.price ? '<s>' + esc(y.price) + '</s> ' : '') + 'Sold</span>' : y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
     return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
