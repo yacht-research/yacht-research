@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '39'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '40'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -145,7 +145,7 @@ function catalogue(type) {
     : [['', 'Any'], ['10000', '€10k / wk'], ['20000', '€20k / wk'], ['50000', '€50k / wk'], ['100000', '€100k / wk'], ['200000', '€200k / wk'], ['500000', '€500k / wk']];
   const opts = a => a.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
   const chips = sale
-    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="offmarket">Off market</button><button data-v="sold">Sold</button></div>`
+    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="exclusive">Exclusive price</button><button data-v="offmarket">Off market</button><button data-v="sold">Sold</button></div>`
     : `<div class="chips" data-f="loc"><button data-v="" class="on">All destinations</button><button data-v="Mediterranean">Mediterranean</button><button data-v="Dubai">Dubai &amp; Gulf</button><button data-v="Caribbean">Caribbean</button><button data-v="Indian Ocean">Indian Ocean</button></div>`;
   return `<section class="cat" id="cat" data-cat="${type}">
   <div class="filters rv">
@@ -293,7 +293,7 @@ const xpDetail = x => {
 ${sxSection(xpCard(x, true), false)}
 ${SX_MODAL}
 ${x.images.length > 2 ? `<section class="yp-sec" style="padding-right:0"><div class="head" style="padding-right:var(--pad)"><div><p class="eyebrow rv">Gallery</p><h2 class="t-l yp-h2">On <span class="acc">board</span></h2></div><div class="rail-ui"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div></div><div class="rail yp-gal">${imgs}</div></section>` : ''}
-<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More experiences</p><h2 class="t-l yp-h2">You may <span class="acc">also like</span></h2></div><a href="/shared-experiences" class="arrow-link rv">View all <span>→</span></a></div>
+<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More experiences</p><h2 class="t-l yp-h2">You may <span class="acc">also like</span></h2></div><a href="/shared-experiences" class="btn-all rv">All shared experiences <span>→</span></a></div>
 <div class="xpd-more">${others.map(o => `<a class="xpd-mini rv" href="/shared-experiences/${o.id}"><img src="${o.images[0]}-800.webp" alt="" width="800" height="533" loading="lazy"><span>${o.tag}</span><b>${o.title}</b>${o.from ? `<small>From AED ${o.from}</small>` : ''}</a>`).join('')}</div></section>
 <div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;

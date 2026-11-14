@@ -180,12 +180,13 @@
       load().then(function(list){
         hits = list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); });
         var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
-        box.innerHTML = (hits.length ? hits.slice(0, 6).map(function(y){
+        box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + (hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
           var sub = [y.builder, y.year, y.location].filter(Boolean).join(' · ');
           return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
             '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
-        }).join('') : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
-          '<a class="qs-all" href="' + CFG.list + (kind === 'xp' ? '' : '?q=' + encodeURIComponent(q)) + '">' + (hits.length > 6 && kind !== 'xp' ? 'See all ' + hits.length + ' results' : CFG.all) + ' <i>→</i></a>';
+        }).join('') + '</div>' : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
+          '<div class="qs-foot">' + (hits.length > 1 && kind !== 'xp' ? '<a class="qs-all" href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
+          '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
         box.hidden = false;
       });
     }
@@ -336,7 +337,7 @@
         if (st.max && y.price_eur && y.price_eur > +st.max) return false;
         if (st.len && lenM(y.length) < +st.len) return false;
         if (st.year && yearN(y.year) < +st.year) return false;
-        if (st.tag && tagOf(y.badge) !== st.tag) return false;
+        if (st.tag && !(tagOf(y.badge) === st.tag || (st.tag === 'reduced' && y.original_price && !/sold/i.test(y.badge || '')) || (st.tag === 'exclusive' && /exclusive/i.test(y.badge || '')))) return false;
         if (st.loc && !(LOC[st.loc] || /x^/).test(y.location + ' ' + y.title)) return false;
         return true;
       });
@@ -452,9 +453,13 @@
     if (offm && offImg) {
       var or = offm.getBoundingClientRect(), op = Math.min(Math.max(-or.top / (or.height - vh), 0), 1), k = 1 - Math.min(op * 1.8, 1);
       // le cadre ne coupe jamais le contenu (cadenas en haut) : marge verticale limitée à la place libre autour du texte
-      var offIn = $('.in', offm), ty = Math.max(0, Math.min(vh * 0.12, offIn ? (vh - offIn.offsetHeight) / 2 - 28 : vh * 0.12));
+      var offIn = $('.in', offm), nav = $('#nav'), navH = nav ? nav.offsetHeight : 80;
+      document.documentElement.style.setProperty('--navh', navH + 'px');
+      // le haut du cadre reste au-dessus du cadenas (texte placé sous le menu fixe)
+      var ty = Math.max(0, Math.min(vh * 0.12, offIn ? offIn.offsetTop - 24 : vh * 0.12));
       var vw = window.innerWidth, tx = Math.min(vw * 0.14, Math.max(12, (vw - (offIn ? offIn.offsetWidth : vw)) / 2));
-      offImg.style.clipPath = 'inset(' + (ty * k) + 'px ' + (tx * k) + 'px round ' + (24 * k) + 'px)';
+      // valeurs entières : évite les fines lignes claires sur les bords gauche et droit
+      offImg.style.clipPath = 'inset(' + Math.round(ty * k) + 'px ' + Math.round(tx * k) + 'px round ' + Math.round(24 * k) + 'px)';
       offPic.style.transform = 'scale(' + (1.2 - op * 0.2) + ')';
     }
   }
