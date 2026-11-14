@@ -36,6 +36,8 @@
   "published": true,
   "image": "/images/yachts/ferretti-860-2023-thailand/01.webp",
   "thumb": "/images/yachts/ferretti-860-2023-thailand/01-800.webp",
-  "gallery": [],
+  "gallery": [
+    "/images/yachts/ferretti-860-2023-thailand/02.webp"
+  ],
   "updated": "2026-11-14"
 }
