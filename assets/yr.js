@@ -150,34 +150,32 @@
     return norm(q).split(/\s+/).filter(Boolean).every(function(w){ return hay.indexOf(w) > -1; });
   }
 
-  // ---------- Barre de recherche sur les fiches (achat, charter, shared experiences) ----------
-  (function(){
-    var crumb = $('main.lx > .lx-crumb'); if (!crumb) return;
-    var p = location.pathname, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
-    if (!kind) return;
+  // ---------- Barres de recherche (fiches + barre compacte du menu sur Buy / Charter / Experiences) ----------
+  // Section de la page : 'sale' (Buy), 'charter', 'xp' (shared experiences), ou '' ailleurs
+  var qsPath = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  var qsKind = /^\/shared-experiences(\/|$)/.test(qsPath) ? 'xp' : qsPath === '/listings' ? 'sale' : qsPath === '/charter' ? 'charter'
+    : /^\/yacht\//.test(qsPath) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+  var qsData = {};
+  function qsBuild(kind, form, onAll){
     var CFG = {
-      sale: { list: '/listings', ph: 'Search yachts for sale: builder, model, location…', all: 'See all yachts for sale' },
-      charter: { list: '/charter', ph: 'Search charter yachts: name, builder, location…', all: 'See all charter yachts' },
-      xp: { list: '/shared-experiences', ph: 'Search shared experiences…', all: 'See all shared experiences' }
+      sale: { list: '/listings', all: 'See all yachts for sale' },
+      charter: { list: '/charter', all: 'See all charter yachts' },
+      xp: { list: '/shared-experiences', all: 'See all shared experiences' }
     }[kind];
-    var row = document.createElement('div'); row.className = 'qs-row';
-    crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
-    row.insertAdjacentHTML('beforeend', '<form class="qs" role="search" action="' + CFG.list + '"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-      '<input type="search" name="q" autocomplete="off" placeholder="' + CFG.ph + '" aria-label="' + CFG.ph + '"><button type="submit">Search</button><div class="qs-list" hidden></div></form>');
-    var form = $('.qs', row), inp = $('input', form), box = $('.qs-list', form), data = null, hits = [];
+    var inp = $('input', form), box = $('.qs-list', form), hits = [];
     function load(){
-      if (data) return Promise.resolve(data);
+      if (qsData[kind]) return Promise.resolve(qsData[kind]);
       var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
       return fetch(url).then(function(r){ return r.json(); }).then(function(d){
-        data = kind === 'xp' ? (d || []).map(function(x){ return { slug: x.id, title: x.title, names: x.names, base: x.base, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
+        return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){ return { slug: x.id, title: x.title, names: x.names, base: x.base, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
           : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
-        return data;
-      }).catch(function(){ return data = []; });
+      }).catch(function(){ return qsData[kind] = []; });
     }
     function show(){
       var q = inp.value.trim();
       if (!q) { box.hidden = true; return; }
       load().then(function(list){
+        if (inp.value.trim() !== q) return;
         hits = list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); });
         var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
         box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + (hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
@@ -185,7 +183,7 @@
           return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
             '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
         }).join('') + '</div>' : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
-          '<div class="qs-foot">' + (hits.length > 1 && kind !== 'xp' ? '<a class="qs-all" href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
+          '<div class="qs-foot">' + (hits.length > 1 && kind !== 'xp' ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
           '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
         box.hidden = false;
       });
@@ -193,10 +191,50 @@
     inp.addEventListener('input', show);
     inp.addEventListener('focus', function(){ load(); if (inp.value.trim()) show(); });
     form.addEventListener('submit', function(e){
+      if (onAll && kind !== 'xp') { e.preventDefault(); box.hidden = true; inp.blur(); onAll(inp.value.trim()); return; }
       if (kind === 'xp' || hits.length === 1) { e.preventDefault(); location.href = hits.length ? hits[0].href : CFG.list; }
+    });
+    // déjà sur le catalogue : « See all N results » filtre la liste de la page au lieu de la recharger
+    box.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('[data-qs-all]');
+      if (a && onAll) { e.preventDefault(); box.hidden = true; onAll(inp.value.trim()); }
     });
     document.addEventListener('click', function(e){ if (!form.contains(e.target)) box.hidden = true; });
     inp.addEventListener('keydown', function(e){ if (e.key === 'Escape') { box.hidden = true; inp.blur(); } });
+    return form;
+  }
+  function qsHTML(cls, ph){
+    return '<form class="' + cls + '" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+      '<input type="search" name="q" autocomplete="off" enterkeyhint="search" placeholder="' + ph + '" aria-label="' + ph + '"><button type="submit">Search</button><div class="qs-list" hidden></div></form>';
+  }
+
+  // Barre compacte : en défilant, le nom « Yacht Research Group » et les liens glissent vers la gauche et la recherche prend leur place
+  var navQS = null;
+  if (nav && qsKind) {
+    var NAVPH = { sale: 'Search yachts for sale…', charter: 'Search charter yachts…', xp: 'Search shared experiences…' }[qsKind];
+    var logoEl = $('.logo', nav);
+    (logoEl || nav.firstChild).insertAdjacentHTML('afterend', qsHTML('qs nav-qs', NAVPH));
+    navQS = $('.nav-qs', nav);
+    navQS.setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[qsKind]);
+    var catQ = $('#cat input[data-f="q"]');
+    qsBuild(qsKind, navQS, catQ ? function(q){
+      catQ.value = q; catQ.dispatchEvent(new Event('input', { bubbles: true }));
+      var c = $('#cat'); if (c) window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 16), behavior: reduce ? 'auto' : 'smooth' });
+    } : null);
+    nav.classList.add('has-qs');
+  }
+
+  // Barre de recherche sur les fiches (achat, charter, shared experiences)
+  (function(){
+    var crumb = $('main.lx > .lx-crumb'); if (!crumb) return;
+    var p = location.pathname, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+    if (!kind) return;
+    var PH = { sale: 'Search yachts for sale: builder, model, location…', charter: 'Search charter yachts: name, builder, location…', xp: 'Search shared experiences…' }[kind];
+    var row = document.createElement('div'); row.className = 'qs-row';
+    crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
+    row.insertAdjacentHTML('beforeend', qsHTML('qs', PH));
+    $('.qs', row).setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]);
+    qsBuild(kind, $('.qs', row));
   })();
 
   // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
@@ -451,6 +489,8 @@
     ticking = false;
     var vh = VH || window.innerHeight, y = window.scrollY;
     if (nav) nav.classList.toggle('solid', y > 40);
+    // barre compacte avec recherche dès qu'on commence à défiler ; elle reste tant qu'on tape dedans
+    if (navQS) nav.classList.toggle('compact', y > 40 || navQS.contains(document.activeElement));
     if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); return; }
     pars.forEach(function(el){
       var r = el.parentNode.getBoundingClientRect(); if (r.bottom < -100 || r.top > vh + 100) return;
@@ -471,5 +511,6 @@
     }
   }
   window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
+  if (navQS) navQS.addEventListener('focusout', function(){ setTimeout(frame, 200); });
   window.addEventListener('resize', function(){ offBox = null; frame(); }); frame();
 })();
