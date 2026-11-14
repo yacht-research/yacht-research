@@ -436,7 +436,17 @@
 
   // ---------- Boucle de scroll : nav, parallaxe, manifeste, off-market ----------
   var pars = $$('[data-par]'), offm = $('#offm'), offImg = $('#offmImg'), offPic = offImg ? $('img', offImg) : null;
-  var ticking = false;
+  var ticking = false, offBox = null;
+  // Private portfolio : le cadre ne coupe jamais le contenu (cadenas sous le menu fixe)
+  function offMeasure(){
+    if (!offm) return;
+    document.documentElement.style.setProperty('--navh', (nav ? nav.offsetHeight : 80) + 'px');
+    var offIn = $('.in', offm), vh = VH || window.innerHeight, vw = window.innerWidth;
+    offBox = {
+      ty: Math.max(0, Math.min(vh * 0.12, offIn ? offIn.offsetTop - 24 : vh * 0.12)),
+      tx: Math.min(vw * 0.14, Math.max(12, (vw - (offIn ? offIn.offsetWidth : vw)) / 2))
+    };
+  }
   function frame(){
     ticking = false;
     var vh = VH || window.innerHeight, y = window.scrollY;
@@ -453,16 +463,13 @@
     if (offm && offImg) {
       var or = offm.getBoundingClientRect(), op = Math.min(Math.max(-or.top / (or.height - vh), 0), 1), k = 1 - Math.min(op * 1.8, 1);
       // le cadre ne coupe jamais le contenu (cadenas en haut) : marge verticale limitée à la place libre autour du texte
-      var offIn = $('.in', offm), nav = $('#nav'), navH = nav ? nav.offsetHeight : 80;
-      document.documentElement.style.setProperty('--navh', navH + 'px');
-      // le haut du cadre reste au-dessus du cadenas (texte placé sous le menu fixe)
-      var ty = Math.max(0, Math.min(vh * 0.12, offIn ? offIn.offsetTop - 24 : vh * 0.12));
-      var vw = window.innerWidth, tx = Math.min(vw * 0.14, Math.max(12, (vw - (offIn ? offIn.offsetWidth : vw)) / 2));
+      // mesures faites une seule fois (et au redimensionnement) : le scroll reste fluide
+      if (!offBox) offMeasure();
       // valeurs entières : évite les fines lignes claires sur les bords gauche et droit
-      offImg.style.clipPath = 'inset(' + Math.round(ty * k) + 'px ' + Math.round(tx * k) + 'px round ' + Math.round(24 * k) + 'px)';
+      offImg.style.clipPath = 'inset(' + Math.round(offBox.ty * k) + 'px ' + Math.round(offBox.tx * k) + 'px round ' + Math.round(24 * k) + 'px)';
       offPic.style.transform = 'scale(' + (1.2 - op * 0.2) + ')';
     }
   }
   window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
-  window.addEventListener('resize', frame); frame();
+  window.addEventListener('resize', function(){ offBox = null; frame(); }); frame();
 })();

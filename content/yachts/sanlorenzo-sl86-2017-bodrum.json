@@ -4,13 +4,13 @@
   "builder": "Sanlorenzo",
   "model": "SL86",
   "listing_type": "sale",
-  "badge": "New Listing",
+  "badge": "Price Reduced",
   "length": "26.70 m / 88 ft",
   "year": "2017",
   "location": "Bodrum, Turkey",
-  "price": "",
+  "price": "€ 4,200,000",
   "price_note": "",
-  "original_price": "",
+  "original_price": "€ 4,480,000",
   "specs": {
     "Builder": "Sanlorenzo",
     "Model": "SL86",
@@ -34,9 +34,9 @@
     "Raymarine Axiom navigation",
     "Lying in Bodrum"
   ],
-  "description": "This 2017 Sanlorenzo SL86 offers four cabins for eight guests and two crew cabins, with a maximum speed of 32 knots and a 27-knot cruise.\n\nShe is fitted with CMC fin stabilisers, two 600 L/h watermakers, two Onan 27 kW generators, a Gaggenau galley, satellite TV and Raymarine Axiom navigation. She is lying in Bodrum, Turkey. Price on request.",
+  "description": "This 2017 Sanlorenzo SL86 offers four cabins for eight guests and two crew cabins, with a maximum speed of 32 knots and a 27-knot cruise.\n\nShe is fitted with CMC fin stabilisers, two 600 L/h watermakers, two Onan 27 kW generators, a Gaggenau galley, satellite TV and Raymarine Axiom navigation. She is lying in Bodrum, Turkey. Reduced to € 4,200,000.",
   "seo_title": "Sanlorenzo SL86 (2017) for Sale in Turkey | Yacht Research",
-  "seo_description": "2017 Sanlorenzo SL86 for sale in Bodrum, Turkey. CMC fin stabilisers. Two 600 L/h watermakers. Price on request. Yacht Research.",
+  "seo_description": "2017 Sanlorenzo SL86 for sale in Bodrum, Turkey. CMC fin stabilisers. Two 600 L/h watermakers. Reduced to € 4,200,000. Yacht Research.",
   "brochure": "/brochures/sanlorenzo-sl86-2017-bodrum.pdf",
   "published": true,
   "image": "/images/yachts/sanlorenzo-sl86-2017-bodrum/01.webp",
@@ -54,5 +54,5 @@
     "/images/yachts/sanlorenzo-sl86-2017-bodrum/11.webp",
     "/images/yachts/sanlorenzo-sl86-2017-bodrum/12.webp"
   ],
-  "updated": "2026-11-14"
+  "updated": "2026-11-15"
 }
