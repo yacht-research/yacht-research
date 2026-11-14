@@ -143,6 +143,61 @@
   }
   window.YR = { card: card, observe: observe, esc: esc };
 
+  // Recherche : chaque mot tapé doit se retrouver dans la fiche (nom, chantier, modèle, lieu, année, taille)
+  function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function yMatch(y, q){
+    var hay = norm([y.title, y.builder, y.model, y.location, y.year, y.length, (y.names || []).join(' '), y.base].join(' '));
+    return norm(q).split(/\s+/).filter(Boolean).every(function(w){ return hay.indexOf(w) > -1; });
+  }
+
+  // ---------- Barre de recherche sur les fiches (achat, charter, shared experiences) ----------
+  (function(){
+    var crumb = $('main.lx > .lx-crumb'); if (!crumb) return;
+    var p = location.pathname, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+    if (!kind) return;
+    var CFG = {
+      sale: { list: '/listings', ph: 'Search yachts for sale: builder, model, location…', all: 'See all yachts for sale' },
+      charter: { list: '/charter', ph: 'Search charter yachts: name, builder, location…', all: 'See all charter yachts' },
+      xp: { list: '/shared-experiences', ph: 'Search shared experiences…', all: 'See all shared experiences' }
+    }[kind];
+    var row = document.createElement('div'); row.className = 'qs-row';
+    crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
+    row.insertAdjacentHTML('beforeend', '<form class="qs" role="search" action="' + CFG.list + '"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+      '<input type="search" name="q" autocomplete="off" placeholder="' + CFG.ph + '" aria-label="' + CFG.ph + '"><button type="submit">Search</button><div class="qs-list" hidden></div></form>');
+    var form = $('.qs', row), inp = $('input', form), box = $('.qs-list', form), data = null, hits = [];
+    function load(){
+      if (data) return Promise.resolve(data);
+      var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
+      return fetch(url).then(function(r){ return r.json(); }).then(function(d){
+        data = kind === 'xp' ? (d || []).map(function(x){ return { slug: x.id, title: x.title, names: x.names, base: x.base, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
+          : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
+        return data;
+      }).catch(function(){ return data = []; });
+    }
+    function show(){
+      var q = inp.value.trim();
+      if (!q) { box.hidden = true; return; }
+      load().then(function(list){
+        hits = list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); });
+        var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
+        box.innerHTML = (hits.length ? hits.slice(0, 6).map(function(y){
+          var sub = [y.builder, y.year, y.location].filter(Boolean).join(' · ');
+          return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
+            '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
+        }).join('') : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
+          '<a class="qs-all" href="' + CFG.list + (kind === 'xp' ? '' : '?q=' + encodeURIComponent(q)) + '">' + (hits.length > 6 && kind !== 'xp' ? 'See all ' + hits.length + ' results' : CFG.all) + ' <i>→</i></a>';
+        box.hidden = false;
+      });
+    }
+    inp.addEventListener('input', show);
+    inp.addEventListener('focus', function(){ load(); if (inp.value.trim()) show(); });
+    form.addEventListener('submit', function(e){
+      if (kind === 'xp' || hits.length === 1) { e.preventDefault(); location.href = hits.length ? hits[0].href : CFG.list; }
+    });
+    document.addEventListener('click', function(e){ if (!form.contains(e.target)) box.hidden = true; });
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Escape') { box.hidden = true; inp.blur(); } });
+  })();
+
   // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
   function phStep(ph, d){
     var imgs; try { imgs = JSON.parse(ph.dataset.imgs); } catch (e) { return; }
@@ -273,9 +328,10 @@
     var tagOf = function(b){ b = (b || '').toLowerCase(); return b.indexOf('sold') > -1 ? 'sold' : b.indexOf('reduc') > -1 || b.indexOf('price') > -1 ? 'reduced' : b.indexOf('off') > -1 ? 'offmarket' : b.indexOf('new') > -1 ? 'new' : 'sale'; };
     var qloc = new URLSearchParams(location.search).get('location');
     if (qloc) { st.loc = /indian/i.test(qloc) ? 'Indian Ocean' : /dubai|gulf/i.test(qloc) ? 'Dubai' : /carib/i.test(qloc) ? 'Caribbean' : /med/i.test(qloc) ? 'Mediterranean' : ''; }
+    st.q = new URLSearchParams(location.search).get('q') || ''; // recherche lancée depuis une fiche (barre de recherche)
     function render(){
       var list = all.filter(function(y){
-        if (st.q && (y.title + ' ' + y.builder + ' ' + y.location + ' ' + y.year).toLowerCase().indexOf(st.q.toLowerCase()) < 0) return false;
+        if (st.q && !yMatch(y, st.q)) return false;
         if (st.min && (y.price_eur || 0) < +st.min) return false;
         if (st.max && y.price_eur && y.price_eur > +st.max) return false;
         if (st.len && lenM(y.length) < +st.len) return false;
@@ -308,6 +364,7 @@
           b.addEventListener('click', function(){ $$('button', el).forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); st[el.dataset.f] = b.dataset.v; render(); });
         });
       } else {
+        if (el.tagName === 'INPUT' && st[el.dataset.f]) el.value = st[el.dataset.f];
         el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.f] = el.value; render(); });
       }
     });
@@ -394,7 +451,10 @@
     }
     if (offm && offImg) {
       var or = offm.getBoundingClientRect(), op = Math.min(Math.max(-or.top / (or.height - vh), 0), 1), k = 1 - Math.min(op * 1.8, 1);
-      offImg.style.clipPath = 'inset(' + (12 * k) + '% ' + (14 * k) + '% round ' + (24 * k) + 'px)';
+      // le cadre ne coupe jamais le contenu (cadenas en haut) : marge verticale limitée à la place libre autour du texte
+      var offIn = $('.in', offm), ty = Math.max(0, Math.min(vh * 0.12, offIn ? (vh - offIn.offsetHeight) / 2 - 28 : vh * 0.12));
+      var vw = window.innerWidth, tx = Math.min(vw * 0.14, Math.max(12, (vw - (offIn ? offIn.offsetWidth : vw)) / 2));
+      offImg.style.clipPath = 'inset(' + (ty * k) + 'px ' + (tx * k) + 'px round ' + (24 * k) + 'px)';
       offPic.style.transform = 'scale(' + (1.2 - op * 0.2) + ')';
     }
   }

@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '38'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '39'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -979,8 +979,8 @@ function card(y, i) {
     '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';
 }
 const yIndex = JSON.parse(fs.readFileSync(path.join(SITE, 'content', 'yachts', 'index.json'), 'utf8')).yachts;
-const cardsFor = (type, lim) => yIndex.filter(y => y.type === type).slice(0, lim).map(card).join('');
+const cardsFor = (type, lim) => yIndex.filter(y => y.type === type && !/sold/i.test(y.badge || '')).slice(0, lim).map(card).join('');
 idx = idx.replace(/(<div class="rail" data-yachts="sale"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/, (m, a, b) => a + cardsFor('sale', 10) + b);
-idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n<\/section>)/, (m, a, b) => a + cardsFor('charter', 8) + b);
+idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/,(m, a, b) => a + cardsFor('charter', 8) + b);
 fs.writeFileSync(path.join(SITE, 'index.html'), responsiveImages(idx), 'utf8');
 console.log('✓ index.html (en-tête et pied de page)');
