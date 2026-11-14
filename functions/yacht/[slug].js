@@ -53,7 +53,7 @@ function currency(p) {
 function titleHTML(t) {
   if (t.indexOf(' - ') > -1) {
     const [name, model] = t.split(' - ');
-    const n = name.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
+    const n = name.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase());
     return '<span class="acc">' + esc(n) + '</span><small class="yt-model">' + esc(model) + '</small>';
   }
   const p = t.split(' ');
@@ -203,7 +203,7 @@ function charterBody(o) {
   const ft = (String(y.length || '').match(/(\d+)\s*ft/i) || [])[1];
   const chips = [[num(guests), 'guests'], [ft, 'ft'], [num(pick(y.specs, /cabin/i)), 'cabins'], [num(pick(y.specs, /crew/i)), 'crew']].filter(c => c[0]);
   const model = y.model || (title.indexOf(' - ') > -1 ? title.split(' - ')[1] : '');
-  const name = title.indexOf(' - ') > -1 ? title.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()) : title;
+  const name = title.indexOf(' - ') > -1 ? title.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase()) : title;
   const paras = esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
   const priceShort = price.replace(/^From\s+/i, '');
   return '<main class="lx">' +

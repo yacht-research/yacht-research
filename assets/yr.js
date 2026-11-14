@@ -119,7 +119,7 @@
   function splitTitle(y){
     // "Sunseeker 88 Yacht" -> "Sunseeker <em>88 Yacht</em>" ; "AGAPA - Sunseeker Predator 84" -> "<em>Agapa</em>"
     var t = y.title || '';
-    if (t.indexOf(' - ') > -1) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); });
+    if (t.indexOf(' - ') > -1) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); }).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, function(r){ return r.toUpperCase(); });
     var parts = t.split(' ');
     if (parts.length === 1) return '<em>' + esc(t) + '</em>';
     if (parts.length < 2) return esc(t);

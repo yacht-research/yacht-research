@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '36'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '37'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -966,7 +966,7 @@ idx = idx.replace(/yr\.css\?v=\d+/, 'yr.css?v=' + V).replace(/yr\.js\?v=\d+/, 'y
 // Le script de la page les rafraîchit ensuite ; Google et les visiteurs voient tout de suite les vraies annonces.
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function badgeLabel(b, type) { b = (b || '').toLowerCase(); if (type === 'charter') return 'Charter'; if (b.includes('exclusive')) return 'Exclusive price'; if (b.includes('reduc') || b.includes('price')) return 'Price reduced'; if (b.includes('off')) return 'Off market'; if (b.includes('new')) return 'New listing'; return 'For sale'; }
-function splitTitle(t) { if (t.includes(' - ')) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()); const p = t.split(' '); return p.length === 1 ? '<em>' + esc(t) + '</em>' : esc(p[0]) + ' <em>' + esc(p.slice(1).join(' ')) + '</em>'; }
+function splitTitle(t) { if (t.includes(' - ')) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase()); const p = t.split(' '); return p.length === 1 ? '<em>' + esc(t) + '</em>' : esc(p[0]) + ' <em>' + esc(p.slice(1).join(' ')) + '</em>'; }
 function shortLen(l) { const m = String(l || '').match(/[\d.,]+\s*m\b/i); return m ? m[0].replace(/\s+/g, ' ').replace(/(\.\d)\d+/, '$1') : (l || ''); }
 function card(y, i) {
   let sub = [y.builder || '', y.year, y.location].filter(Boolean).join(' · ');
