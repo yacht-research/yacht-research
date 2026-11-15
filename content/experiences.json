@@ -99,7 +99,7 @@
       "/images/experiences/sunseeker-experience/03",
       "/images/experiences/sunseeker-experience/04"
     ],
-    "from": null,
+    "from": 643,
     "about": "Encore is a 131ft Sunseeker with a sky lounge, a large sun deck and refined interiors. This is the most premium shared experience we offer in Dubai: a limited number of guests, a sushi chef on board, a DJ with a live saxophonist and premium drinks, for a three-hour cruise along the coast.",
     "meet": "Dubai Harbour. The exact berth is sent with your confirmation.",
     "info": [
@@ -127,7 +127,8 @@
       "2 Hour Twilight Tour with BBQ",
       "2 Hour Yacht Tour with BBQ Lunch",
       "3 hours Extended Sunset Tour with BBQ",
-      "Dubai Marina: Luxury Yacht Tour with BBQ"
+      "Dubai Marina: Luxury Yacht Tour with BBQ",
+      "3 Hour Afternoon Tour with BBQ Lunch"
     ],
     "yachts": [
       "solana-92ft-majesty-dubai",
@@ -164,7 +165,8 @@
     "base": "Dubai Marina",
     "names": [
       "Breakfast Tour",
-      "Late Riser Tour"
+      "Late Riser Tour",
+      "2 Hour Late Riser with Breakfast"
     ],
     "yachts": [
       "solana-92ft-majesty-dubai",
@@ -389,7 +391,7 @@
       "/images/experiences/ain-cruise/01",
       "/images/experiences/ain-cruise/02"
     ],
-    "from": null,
+    "from": 58,
     "about": "A relaxed one-hour evening cruise on a 90ft houseboat with an open-air top deck. Move freely between the decks and take photos of Ain Dubai lit up at night and the lights of Dubai Marina.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [

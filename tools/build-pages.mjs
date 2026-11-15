@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '50'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '51'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -286,7 +286,7 @@ const xpDetail = x => {
   return `<main class="lx">
   <p class="lx-crumb"><a href="/">Home</a> · <a href="/shared-experiences">Shared experiences</a> · <span>${x.title}</span></p>
   <div class="lx-top"><div><span class="tag yp-tag">${x.tag}</span><h1 class="lx-h1">${x.title}</h1><p class="lx-loc">⚲ ${x.base}, Dubai · Shared yacht, by the seat</p></div>
-    <div class="lx-chips">${chips.map(([v, k]) => `<div><b>${v}</b><span>${k}</span></div>`).join('')}</div></div>
+    <div class="lx-chips">${chips.map(([v, k]) => `<div><b${k === 'AED / guest' ? ' data-live-from' : ''}>${v}</b><span>${k}</span></div>`).join('')}</div></div>
   <div class="lx-mosaic lx-n${Math.min(x.images.length, 5)}">${x.images.slice(0, 5).map((im, i) => `<button class="yp-shot" data-full="${im}.webp"><img src="${i ? im + '-800' : im}.webp" alt="${xesc(x.title)} in Dubai photo ${i + 1}"${i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"'}></button>`).join('')}${x.images.length > 1 ? `<button class="lx-all" type="button" onclick="this.parentNode.querySelector('.yp-shot').click()">All ${x.images.length} photos</button>` : ''}</div>
   <div class="lx-body"><div class="lx-main">
     <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${ys.length ? `<p class="lx-small">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}">${n}</a>`).join(' or ')}</p>` : ''}</section>
@@ -296,7 +296,7 @@ const xpDetail = x => {
     <section class="lx-sec"><h2>Cancellation</h2><p class="lx-small" style="margin:0;font-size:15px;color:rgba(243,238,228,.82)">${SX_POLICY}</p></section>
     <section class="lx-sec lx-faq"><h2>Questions</h2>${faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</section>
   </div>
-  <aside class="lx-book"><p class="eyebrow">Shared experience</p><p class="lx-price">${x.from ? `From AED ${x.from} <small style="font-size:.5em;color:var(--mute)">/ guest</small>` : 'Price on request'}</p><p class="yp-note">Live times and prices below · Secure card payment</p>
+  <aside class="lx-book"><p class="eyebrow">Shared experience</p><p class="lx-price">${x.from ? `From AED <span data-live-from>${x.from}</span> <small style="font-size:.5em;color:var(--mute)">/ guest</small>` : 'Price on request'}</p><p class="yp-note">Live times and prices below · Secure card payment</p>
     <a href="#sx" class="btn btn-gold">Times and prices <i>→</i></a>
     <div class="yp-wa"><a href="${WA_UAE}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp UAE</a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp FR</a></div>
     <ul class="lx-pts"><li>${x.duration} · ${x.base}</li><li>Free cancellation up to 48 hours before</li><li>Reply within 24 hours, in English or French</li></ul></aside>

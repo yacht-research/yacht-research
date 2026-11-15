@@ -194,8 +194,14 @@
   function qsLoad(kind){
     if (qsData[kind]) return Promise.resolve(qsData[kind]);
     var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
-    return fetch(url).then(function(r){ return r.json(); }).then(function(d){
-      return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){ var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
+    // shared experiences : prix « à partir de » en direct (Xclusive, 14 prochains jours) quand il est disponible
+    var live = kind === 'xp' ? fetch('/api/sx/from').then(function(r){ return r.json(); }).then(function(d){ return (d && d.from) || {}; }).catch(function(){ return {}; }) : Promise.resolve({});
+    return Promise.all([fetch(url).then(function(r){ return r.json(); }), live]).then(function(res){
+      var d = res[0], lf = res[1];
+      return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){
+        var v = (x.names || []).map(function(n){ return lf[n]; }).filter(function(p){ return p > 0; });
+        if (v.length) x.from = Math.round(Math.min.apply(null, v));
+        var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
         : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
     }).catch(function(){ return qsData[kind] = []; });
   }

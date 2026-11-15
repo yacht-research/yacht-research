@@ -18,6 +18,22 @@
     m.querySelectorAll('.xp-nav').forEach(function (b) { b.onclick = function () { show(i + (b.classList.contains('next') ? 1 : -1)); }; });
   });
 
+  // Prix « à partir de » en direct (le plus bas des 14 prochains jours chez Xclusive) : remplace le prix indicatif,
+  // et reste affiché les jours sans départ ; sur la fiche d'une expérience, met aussi à jour le prix du haut et de la réservation
+  fetch('/api/sx/from').then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.from) return;
+    cards.forEach(function (c) {
+      var v = JSON.parse(c.dataset.names || '[]').map(function (n) { return d.from[n]; }).filter(function (x) { return x > 0; });
+      if (!v.length) return;
+      v = Math.round(Math.min.apply(null, v));
+      c.dataset.from = v;
+      var f = c.querySelector('.xp-from');
+      if (!f) { f = document.createElement('p'); f.className = 'xp-from'; f.hidden = !!c.querySelector('.xp-slot'); var meta = c.querySelector('.xp-meta'); meta.parentNode.insertBefore(f, meta.nextSibling); }
+      f.innerHTML = '<small>Starting from</small> <b>' + aed(v) + '</b> <small>per guest</small>';
+      if (c.classList.contains('xp-solo')) document.querySelectorAll('[data-live-from]').forEach(function (e) { e.textContent = Number(v).toLocaleString('en-US'); });
+    });
+  }).catch(function () {});
+
   // Un clic n'importe où sur une carte (hors boutons et liens) ouvre la page de l'expérience
   root.addEventListener('click', function (e) {
     var c = e.target.closest('.xp-card');
