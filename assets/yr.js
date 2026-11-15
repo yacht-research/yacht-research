@@ -212,7 +212,7 @@
   }
 
   // Barre compacte : en défilant, le nom « Yacht Research Group » et les liens glissent vers la gauche et la recherche prend leur place
-  var navQS = null;
+  var navQS = null, pageQS = null;
   if (nav && qsKind) {
     var NAVPH = { sale: 'Search yachts for sale…', charter: 'Search charter yachts…', xp: 'Search shared experiences…' }[qsKind];
     var logoEl = $('.logo', nav);
@@ -233,13 +233,22 @@
       keepY = window.scrollY; e.preventDefault();
       try { navIn.focus({ preventScroll: true }); } catch (err) { navIn.focus(); }
     });
+    // seulement après un toucher (téléphone, tablette) : sur ordinateur, ça bloquait la molette et la page sautait
     navIn.addEventListener('focus', function(){
-      if (keepY === null) keepY = window.scrollY;
-      var y = keepY, t0 = Date.now();
+      if (keepY === null) return;
+      var y = keepY, t0 = Date.now(); keepY = null;
       (function hold(){
-        if (Math.abs(window.scrollY - y) > 20) window.scrollTo(0, y);
-        if (Date.now() - t0 < 900) requestAnimationFrame(hold); else keepY = null;
+        if (Math.abs(window.scrollY - y) > 20) window.scrollTo({ top: y, behavior: 'instant' }); // sans animation (le site défile en « smooth »)
+        if (Date.now() - t0 < 700) requestAnimationFrame(hold);
       })();
+    });
+  }
+  // Une seule liste de résultats ouverte à la fois, et la même recherche dans les deux barres
+  function qsPair(a, b){
+    var ia = $('input', a), ib = $('input', b);
+    [[a, ia, b, ib], [b, ib, a, ia]].forEach(function(p){
+      p[1].addEventListener('focus', function(){ $('.qs-list', p[2]).hidden = true; });
+      p[1].addEventListener('input', function(){ p[3].value = p[1].value; });
     });
   }
 
@@ -253,7 +262,8 @@
     crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
     row.insertAdjacentHTML('beforeend', qsHTML('qs', PH));
     $('.qs', row).setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]);
-    qsBuild(kind, $('.qs', row));
+    pageQS = qsBuild(kind, $('.qs', row));
+    if (navQS) qsPair(navQS, pageQS);
   })();
 
   // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
@@ -508,8 +518,16 @@
     ticking = false;
     var vh = VH || window.innerHeight, y = window.scrollY;
     // barre compacte avec recherche dès qu'on commence à défiler ; elle reste tant qu'on tape dedans
-    var compact = !!navQS && (y > 40 || navQS.contains(document.activeElement));
-    if (navQS) nav.classList.toggle('compact', compact);
+    // sur les fiches, elle n'arrive qu'une fois la barre de la page passée sous le menu (jamais deux barres l'une sur l'autre)
+    var compact = false;
+    if (navQS) {
+      var pageOn = pageQS && (pageQS.contains(document.activeElement) || pageQS.getBoundingClientRect().bottom > nav.offsetHeight);
+      compact = navQS.contains(document.activeElement) || (y > 40 && !pageOn);
+      if (compact !== nav.classList.contains('compact')) {
+        nav.classList.toggle('compact', compact);
+        if (pageQS) $('.qs-list', compact ? pageQS : navQS).hidden = true;
+      }
+    }
     if (nav) nav.classList.toggle('solid', y > 40 || compact);
     if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); return; }
     pars.forEach(function(el){
