@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-15T04:38:15.693Z",
+ "generated": "2026-11-15T05:00:40.093Z",
  "count": 114,
  "yachts": [
   {
@@ -173,8 +173,8 @@
    "slug": "behike-150ft-tri-deck-dubai",
    "type": "charter",
    "title": "Behike",
-   "builder": "",
-   "model": "150ft tri-deck superyacht",
+   "builder": "CRN",
+   "model": "141ft tri-deck superyacht",
    "badge": "Charter Ready",
    "image": "/images/yachts/behike-150ft-tri-deck-dubai/01.webp",
    "thumb": "/images/yachts/behike-150ft-tri-deck-dubai/01-800.webp",
@@ -190,13 +190,13 @@
     "/images/yachts/behike-150ft-tri-deck-dubai/09-800.webp",
     "/images/yachts/behike-150ft-tri-deck-dubai/10-800.webp"
    ],
-   "length": "46 m / 150 ft",
+   "length": "43 m / 141 ft",
    "year": "",
    "location": "Dubai, UAE",
    "price": "From AED 11,500 per hour",
    "original_price": "",
    "price_eur": 2875,
-   "guests": "36",
+   "guests": "50",
    "cabins": "5",
    "updated": "2026-11-15"
   },

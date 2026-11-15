@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '52'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '55'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -230,7 +230,7 @@ const XP_FILTERS = `<div class="xf" data-xf>
     <label class="field"><span>Budget per guest</span><select data-xf="max"><option value="">Any</option><option value="100">Up to AED 100</option><option value="200">Up to AED 200</option><option value="300">Up to AED 300</option></select></label>
     <label class="field"><span>Duration</span><select data-xf="dur"><option value="">Any</option><option value="short">Up to 1 h 30</option><option value="long">2 hours or more</option></select></label>
     <label class="field"><span>Departure</span><select data-xf="base"><option value="">Anywhere</option><option value="marina">Dubai Marina</option><option value="harbour">Dubai Harbour</option></select></label>
-    <label class="field"><span>Sort</span><select data-xf="sort"><option value="price-desc">Price: high to low</option><option value="price-asc">Price: low to high</option><option value="dur-desc">Longest first</option><option value="dur-asc">Shortest first</option></select></label>
+    <label class="field"><span>Sort</span><select data-xf="sort"><option value="price-desc">Price: high to low</option><option value="price-asc">Price: low to high</option><option value="dur-desc">Duration: long to short</option><option value="dur-asc">Duration: short to long</option></select></label>
   </div>
   <div class="cat-bar rv"><div class="chips" data-xf="tag"><button type="button" data-v="" class="on">All</button></div><p class="cat-count"><b data-xf-count>${XP.length}</b> <span data-xf-label>experiences</span> <button class="cat-reset" type="button">Reset</button></p></div>
   <p class="cat-empty" data-xf-empty hidden>No experience matches these filters. Tell us on <a href="${WA_UAE}" target="_blank" rel="noopener">WhatsApp UAE</a> or <a href="${WA_FR}" target="_blank" rel="noopener">WhatsApp FR</a> what you have in mind.</p>
