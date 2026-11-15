@@ -765,14 +765,14 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 /* Charter : encart vers les sorties partagées */
 .sxt{padding:clamp(30px,4vw,50px) var(--pad) 0}
 .sxt-card{display:grid;grid-template-columns:1.1fr 1fr;gap:0;max-width:1200px;margin:0 auto;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--black-2);color:inherit;text-decoration:none}
-.sxt-img{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px;min-height:300px}
-.sxt-img img{width:100%;height:100%;object-fit:cover;display:block}
+.sxt-img{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:repeat(2,minmax(0,1fr));gap:3px;min-height:300px;overflow:hidden}
+.sxt-img img{width:100%;height:100%;min-height:0;object-fit:cover;display:block}
 .sxt-img img:first-child{grid-row:1/3}
 .sxt-txt{padding:clamp(24px,3.5vw,48px);display:flex;flex-direction:column;justify-content:center;gap:16px}
 .sxt-txt h2{margin:0;font-family:var(--sans);font-weight:300;text-transform:uppercase;font-size:clamp(26px,3vw,40px);line-height:1.05}
 .sxt-txt p{margin:0;line-height:1.7}
 .sxt-txt .btn{align-self:flex-start}
-@media(max-width:860px){.sxt-card{grid-template-columns:1fr}.sxt-img{min-height:220px}}
+@media(max-width:860px){.sxt-card{grid-template-columns:1fr}.sxt-img{min-height:0;height:clamp(220px,62vw,360px)}}
 @media(max-width:560px){.xp-hl{grid-template-columns:1fr}.xp-foot .btn{width:100%;justify-content:center}.sx-date{width:100%}}
 /* Shared experiences : prix indicatif, liens fiche et WhatsApp, fiches détaillées */
 .xp-body h3 a{color:inherit;text-decoration:none}
@@ -1011,6 +1011,6 @@ nav.compact .nav-qs{opacity:1;visibility:visible;pointer-events:auto;transform:n
   .nav-qs{left:calc(var(--pad) + 72px);right:calc(var(--pad) + 54px);height:42px;padding:0 6px 0 14px;flex:none}
   .nav-qs input{font-size:16px}
   .nav-qs button{display:none}
-  .nav-qs .qs-list{position:fixed;left:var(--pad);right:var(--pad);top:calc(100% + 8px)}
+  .nav-qs .qs-list{left:-72px;right:-54px}
 }
 @media(prefers-reduced-motion:reduce){.logo span,.nav-qs,nav.has-qs .nav-links,nav.has-qs .nav-r .btn{transition:none}nav.compact .burger{animation:none}}body.menu-open nav.has-qs .burger{display:block}

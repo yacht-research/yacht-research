@@ -186,6 +186,9 @@
           '<div class="qs-foot">' + (hits.length > 1 && kind !== 'xp' ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
           '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
         box.hidden = false;
+        // barre du menu : la liste s'arrête au-dessus du clavier du téléphone
+        var vv = window.visualViewport;
+        if (vv && form.classList.contains('nav-qs')) box.style.maxHeight = Math.max(170, vv.height + vv.offsetTop - form.getBoundingClientRect().bottom - 14) + 'px';
       });
     }
     inp.addEventListener('input', show);
@@ -222,6 +225,22 @@
       var c = $('#cat'); if (c) window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 16), behavior: reduce ? 'auto' : 'smooth' });
     } : null);
     nav.classList.add('has-qs');
+    // iPhone : toucher un champ dans un en-tête fixe fait remonter la page tout en haut. On donne le focus
+    // nous-mêmes sans défilement, et on remet la page où elle était si Safari la déplace quand même.
+    var navIn = $('input', navQS), keepY = null;
+    navIn.addEventListener('touchend', function(e){
+      if (document.activeElement === navIn) return;
+      keepY = window.scrollY; e.preventDefault();
+      try { navIn.focus({ preventScroll: true }); } catch (err) { navIn.focus(); }
+    });
+    navIn.addEventListener('focus', function(){
+      if (keepY === null) keepY = window.scrollY;
+      var y = keepY, t0 = Date.now();
+      (function hold(){
+        if (Math.abs(window.scrollY - y) > 20) window.scrollTo(0, y);
+        if (Date.now() - t0 < 900) requestAnimationFrame(hold); else keepY = null;
+      })();
+    });
   }
 
   // Barre de recherche sur les fiches (achat, charter, shared experiences)
@@ -488,9 +507,10 @@
   function frame(){
     ticking = false;
     var vh = VH || window.innerHeight, y = window.scrollY;
-    if (nav) nav.classList.toggle('solid', y > 40);
     // barre compacte avec recherche dès qu'on commence à défiler ; elle reste tant qu'on tape dedans
-    if (navQS) nav.classList.toggle('compact', y > 40 || navQS.contains(document.activeElement));
+    var compact = !!navQS && (y > 40 || navQS.contains(document.activeElement));
+    if (navQS) nav.classList.toggle('compact', compact);
+    if (nav) nav.classList.toggle('solid', y > 40 || compact);
     if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); return; }
     pars.forEach(function(el){
       var r = el.parentNode.getBoundingClientRect(); if (r.bottom < -100 || r.top > vh + 100) return;
