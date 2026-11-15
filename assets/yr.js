@@ -146,8 +146,37 @@
   // Recherche : chaque mot tapé doit se retrouver dans la fiche (nom, chantier, modèle, lieu, année, taille)
   function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function yMatch(y, q){
-    var hay = norm([y.title, y.builder, y.model, y.location, y.year, y.length, (y.names || []).join(' '), y.base].join(' '));
+    var hay = norm([y.title, y.builder, y.model, y.location, y.year, y.length, (y.names || []).join(' '), y.base, y.extra].join(' '));
     return norm(q).split(/\s+/).filter(Boolean).every(function(w){ return hay.indexOf(w) > -1; });
+  }
+
+  // Shared experiences : tags, durée et budget tirés de la fiche (titre, horaires, résumé, points forts)
+  var XP_TAGS = [
+    ['superyacht', 'Superyacht', /superyacht/i],
+    ['food', 'Food & BBQ', /bbq|dinner|breakfast|sushi|brunch|buffet|lunch/i],
+    ['sunset', 'Sunset', /sunset|sundowner/i],
+    ['night', 'Night & party', /night|party|moonlight|twilight|\bdj\b/i],
+    ['sightseeing', 'Sightseeing', /sightseeing|atlantis|burj al arab|ain dubai|\bjbr\b|palm/i],
+    ['speedboat', 'Speedboat', /speedboat|\brib\b/i]
+  ];
+  function xpInfo(x){
+    var txt = [x.title, (x.names || []).join(' '), x.summary, (x.highlights || []).join(' ')].join(' ');
+    var tags = XP_TAGS.filter(function(t){ return t[2].test(txt); });
+    var d = String(x.duration || ''), h = d.match(/(\d+(?:[.,]\d+)?)\s*(?:h|hour)/i), m = d.match(/h\s*(\d{2})\b/i);
+    return {
+      tags: tags.map(function(t){ return t[0]; }),
+      min: h ? Math.round(parseFloat(h[1].replace(',', '.')) * 60) + (m ? +m[1] : 0) : 0,
+      from: x.from || 0,
+      base: /harbour/i.test(x.base || '') ? 'harbour' : /marina/i.test(x.base || '') ? 'marina' : '',
+      extra: [x.summary, (x.highlights || []).join(' '), tags.map(function(t){ return t[1]; }).join(' ')].join(' ')
+    };
+  }
+
+  // Arrivée sur la page des résultats : on descend jusqu'à la liste (compteur + bateaux), pas en haut de page
+  function goResults(smooth){
+    // Buy / Charter : le compteur, juste au-dessus des bateaux ; Experiences : les cartes (le choix de date est entre les deux)
+    var bar = $('#cat .cat-bar') || ($('[data-xf]') && $('[data-sx-grid]')); if (!bar) return;
+    window.scrollTo({ top: bar.getBoundingClientRect().top + window.scrollY - ((nav ? nav.offsetHeight : 70) + 12), behavior: smooth && !reduce ? 'smooth' : 'instant' });
   }
 
   // ---------- Barres de recherche (fiches + barre compacte du menu sur Buy / Charter / Experiences) ----------
@@ -156,34 +185,36 @@
   var qsKind = /^\/shared-experiences(\/|$)/.test(qsPath) ? 'xp' : qsPath === '/listings' ? 'sale' : qsPath === '/charter' ? 'charter'
     : /^\/yacht\//.test(qsPath) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
   var qsData = {};
+  function qsLoad(kind){
+    if (qsData[kind]) return Promise.resolve(qsData[kind]);
+    var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
+    return fetch(url).then(function(r){ return r.json(); }).then(function(d){
+      return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){ var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
+        : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
+    }).catch(function(){ return qsData[kind] = []; });
+  }
   function qsBuild(kind, form, onAll){
     var CFG = {
       sale: { list: '/listings', all: 'See all yachts for sale' },
       charter: { list: '/charter', all: 'See all charter yachts' },
       xp: { list: '/shared-experiences', all: 'See all shared experiences' }
     }[kind];
-    var inp = $('input', form), box = $('.qs-list', form), hits = [];
-    function load(){
-      if (qsData[kind]) return Promise.resolve(qsData[kind]);
-      var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
-      return fetch(url).then(function(r){ return r.json(); }).then(function(d){
-        return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){ return { slug: x.id, title: x.title, names: x.names, base: x.base, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
-          : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
-      }).catch(function(){ return qsData[kind] = []; });
-    }
+    var inp = $('input', form), box = $('.qs-list', form);
+    var load = function(){ return qsLoad(kind); };
+    var find = function(list, q){ return list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); }); };
     function show(){
       var q = inp.value.trim();
       if (!q) { box.hidden = true; return; }
       load().then(function(list){
         if (inp.value.trim() !== q) return;
-        hits = list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); });
+        var hits = find(list, q);
         var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
         box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + (hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
           var sub = [y.builder, y.year, y.location].filter(Boolean).join(' · ');
           return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
             '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
         }).join('') + '</div>' : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
-          '<div class="qs-foot">' + (hits.length > 1 && kind !== 'xp' ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
+          '<div class="qs-foot">' + (hits.length > 1 ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
           '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
         box.hidden = false;
         // barre du menu : la liste s'arrête au-dessus du clavier du téléphone
@@ -193,11 +224,18 @@
     }
     inp.addEventListener('input', show);
     inp.addEventListener('focus', function(){ load(); if (inp.value.trim()) show(); });
+    // Entrée / loupe : un seul résultat → sa fiche ; sinon → la liste de la page, déjà filtrée, à hauteur des résultats
     form.addEventListener('submit', function(e){
-      if (onAll && kind !== 'xp') { e.preventDefault(); box.hidden = true; inp.blur(); onAll(inp.value.trim()); return; }
-      if (kind === 'xp' || hits.length === 1) { e.preventDefault(); location.href = hits.length ? hits[0].href : CFG.list; }
+      e.preventDefault();
+      var q = inp.value.trim(); box.hidden = true; inp.blur();
+      load().then(function(list){
+        var hits = q ? find(list, q) : [];
+        if (hits.length === 1) { location.href = hits[0].href; return; }
+        if (onAll) { onAll(q); return; }
+        location.href = CFG.list + (q ? '?q=' + encodeURIComponent(q) : '');
+      });
     });
-    // déjà sur le catalogue : « See all N results » filtre la liste de la page au lieu de la recharger
+    // déjà sur la page de la liste : « See all N results » filtre la liste de la page au lieu de la recharger
     box.addEventListener('click', function(e){
       var a = e.target.closest && e.target.closest('[data-qs-all]');
       if (a && onAll) { e.preventDefault(); box.hidden = true; onAll(inp.value.trim()); }
@@ -219,29 +257,37 @@
     (logoEl || nav.firstChild).insertAdjacentHTML('afterend', qsHTML('qs nav-qs', NAVPH));
     navQS = $('.nav-qs', nav);
     navQS.setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[qsKind]);
-    var catQ = $('#cat input[data-f="q"]');
+    // sur la page de la liste (Buy, Charter, Experiences) : la recherche remplit le filtre de la page et descend aux résultats
+    var catQ = $('#cat input[data-f="q"]') || $('[data-xf] input[data-xf="q"]');
     qsBuild(qsKind, navQS, catQ ? function(q){
       catQ.value = q; catQ.dispatchEvent(new Event('input', { bubbles: true }));
-      var c = $('#cat'); if (c) window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 16), behavior: reduce ? 'auto' : 'smooth' });
+      goResults(true);
     } : null);
     nav.classList.add('has-qs');
-    // iPhone : toucher un champ dans un en-tête fixe fait remonter la page tout en haut. On donne le focus
-    // nous-mêmes sans défilement, et on remet la page où elle était si Safari la déplace quand même.
-    var navIn = $('input', navQS), keepY = null;
+    // iPhone : toucher un champ dans un en-tête fixe fait remonter la page tout en haut → focus sans défilement
+    var navIn = $('input', navQS);
     navIn.addEventListener('touchend', function(e){
       if (document.activeElement === navIn) return;
-      keepY = window.scrollY; e.preventDefault();
+      e.preventDefault();
       try { navIn.focus({ preventScroll: true }); } catch (err) { navIn.focus(); }
     });
-    // seulement après un toucher (téléphone, tablette) : sur ordinateur, ça bloquait la molette et la page sautait
-    navIn.addEventListener('focus', function(){
-      if (keepY === null) return;
-      var y = keepY, t0 = Date.now(); keepY = null;
-      (function hold(){
-        if (Math.abs(window.scrollY - y) > 20) window.scrollTo({ top: y, behavior: 'instant' }); // sans animation (le site défile en « smooth »)
-        if (Date.now() - t0 < 700) requestAnimationFrame(hold);
-      })();
-    });
+  }
+  // iPhone : quand le clavier se ferme, Safari laisse parfois le menu fixe décalé (il disparaît jusqu'à ce qu'on remonte).
+  // On redonne sa place à la page d'un pixel, sans animation, pour qu'il se recale.
+  if (window.matchMedia('(hover:none),(pointer:coarse)').matches) {
+    var kbd = false; // seulement après la fermeture d'un clavier, jamais pendant un simple défilement
+    document.addEventListener('focusin', function(e){ if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) kbd = true; });
+    var vvFix = function(){
+      setTimeout(function(){
+        var el = document.activeElement;
+        if (!kbd || (el && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName))) return; // clavier encore ouvert
+        kbd = false;
+        var y = window.scrollY;
+        window.scrollTo({ top: y + 1, behavior: 'instant' }); window.scrollTo({ top: y, behavior: 'instant' });
+      }, 150);
+    };
+    document.addEventListener('focusout', vvFix);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', vvFix);
   }
   // Une seule liste de résultats ouverte à la fois, et la même recherche dans les deux barres
   function qsPair(a, b){
@@ -264,6 +310,55 @@
     $('.qs', row).setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]);
     pageQS = qsBuild(kind, $('.qs', row));
     if (navQS) qsPair(navQS, pageQS);
+  })();
+
+  // ---------- Shared experiences : filtres (recherche, budget, durée, départ, tags) ----------
+  (function(){
+    var root = $('[data-xf]'); if (!root) return;
+    var cards = $$('.xp-card[data-xp]', $('[data-sx-grid]')), chips = $('[data-xf="tag"]', root), cnt = $('[data-xf-count]', root), lbl = $('[data-xf-label]', root), empty = $('[data-xf-empty]', root);
+    var st = { q: new URLSearchParams(location.search).get('q') || '', max: '', dur: '', base: '', tag: '' }, info = {};
+    var qIn = $('input[data-xf="q"]', root); qIn.value = st.q;
+    function render(){
+      var n = 0;
+      cards.forEach(function(c){
+        var x = info[c.dataset.xp], ok = !!x;
+        if (x) {
+          var i = x.info;
+          if (st.q && !yMatch(x, st.q)) ok = false;
+          if (st.max && !(i.from && i.from <= +st.max)) ok = false;
+          if (st.dur === 'short' && !(i.min && i.min <= 90)) ok = false;
+          if (st.dur === 'long' && !(i.min >= 120)) ok = false;
+          if (st.base && i.base !== st.base) ok = false;
+          if (st.tag && i.tags.indexOf(st.tag) < 0) ok = false;
+        }
+        c.classList.toggle('xf-hide', !ok); if (ok) n++;
+      });
+      cnt.textContent = n; lbl.textContent = n === 1 ? 'experience' : 'experiences'; empty.hidden = !!n;
+    }
+    qsLoad('xp').then(function(list){
+      list.forEach(function(x){ info[x.slug] = x; });
+      // tags : seulement ceux qui correspondent à au moins une expérience
+      XP_TAGS.forEach(function(t){
+        var k = list.filter(function(x){ return x.info.tags.indexOf(t[0]) > -1; }).length;
+        if (k) chips.insertAdjacentHTML('beforeend', '<button type="button" data-v="' + t[0] + '">' + esc(t[1]) + '</button>');
+      });
+      $$('button', chips).forEach(function(b){
+        b.addEventListener('click', function(){ $$('button', chips).forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); st.tag = b.dataset.v; render(); });
+      });
+      render();
+      if (st.q) setTimeout(function(){ goResults(false); }, 80);
+    });
+    $$('input[data-xf],select[data-xf]', root).forEach(function(el){
+      el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.xf] = el.value; render(); });
+    });
+    // Entrée / loupe dans la recherche de la page : on ferme le clavier et on descend aux expériences
+    qIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); qIn.blur(); goResults(true); } });
+    $('.cat-reset', root).addEventListener('click', function(){
+      for (var k in st) st[k] = '';
+      $$('input[data-xf],select[data-xf]', root).forEach(function(el){ el.value = ''; });
+      $$('button', chips).forEach(function(b){ b.classList.toggle('on', b.dataset.v === ''); });
+      render();
+    });
   })();
 
   // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
@@ -433,6 +528,7 @@
         });
       } else {
         if (el.tagName === 'INPUT' && st[el.dataset.f]) el.value = st[el.dataset.f];
+        if (el.tagName === 'INPUT') el.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); el.blur(); goResults(true); } });
         el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.f] = el.value; render(); });
       }
     });
@@ -444,6 +540,7 @@
     });
     fetch('/content/yachts/index.json').then(function(r){ return r.json(); }).then(function(d){
       all = (d.yachts || []).filter(function(y){ return y.type === type; }); render();
+      if (st.q) setTimeout(function(){ goResults(false); }, 80); // arrivée depuis une autre barre de recherche : directement aux résultats
     }).catch(function(){ grid.innerHTML = '<p class="cat-empty">Listings are temporarily unavailable. Please <a href="/yacht-research-form">contact us</a>.</p>'; });
   }
 
