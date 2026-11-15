@@ -30,8 +30,14 @@
 
   // ---------- Menu mobile ----------
   var burger = $('#burger');
-  if (burger) burger.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
-  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); }); });
+  // la page derrière ne défile plus pendant que le menu est ouvert (iPhone : body overflow:hidden ne suffit pas)
+  var menuEl = $('#menu');
+  function setMenu(open){
+    if (open && menuEl && nav) menuEl.style.setProperty('--menutop', (nav.offsetHeight + 10) + 'px');
+    document.body.classList.toggle('menu-open', open); document.documentElement.classList.toggle('menu-lock', open); }
+  if (burger) burger.addEventListener('click', function(){ setMenu(!document.body.classList.contains('menu-open')); });
+  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+  if (menuEl) menuEl.addEventListener('touchmove', function(e){ if (menuEl.scrollHeight <= menuEl.clientHeight + 1) e.preventDefault(); }, { passive: false });
 
   // ---------- Titres : découpe mot par mot ----------
   function splitWords(h){
@@ -119,7 +125,7 @@
   function splitTitle(y){
     // "Sunseeker 88 Yacht" -> "Sunseeker <em>88 Yacht</em>" ; "AGAPA - Sunseeker Predator 84" -> "<em>Agapa</em>"
     var t = y.title || '';
-    if (t.indexOf(' - ') > -1) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); });
+    if (t.indexOf(' - ') > -1) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); }).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, function(r){ return r.toUpperCase(); });
     var parts = t.split(' ');
     if (parts.length === 1) return '<em>' + esc(t) + '</em>';
     if (parts.length < 2) return esc(t);
@@ -132,7 +138,7 @@
     var specs = y.type === 'charter' ? '' :
       '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
       (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
-      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
+      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (function(l){ return '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>'; })((y.location || '—').split(',')[0].trim())) + '</div>';
     var sold = y.type !== 'charter' && /sold/i.test(y.badge || '');
     var price = sold ? '<span>' + (y.price ? '<s>' + esc(y.price) + '</s> ' : '') + 'Sold</span>' : y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
     return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
@@ -142,6 +148,254 @@
       '<div class="price">' + price + ' <i>→</i></div></div></a>';
   }
   window.YR = { card: card, observe: observe, esc: esc };
+
+  // Recherche : chaque mot tapé doit se retrouver dans la fiche (nom, chantier, modèle, lieu, année, taille)
+  function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function yMatch(y, q){
+    var hay = norm([y.title, y.builder, y.model, y.location, y.year, y.length, (y.names || []).join(' '), y.base, y.extra].join(' '));
+    return norm(q).split(/\s+/).filter(Boolean).every(function(w){ return hay.indexOf(w) > -1; });
+  }
+
+  // Shared experiences : tags, durée et budget tirés de la fiche (titre, horaires, résumé, points forts)
+  var XP_TAGS = [
+    ['superyacht', 'Superyacht', /superyacht/i],
+    ['food', 'Food & BBQ', /bbq|dinner|breakfast|sushi|brunch|buffet|lunch/i],
+    ['sunset', 'Sunset', /sunset|sundowner/i],
+    ['night', 'Night & party', /night|party|moonlight|twilight|\bdj\b/i],
+    ['sightseeing', 'Sightseeing', /sightseeing|atlantis|burj al arab|ain dubai|\bjbr\b|palm/i],
+    ['speedboat', 'Speedboat', /speedboat|\brib\b/i]
+  ];
+  function xpInfo(x){
+    var txt = [x.title, (x.names || []).join(' '), x.summary, (x.highlights || []).join(' ')].join(' ');
+    var tags = XP_TAGS.filter(function(t){ return t[2].test(txt); });
+    var d = String(x.duration || ''), h = d.match(/(\d+(?:[.,]\d+)?)\s*(?:h|hour)/i), m = d.match(/h\s*(\d{2})\b/i);
+    return {
+      tags: tags.map(function(t){ return t[0]; }),
+      min: h ? Math.round(parseFloat(h[1].replace(',', '.')) * 60) + (m ? +m[1] : 0) : 0,
+      from: x.from || 0,
+      base: /harbour/i.test(x.base || '') ? 'harbour' : /marina/i.test(x.base || '') ? 'marina' : '',
+      extra: [x.summary, (x.highlights || []).join(' '), tags.map(function(t){ return t[1]; }).join(' ')].join(' ')
+    };
+  }
+
+  // Arrivée sur la page des résultats : on descend jusqu'à la liste (compteur + bateaux), pas en haut de page
+  function goResults(smooth){
+    var navH = (nav ? nav.offsetHeight : 70) + 12, xf = $('[data-xf]'), none = $('[data-xf-empty]');
+    // Experiences sans résultat : on arrive sur les filtres et le message WhatsApp (pas plus bas, sur les dates)
+    if (xf && none && !none.hidden) {
+      var top = xf.getBoundingClientRect().top + window.scrollY - navH, r = none.getBoundingClientRect();
+      var need = r.bottom + window.scrollY - window.innerHeight + 24; // le message doit être visible en bas de l'écran
+      window.scrollTo({ top: Math.max(top, Math.min(need, r.top + window.scrollY - navH)), behavior: smooth && !reduce ? 'smooth' : 'instant' });
+      return;
+    }
+    // Buy / Charter : le compteur, juste au-dessus des bateaux ; Experiences : les cartes (le choix de date est entre les deux)
+    var bar = $('#cat .cat-bar') || ($('[data-xf]') && $('[data-sx-grid]')); if (!bar) return;
+    window.scrollTo({ top: bar.getBoundingClientRect().top + window.scrollY - ((nav ? nav.offsetHeight : 70) + 12), behavior: smooth && !reduce ? 'smooth' : 'instant' });
+  }
+
+  // ---------- Barres de recherche (fiches + barre compacte du menu sur Buy / Charter / Experiences) ----------
+  // Section de la page : 'sale' (Buy), 'charter', 'xp' (shared experiences), ou '' ailleurs
+  var qsPath = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  var qsKind = /^\/shared-experiences(\/|$)/.test(qsPath) ? 'xp' : qsPath === '/listings' ? 'sale' : qsPath === '/charter' ? 'charter'
+    : /^\/yacht\//.test(qsPath) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+  var qsData = {};
+  function qsLoad(kind){
+    if (qsData[kind]) return Promise.resolve(qsData[kind]);
+    var url = kind === 'xp' ? '/content/experiences.json' : '/content/yachts/index.json';
+    // shared experiences : prix « à partir de » en direct (Xclusive, 14 prochains jours) quand il est disponible
+    var live = kind === 'xp' ? fetch('/api/sx/from').then(function(r){ return r.json(); }).then(function(d){ return (d && d.from) || {}; }).catch(function(){ return {}; }) : Promise.resolve({});
+    return Promise.all([fetch(url).then(function(r){ return r.json(); }), live]).then(function(res){
+      var d = res[0], lf = res[1];
+      return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){
+        var v = (x.names || []).map(function(n){ return lf[n]; }).filter(function(p){ return p > 0; });
+        if (v.length) x.from = Math.round(Math.min.apply(null, v));
+        var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
+        : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
+    }).catch(function(){ return qsData[kind] = []; });
+  }
+  function qsBuild(kind, form, onAll){
+    var CFG = {
+      sale: { list: '/listings', all: 'See all yachts for sale' },
+      charter: { list: '/charter', all: 'See all charter yachts' },
+      xp: { list: '/shared-experiences', all: 'See all shared experiences' }
+    }[kind];
+    var inp = $('input', form), box = $('.qs-list', form);
+    var load = function(){ return qsLoad(kind); };
+    var find = function(list, q){ return list.filter(function(y){ return yMatch(y, q); }).sort(function(a, b){ return (/sold/i.test(a.badge || '') ? 1 : 0) - (/sold/i.test(b.badge || '') ? 1 : 0); }); };
+    function show(){
+      var q = inp.value.trim();
+      if (!q) { box.hidden = true; return; }
+      load().then(function(list){
+        if (inp.value.trim() !== q) return;
+        var hits = find(list, q);
+        var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
+        box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + (hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
+          var sub = [y.builder, y.year, y.location].filter(Boolean).join(' · ');
+          return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
+            '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
+        }).join('') + '</div>' : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
+          '<div class="qs-foot">' + (hits.length > 1 ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
+          '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
+        box.hidden = false;
+        // barre du menu : la liste s'arrête au-dessus du clavier du téléphone
+        var vv = window.visualViewport;
+        if (vv && form.classList.contains('nav-qs')) box.style.maxHeight = Math.max(170, vv.height + vv.offsetTop - form.getBoundingClientRect().bottom - 14) + 'px';
+      });
+    }
+    inp.addEventListener('input', show);
+    inp.addEventListener('focus', function(){ load(); if (inp.value.trim()) show(); });
+    // Entrée / loupe : un seul résultat → sa fiche ; sinon → la liste de la page, déjà filtrée, à hauteur des résultats
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var q = inp.value.trim(); box.hidden = true; inp.blur();
+      load().then(function(list){
+        var hits = q ? find(list, q) : [];
+        if (hits.length === 1) { location.href = hits[0].href; return; }
+        if (onAll) { onAll(q); return; }
+        location.href = CFG.list + (q ? '?q=' + encodeURIComponent(q) : '');
+      });
+    });
+    // déjà sur la page de la liste : « See all N results » filtre la liste de la page au lieu de la recharger
+    box.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('[data-qs-all]');
+      if (a && onAll) { e.preventDefault(); box.hidden = true; onAll(inp.value.trim()); }
+    });
+    document.addEventListener('click', function(e){ if (!form.contains(e.target)) box.hidden = true; });
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Escape') { box.hidden = true; inp.blur(); } });
+    return form;
+  }
+  function qsHTML(cls, ph){
+    return '<form class="' + cls + '" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+      '<input type="search" name="q" autocomplete="off" enterkeyhint="search" placeholder="' + ph + '" aria-label="' + ph + '"><button type="submit">Search</button><div class="qs-list" hidden></div></form>';
+  }
+
+  // Barre compacte : en défilant, le nom « Yacht Research Group » et les liens glissent vers la gauche et la recherche prend leur place
+  var navQS = null, pageQS = null;
+  if (nav && qsKind) {
+    var NAVPH = { sale: 'Search yachts for sale…', charter: 'Search charter yachts…', xp: 'Search shared experiences…' }[qsKind];
+    var logoEl = $('.logo', nav);
+    (logoEl || nav.firstChild).insertAdjacentHTML('afterend', qsHTML('qs nav-qs', NAVPH));
+    navQS = $('.nav-qs', nav);
+    navQS.setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[qsKind]);
+    // sur la page de la liste (Buy, Charter, Experiences) : la recherche remplit le filtre de la page et descend aux résultats
+    var catQ = $('#cat input[data-f="q"]') || $('[data-xf] input[data-xf="q"]');
+    qsBuild(qsKind, navQS, catQ ? function(q){
+      catQ.value = q; catQ.dispatchEvent(new Event('input', { bubbles: true }));
+      goResults(true);
+    } : null);
+    nav.classList.add('has-qs');
+    // iPhone : toucher un champ dans un en-tête fixe fait remonter la page tout en haut → focus sans défilement
+    var navIn = $('input', navQS);
+    navIn.addEventListener('touchend', function(e){
+      if (document.activeElement === navIn) return;
+      e.preventDefault();
+      try { navIn.focus({ preventScroll: true }); } catch (err) { navIn.focus(); }
+    });
+  }
+  // iPhone : quand le clavier se ferme, Safari laisse parfois le menu fixe décalé (il disparaît jusqu'à ce qu'on remonte).
+  // On redonne sa place à la page d'un pixel, sans animation, pour qu'il se recale.
+  if (window.matchMedia('(hover:none),(pointer:coarse)').matches) {
+    var kbd = false; // seulement après la fermeture d'un clavier, jamais pendant un simple défilement
+    document.addEventListener('focusin', function(e){ if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) kbd = true; });
+    var vvFix = function(){
+      setTimeout(function(){
+        var el = document.activeElement;
+        if (!kbd || (el && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName))) return; // clavier encore ouvert
+        kbd = false;
+        var y = window.scrollY;
+        window.scrollTo({ top: y + 1, behavior: 'instant' }); window.scrollTo({ top: y, behavior: 'instant' });
+      }, 150);
+    };
+    document.addEventListener('focusout', vvFix);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', vvFix);
+  }
+  // Une seule liste de résultats ouverte à la fois, et la même recherche dans les deux barres
+  function qsPair(a, b){
+    var ia = $('input', a), ib = $('input', b);
+    [[a, ia, b, ib], [b, ib, a, ia]].forEach(function(p){
+      p[1].addEventListener('focus', function(){ $('.qs-list', p[2]).hidden = true; });
+      p[1].addEventListener('input', function(){ p[3].value = p[1].value; });
+    });
+  }
+
+  // Barre de recherche sur les fiches (achat, charter, shared experiences)
+  (function(){
+    var crumb = $('main.lx > .lx-crumb'); if (!crumb) return;
+    var p = location.pathname, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+    if (!kind) return;
+    var PH = { sale: 'Search yachts for sale: builder, model, location…', charter: 'Search charter yachts: name, builder, location…', xp: 'Search shared experiences…' }[kind];
+    var row = document.createElement('div'); row.className = 'qs-row';
+    crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
+    row.insertAdjacentHTML('beforeend', qsHTML('qs', PH));
+    $('.qs', row).setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]);
+    pageQS = qsBuild(kind, $('.qs', row));
+    if (navQS) qsPair(navQS, pageQS);
+  })();
+
+  // ---------- Shared experiences : filtres (recherche, budget, durée, départ, tags) et tri ----------
+  (function(){
+    var root = $('[data-xf]'); if (!root) return;
+    var grid = $('[data-sx-grid]'), cards = $$('.xp-card[data-xp]', grid), chips = $('[data-xf="tag"]', root), cnt = $('[data-xf-count]', root), lbl = $('[data-xf-label]', root), empty = $('[data-xf-empty]', root);
+    var st = { q: new URLSearchParams(location.search).get('q') || '', max: '', dur: '', base: '', tag: '', sort: 'price-desc' }, info = {};
+    var qIn = $('input[data-xf="q"]', root);
+    // retour arrière : le navigateur remet les choix des menus, on repart de ce qui est affiché
+    $$('select[data-xf]', root).forEach(function(el){ if (el.value) st[el.dataset.xf] = el.value; });
+    if (!st.q && qIn.value) st.q = qIn.value; else qIn.value = st.q;
+    // prix pour le tri : celui de la carte (mis à jour en direct par sx.js), sinon celui de la fiche
+    var price = function(c){ return +c.dataset.from || (info[c.dataset.xp] && info[c.dataset.xp].info.from) || 0; };
+    var mins = function(c){ return (info[c.dataset.xp] && info[c.dataset.xp].info.min) || 0; };
+    function render(){
+      var n = 0, shown = [];
+      cards.forEach(function(c){
+        var x = info[c.dataset.xp], ok = !!x;
+        if (x) {
+          var i = x.info;
+          if (st.q && !yMatch(x, st.q)) ok = false;
+          if (st.max && !(price(c) && price(c) <= +st.max)) ok = false;
+          if (st.dur === 'short' && !(i.min && i.min <= 90)) ok = false;
+          if (st.dur === 'long' && !(i.min >= 120)) ok = false;
+          if (st.base && i.base !== st.base) ok = false;
+          if (st.tag && i.tags.indexOf(st.tag) < 0) ok = false;
+        }
+        c.classList.toggle('xf-hide', !ok); if (ok) { n++; shown.push(c); }
+      });
+      // Tri (comme Buy et Charter) ; la nouveauté reste en tête quand elle fait partie des résultats ; sans prix = à la fin
+      var k = st.sort;
+      shown.sort(function(a, b){
+        if (k === 'dur-desc' || k === 'dur-asc') { var d = mins(a) - mins(b); return k === 'dur-desc' ? -d : d; }
+        var pa = price(a), pb = price(b);
+        if (!pa || !pb) return (pa ? 0 : 1) - (pb ? 0 : 1);
+        return k === 'price-asc' ? pa - pb : pb - pa;
+      });
+      shown.forEach(function(c, i){ c.style.order = c.classList.contains('xp-feat') ? -1 : i; });
+      cnt.textContent = n; lbl.textContent = n === 1 ? 'experience' : 'experiences'; empty.hidden = !!n;
+    }
+    qsLoad('xp').then(function(list){
+      list.forEach(function(x){ info[x.slug] = x; });
+      // tags : seulement ceux qui correspondent à au moins une expérience
+      XP_TAGS.forEach(function(t){
+        var k = list.filter(function(x){ return x.info.tags.indexOf(t[0]) > -1; }).length;
+        if (k) chips.insertAdjacentHTML('beforeend', '<button type="button" data-v="' + t[0] + '">' + esc(t[1]) + '</button>');
+      });
+      $$('button', chips).forEach(function(b){
+        b.addEventListener('click', function(){ $$('button', chips).forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); st.tag = b.dataset.v; render(); });
+      });
+      render();
+      if (st.q) setTimeout(function(){ goResults(false); }, 80);
+    });
+    document.addEventListener('sx:from', render); // prix en direct arrivés : on retrie
+    $$('input[data-xf],select[data-xf]', root).forEach(function(el){
+      el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.xf] = el.value; render(); });
+    });
+    // Entrée / loupe dans la recherche de la page : on ferme le clavier et on descend aux expériences (ou au message)
+    qIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); qIn.blur(); goResults(true); } });
+    $('.cat-reset', root).addEventListener('click', function(){
+      for (var k in st) st[k] = k === 'sort' ? 'price-desc' : '';
+      $$('input[data-xf],select[data-xf]', root).forEach(function(el){ el.value = el.dataset.xf === 'sort' ? 'price-desc' : ''; });
+      $$('button', chips).forEach(function(b){ b.classList.toggle('on', b.dataset.v === ''); });
+      render();
+    });
+  })();
 
   // ---------- Photos des cartes : flèches et glisser au doigt, sans ouvrir la fiche ----------
   function phStep(ph, d){
@@ -273,14 +527,15 @@
     var tagOf = function(b){ b = (b || '').toLowerCase(); return b.indexOf('sold') > -1 ? 'sold' : b.indexOf('reduc') > -1 || b.indexOf('price') > -1 ? 'reduced' : b.indexOf('off') > -1 ? 'offmarket' : b.indexOf('new') > -1 ? 'new' : 'sale'; };
     var qloc = new URLSearchParams(location.search).get('location');
     if (qloc) { st.loc = /indian/i.test(qloc) ? 'Indian Ocean' : /dubai|gulf/i.test(qloc) ? 'Dubai' : /carib/i.test(qloc) ? 'Caribbean' : /med/i.test(qloc) ? 'Mediterranean' : ''; }
+    st.q = new URLSearchParams(location.search).get('q') || ''; // recherche lancée depuis une fiche (barre de recherche)
     function render(){
       var list = all.filter(function(y){
-        if (st.q && (y.title + ' ' + y.builder + ' ' + y.location + ' ' + y.year).toLowerCase().indexOf(st.q.toLowerCase()) < 0) return false;
+        if (st.q && !yMatch(y, st.q)) return false;
         if (st.min && (y.price_eur || 0) < +st.min) return false;
         if (st.max && y.price_eur && y.price_eur > +st.max) return false;
         if (st.len && lenM(y.length) < +st.len) return false;
         if (st.year && yearN(y.year) < +st.year) return false;
-        if (st.tag && tagOf(y.badge) !== st.tag) return false;
+        if (st.tag && !(tagOf(y.badge) === st.tag || (st.tag === 'reduced' && y.original_price && !/sold/i.test(y.badge || '')) || (st.tag === 'exclusive' && /exclusive/i.test(y.badge || '')))) return false;
         if (st.loc && !(LOC[st.loc] || /x^/).test(y.location + ' ' + y.title)) return false;
         return true;
       });
@@ -308,6 +563,9 @@
           b.addEventListener('click', function(){ $$('button', el).forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); st[el.dataset.f] = b.dataset.v; render(); });
         });
       } else {
+        if (el.tagName === 'INPUT' && st[el.dataset.f]) el.value = st[el.dataset.f];
+        else if (el.value) st[el.dataset.f] = el.value; // retour arrière : le navigateur remet le tri / les filtres choisis, la liste les suit
+        if (el.tagName === 'INPUT') el.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); el.blur(); goResults(true); } });
         el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.f] = el.value; render(); });
       }
     });
@@ -319,6 +577,7 @@
     });
     fetch('/content/yachts/index.json').then(function(r){ return r.json(); }).then(function(d){
       all = (d.yachts || []).filter(function(y){ return y.type === type; }); render();
+      if (st.q) setTimeout(function(){ goResults(false); }, 80); // arrivée depuis une autre barre de recherche : directement aux résultats
     }).catch(function(){ grid.innerHTML = '<p class="cat-empty">Listings are temporarily unavailable. Please <a href="/yacht-research-form">contact us</a>.</p>'; });
   }
 
@@ -378,11 +637,32 @@
 
   // ---------- Boucle de scroll : nav, parallaxe, manifeste, off-market ----------
   var pars = $$('[data-par]'), offm = $('#offm'), offImg = $('#offmImg'), offPic = offImg ? $('img', offImg) : null;
-  var ticking = false;
+  var ticking = false, offBox = null;
+  // Private portfolio : le cadre ne coupe jamais le contenu (cadenas sous le menu fixe)
+  function offMeasure(){
+    if (!offm) return;
+    document.documentElement.style.setProperty('--navh', (nav ? nav.offsetHeight : 80) + 'px');
+    var offIn = $('.in', offm), vh = VH || window.innerHeight, vw = window.innerWidth;
+    offBox = {
+      ty: Math.max(0, Math.min(vh * 0.12, offIn ? offIn.offsetTop - 24 : vh * 0.12)),
+      tx: Math.min(vw * 0.14, Math.max(12, (vw - (offIn ? offIn.offsetWidth : vw)) / 2))
+    };
+  }
   function frame(){
     ticking = false;
     var vh = VH || window.innerHeight, y = window.scrollY;
-    if (nav) nav.classList.toggle('solid', y > 40);
+    // barre compacte avec recherche dès qu'on commence à défiler ; elle reste tant qu'on tape dedans
+    // sur les fiches, elle n'arrive qu'une fois la barre de la page passée sous le menu (jamais deux barres l'une sur l'autre)
+    var compact = false;
+    if (navQS) {
+      var pageOn = pageQS && (pageQS.contains(document.activeElement) || pageQS.getBoundingClientRect().bottom > nav.offsetHeight);
+      compact = navQS.contains(document.activeElement) || (y > 40 && !pageOn);
+      if (compact !== nav.classList.contains('compact')) {
+        nav.classList.toggle('compact', compact);
+        if (pageQS) $('.qs-list', compact ? pageQS : navQS).hidden = true;
+      }
+    }
+    if (nav) nav.classList.toggle('solid', y > 40 || compact);
     if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); return; }
     pars.forEach(function(el){
       var r = el.parentNode.getBoundingClientRect(); if (r.bottom < -100 || r.top > vh + 100) return;
@@ -394,10 +674,15 @@
     }
     if (offm && offImg) {
       var or = offm.getBoundingClientRect(), op = Math.min(Math.max(-or.top / (or.height - vh), 0), 1), k = 1 - Math.min(op * 1.8, 1);
-      offImg.style.clipPath = 'inset(' + (12 * k) + '% ' + (14 * k) + '% round ' + (24 * k) + 'px)';
+      // le cadre ne coupe jamais le contenu (cadenas en haut) : marge verticale limitée à la place libre autour du texte
+      // mesures faites une seule fois (et au redimensionnement) : le scroll reste fluide
+      if (!offBox) offMeasure();
+      // valeurs entières : évite les fines lignes claires sur les bords gauche et droit
+      offImg.style.clipPath = 'inset(' + Math.round(offBox.ty * k) + 'px ' + Math.round(offBox.tx * k) + 'px round ' + Math.round(24 * k) + 'px)';
       offPic.style.transform = 'scale(' + (1.2 - op * 0.2) + ')';
     }
   }
   window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
-  window.addEventListener('resize', frame); frame();
+  if (navQS) navQS.addEventListener('focusout', function(){ setTimeout(frame, 200); });
+  window.addEventListener('resize', function(){ offBox = null; frame(); }); frame();
 })();

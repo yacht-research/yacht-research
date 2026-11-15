@@ -18,6 +18,23 @@
     m.querySelectorAll('.xp-nav').forEach(function (b) { b.onclick = function () { show(i + (b.classList.contains('next') ? 1 : -1)); }; });
   });
 
+  // Prix « à partir de » en direct (le plus bas des 14 prochains jours chez Xclusive) : remplace le prix indicatif,
+  // et reste affiché les jours sans départ ; sur la fiche d'une expérience, met aussi à jour le prix du haut et de la réservation
+  fetch('/api/sx/from').then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.from) return;
+    cards.forEach(function (c) {
+      var v = JSON.parse(c.dataset.names || '[]').map(function (n) { return d.from[n]; }).filter(function (x) { return x > 0; });
+      if (!v.length) return;
+      v = Math.round(Math.min.apply(null, v));
+      c.dataset.from = v;
+      var f = c.querySelector('.xp-from');
+      if (!f) { f = document.createElement('p'); f.className = 'xp-from'; f.hidden = !!c.querySelector('.xp-slot'); var meta = c.querySelector('.xp-meta'); meta.parentNode.insertBefore(f, meta.nextSibling); }
+      f.innerHTML = '<small>Starting from</small> <b>' + aed(v) + '</b> <small>per guest</small>';
+      if (c.classList.contains('xp-solo')) document.querySelectorAll('[data-live-from]').forEach(function (e) { e.textContent = Number(v).toLocaleString('en-US'); });
+    });
+    document.dispatchEvent(new Event('sx:from')); // le tri de la page se refait avec les prix en direct
+  }).catch(function () {});
+
   // Un clic n'importe où sur une carte (hors boutons et liens) ouvre la page de l'expérience
   root.addEventListener('click', function (e) {
     var c = e.target.closest('.xp-card');
@@ -45,7 +62,7 @@
     var slots = card.querySelector('[data-slots]'), price = card.querySelector('[data-price]'), cta = card.querySelector('[data-cta]');
     var fromEl = card.querySelector('.xp-from');
     card.classList.toggle('xp-off', !deps.length);
-    card.style.order = card.classList.contains('xp-feat') ? '-1' : deps.length ? '0' : '1'; // la nouveauté toujours en tête, puis les expériences disponibles ce jour-là
+    // l'ordre des cartes est donné par le tri de la page (yr.js) : plus cher d'abord par défaut, la nouveauté en tête
     if (fromEl) fromEl.hidden = !!deps.length; // le prix du jour remplace le prix indicatif
     if (!deps.length) { slots.innerHTML = '<span class="xp-wait">No departure on this date. Try another day.</span>'; price.innerHTML = ''; cta.innerHTML = ''; return; }
     var low = deps.map(function (d) { return d.from_aed; }).filter(Boolean);

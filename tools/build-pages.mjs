@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '36'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '56'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -145,7 +145,7 @@ function catalogue(type) {
     : [['', 'Any'], ['10000', '€10k / wk'], ['20000', '€20k / wk'], ['50000', '€50k / wk'], ['100000', '€100k / wk'], ['200000', '€200k / wk'], ['500000', '€500k / wk']];
   const opts = a => a.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
   const chips = sale
-    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="offmarket">Off market</button><button data-v="sold">Sold</button></div>`
+    ? `<div class="chips" data-f="tag"><button data-v="" class="on">All</button><button data-v="new">New listing</button><button data-v="reduced">Price reduced</button><button data-v="exclusive">Exclusive price</button><button data-v="offmarket">Off market</button><button data-v="sold">Sold</button></div>`
     : `<div class="chips" data-f="loc"><button data-v="" class="on">All destinations</button><button data-v="Mediterranean">Mediterranean</button><button data-v="Dubai">Dubai &amp; Gulf</button><button data-v="Caribbean">Caribbean</button><button data-v="Indian Ocean">Indian Ocean</button></div>`;
   return `<section class="cat" id="cat" data-cat="${type}">
   <div class="filters rv">
@@ -223,7 +223,20 @@ const SX_TEASER = `<section class="sxt rv">
 </section>`;
 
 const SX_POLICY = 'Free cancellation up to 48 hours before departure. Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.';
+// Filtres de la page Shared experiences (même principe que Buy / Charter ; les tags sont calculés par yr.js)
+const XP_FILTERS = `<div class="xf" data-xf>
+  <div class="filters xp-filters rv">
+    <label class="field fsearch"><span>Search</span><input data-xf="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Superyacht, BBQ, sunset, party…"></label>
+    <label class="field"><span>Budget per guest</span><select data-xf="max"><option value="">Any</option><option value="100">Up to AED 100</option><option value="200">Up to AED 200</option><option value="300">Up to AED 300</option></select></label>
+    <label class="field"><span>Duration</span><select data-xf="dur"><option value="">Any</option><option value="short">Up to 1 h 30</option><option value="long">2 hours or more</option></select></label>
+    <label class="field"><span>Departure</span><select data-xf="base"><option value="">Anywhere</option><option value="marina">Dubai Marina</option><option value="harbour">Dubai Harbour</option></select></label>
+    <label class="field"><span>Sort</span><select data-xf="sort"><option value="price-desc">Price: high to low</option><option value="price-asc">Price: low to high</option><option value="dur-desc">Duration: longest</option><option value="dur-asc">Duration: shortest</option></select></label>
+  </div>
+  <div class="cat-bar rv"><div class="chips" data-xf="tag"><button type="button" data-v="" class="on">All</button></div><p class="cat-count"><b data-xf-count>${XP.length}</b> <span data-xf-label>experiences</span> <button class="cat-reset" type="button">Reset</button></p></div>
+  <p class="cat-empty" data-xf-empty hidden>No experience matches these filters. Tell us on <a href="${WA_UAE}" target="_blank" rel="noopener">WhatsApp UAE</a> or <a href="${WA_FR}" target="_blank" rel="noopener">WhatsApp FR</a> what you have in mind.</p>
+</div>`;
 const sxSection = (cards, more = true) => `<section class="sx" id="sx">
+  ${more ? XP_FILTERS : ''}
   <div class="sx-bar">
     <div class="sx-days" data-sx-days role="group" aria-label="Choose a date"></div>
     <label class="field sx-date"><span>Other date</span><input type="date" data-sx-date></label>
@@ -274,7 +287,7 @@ const xpDetail = x => {
   return `<main class="lx">
   <p class="lx-crumb"><a href="/">Home</a> · <a href="/shared-experiences">Shared experiences</a> · <span>${x.title}</span></p>
   <div class="lx-top"><div><span class="tag yp-tag">${x.tag}</span><h1 class="lx-h1">${x.title}</h1><p class="lx-loc">⚲ ${x.base}, Dubai · Shared yacht, by the seat</p></div>
-    <div class="lx-chips">${chips.map(([v, k]) => `<div><b>${v}</b><span>${k}</span></div>`).join('')}</div></div>
+    <div class="lx-chips">${chips.map(([v, k]) => `<div><b${k === 'AED / guest' ? ' data-live-from' : ''}>${v}</b><span>${k}</span></div>`).join('')}</div></div>
   <div class="lx-mosaic lx-n${Math.min(x.images.length, 5)}">${x.images.slice(0, 5).map((im, i) => `<button class="yp-shot" data-full="${im}.webp"><img src="${i ? im + '-800' : im}.webp" alt="${xesc(x.title)} in Dubai photo ${i + 1}"${i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"'}></button>`).join('')}${x.images.length > 1 ? `<button class="lx-all" type="button" onclick="this.parentNode.querySelector('.yp-shot').click()">All ${x.images.length} photos</button>` : ''}</div>
   <div class="lx-body"><div class="lx-main">
     <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${ys.length ? `<p class="lx-small">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}">${n}</a>`).join(' or ')}</p>` : ''}</section>
@@ -284,7 +297,7 @@ const xpDetail = x => {
     <section class="lx-sec"><h2>Cancellation</h2><p class="lx-small" style="margin:0;font-size:15px;color:rgba(243,238,228,.82)">${SX_POLICY}</p></section>
     <section class="lx-sec lx-faq"><h2>Questions</h2>${faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</section>
   </div>
-  <aside class="lx-book"><p class="eyebrow">Shared experience</p><p class="lx-price">${x.from ? `From AED ${x.from} <small style="font-size:.5em;color:var(--mute)">/ guest</small>` : 'Price on request'}</p><p class="yp-note">Live times and prices below · Secure card payment</p>
+  <aside class="lx-book"><p class="eyebrow">Shared experience</p><p class="lx-price">${x.from ? `From AED <span data-live-from>${x.from}</span> <small style="font-size:.5em;color:var(--mute)">/ guest</small>` : 'Price on request'}</p><p class="yp-note">Live times and prices below · Secure card payment</p>
     <a href="#sx" class="btn btn-gold">Times and prices <i>→</i></a>
     <div class="yp-wa"><a href="${WA_UAE}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp UAE</a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp FR</a></div>
     <ul class="lx-pts"><li>${x.duration} · ${x.base}</li><li>Free cancellation up to 48 hours before</li><li>Reply within 24 hours, in English or French</li></ul></aside>
@@ -293,7 +306,7 @@ const xpDetail = x => {
 ${sxSection(xpCard(x, true), false)}
 ${SX_MODAL}
 ${x.images.length > 2 ? `<section class="yp-sec" style="padding-right:0"><div class="head" style="padding-right:var(--pad)"><div><p class="eyebrow rv">Gallery</p><h2 class="t-l yp-h2">On <span class="acc">board</span></h2></div><div class="rail-ui"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div></div><div class="rail yp-gal">${imgs}</div></section>` : ''}
-<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More experiences</p><h2 class="t-l yp-h2">You may <span class="acc">also like</span></h2></div><a href="/shared-experiences" class="arrow-link rv">View all <span>→</span></a></div>
+<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More experiences</p><h2 class="t-l yp-h2">You may <span class="acc">also like</span></h2></div><a href="/shared-experiences" class="btn-all rv">All shared experiences <span>→</span></a></div>
 <div class="xpd-more">${others.map(o => `<a class="xpd-mini rv" href="/shared-experiences/${o.id}"><img src="${o.images[0]}-800.webp" alt="" width="800" height="533" loading="lazy"><span>${o.tag}</span><b>${o.title}</b>${o.from ? `<small>From AED ${o.from}</small>` : ''}</a>`).join('')}</div></section>
 <div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;
@@ -919,13 +932,13 @@ pages.push({
           <a class="tli" href="${li}" target="_blank" rel="noopener">${LI_SVG}<span>View ${n.split(' ')[0]}'s LinkedIn profile</span><i>↗</i></a>
         </article>`).join('')}</div>
       </div>
-      <div class="channels ctp-ch rv">
-        <a href="${WA_UAE}"><b>WhatsApp <em>UAE</em></b>+971 52 430 2425</a>
-        <a href="${WA_FR}"><b>WhatsApp <em>France</em></b>+33 7 45 53 28 09</a>
-        <a href="mailto:contact@yachtresearchgroup.com"><b>Email</b>contact@yachtresearchgroup.com</a>
-      </div>
     </div>
     <aside class="ctp-r">${CONTACT_FORM}</aside>
+  </div>
+  <div class="channels ctp-ch rv">
+    <a href="${WA_UAE}"><b>WhatsApp <em>UAE</em></b>+971 52 430 2425</a>
+    <a href="${WA_FR}"><b>WhatsApp <em>France</em></b>+33 7 45 53 28 09</a>
+    <a href="mailto:contact@yachtresearchgroup.com"><b>Email</b>contact@yachtresearchgroup.com</a>
   </div>
 </main>
 ${NEWSLETTER}`
@@ -966,21 +979,21 @@ idx = idx.replace(/yr\.css\?v=\d+/, 'yr.css?v=' + V).replace(/yr\.js\?v=\d+/, 'y
 // Le script de la page les rafraîchit ensuite ; Google et les visiteurs voient tout de suite les vraies annonces.
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function badgeLabel(b, type) { b = (b || '').toLowerCase(); if (type === 'charter') return 'Charter'; if (b.includes('exclusive')) return 'Exclusive price'; if (b.includes('reduc') || b.includes('price')) return 'Price reduced'; if (b.includes('off')) return 'Off market'; if (b.includes('new')) return 'New listing'; return 'For sale'; }
-function splitTitle(t) { if (t.includes(' - ')) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()); const p = t.split(' '); return p.length === 1 ? '<em>' + esc(t) + '</em>' : esc(p[0]) + ' <em>' + esc(p.slice(1).join(' ')) + '</em>'; }
+function splitTitle(t) { if (t.includes(' - ')) t = t.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase()); const p = t.split(' '); return p.length === 1 ? '<em>' + esc(t) + '</em>' : esc(p[0]) + ' <em>' + esc(p.slice(1).join(' ')) + '</em>'; }
 function shortLen(l) { const m = String(l || '').match(/[\d.,]+\s*m\b/i); return m ? m[0].replace(/\s+/g, ' ').replace(/(\.\d)\d+/, '$1') : (l || ''); }
 function card(y, i) {
   let sub = [y.builder || '', y.year, y.location].filter(Boolean).join(' · ');
   if (y.type === 'charter' && y.title.includes(' - ')) sub = y.title.split(' - ').slice(1).join(' - ') + (y.location ? ' · ' + y.location : '');
   const specs = y.type === 'charter' ? '' : '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
     (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
-    (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : '<div><b>' + esc((y.location || '—').split(',')[0]) + '</b><span>Location</span></div>') + '</div>';
+    (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (l => '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>')((y.location || '—').split(',')[0].trim())) + '</div>';
   const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
   return '\n    <a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '"><div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
     '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';
 }
 const yIndex = JSON.parse(fs.readFileSync(path.join(SITE, 'content', 'yachts', 'index.json'), 'utf8')).yachts;
-const cardsFor = (type, lim) => yIndex.filter(y => y.type === type).slice(0, lim).map(card).join('');
+const cardsFor = (type, lim) => yIndex.filter(y => y.type === type && !/sold/i.test(y.badge || '')).slice(0, lim).map(card).join('');
 idx = idx.replace(/(<div class="rail" data-yachts="sale"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/, (m, a, b) => a + cardsFor('sale', 10) + b);
-idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n<\/section>)/, (m, a, b) => a + cardsFor('charter', 8) + b);
+idx = idx.replace(/(<div class="rail" data-yachts="charter"[^>]*>)[\s\S]*?(\n  <\/div>\n  <div class="progress">)/,(m, a, b) => a + cardsFor('charter', 8) + b);
 fs.writeFileSync(path.join(SITE, 'index.html'), responsiveImages(idx), 'utf8');
 console.log('✓ index.html (en-tête et pied de page)');

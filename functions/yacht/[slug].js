@@ -8,6 +8,9 @@ export async function onRequest(context) {
   const slug = context.params.slug;
   const origin = new URL(context.request.url).origin;
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) return notFound();
+  // Anciennes adresses de fiches renommées : redirection permanente (Google remplace l'ancienne adresse par la nouvelle)
+  const MOVED = { 'behike-150ft-tri-deck-dubai': 'behike-141ft-tri-deck-dubai' };
+  if (MOVED[slug]) return Response.redirect(origin + '/yacht/' + MOVED[slug] + new URL(context.request.url).search, 301);
 
   let y = null;
   try {
@@ -53,7 +56,7 @@ function currency(p) {
 function titleHTML(t) {
   if (t.indexOf(' - ') > -1) {
     const [name, model] = t.split(' - ');
-    const n = name.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
+    const n = name.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase());
     return '<span class="acc">' + esc(n) + '</span><small class="yt-model">' + esc(model) + '</small>';
   }
   const p = t.split(' ');
@@ -171,7 +174,7 @@ function renderYachtPage(y, slug, base, origin) {
     '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost">WhatsApp UAE</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost">WhatsApp FR</a></div>' + brochure +
     '<p class="yp-disc">All enquiries handled with discretion. Reply within 24 hours, in English or French.</p></aside></section>') +
     videoHTML + galHTML +
-    '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="arrow-link rv">View all <span>→</span></a></div>' +
+    '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">' + (isCharter ? 'More charters' : 'More yachts') + '</p><h2 class="t-l split-words yp-h2">You may <span class="acc">also like</span></h2></div><a href="' + (isCharter ? '/charter' : '/listings') + '" class="btn-all rv">' + (isCharter ? 'All charter yachts' : 'All yachts for sale') + ' <span>→</span></a></div>' +
     '<div class="rail" data-yachts="' + (isCharter ? 'charter' : 'sale') + '" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>'
     )) +
     '<div class="lightbox" id="lb" hidden><button aria-label="Close">×</button><img alt=""></div>' +
@@ -203,7 +206,7 @@ function charterBody(o) {
   const ft = (String(y.length || '').match(/(\d+)\s*ft/i) || [])[1];
   const chips = [[num(guests), 'guests'], [ft, 'ft'], [num(pick(y.specs, /cabin/i)), 'cabins'], [num(pick(y.specs, /crew/i)), 'crew']].filter(c => c[0]);
   const model = y.model || (title.indexOf(' - ') > -1 ? title.split(' - ')[1] : '');
-  const name = title.indexOf(' - ') > -1 ? title.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()) : title;
+  const name = title.indexOf(' - ') > -1 ? title.split(' - ')[0].toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase()).replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix)\b/g, r => r.toUpperCase()) : title;
   const paras = esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
   const priceShort = price.replace(/^From\s+/i, '');
   return '<main class="lx">' +
@@ -228,7 +231,7 @@ function charterBody(o) {
     '<ul class="lx-pts"><li>Reply within 24 hours, in English or French</li><li>Payment by bank transfer or card</li><li>No payment to request a quote</li><li>All enquiries handled with discretion</li></ul></aside>' +
     '</div></main>' +
     videoHTML + specsHTML + galHTML +
-    '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More charters</p><h2 class="t-l split-words yp-h2">Similar <span class="acc">yachts</span></h2></div><a href="/charter" class="arrow-link rv">View all <span>→</span></a></div>' +
+    '<section class="yp-sec"><div class="head"><div><p class="eyebrow rv">More charters</p><h2 class="t-l split-words yp-h2">Similar <span class="acc">yachts</span></h2></div><a href="/charter" class="btn-all rv">All charter yachts <span>→</span></a></div>' +
     '<div class="rail" data-yachts="charter" data-limit="9" data-exclude="' + esc(slug) + '"></div></section>';
 }
 
