@@ -1030,3 +1030,8 @@ nav.compact .nav-qs{opacity:1;visibility:visible;pointer-events:auto;transform:n
 @media(max-width:600px){.xp-filters{grid-template-columns:1fr 1fr}.xp-filters .field:last-child{grid-column:1/-1}}
 .xp-card.xf-hide{display:none!important}
 .xf .cat-empty{margin:0 0 24px}
+/* Menu déroulant : « Enquire now » toujours visible en bas de l'écran (téléphone et PC), la liste défile au-dessus */
+.menu{padding-top:96px;padding-bottom:18px}
+.menu a{font-size:clamp(20px,min(7vw,calc(var(--vh,1svh)*3.2)),46px);padding:.28em 0}
+.menu a.menu-cta{position:sticky;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2;flex:none;
+  box-shadow:0 0 0 12px var(--black),0 -22px 30px 14px var(--black),0 26px 0 14px var(--black),0 14px 34px -14px rgba(201,168,76,.7)}
