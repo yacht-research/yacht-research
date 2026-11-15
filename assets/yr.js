@@ -30,8 +30,14 @@
 
   // ---------- Menu mobile ----------
   var burger = $('#burger');
-  if (burger) burger.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
-  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); }); });
+  // la page derrière ne défile plus pendant que le menu est ouvert (iPhone : body overflow:hidden ne suffit pas)
+  var menuEl = $('#menu');
+  function setMenu(open){
+    if (open && menuEl && nav) menuEl.style.setProperty('--menutop', (nav.offsetHeight + 10) + 'px');
+    document.body.classList.toggle('menu-open', open); document.documentElement.classList.toggle('menu-lock', open); }
+  if (burger) burger.addEventListener('click', function(){ setMenu(!document.body.classList.contains('menu-open')); });
+  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+  if (menuEl) menuEl.addEventListener('touchmove', function(e){ if (menuEl.scrollHeight <= menuEl.clientHeight + 1) e.preventDefault(); }, { passive: false });
 
   // ---------- Titres : découpe mot par mot ----------
   function splitWords(h){

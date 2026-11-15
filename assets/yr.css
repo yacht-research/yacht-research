@@ -1031,7 +1031,10 @@ nav.compact .nav-qs{opacity:1;visibility:visible;pointer-events:auto;transform:n
 .xp-card.xf-hide{display:none!important}
 .xf .cat-empty{margin:0 0 24px}
 /* Menu déroulant : « Enquire now » toujours visible en bas de l'écran (téléphone et PC), la liste défile au-dessus */
-.menu{padding-top:96px;padding-bottom:18px}
+/* la liste commence juste sous l'en-tête (yr.js règle l'espace à la hauteur du menu), plus de grand vide entre le logo et Home */
+.menu{padding-top:calc(var(--menutop,84px));padding-bottom:18px}
+.menu>a:first-child{margin-top:0}
 .menu a{font-size:clamp(20px,min(7vw,calc(var(--vh,1svh)*3.2)),46px);padding:.28em 0}
+html.menu-lock,html.menu-lock body{overflow:hidden!important;overscroll-behavior:none}
 .menu a.menu-cta{position:sticky;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2;flex:none;
-  box-shadow:0 0 0 12px var(--black),0 -22px 30px 14px var(--black),0 26px 0 14px var(--black),0 14px 34px -14px rgba(201,168,76,.7)}
+  box-shadow:0 0 0 10px var(--black),0 14px 34px -14px rgba(201,168,76,.7)}
