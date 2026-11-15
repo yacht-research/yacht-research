@@ -232,7 +232,7 @@ const XP_FILTERS = `<div class="xf" data-xf>
     <label class="field"><span>Departure</span><select data-xf="base"><option value="">Anywhere</option><option value="marina">Dubai Marina</option><option value="harbour">Dubai Harbour</option></select></label>
   </div>
   <div class="cat-bar rv"><div class="chips" data-xf="tag"><button type="button" data-v="" class="on">All</button></div><p class="cat-count"><b data-xf-count>${XP.length}</b> <span data-xf-label>experiences</span> <button class="cat-reset" type="button">Reset</button></p></div>
-  <p class="cat-empty" data-xf-empty hidden>No experience matches these filters. <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" rel="noopener">Tell us on WhatsApp</a> what you have in mind.</p>
+  <p class="cat-empty" data-xf-empty hidden>No experience matches these filters. Tell us on <a href="${WA_UAE}" target="_blank" rel="noopener">WhatsApp UAE</a> or <a href="${WA_FR}" target="_blank" rel="noopener">WhatsApp FR</a> what you have in mind.</p>
 </div>`;
 const sxSection = (cards, more = true) => `<section class="sx" id="sx">
   ${more ? XP_FILTERS : ''}
