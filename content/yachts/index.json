@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-15T05:00:40.093Z",
+ "generated": "2026-11-15T05:03:15.588Z",
  "count": 114,
  "yachts": [
   {
@@ -235,7 +235,7 @@
    "slug": "stardom-140ft-tri-deck-dubai",
    "type": "charter",
    "title": "Stardom",
-   "builder": "",
+   "builder": "Custom Line",
    "model": "140ft tri-deck superyacht",
    "badge": "Charter Ready",
    "image": "/images/yachts/stardom-140ft-tri-deck-dubai/01.webp",

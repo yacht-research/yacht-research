@@ -1,7 +1,7 @@
 {
     "slug": "stardom-140ft-tri-deck-dubai",
     "title": "Stardom",
-    "builder": "",
+    "builder": "Custom Line",
     "model": "140ft tri-deck superyacht",
     "listing_type": "charter",
     "badge": "Charter Ready",
@@ -12,6 +12,7 @@
     "price_note": "Private charters in Dubai by the hour · Preferential B2B rate · Final rate depends on date and time",
     "original_price": "",
     "specs": {
+        "Builder": "Custom Line",
         "Type": "Tri-deck motor yacht",
         "Length overall": "43 m / 140 ft",
         "Guests": "100 guests (day charter)",
