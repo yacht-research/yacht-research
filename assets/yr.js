@@ -180,6 +180,14 @@
 
   // Arrivée sur la page des résultats : on descend jusqu'à la liste (compteur + bateaux), pas en haut de page
   function goResults(smooth){
+    var navH = (nav ? nav.offsetHeight : 70) + 12, xf = $('[data-xf]'), none = $('[data-xf-empty]');
+    // Experiences sans résultat : on arrive sur les filtres et le message WhatsApp (pas plus bas, sur les dates)
+    if (xf && none && !none.hidden) {
+      var top = xf.getBoundingClientRect().top + window.scrollY - navH, r = none.getBoundingClientRect();
+      var need = r.bottom + window.scrollY - window.innerHeight + 24; // le message doit être visible en bas de l'écran
+      window.scrollTo({ top: Math.max(top, Math.min(need, r.top + window.scrollY - navH)), behavior: smooth && !reduce ? 'smooth' : 'instant' });
+      return;
+    }
     // Buy / Charter : le compteur, juste au-dessus des bateaux ; Experiences : les cartes (le choix de date est entre les deux)
     var bar = $('#cat .cat-bar') || ($('[data-xf]') && $('[data-sx-grid]')); if (!bar) return;
     window.scrollTo({ top: bar.getBoundingClientRect().top + window.scrollY - ((nav ? nav.offsetHeight : 70) + 12), behavior: smooth && !reduce ? 'smooth' : 'instant' });
@@ -324,27 +332,42 @@
     if (navQS) qsPair(navQS, pageQS);
   })();
 
-  // ---------- Shared experiences : filtres (recherche, budget, durée, départ, tags) ----------
+  // ---------- Shared experiences : filtres (recherche, budget, durée, départ, tags) et tri ----------
   (function(){
     var root = $('[data-xf]'); if (!root) return;
-    var cards = $$('.xp-card[data-xp]', $('[data-sx-grid]')), chips = $('[data-xf="tag"]', root), cnt = $('[data-xf-count]', root), lbl = $('[data-xf-label]', root), empty = $('[data-xf-empty]', root);
-    var st = { q: new URLSearchParams(location.search).get('q') || '', max: '', dur: '', base: '', tag: '' }, info = {};
-    var qIn = $('input[data-xf="q"]', root); qIn.value = st.q;
+    var grid = $('[data-sx-grid]'), cards = $$('.xp-card[data-xp]', grid), chips = $('[data-xf="tag"]', root), cnt = $('[data-xf-count]', root), lbl = $('[data-xf-label]', root), empty = $('[data-xf-empty]', root);
+    var st = { q: new URLSearchParams(location.search).get('q') || '', max: '', dur: '', base: '', tag: '', sort: 'price-desc' }, info = {};
+    var qIn = $('input[data-xf="q"]', root);
+    // retour arrière : le navigateur remet les choix des menus, on repart de ce qui est affiché
+    $$('select[data-xf]', root).forEach(function(el){ if (el.value) st[el.dataset.xf] = el.value; });
+    if (!st.q && qIn.value) st.q = qIn.value; else qIn.value = st.q;
+    // prix pour le tri : celui de la carte (mis à jour en direct par sx.js), sinon celui de la fiche
+    var price = function(c){ return +c.dataset.from || (info[c.dataset.xp] && info[c.dataset.xp].info.from) || 0; };
+    var mins = function(c){ return (info[c.dataset.xp] && info[c.dataset.xp].info.min) || 0; };
     function render(){
-      var n = 0;
+      var n = 0, shown = [];
       cards.forEach(function(c){
         var x = info[c.dataset.xp], ok = !!x;
         if (x) {
           var i = x.info;
           if (st.q && !yMatch(x, st.q)) ok = false;
-          if (st.max && !(i.from && i.from <= +st.max)) ok = false;
+          if (st.max && !(price(c) && price(c) <= +st.max)) ok = false;
           if (st.dur === 'short' && !(i.min && i.min <= 90)) ok = false;
           if (st.dur === 'long' && !(i.min >= 120)) ok = false;
           if (st.base && i.base !== st.base) ok = false;
           if (st.tag && i.tags.indexOf(st.tag) < 0) ok = false;
         }
-        c.classList.toggle('xf-hide', !ok); if (ok) n++;
+        c.classList.toggle('xf-hide', !ok); if (ok) { n++; shown.push(c); }
       });
+      // Tri (comme Buy et Charter) ; la nouveauté reste en tête quand elle fait partie des résultats ; sans prix = à la fin
+      var k = st.sort;
+      shown.sort(function(a, b){
+        if (k === 'dur-desc' || k === 'dur-asc') { var d = mins(a) - mins(b); return k === 'dur-desc' ? -d : d; }
+        var pa = price(a), pb = price(b);
+        if (!pa || !pb) return (pa ? 0 : 1) - (pb ? 0 : 1);
+        return k === 'price-asc' ? pa - pb : pb - pa;
+      });
+      shown.forEach(function(c, i){ c.style.order = c.classList.contains('xp-feat') ? -1 : i; });
       cnt.textContent = n; lbl.textContent = n === 1 ? 'experience' : 'experiences'; empty.hidden = !!n;
     }
     qsLoad('xp').then(function(list){
@@ -360,14 +383,15 @@
       render();
       if (st.q) setTimeout(function(){ goResults(false); }, 80);
     });
+    document.addEventListener('sx:from', render); // prix en direct arrivés : on retrie
     $$('input[data-xf],select[data-xf]', root).forEach(function(el){
       el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.xf] = el.value; render(); });
     });
-    // Entrée / loupe dans la recherche de la page : on ferme le clavier et on descend aux expériences
+    // Entrée / loupe dans la recherche de la page : on ferme le clavier et on descend aux expériences (ou au message)
     qIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); qIn.blur(); goResults(true); } });
     $('.cat-reset', root).addEventListener('click', function(){
-      for (var k in st) st[k] = '';
-      $$('input[data-xf],select[data-xf]', root).forEach(function(el){ el.value = ''; });
+      for (var k in st) st[k] = k === 'sort' ? 'price-desc' : '';
+      $$('input[data-xf],select[data-xf]', root).forEach(function(el){ el.value = el.dataset.xf === 'sort' ? 'price-desc' : ''; });
       $$('button', chips).forEach(function(b){ b.classList.toggle('on', b.dataset.v === ''); });
       render();
     });
@@ -540,6 +564,7 @@
         });
       } else {
         if (el.tagName === 'INPUT' && st[el.dataset.f]) el.value = st[el.dataset.f];
+        else if (el.value) st[el.dataset.f] = el.value; // retour arrière : le navigateur remet le tri / les filtres choisis, la liste les suit
         if (el.tagName === 'INPUT') el.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); el.blur(); goResults(true); } });
         el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function(){ st[el.dataset.f] = el.value; render(); });
       }

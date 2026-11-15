@@ -1025,9 +1025,9 @@ nav.compact .nav-qs{opacity:1;visibility:visible;pointer-events:auto;transform:n
 
 /* Shared experiences : filtres */
 .xf{margin-bottom:8px}
-.xp-filters{grid-template-columns:2fr repeat(3,1fr)}
-@media(max-width:1100px){.xp-filters{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.xp-filters{grid-template-columns:1fr 1fr}.xp-filters .field:last-child{grid-column:1/-1}}
+.xp-filters{grid-template-columns:2fr repeat(4,1fr)}
+@media(max-width:1100px){.xp-filters{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:600px){.xp-filters{grid-template-columns:1fr 1fr}}
 .xp-card.xf-hide{display:none!important}
 .xf .cat-empty{margin:0 0 24px}
 /* Menu déroulant : « Enquire now » toujours visible en bas de l'écran (téléphone et PC), la liste défile au-dessus */
