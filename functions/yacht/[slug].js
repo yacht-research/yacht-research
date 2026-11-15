@@ -8,6 +8,9 @@ export async function onRequest(context) {
   const slug = context.params.slug;
   const origin = new URL(context.request.url).origin;
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) return notFound();
+  // Anciennes adresses de fiches renommées : redirection permanente (Google remplace l'ancienne adresse par la nouvelle)
+  const MOVED = { 'behike-150ft-tri-deck-dubai': 'behike-141ft-tri-deck-dubai' };
+  if (MOVED[slug]) return Response.redirect(origin + '/yacht/' + MOVED[slug] + new URL(context.request.url).search, 301);
 
   let y = null;
   try {
