@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-15T05:26:59.606Z",
- "count": 114,
+ "generated": "2026-11-18T15:41:46.332Z",
+ "count": 113,
  "yachts": [
   {
    "slug": "sunseeker-95-yacht-2020",
@@ -2795,33 +2795,6 @@
    "price_eur": 3496000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-10"
-  },
-  {
-   "slug": "nasayem-125ft-motor-yacht-2011-dubai",
-   "type": "sale",
-   "title": "Nasayem",
-   "builder": "Custom build (UAE)",
-   "model": "125ft motor yacht",
-   "badge": "New Listing",
-   "image": "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/03.webp",
-   "thumb": "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/03-800.webp",
-   "photos": [
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/03-800.webp",
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/01-800.webp",
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/02-800.webp",
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/04-800.webp",
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/05-800.webp",
-    "/images/yachts/nasayem-125ft-motor-yacht-2011-dubai/06-800.webp"
-   ],
-   "length": "38 m / 125 ft",
-   "year": "2011",
-   "location": "Dubai, UAE",
-   "price": "AED 11,000,000",
-   "original_price": "",
-   "price_eur": 2750000,
-   "guests": "",
-   "cabins": "7",
    "updated": "2026-11-10"
   },
   {
