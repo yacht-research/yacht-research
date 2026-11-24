@@ -1,0 +1,15 @@
+{
+ "description": "Construit en 2023, ce Ferretti Yachts 860 est un yacht contemporain de 88 pieds avec flybridge, qui concilie navigation performante et luxe italien raffiné, peu utilisé avec seulement 300 heures moteur.\n\nSes deux moteurs MAN V12 de 2 000 ch lui donnent une croisière rapide à 28 nœuds, une vitesse maximale de 32 nœuds et une autonomie d’environ 800 milles nautiques, tandis que des stabilisateurs à ailerons et un gyroscope Seakeeper assurent le confort en navigation comme à l’arrêt. Basé à Malte et sous pavillon maltais, il est idéalement placé pour naviguer en Méditerranée.",
+ "highlights": [
+  "Livré en 2023, seulement 300 heures moteur",
+  "Stabilisateurs à ailerons et gyroscope Seakeeper",
+  "Croisière à 28 nœuds, 32 nœuds max.",
+  "Propulseurs d’étrave et de poupe",
+  "Pavillon maltais, idéal pour la Méditerranée"
+ ],
+ "specs": {
+  "Cabins": "4 cabines",
+  "Crew": "2 cabines",
+  "Range": "environ 800 milles"
+ }
+}

@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '62'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '67'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -45,6 +45,7 @@ const NAV = `<nav id="nav">
     <li><a href="/contact" class="gold-link">Contact</a></li>
   </ul>
   <div class="nav-r">
+    <a href="/fr/" class="lang-sw" hreflang="fr" lang="fr" translate="no" aria-label="Version française">FR</a>
     <a href="/yacht-research-form" class="btn btn-gold">Enquire <i>→</i></a>
     <button class="burger" aria-label="Menu" id="burger"><i></i><i></i><i></i></button>
   </div>
@@ -125,12 +126,12 @@ ${SCRIPTS}${script ? '\n' + script : ''}
 }
 
 // Bandeau de titre commun aux pages intérieures
-function hero({ img, src, eyebrow, title, lead, ctas = '' }) {
+function hero({ img, src, eyebrow, title, titleFr, lead, ctas = '' }) {
   return `<header class="phero">
   ${img || src ? `<div class="hero-media" data-par="0.2"><img src="${src || U(img)}" alt="" fetchpriority="high"></div>` : ''}
   <div class="phero-in">
     <p class="eyebrow">${eyebrow}</p>
-    <h1 class="t-xl phero-title">${title}</h1>
+    <h1 class="t-xl phero-title"${titleFr ? ` data-fr="${titleFr.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}"` : ''}>${title}</h1>
     ${lead ? `<p class="lead phero-lead">${lead}</p>` : ''}
     ${ctas ? `<div class="ctas phero-ctas">${ctas}</div>` : ''}
   </div>
@@ -200,7 +201,7 @@ const xpCard = (x, detail) => {
       ${x.from ? `<p class="xp-from"><small>Starting from</small> <b>AED ${x.from}</b> <small>per guest</small></p>` : ''}
       ${detail ? '' : `<p class="xp-sum">${x.summary}</p>`}
       <ul class="xp-hl">${x.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
-      ${ys.length ? `<p class="xp-yacht">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}">${n}</a>`).join(' or ')}</p>` : ''}
+      ${ys.length ? `<p class="xp-yacht">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}" class="notranslate" translate="no">${n}</a>`).join(' or ')}</p>` : ''}
       <div class="xp-slots" data-slots><span class="xp-wait">Loading times…</span></div>
       <div class="xp-foot"><p class="xp-price" data-price></p><span data-cta></span></div>
       <div class="xp-links">${detail ? '' : `<a href="/shared-experiences/${x.id}" class="xp-more-link">Details, meeting point and policy <i>→</i></a>`}<a class="xp-wa" href="${WA_UAE}" target="_blank" rel="noopener">${WA_SVG}WhatsApp UAE</a><a class="xp-wa" href="${WA_FR}" target="_blank" rel="noopener">${WA_SVG}WhatsApp FR</a></div>
@@ -290,7 +291,7 @@ const xpDetail = x => {
     <div class="lx-chips">${chips.map(([v, k]) => `<div><b${k === 'AED / guest' ? ' data-live-from' : ''}>${v}</b><span>${k}</span></div>`).join('')}</div></div>
   <div class="lx-mosaic lx-n${Math.min(x.images.length, 5)}">${x.images.slice(0, 5).map((im, i) => `<button class="yp-shot" data-full="${im}.webp"><img src="${i ? im + '-800' : im}.webp" alt="${xesc(x.title)} in Dubai photo ${i + 1}"${i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"'}></button>`).join('')}${x.images.length > 1 ? `<button class="lx-all" type="button" onclick="this.parentNode.querySelector('.yp-shot').click()">All ${x.images.length} photos</button>` : ''}</div>
   <div class="lx-body"><div class="lx-main">
-    <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${ys.length ? `<p class="lx-small">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}">${n}</a>`).join(' or ')}</p>` : ''}</section>
+    <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${ys.length ? `<p class="lx-small">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}" class="notranslate" translate="no">${n}</a>`).join(' or ')}</p>` : ''}</section>
     <section class="lx-sec lx-hl"><div class="yp-hl"><p class="eyebrow">Included</p><ul>${x.highlights.map(h => `<li>${h}</li>`).join('')}</ul></div></section>
     <section class="lx-sec"><h2>Good to know</h2><div class="lx-grid"><div><span>Meeting point</span><b>${x.meet}</b></div><div><span>Duration</span><b>${x.duration}</b></div>${x.note ? `<div><span>Please note</span><b>${x.note}</b></div>` : ''}<div><span>Shared yacht</span><b>Other guests join you on board. For the yacht to yourself, see our <a href="/charter">private charters</a>.</b></div></div>
       <ul class="lx-pts" style="margin-top:18px">${x.info.map(i => `<li>${i}</li>`).join('')}</ul></section>
@@ -422,7 +423,7 @@ pages.push({
   <div class="ya-in">
     <img class="ya-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="132" height="90">
     <p class="ya-k">By the founders of Yacht Research</p>
-    <h1 class="ya-h1">Want to become<br>a<span class="notranslate" translate="no"> Yacht <em>Broker?</em></span></h1>
+    <h1 class="ya-h1" data-fr="Vous souhaitez devenir&lt;br&gt;Yacht &lt;em&gt;Broker ?&lt;/em&gt;">Want to become<br>a<span class="notranslate" translate="no"> Yacht <em>Broker?</em></span></h1>
     <p class="ya-lead">We created Yacht Club Academy to open the doors of our profession. No theory from the outside: the method we use every day at Yacht Research, shared step by step, wherever you are in the world.</p>
     <div class="ya-ctas"><a href="${YCA_URL}" target="_blank" rel="noopener" class="ya-btn">Discover the academy <i>→</i></a><a href="#ya-plan" class="ya-btn ya-ghost">See the 30-day plan</a></div>
   </div>
@@ -456,7 +457,7 @@ pages.push({
       <ul class="ya-list">
         <li>The complete path: sales, charter, prospecting, negotiation and closing</li>
         <li>24/7 support on our private numbers</li>
-        <li>One-to-one sessions, role-plays and reviews of your messages</li>
+        <li>1:1 coaching, call and negotiation role-plays, review and edits of your messages</li>
         <li>Your first prospect list and introductions to our network</li>
         <li>Access to selected events: Monaco, Dubai, Cannes and more</li>
       </ul></div>
@@ -478,10 +479,10 @@ pages.push({
 
 <section class="ya-sec">
   <p class="ya-k rv">Go further</p>
-  <h2 class="ya-h2 split-words">Learn with us, <em>one to one</em></h2>
+  <h2 class="ya-h2 split-words" data-fr="Nous vous accompagnons &lt;em&gt;en one-to-one&lt;/em&gt;">Learn with us, <em>one to one</em></h2>
   <div class="ya-grid2">
     <div class="ya-card rv"><h3>Yacht Broker Elite Pack</h3><p>The complete path to learn the profession step by step: the market, sales and charter, high-end prospecting, qualifying, negotiation, closing and client follow-up, with 24/7 support on our private numbers.</p></div>
-    <div class="ya-card ya-hl rv d1"><h3>Private Coaching</h3><p>Everything in the Elite Pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.</p></div>
+    <div class="ya-card ya-hl rv d1"><h3>Private Coaching</h3><p>Everything in the Elite Pack, plus 5 hours a week of 1:1 coaching with us: action plan and positioning, call and negotiation role-plays, review and edits of your messages, your first prospect list, a VIP private group and introductions.</p></div>
   </div>
   <p class="ya-p rv" style="margin-top:22px">We are ready to guide you, and a dedicated platform will bring everything together in one place: learning the profession, working on your first deals, a community of future brokers and sessions with industry experts. Payment in instalments is available, and a free 30-minute discovery call helps you choose the right path.</p>
 </section>
@@ -553,7 +554,7 @@ pages.push({
   title: 'Private Jet Charter, Empty Legs & Private Flights Worldwide | Yacht Research',
   desc: 'Private jet charter, empty-leg flights and private flights anywhere in the world, booked through the Yacht Research network. Contact us on WhatsApp UAE or France.',
   preload: U('photo-1474302770737-173ee21bab63'),
-  body: hero({ img: 'photo-1474302770737-173ee21bab63', eyebrow: 'Private aviation', title: 'Fly <span class="acc">private</span>', lead: 'Private jets, empty legs and private flights, anywhere in the world, booked through our global network.', ctas: `<a href="${WA_UAE}" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp UAE <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp France</a>` })
+  body: hero({ img: 'photo-1474302770737-173ee21bab63', eyebrow: 'Private aviation', title: 'Fly <span class="acc">private</span>', titleFr: 'Voyagez <span class="acc">en jet privé</span>', lead: 'Private jets, empty legs and private flights, anywhere in the world, booked through our global network.', ctas: `<a href="${WA_UAE}" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp UAE <i>→</i></a><a href="${WA_FR}" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp France</a>` })
   + `<section class="manifesto" style="padding-top:clamp(70px,9vw,130px)">
   <p class="big" id="manifesto">From one yacht to the next, <span class="acc">the journey matters too.</span> Thanks to our worldwide network, we book your private flight wherever you need to be.</p>
   <p class="lead rv" style="margin-top:40px;max-width:760px">Tell us your route, dates and number of passengers. We look for the right aircraft, including empty-leg return flights when one fits your plans, and come back to you with options.</p>

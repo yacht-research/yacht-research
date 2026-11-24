@@ -26,14 +26,16 @@ export async function onRequest(context) {
   ];
 
   // 1) Index généré au build (seulement les yachts publiés, avec date de mise à jour)
-  var yachtSlugs = [], lastmods = {};
+  var yachtSlugs = [], lastmods = {}, frYachts = {};
   try {
     var idx = await context.env.ASSETS.fetch(new URL('/content/yachts/index.json', context.request.url));
     if (idx.ok) {
       var data = await idx.json();
-      (data.yachts || []).forEach(function (y) { yachtSlugs.push(y.slug); if (y.updated) lastmods[y.slug] = y.updated; });
+      (data.yachts || []).forEach(function (y) { yachtSlugs.push(y.slug); if (y.updated) lastmods[y.slug] = y.updated; if (y.fr) frYachts[y.slug] = 1; });
     }
   } catch (e) {}
+  // version française de chaque page (/fr/...) : les fiches yachts seulement quand leur texte français existe
+  staticPages = staticPages.concat(staticPages.map(function (p) { return { url: '/fr' + p.url, priority: p.priority, changefreq: p.changefreq }; }));
 
   // 2) Secours : ancienne méthode (API GitHub) si l'index n'existe pas encore
   if (!yachtSlugs.length) try {
@@ -80,6 +82,14 @@ export async function onRequest(context) {
     xml += '    <changefreq>weekly</changefreq>\n';
     xml += '    <priority>0.8</priority>\n';
     xml += '  </url>\n\n';
+    if (frYachts[yachtSlugs[k]]) {
+      xml += '  <url>\n';
+      xml += '    <loc>' + baseUrl + '/fr/yacht/' + yachtSlugs[k] + '</loc>\n';
+      xml += '    <lastmod>' + (lastmods[yachtSlugs[k]] || today) + '</lastmod>\n';
+      xml += '    <changefreq>weekly</changefreq>\n';
+      xml += '    <priority>0.7</priority>\n';
+      xml += '  </url>\n\n';
+    }
   }
 
   xml += '</urlset>';

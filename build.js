@@ -61,9 +61,13 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'in
     price_eur: toEur(y.price),
     guests: (guests.match(/\d+/) || [''])[0],
     cabins: (guests.match(/(\d+)\s*cabin/i) || [])[1] || (cabinsField.match(/\d+/) || [''])[0],
-    updated: y.updated || ''
+    updated: y.updated || '',
+    // fiche française écrite (content/i18n/yachts/<slug>.json) : la page /fr/yacht/<slug> existe
+    ...(fs.existsSync(path.join(__dirname, 'content', 'i18n', 'yachts', slug + '.json')) ? { fr: true } : {})
   });
 }
+const noFr = yachts.filter(y => !y.fr).map(y => y.slug);
+if (noFr.length) console.warn('⚠ Sans version française (la page FR renvoie vers l’anglais) : ' + noFr.join(', '));
 // Les plus récents d'abord, puis du plus cher au moins cher
 yachts.sort((a, b) => (b.updated || '').localeCompare(a.updated || '') || (b.price_eur || 0) - (a.price_eur || 0));
 

@@ -1,0 +1,21 @@
+{
+ "description": "Construit aux Pays-Bas, PHILOSOPHY est un yacht à moteur de 44,2 mètres signé Feadship en 2015, au design extérieur du Studio De Voogt et à l’intérieur de Bannenberg & Rowell, qui allie chaleur et élégance.\n\nIl accueille huit invités dans quatre cabines, les deux cabines invités pouvant se transformer en une seule cabine VIP, ainsi qu’un équipage de huit personnes. Le pont arrière dispose d’une piscine à contre-courant, et les stabilisateurs Quantum le maintiennent stable en navigation comme au mouillage.\n\nSes deux moteurs Caterpillar C32 lui donnent une vitesse de croisière de 12 nœuds et une autonomie de 3 850 milles nautiques à 10 nœuds. Il a bénéficié d’une peinture complète et de l’entretien de tous ses systèmes au printemps 2024.",
+ "highlights": [
+  "Construction Feadship, extérieur du Studio De Voogt",
+  "Intérieur Bannenberg & Rowell",
+  "Piscine à contre-courant sur le pont arrière",
+  "Stabilisateurs à l’arrêt et en navigation",
+  "Autonomie de 3 850 milles à 10 nœuds",
+  "Peinture complète et entretien des systèmes au printemps 2024"
+ ],
+ "specs": {
+  "Classification": "Lloyd’s Register",
+  "Construction": "Coque en acier, superstructure en aluminium",
+  "Guests": "8 dans 4 cabines",
+  "Cabins": "4 (1 propriétaire, 1 VIP, 2 invités)",
+  "Crew": "8 dans 5 cabines",
+  "Engine hours": "5 500 (février 2026)",
+  "Generators": "2 × Kohler 125 kW",
+  "Stabilisers": "Quantum, en navigation et à l’arrêt"
+ }
+}

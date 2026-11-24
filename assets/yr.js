@@ -4,6 +4,34 @@
   var $ = function(s, r){ return (r || document).querySelector(s); };
   var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var nav = $('#nav');
+  // ---------- Version française du site (/fr/...) : textes affichés par ce script et liens internes ----------
+  var IS_FR = /^\/fr(\/|$)/.test(location.pathname);
+  var PATHNAME = IS_FR ? (location.pathname.replace(/^\/fr/, '') || '/') : location.pathname;
+  function U(p){ return IS_FR && /^\/(?!fr(\/|$)|images\/|assets\/|content\/|api\/|brochures\/|videos\/)/.test(p) ? '/fr' + p : p; }
+  var LFR = {
+    'Charter': 'Location', 'Sold': 'Vendu', 'Exclusive price': 'Prix exclusif', 'Price reduced': 'Prix baissé', 'Off market': 'Hors marché',
+    'New listing': 'Nouveauté', 'For sale': 'À vendre', 'Length': 'Longueur', 'Guests': 'Invités', 'Year': 'Année', 'Cabins': 'Cabines', 'Location': 'Lieu',
+    'Price on request': 'Prix sur demande', 'Previous photo': 'Photo précédente', 'Next photo': 'Photo suivante',
+    ' yacht charter': ' en location', ' sold': ' vendu', ' for sale': ' à vendre',
+    'See all yachts for sale': 'Voir tous les yachts à vendre', 'See all charter yachts': 'Voir tous les yachts en location', 'See all shared experiences': 'Voir toutes les expériences partagées',
+    ' result': ' résultat', ' results': ' résultats', 'See all': 'Voir les', 'No match for': 'Aucun résultat pour', 'Tell us what you are looking for': 'Dites-nous ce que vous recherchez',
+    'Search': 'Rechercher', 'Search yachts for sale…': 'Rechercher un yacht à vendre…', 'Search charter yachts…': 'Rechercher un yacht en location…', 'Search shared experiences…': 'Rechercher une expérience…',
+    'Search yachts for sale: builder, model, location…': 'Rechercher un yacht à vendre : chantier, modèle, lieu…', 'Search charter yachts: name, builder, location…': 'Rechercher un yacht en location : nom, chantier, lieu…',
+    'experience': 'expérience', 'experiences': 'expériences', 'yachts for sale': 'yachts à vendre', 'sold': 'vendu(s)',
+    'Superyacht': 'Superyacht', 'Food & BBQ': 'Repas & barbecue', 'Sunset': 'Coucher de soleil', 'Night & party': 'Nuit & soirée', 'Sightseeing': 'Découverte', 'Speedboat': 'Speedboat',
+    'No yacht matches these filters yet.': 'Aucun yacht ne correspond encore à ces filtres.', 'and we will search the off-market for you.': 'et nous chercherons pour vous sur le marché off-market.',
+    'Listings are temporarily unavailable. Please': 'Les annonces sont momentanément indisponibles. Merci de', 'contact us': 'nous contacter',
+    'Please fill in your name and email.': 'Indiquez votre nom et votre e-mail.', 'Please accept the Privacy Policy.': 'Merci d’accepter la politique de confidentialité.',
+    'Thank you. Your message has been sent, we will be in touch shortly.': 'Merci. Votre message a bien été envoyé, nous revenons vers vous très vite.',
+    'Thank you. Your message has been sent, we will reply within 24 hours.': 'Merci. Votre message a bien été envoyé, nous vous répondons sous 24 heures.'
+  };
+  function L(s){ return IS_FR && Object.prototype.hasOwnProperty.call(LFR, s) ? LFR[s] : s; }
+  // prix et lieux issus des fiches (en anglais dans les données)
+  var PLACES_FR = [['United Kingdom', 'Royaume-Uni'], ['Turkey', 'Turquie'], ['Greece', 'Grèce'], ['Italy', 'Italie'], ['Thailand', 'Thaïlande'], ['Florida', 'Floride'], ['Spain', 'Espagne'], ['Croatia', 'Croatie'], ['Netherlands', 'Pays-Bas'], ['Germany', 'Allemagne'], ['Montenegro', 'Monténégro'], ['UAE', 'EAU'], ['Dubai', 'Dubaï'], ['(new)', '(neuf)'], ['Mallorca', 'Majorque'], ['Corsica', 'Corse'], ['Aegean Sea', 'mer Égée'], ['South of France', 'Sud de la France'], ['Mediterranean', 'Méditerranée'], ['French Riviera', 'Côte d’Azur']];
+  function placeFr(s){ return IS_FR ? PLACES_FR.reduce(function(a, p){ return a.split(p[0]).join(p[1]); }, String(s || '')) : s; }
+  function priceFr(s){ return IS_FR ? String(s || '').replace(/^From (.+?) per hour/, 'À partir de $1 / heure').replace(/^From (.+?) per day/, 'À partir de $1 / jour').replace(/^From (.+?) per week/, 'À partir de $1 / semaine').replace(/^From /, 'À partir de ').replace(/Price on request/, 'Prix sur demande').replace(/\(Landed Exc\. Taxes\)/, '(hors taxes, livré)') : s; }
+  // sélecteur de langue : la même page dans l'autre langue
+  $$('.lang-sw').forEach(function(a){ a.setAttribute('href', (IS_FR ? PATHNAME : '/fr' + (PATHNAME === '/' ? '/' : PATHNAME)) + location.search + location.hash); });
   // ---------- Hauteur d'écran figée au chargement (--vh, utilisée par yr.css) ----------
   // Le navigateur intégré de Facebook redimensionne la page quand ses barres se cachent pendant le défilement :
   // les blocs à hauteur « écran » changeaient de taille et la page sautait. On ne remet à jour qu'en cas de
@@ -96,7 +124,15 @@
     'our academy for those who want to become yacht brokers: the off-market world, the method professionals use, a dedicated platform and much more.': { _free: 1, fr: 'Notre académie pour ceux qui veulent devenir Yacht Brokers : le hors marché, la méthode des professionnels, une plateforme dédiée et bien plus encore.' },
     'we created yacht club academy to open the doors of our profession. no theory from the outside: the method we use every day at yacht research, shared step by step, wherever you are in the world.': { _free: 1, fr: 'Nous avons créé Yacht Club Academy pour ouvrir les portes de notre métier. Pas de théorie vue de l’extérieur : la méthode que nous appliquons chaque jour chez Yacht Research, partagée étape par étape, où que vous soyez dans le monde.' },
     'join yacht club academy and learn the profession from two brokers who do it every day.': { _free: 1, fr: 'Rejoignez Yacht Club Academy et apprenez le métier auprès de deux Yacht Brokers qui l’exercent au quotidien.' },
-    'everything in the elite pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.': { _free: 1, fr: 'Tout le Pack Elite, plus cinq heures de coaching par semaine avec nous : votre plan d’action, des jeux de rôle pour les appels et les négociations, une analyse de vos messages, votre première liste de prospects et des présentations à notre réseau.' },
+    'everything in the elite pack, plus 5 hours a week of 1:1 coaching with us: action plan and positioning, call and negotiation role-plays, review and edits of your messages, your first prospect list, a vip private group and introductions.': { _free: 1, fr: 'Tout le Pack Elite, plus 5 h de coaching 1:1 par semaine avec nous : plan d’action et positionnement, simulations d’appels et de négociation, analyse et correction de vos messages, votre première liste de prospects, un groupe privé VIP et des mises en relation.' },
+    '1:1 coaching, call and negotiation role-plays, review and edits of your messages': { _free: 1, fr: 'Coaching 1:1, simulations d’appels et de négociation, analyse et correction de vos messages' },
+    'become a yacht broker, with us': { _free: 1, fr: 'Devenez Yacht Broker avec nous' },
+    'everything in the ebook, and much more: we guide you to close your first deals.': { _free: 1, fr: 'Tout le contenu de l’ebook, et bien plus encore : nous vous accompagnons jusqu’à vos premiers deals.' },
+    // jet privé : pas de traduction mot à mot (« vol privé », « jambes vides »)
+    'empty legs': { _free: 1, fr: 'Empty legs' },
+    'fly private': { _free: 1, fr: 'Voyager en jet privé' },
+    'private jets, empty legs and private flights, anywhere in the world, booked through our global network.': { _free: 1, fr: 'Jets privés, empty legs et vols privés, partout dans le monde, réservés via notre réseau international.' },
+    'private jets, empty legs and private flights anywhere in the world, booked through our global network.': { _free: 1, fr: 'Jets privés, empty legs et vols privés, partout dans le monde, réservés via notre réseau international.' },
     'we have been interviewed by well-known figures of entrepreneurship and online business, sharing our vision of yachting and of the yacht broker profession with their audiences.': { _free: 1, fr: 'Nous avons été interviewés par des figures reconnues de l’entrepreneuriat et du business en ligne, pour partager notre vision du yachting et du métier de Yacht Broker avec leur public.' }
   };
   function noTr(el){ el.setAttribute('translate', 'no'); el.classList.add('notranslate'); }
@@ -107,7 +143,8 @@
     var list = []; while (tw.nextNode()) list.push(tw.currentNode);
     list.forEach(function(n){
       var t = n.nodeValue, key = t.trim().toLowerCase();
-      if (TR[key]) { var s = document.createElement('span'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
+      // balise neutre <yr-t> (pas <span>) : aucun style du site ne la cible (ex. .ya-week span = pastille bleue)
+      if (TR[key]) { var s = document.createElement('yr-t'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
         var parts = t.split(t.trim()); var f = document.createDocumentFragment(); if (parts[0]) f.appendChild(document.createTextNode(parts[0])); f.appendChild(s); if (parts[1]) f.appendChild(document.createTextNode(parts[1])); n.parentNode.replaceChild(f, n); return; }
       if (!BRAND.test(t)) return;
       var frag = document.createDocumentFragment(), parts = t.split(BRAND);
@@ -117,7 +154,7 @@
         if (a) { parts[i] = a[0] + parts[i]; parts[i - 1] = parts[i - 1].slice(0, -a[0].length); }
         if (z) { parts[i] += z[0]; parts[i + 1] = parts[i + 1].slice(z[0].length); }
       }
-      parts.forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('span'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
+      parts.forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('yr-t'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
       n.parentNode.replaceChild(frag, n);
     });
   })(document.body);
@@ -209,6 +246,7 @@
     // (jamais « charter » : c'est aussi le mot anglais, pas encore traduit par Google plus bas dans la page)
     [/\b([Aa])ffrètement(s?)\b/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'ocation' + s; }],
     [/\b([Cc])harte(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
+    [/\b([Jj])ambes? vides?\b/g, function(m, j){ return (j === 'J' ? 'E' : 'e') + 'mpty leg' + (/s$/.test(m) ? 's' : ''); }],
     [/\b([Aa])ffréter\b/g, function(m, a){ return (a === 'A' ? 'L' : 'l') + 'ouer'; }],
     [/\b([Aa])ffrété(e?s?)(?![\wÀ-ÿ])/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'oué' + s; }]
   ];
@@ -219,7 +257,7 @@
     var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
       var p = n.parentNode; return (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.nodeName) || p.closest('[translate="no"]')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
     var n, v, w;
-    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte\b|hartes\b/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
+    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte\b|hartes\b|ambes? vide/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
   }
   // menu du haut : si les libellés (traduits, plus longs) chevauchent le logo ou le bouton, on passe au burger
   var links = $('.nav-links'), logo = $('#nav .logo'), navR = $('.nav-r'), fitT;
@@ -268,13 +306,13 @@
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function badgeLabel(b, type){
     b = (b || '').toLowerCase();
-    if (type === 'charter') return 'Charter';
-    if (b.indexOf('sold') > -1) return 'Sold';
-    if (b.indexOf('exclusive') > -1) return 'Exclusive price';
-    if (b.indexOf('reduc') > -1 || b.indexOf('price') > -1) return 'Price reduced';
-    if (b.indexOf('off') > -1) return 'Off market';
-    if (b.indexOf('new') > -1) return 'New listing';
-    return 'For sale';
+    if (type === 'charter') return L('Charter');
+    if (b.indexOf('sold') > -1) return L('Sold');
+    if (b.indexOf('exclusive') > -1) return L('Exclusive price');
+    if (b.indexOf('reduc') > -1 || b.indexOf('price') > -1) return L('Price reduced');
+    if (b.indexOf('off') > -1) return L('Off market');
+    if (b.indexOf('new') > -1) return L('New listing');
+    return L('For sale');
   }
   function splitTitle(y){
     // "Sunseeker 88 Yacht" -> "Sunseeker <em>88 Yacht</em>" ; "AGAPA - Sunseeker Predator 84" -> "<em>Agapa</em>"
@@ -289,19 +327,20 @@
   function card(y, i){
     var sub = [y.builder || '', y.year, y.location].filter(Boolean).join(' · ');
     if (y.type === 'charter' && y.title.indexOf(' - ') > -1) sub = y.title.split(' - ').slice(1).join(' - ') + (y.location ? ' · ' + y.location : '');
+    sub = placeFr(sub);
     var specs = y.type === 'charter' ? '' :
-      '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
-      (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
-      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (function(l){ return '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>'; })((y.location || '—').split(',')[0].trim())) + '</div>';
+      '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>' + L('Length') + '</span></div>' +
+      (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>' + L('Guests') + '</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>' + L('Year') + '</span></div>') +
+      (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>' + L('Cabins') + '</span></div>' : (function(l){ return '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>' + L('Location') + '</span></div>'; })(placeFr((y.location || '—').split(',')[0].trim()))) + '</div>';
     var sold = y.type !== 'charter' && /sold/i.test(y.badge || '');
-    var price = sold ? '<span>' + (y.price ? '<s>' + esc(y.price) + '</s> ' : '') + 'Sold</span>' : y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
-    return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
-      '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : sold ? ' sold' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
-      (y.photos ? '<button type="button" class="ph-nav prev" aria-label="Previous photo">‹</button><button type="button" class="ph-nav next" aria-label="Next photo">›</button><span class="ph-count"><b>1</b>/' + y.photos.length + '</span>' : '') + '</div>' +
-      '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y) + '</h4>' + specs +
+    var price = sold ? '<span>' + (y.price ? '<s>' + esc(priceFr(y.price)) + '</s> ' : '') + L('Sold') + '</span>' : y.original_price ? '<span><s>' + esc(priceFr(y.original_price)) + '</s> ' + esc(priceFr(y.price)) + '</span>' : esc(priceFr(y.price || 'Price on request'));
+    return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="' + U('/yacht/' + esc(y.slug)) + '">' +
+      '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + L(y.type === 'charter' ? ' yacht charter' : sold ? ' sold' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
+      (y.photos ? '<button type="button" class="ph-nav prev" aria-label="' + L('Previous photo') + '">‹</button><button type="button" class="ph-nav next" aria-label="' + L('Next photo') + '">›</button><span class="ph-count"><b>1</b>/' + y.photos.length + '</span>' : '') + '</div>' +
+      '<div class="bd"><small>' + esc(sub) + '</small><h4 class="notranslate" translate="no">' + splitTitle(y) + '</h4>' + specs +
       '<div class="price">' + price + ' <i>→</i></div></div></a>';
   }
-  window.YR = { card: card, observe: observe, esc: esc };
+  window.YR = { card: card, observe: observe, esc: esc, L: L, U: U, FR: IS_FR };
 
   // Recherche : chaque mot tapé doit se retrouver dans la fiche (nom, chantier, modèle, lieu, année, taille)
   function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
@@ -313,10 +352,10 @@
   // Shared experiences : tags, durée et budget tirés de la fiche (titre, horaires, résumé, points forts)
   var XP_TAGS = [
     ['superyacht', 'Superyacht', /superyacht/i],
-    ['food', 'Food & BBQ', /bbq|dinner|breakfast|sushi|brunch|buffet|lunch/i],
-    ['sunset', 'Sunset', /sunset|sundowner/i],
-    ['night', 'Night & party', /night|party|moonlight|twilight|\bdj\b/i],
-    ['sightseeing', 'Sightseeing', /sightseeing|atlantis|burj al arab|ain dubai|\bjbr\b|palm/i],
+    ['food', L('Food & BBQ'), /bbq|dinner|breakfast|sushi|brunch|buffet|lunch/i],
+    ['sunset', L('Sunset'), /sunset|sundowner/i],
+    ['night', L('Night & party'), /night|party|moonlight|twilight|\bdj\b/i],
+    ['sightseeing', L('Sightseeing'), /sightseeing|atlantis|burj al arab|ain dubai|\bjbr\b|palm/i],
     ['speedboat', 'Speedboat', /speedboat|\brib\b/i]
   ];
   function xpInfo(x){
@@ -349,7 +388,7 @@
 
   // ---------- Barres de recherche (fiches + barre compacte du menu sur Buy / Charter / Experiences) ----------
   // Section de la page : 'sale' (Buy), 'charter', 'xp' (shared experiences), ou '' ailleurs
-  var qsPath = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  var qsPath = PATHNAME.replace(/\.html$/, '').replace(/\/$/, '');
   var qsKind = /^\/shared-experiences(\/|$)/.test(qsPath) ? 'xp' : qsPath === '/listings' ? 'sale' : qsPath === '/charter' ? 'charter'
     : /^\/yacht\//.test(qsPath) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
   var qsData = {};
@@ -363,15 +402,15 @@
       return qsData[kind] = kind === 'xp' ? (d || []).map(function(x){
         var v = (x.names || []).map(function(n){ return lf[n]; }).filter(function(p){ return p > 0; });
         if (v.length) x.from = Math.round(Math.min.apply(null, v));
-        var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? 'From AED ' + x.from : '', href: '/shared-experiences/' + x.id }; })
-        : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = '/yacht/' + y.slug; return y; });
+        var i = xpInfo(x); return { slug: x.id, title: x.title, names: x.names, base: x.base, extra: i.extra, info: i, location: 'Dubai', thumb: (x.images || [])[0] ? x.images[0] + '-800.webp' : '', price: x.from ? (IS_FR ? 'Dès ' + x.from + ' AED' : 'From AED ' + x.from) : '', href: U('/shared-experiences/' + x.id) }; })
+        : (d.yachts || []).filter(function(y){ return y.type === kind; }).map(function(y){ y.href = U('/yacht/' + y.slug); y.price = priceFr(y.price); y.location = placeFr(y.location); return y; });
     }).catch(function(){ return qsData[kind] = []; });
   }
   function qsBuild(kind, form, onAll){
     var CFG = {
-      sale: { list: '/listings', all: 'See all yachts for sale' },
-      charter: { list: '/charter', all: 'See all charter yachts' },
-      xp: { list: '/shared-experiences', all: 'See all shared experiences' }
+      sale: { list: U('/listings'), all: L('See all yachts for sale') },
+      charter: { list: U('/charter'), all: L('See all charter yachts') },
+      xp: { list: U('/shared-experiences'), all: L('See all shared experiences') }
     }[kind];
     var inp = $('input', form), box = $('.qs-list', form);
     var load = function(){ return qsLoad(kind); };
@@ -383,12 +422,12 @@
         if (inp.value.trim() !== q) return;
         var hits = find(list, q);
         var sold = function(y){ return kind === 'sale' && /sold/i.test(y.badge || ''); };
-        box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + (hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
+        box.innerHTML = (hits.length ? '<p class="qs-n">' + hits.length + L(hits.length > 1 ? ' results' : ' result') + '</p><div class="qs-sc">' + hits.map(function(y){
           var sub = [y.builder, y.year, y.location].filter(Boolean).join(' · ');
           return '<a href="' + esc(y.href) + '">' + (y.thumb || y.image ? '<img src="' + esc(y.thumb || y.image) + '" alt="" loading="lazy">' : '<span></span>') +
-            '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? 'Sold' : esc(y.price || '')) + '</span></a>';
-        }).join('') + '</div>' : '<p class="qs-none">No match for “' + esc(q) + '”. <a href="/yacht-research-form">Tell us what you are looking for</a>.</p>') +
-          '<div class="qs-foot">' + (hits.length > 1 ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">See all ' + hits.length + ' results <i>→</i></a>' : '') +
+            '<span class="qs-t"><b>' + esc(y.title) + '</b><small>' + esc(sub) + '</small></span><span class="qs-p">' + (sold(y) ? L('Sold') : esc(y.price || '')) + '</span></a>';
+        }).join('') + '</div>' : '<p class="qs-none">' + (IS_FR ? 'Aucun résultat pour « ' + esc(q) + ' »' : 'No match for “' + esc(q) + '”') + '. <a href="' + U('/yacht-research-form') + '">' + L('Tell us what you are looking for') + '</a>.</p>') +
+          '<div class="qs-foot">' + (hits.length > 1 ? '<a class="qs-all" data-qs-all href="' + CFG.list + '?q=' + encodeURIComponent(q) + '">' + L('See all') + ' ' + hits.length + L(' results') + ' <i>→</i></a>' : '') +
           '<a class="qs-all" href="' + CFG.list + '">' + CFG.all + ' <i>→</i></a></div>';
         box.hidden = false;
         // barre du menu : la liste s'arrête au-dessus du clavier du téléphone
@@ -420,17 +459,17 @@
   }
   function qsHTML(cls, ph){
     return '<form class="' + cls + '" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-      '<input type="search" name="q" autocomplete="off" enterkeyhint="search" placeholder="' + ph + '" aria-label="' + ph + '"><button type="submit">Search</button><div class="qs-list" hidden></div></form>';
+      '<input type="search" name="q" autocomplete="off" enterkeyhint="search" placeholder="' + ph + '" aria-label="' + ph + '"><button type="submit">' + L('Search') + '</button><div class="qs-list" hidden></div></form>';
   }
 
   // Barre compacte : en défilant, le nom « Yacht Research Group » et les liens glissent vers la gauche et la recherche prend leur place
   var navQS = null, pageQS = null;
   if (nav && qsKind) {
-    var NAVPH = { sale: 'Search yachts for sale…', charter: 'Search charter yachts…', xp: 'Search shared experiences…' }[qsKind];
+    var NAVPH = L({ sale: 'Search yachts for sale…', charter: 'Search charter yachts…', xp: 'Search shared experiences…' }[qsKind]);
     var logoEl = $('.logo', nav);
     (logoEl || nav.firstChild).insertAdjacentHTML('afterend', qsHTML('qs nav-qs', NAVPH));
     navQS = $('.nav-qs', nav);
-    navQS.setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[qsKind]);
+    navQS.setAttribute('action', U({ sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[qsKind]));
     // sur la page de la liste (Buy, Charter, Experiences) : la recherche remplit le filtre de la page et descend aux résultats
     var catQ = $('#cat input[data-f="q"]') || $('[data-xf] input[data-xf="q"]');
     qsBuild(qsKind, navQS, catQ ? function(q){
@@ -475,13 +514,13 @@
   // Barre de recherche sur les fiches (achat, charter, shared experiences)
   (function(){
     var crumb = $('main.lx > .lx-crumb'); if (!crumb) return;
-    var p = location.pathname, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
+    var p = PATHNAME, kind = /^\/shared-experiences\//.test(p) ? 'xp' : /^\/yacht\//.test(p) ? ($('main.lx-sale') ? 'sale' : 'charter') : '';
     if (!kind) return;
-    var PH = { sale: 'Search yachts for sale: builder, model, location…', charter: 'Search charter yachts: name, builder, location…', xp: 'Search shared experiences…' }[kind];
+    var PH = L({ sale: 'Search yachts for sale: builder, model, location…', charter: 'Search charter yachts: name, builder, location…', xp: 'Search shared experiences…' }[kind]);
     var row = document.createElement('div'); row.className = 'qs-row';
     crumb.parentNode.insertBefore(row, crumb); row.appendChild(crumb);
     row.insertAdjacentHTML('beforeend', qsHTML('qs', PH));
-    $('.qs', row).setAttribute('action', { sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]);
+    $('.qs', row).setAttribute('action', U({ sale: '/listings', charter: '/charter', xp: '/shared-experiences' }[kind]));
     pageQS = qsBuild(kind, $('.qs', row));
     if (navQS) qsPair(navQS, pageQS);
   })();
@@ -522,7 +561,7 @@
         return k === 'price-asc' ? pa - pb : pb - pa;
       });
       shown.forEach(function(c, i){ c.style.order = c.classList.contains('xp-feat') ? -1 : i; });
-      cnt.textContent = n; lbl.textContent = n === 1 ? 'experience' : 'experiences'; empty.hidden = !!n;
+      cnt.textContent = n; lbl.textContent = L(n === 1 ? 'experience' : 'experiences'); empty.hidden = !!n;
     }
     qsLoad('xp').then(function(list){
       list.forEach(function(x){ info[x.slug] = x; });
@@ -619,7 +658,7 @@
   if (lb) {
     var lbImg = $('img', lb), shots = $$('.yp-shot'), urls = [], cur = 0;
     shots.forEach(function(b){ if (urls.indexOf(b.dataset.full) < 0) urls.push(b.dataset.full); });
-    lb.insertAdjacentHTML('beforeend', '<button type="button" class="lb-nav lb-prev" aria-label="Previous photo">‹</button><button type="button" class="lb-nav lb-next" aria-label="Next photo">›</button><span class="lb-count"></span>');
+    lb.insertAdjacentHTML('beforeend', '<button type="button" class="lb-nav lb-prev" aria-label="' + L('Previous photo') + '">‹</button><button type="button" class="lb-nav lb-next" aria-label="' + L('Next photo') + '">›</button><span class="lb-count"></span>');
     var cnt = $('.lb-count', lb), multi = urls.length > 1;
     if (!multi) lb.classList.add('lb-one');
     function show(i){ cur = (i + urls.length) % urls.length; lbImg.src = urls[cur]; cnt.textContent = (cur + 1) + ' / ' + urls.length;
@@ -662,7 +701,7 @@
   // ---------- Lien actif dans le menu ----------
   var here = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
   var crumb = $('.yp-crumb a + a, .lx-crumb a + a');
-  if (/^\/yacht\//.test(here) && crumb) here = crumb.getAttribute('href');
+  if (/^\/yacht\//.test(PATHNAME) && crumb) here = crumb.getAttribute('href');
   $$('.nav-links a, #menu a').forEach(function(a){ var p = a.getAttribute('href') || ''; if (p.charAt(0) === '/' && p.indexOf('#') < 0 && p.length > 1 && (p === here || here.indexOf(p + '/') === 0) || (p === '/' && here === '/')) { a.classList.add('active'); a.setAttribute('aria-current', 'page'); } });
 
   // ---------- Catalogues (Listings / Charter) : filtres, tri, ?location= ----------
@@ -705,9 +744,9 @@
       // les vendus ne comptent pas dans « yachts for sale » : « 12 yachts for sale · 1 sold », ou « 1 sold » avec le filtre Sold
       var nSold = list.filter(isSold).length, nSale = list.length - nSold, soldOut = $('[data-sold-out]', cat), label = $('[data-count-label]', cat);
       countOut.textContent = nSale || !nSold ? nSale : nSold;
-      if (label) label.textContent = nSale || !nSold ? 'yachts for sale' : 'sold';
-      if (soldOut) soldOut.textContent = nSale && nSold ? ' · ' + nSold + ' sold' : '';
-      grid.innerHTML = list.length ? list.map(card).join('') : '<p class="cat-empty">No yacht matches these filters yet. <a href="/yacht-research-form">Tell us what you are looking for</a> and we will search the off-market for you.</p>';
+      if (label) label.textContent = L(nSale || !nSold ? 'yachts for sale' : 'sold');
+      if (soldOut) soldOut.textContent = nSale && nSold ? ' · ' + nSold + L(' sold') : '';
+      grid.innerHTML = list.length ? list.map(card).join('') : '<p class="cat-empty">' + L('No yacht matches these filters yet.') + ' <a href="' + U('/yacht-research-form') + '">' + L('Tell us what you are looking for') + '</a> ' + L('and we will search the off-market for you.') + '</p>';
       $$('.card', grid).forEach(function(c){ c.classList.add('is-in'); });
     }
     $$('[data-f]', cat).forEach(function(el){
@@ -732,7 +771,7 @@
     fetch('/content/yachts/index.json').then(function(r){ return r.json(); }).then(function(d){
       all = (d.yachts || []).filter(function(y){ return y.type === type; }); render();
       if (st.q) setTimeout(function(){ goResults(false); }, 80); // arrivée depuis une autre barre de recherche : directement aux résultats
-    }).catch(function(){ grid.innerHTML = '<p class="cat-empty">Listings are temporarily unavailable. Please <a href="/yacht-research-form">contact us</a>.</p>'; });
+    }).catch(function(){ grid.innerHTML = '<p class="cat-empty">' + L('Listings are temporarily unavailable. Please') + ' <a href="' + U('/yacht-research-form') + '">' + L('contact us') + '</a>.</p>'; });
   }
 
   // ---------- Formulaires génériques (ex. Partnership Inquiry) : mêmes champs, même Apps Script ----------
@@ -741,8 +780,8 @@
       e.preventDefault();
       var msg = $('.cform-msg', f), btn = $('button[type=submit]', f), el = function(n){ return f.elements[n]; };
       function say(t, ok){ msg.textContent = t; msg.className = 'cform-msg ' + (ok ? 'ok' : 'err'); }
-      if (!el('name').value.trim() || !el('email').value.trim()) return say('Please fill in your name and email.');
-      if (el('gdpr') && !el('gdpr').checked) return say('Please accept the Privacy Policy.');
+      if (!el('name').value.trim() || !el('email').value.trim()) return say(L('Please fill in your name and email.'));
+      if (el('gdpr') && !el('gdpr').checked) return say(L('Please accept the Privacy Policy.'));
       if (f.hasAttribute('data-hp-abort') && el('website') && el('website').value) return;
       var fd = new FormData();
       $$('input[name],select[name],textarea[name]', f).forEach(function(i){ if (i.name !== 'gdpr') fd.append(i.name, i.value); });
@@ -751,7 +790,7 @@
       btn.disabled = true;
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fd), mode: 'no-cors' }).catch(function(){});
       f.reset(); btn.disabled = false;
-      say('Thank you. Your message has been sent, we will be in touch shortly.', true);
+      say(L('Thank you. Your message has been sent, we will be in touch shortly.'), true);
     });
   });
 
@@ -761,8 +800,8 @@
     e.preventDefault();
     var msg = $('.cform-msg', cf), btn = $('button[type=submit]', cf), el = function(n){ return cf.elements[n]; };
     function say(t, ok){ msg.textContent = t; msg.className = 'cform-msg ' + (ok ? 'ok' : 'err'); }
-    if (!el('name').value.trim() || !el('email').value.trim()) return say('Please fill in your name and email.');
-    if (!el('gdpr').checked) return say('Please accept the Privacy Policy.');
+    if (!el('name').value.trim() || !el('email').value.trim()) return say(L('Please fill in your name and email.'));
+    if (!el('gdpr').checked) return say(L('Please accept the Privacy Policy.'));
     var fd = new FormData();
     fd.append('name', el('name').value.trim());
     fd.append('phone', el('phone').value.trim());
@@ -775,7 +814,7 @@
     btn.disabled = true;
     fetch(APPS_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fd), mode: 'no-cors' }).catch(function(){});
     cf.reset(); btn.disabled = false;
-    say('Thank you. Your message has been sent, we will reply within 24 hours.', true);
+    say(L('Thank you. Your message has been sent, we will reply within 24 hours.'), true);
   });
 
   // ---------- Bandeau cookies (même cookie que l'ancien site) ----------

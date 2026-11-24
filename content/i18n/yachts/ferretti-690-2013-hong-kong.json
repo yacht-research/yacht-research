@@ -1,0 +1,15 @@
+{
+ "description": "Ce Ferretti 690 est un exemplaire très bien équipé et présenté de façon impeccable, d’un style italien intemporel. Doté d’un stabilisateur gyroscopique, il accueille six personnes dans trois cabines généreuses, chacune avec sa salle de bain privative, ainsi qu’une cabine d’équipage twin climatisée.\n\nLe vaste salon est parfait pour les soirées au mouillage, tandis que le cockpit et le flybridge accueillent les moments de détente en journée. Ses deux moteurs MTU de 1 250 ch lui donnent une vitesse maximale de 28 nœuds. Il se trouve à Hong Kong.",
+ "highlights": [
+  "Stabilisateur gyroscopique",
+  "Trois cabines avec salle de bain",
+  "Cabine d’équipage twin climatisée",
+  "Deux MTU de 1 250 ch, 28 nœuds",
+  "Présenté de façon impeccable"
+ ],
+ "price_note": "USD",
+ "specs": {
+  "Guests": "6 dans 3 cabines",
+  "Crew": "1 cabine twin"
+ }
+}
