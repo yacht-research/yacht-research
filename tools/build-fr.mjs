@@ -30,9 +30,12 @@ const PLACES = [['United Kingdom', 'Royaume-Uni'], ['Turkey', 'Turquie'], ['Gree
   ['Spain', 'Espagne'], ['Croatia', 'Croatie'], ['Netherlands', 'Pays-Bas'], ['Germany', 'Allemagne'], ['Montenegro', 'Monténégro'], ['Portugal', 'Portugal'],
   ['UAE', 'EAU'], ['Dubai', 'Dubaï'], ['(new)', '(neuf)'], ['Mallorca', 'Majorque'], ['Corsica', 'Corse'], ['Seychelles', 'Seychelles'], ['Aegean Sea', 'mer Égée'], ['South of France', 'Sud de la France'], ['Mediterranean', 'Méditerranée'], ['French Riviera', 'Côte d’Azur']];
 const place = s => PLACES.reduce((a, [e, f]) => a.split(e).join(f), s);
-const price = s => s.replace(/^From (.+?) per hour/, 'À partir de $1 / heure').replace(/^From (.+?) per day/, 'À partir de $1 / jour')
-  .replace(/^From (.+?) per week/, 'À partir de $1 / semaine').replace(/^From (.+?) per guest/, 'À partir de $1 / personne').replace(/^From /, 'À partir de ')
-  .replace(/Price on request/, 'Prix sur demande').replace(/\(Landed Exc\. Taxes\)/, '(hors taxes, livré)').replace(/\bSold\b/, 'Vendu');
+const price = s => String(s || '')
+    .replace(/(HK\$|AED|USD|€|£|\$)\s?(\d[\d,]*(?:\.\d+)?)/g, function(m, c, n){ return n.replace(/,/g, '\u00a0') + '\u00a0' + c; })
+    .replace(/^From (.+?) per hour/, 'À partir de $1 / heure').replace(/^From (.+?) per day/, 'À partir de $1 / jour').replace(/^From (.+?) per week/, 'À partir de $1 / semaine')
+    .replace(/^From /, 'À partir de ').replace(/ for (\d+) hours/, ' pour $1 heures').replace(/ per hour/, ' / heure').replace(/ per week/, ' / semaine')
+    .replace(/VAT Included/i, 'TVA incluse').replace(/VAT Excluded/i, 'hors TVA').replace(/\(Landed Exc\. Taxes\)/, '(livré, hors taxes)').replace(/\(Exc\. Taxes\)/, '(hors taxes)')
+    .replace(/Price on request/, 'Prix sur demande').replace(/\bSold\b/, 'Vendu');
 function t(s) { const k = norm(s); return Object.prototype.hasOwnProperty.call(dict, k) && dict[k] !== '' ? (used.add(k), dict[k]) : null; }
 // phrases construites sur un même modèle (pages d'expériences, légendes de photos…)
 const PATTERNS = [
