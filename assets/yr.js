@@ -164,12 +164,9 @@
     [/\b([Ll])['’]affrètement(s?)\b/g, function(m, l, s){ return (l === 'L' ? 'L' : 'l') + (s ? 'es locations' : 'a location'); }],
     [/\b([Dd])['’]affrètement(s?)\b/g, function(m, d, s){ return d + 'e location' + s; }],
     [/\b([Uu])n affrètement\b/g, function(m, u){ return u + 'ne location'; }],
-    [/\b([Dd])u charter\b/g, function(m, d){ return d + 'e la location'; }],
-    [/\b([Uu])n charter\b/g, function(m, u){ return u + 'ne location'; }],
-    [/\b([Ll])e charter\b/g, function(m, l){ return l + 'a location'; }],
+    // (jamais « charter » : c'est aussi le mot anglais, pas encore traduit par Google plus bas dans la page)
     [/\b([Aa])ffrètement(s?)\b/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'ocation' + s; }],
     [/\b([Cc])harte(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
-    [/\b([Cc])harter(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
     [/\b([Aa])ffréter\b/g, function(m, a){ return (a === 'A' ? 'L' : 'l') + 'ouer'; }],
     [/\b([Aa])ffrété(e?s?)(?![\wÀ-ÿ])/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'oué' + s; }]
   ];
@@ -180,7 +177,7 @@
     var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
       var p = n.parentNode; return (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.nodeName) || p.closest('[translate="no"]')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
     var n, v, w;
-    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
+    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte\b|hartes\b/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
   }
   // menu du haut : si les libellés (traduits, plus longs) chevauchent le logo ou le bouton, on passe au burger
   var links = $('.nav-links'), logo = $('#nav .logo'), navR = $('.nav-r'), fitT;
