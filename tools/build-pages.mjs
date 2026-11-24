@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '60'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '61'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -39,7 +39,7 @@ const NAV = `<nav id="nav">
     <li><a href="/private-jet">Private Jet</a></li>
     <li><a href="/bespoke">Services</a></li>
     <li><a href="/why-us">Why Us</a></li>
-    <li><a href="/yacht-club-academy" class="yca-link">Academy</a></li>
+    <li><a href="/yacht-club-academy" class="yca-link notranslate" translate="no">Academy</a></li>
     <li><a href="/partnerships">Partners</a></li>
     <li><a href="/recruitment">Careers</a></li>
     <li><a href="/contact" class="gold-link">Contact</a></li>
@@ -53,13 +53,13 @@ const NAV = `<nav id="nav">
   <a href="/">Home</a>
   <a href="/listings">Yachts <em>for sale</em></a>
   <a href="/charter">Charter</a>
-  <a href="/shared-experiences">Shared <em>experiences</em></a>
+  <a href="/shared-experiences" data-fr="Expériences &lt;em&gt;partagées&lt;/em&gt;">Shared <em>experiences</em></a>
   <a href="/yacht-research-form?project=sell">Sell <em>your yacht</em></a>
-  <a href="/private-jet">Private <em>jet</em></a>
+  <a href="/private-jet" data-fr="Jet &lt;em&gt;privé&lt;/em&gt;">Private <em>jet</em></a>
   <a href="/bespoke">Services</a>
   <a href="/why-us">Why us</a>
-  <a href="/yacht-club-academy" class="yca-link">Yacht Club <em>Academy</em></a>
-  <a href="/partnerships">Partners <em>&amp; referrals</em></a>
+  <a href="/yacht-club-academy" class="yca-link notranslate" translate="no">Yacht Club <em>Academy</em></a>
+  <a href="/partnerships" data-fr="Partenaires &lt;em&gt;&amp;amp; parrainage&lt;/em&gt;">Partners <em>&amp; referrals</em></a>
   <a href="/recruitment">Careers</a>
   <a href="/contact">Contact</a>
   <a href="/contact#newsletter"><em>Newsletter</em></a>
@@ -325,11 +325,11 @@ const TEAM = `<section class="team" id="team">
     </div>
     <div class="team-txt">
       <p class="eyebrow rv">The founders</p>
-      <h2 class="t-l split-words" style="margin-top:22px">The people <span class="acc">behind the search</span></h2>
+      <h2 class="t-l split-words" style="margin-top:22px" data-fr="L’équipe &lt;span class=&quot;acc&quot;&gt;derrière chaque recherche&lt;/span&gt;">The people <span class="acc">behind the search</span></h2>
       <div class="team-cards">
         ${[
           ['Mathis Y.', 'Founder &amp; Yacht Broker', 'Raised between Brittany and Paris, Mathis built a close bond with yachting through summers and first connections on the French Riviera: Cannes, Antibes, Monaco and Saint-Tropez.', 'Off-market, events and charter', 'https://www.linkedin.com/in/mathis-ybs-bb20483b7'],
-          ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a yacht broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
+          ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a Yacht Broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
         ].map(([n, r, bio, sp, li], i) => `<article class="tcard rv${i ? ' d1' : ''}">
           <div class="tcard-h"><h4>${n}</h4><p class="trole">${r}</p></div>
           <p>${bio}</p>
@@ -340,7 +340,7 @@ const TEAM = `<section class="team" id="team">
       <a class="yca-card rv" href="/yacht-club-academy">
         <img class="yca-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="88" height="60" loading="lazy">
         <span class="yca-k">Also founded by Mathis &amp; Antoine</span>
-        <b>Yacht Club <em>Academy</em></b>
+        <b class="notranslate" translate="no">Yacht Club <em>Academy</em></b>
         <span class="yca-p">Our academy for those who want to become Yacht Brokers: the off-market world, the method professionals use, a dedicated platform and much more.</span>
         <span class="yca-go">Discover the academy <i>→</i></span>
       </a>
@@ -490,10 +490,10 @@ pages.push({
   <div class="ya-split">
     <div>
       <p class="ya-k rv">In the field</p>
-      <h2 class="ya-h2 split-words">Built close to the boats <em>and the people</em></h2>
+      <h2 class="ya-h2 split-words" data-fr="Au plus près des bateaux &lt;em&gt;et des gens&lt;/em&gt;">Built close to the boats <em>and the people</em></h2>
       <p class="ya-p rv">Our journey started in Antibes, Cannes and Monaco, then continued in Dubai. We meet the industry where it happens: at the shows, on board and with the people who shape it.</p>
     </div>
-    <div class="ya-tags rv"><span>Qatar Boat Show 2026</span><span>Dubai International Boat Show</span><span>Monaco Yacht Show</span><span>Cannes Yachting Festival</span><span>Abu Dhabi International Boat Show</span></div>
+    <div class="ya-tags rv notranslate" translate="no"><span>Qatar Boat Show 2026</span><span>Dubai International Boat Show</span><span>Monaco Yacht Show</span><span>Cannes Yachting Festival</span><span>Abu Dhabi International Boat Show</span></div>
   </div>
   <div class="ya-gal">
     ${[
@@ -502,7 +502,7 @@ pages.push({
       ['deck', 'Cannes Yachting Festival'],
       ['dubai', 'Dubai Marina'],
       ['sunset', 'On board at sunset']
-    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-400.webp" srcset="/images/yca/${f}-400.webp 400w, /images/yca/${f}-800.webp 800w" sizes="(max-width:560px) 50vw, (max-width:960px) 33vw, 20vw" alt="${c}" width="800" height="1000" loading="lazy" decoding="async"><figcaption${/Show|Festival/.test(c) ? ' data-notr' : ''}>${c}</figcaption></figure>`).join('')}
+    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-400.webp" srcset="/images/yca/${f}-400.webp 400w, /images/yca/${f}-800.webp 800w" sizes="(max-width:560px) 50vw, (max-width:960px) 33vw, 20vw" alt="${c}" width="800" height="1000" loading="lazy" decoding="async"><figcaption${/Show|Festival/.test(c) ? ' class="notranslate" translate="no"' : ''}>${c}</figcaption></figure>`).join('')}
   </div>
   <div class="ya-split ya-int">
     <div>
@@ -896,7 +896,7 @@ const NEWSLETTER = `<section id="newsletter">
 </section>`;
 const FOUNDERS = [
   ['Mathis Y.', 'Founder &amp; Yacht Broker', 'Raised between Brittany and Paris, Mathis built a close bond with yachting through summers and first connections on the French Riviera: Cannes, Antibes, Monaco and Saint-Tropez.', 'Off-market, events and charter', 'https://www.linkedin.com/in/mathis-ybs-bb20483b7'],
-  ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a yacht broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
+  ['Antoine E.', 'Co-Founder &amp; Yacht Broker', 'Raised in the South of France, Antoine grew up close to the world of luxury, with regular time in Switzerland and Monaco. He built his network inside the industry and became a Yacht Broker backed by relationships formed over several years.', 'Closing and booking', 'https://www.linkedin.com/in/antoine-elie-163583383']
 ];
 pages.push({
   file: 'contact.html', canonical: '/contact',

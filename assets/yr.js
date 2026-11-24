@@ -81,6 +81,21 @@
     'your 30-day plan': { _free: 1, fr: 'Votre plan sur 30 jours' },
     'see the 30-day plan': { _free: 1, fr: 'Voir le plan sur 30 jours' },
     'in the field': { _free: 1, fr: 'Sur le terrain' },
+    'our interviews': { _free: 1, fr: 'Nos interviews' },
+    'quality outreach': { _free: 1, fr: 'Prospection de qualité' },
+    'no first clients': { _free: 1, fr: 'Aucun premier client' },
+    'no first clients.': { _free: 1, fr: 'Aucun premier client.' },
+    decline: { _free: 1, fr: 'Refuser' },
+    'private jet': { _free: 1, fr: 'Jet privé' },
+    'referral programme': { _free: 1, fr: 'Programme de parrainage' },
+    'charter placements': { _free: 1, fr: 'Locations de yachts' },
+    'worldwide charter opportunities with preferential rates: mediterranean, gulf, caribbean and beyond, curated for uhnw clients.': { _free: 1, fr: 'Des locations dans le monde entier à des tarifs préférentiels : Méditerranée, Golfe, Caraïbes et au-delà, sélectionnées pour une clientèle très fortunée.' },
+    'off-market sourcing': { _free: 1, fr: 'Recherche hors marché' },
+    'off-market, events and charter': { _free: 1, fr: 'Hors marché, événements et location' },
+    'closing and booking': { _free: 1, fr: 'Closing et réservations' },
+    'our academy for those who want to become yacht brokers: the off-market world, the method professionals use, a dedicated platform and much more.': { _free: 1, fr: 'Notre académie pour ceux qui veulent devenir Yacht Brokers : le hors marché, la méthode des professionnels, une plateforme dédiée et bien plus encore.' },
+    'we created yacht club academy to open the doors of our profession. no theory from the outside: the method we use every day at yacht research, shared step by step, wherever you are in the world.': { _free: 1, fr: 'Nous avons créé Yacht Club Academy pour ouvrir les portes de notre métier. Pas de théorie vue de l’extérieur : la méthode que nous appliquons chaque jour chez Yacht Research, partagée étape par étape, où que vous soyez dans le monde.' },
+    'join yacht club academy and learn the profession from two brokers who do it every day.': { _free: 1, fr: 'Rejoignez Yacht Club Academy et apprenez le métier auprès de deux Yacht Brokers qui l’exercent au quotidien.' },
     'everything in the elite pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.': { _free: 1, fr: 'Tout le Pack Elite, plus cinq heures de coaching par semaine avec nous : votre plan d’action, des jeux de rôle pour les appels et les négociations, une analyse de vos messages, votre première liste de prospects et des présentations à notre réseau.' },
     'we have been interviewed by well-known figures of entrepreneurship and online business, sharing our vision of yachting and of the yacht broker profession with their audiences.': { _free: 1, fr: 'Nous avons été interviewés par des figures reconnues de l’entrepreneuriat et du business en ligne, pour partager notre vision du yachting et du métier de Yacht Broker avec leur public.' }
   };
@@ -109,6 +124,7 @@
   $$('.yca-link,.logo,.foot-logo,.foot-bot > span:first-child,.ya-tags span,[data-notr]').forEach(noTr);
   var plainHTML = [];
   $$('.split-words,#manifesto,[data-tr-plain]').forEach(function(el){ plainHTML.push([el, el.getAttribute('data-tr-plain') || el.innerHTML]); });
+  var frEls = $$('[data-fr]').filter(function(e){ return !plainHTML.some(function(p){ return p[0] === e; }); });
 
   $$('.split-words').forEach(splitWords);
 
@@ -152,12 +168,17 @@
     if (on && !trDone) {
       trDone = true;
       // on garde la version animée (mot par mot) pour la remettre si on revient en anglais
-      plainHTML.forEach(function(p){ p[2] = p[0].innerHTML; p[0].innerHTML = p[1]; p[0].classList.add('tr-plain', 'is-in'); });
+      plainHTML.forEach(function(p){ p[2] = p[0].innerHTML;
+        // titre avec sa propre version française (data-fr) : on la met et Google n'y touche plus
+        var fr = lang === 'fr' && p[0].getAttribute('data-fr');
+        if (fr) { noTr(p[0]); p[0].innerHTML = fr; } else p[0].innerHTML = p[1];
+        p[0].classList.add('tr-plain', 'is-in'); });
       if (man) man.classList.add('tr-plain');
     }
     if (!on && trDone) {
       trDone = false;
-      plainHTML.forEach(function(p){ if (p[2] != null) p[0].innerHTML = p[2]; p[0].classList.remove('tr-plain'); });
+      plainHTML.forEach(function(p){ if (p[2] != null) p[0].innerHTML = p[2]; p[0].classList.remove('tr-plain');
+        if (p[0].getAttribute('data-fr')) { p[0].removeAttribute('translate'); p[0].classList.remove('notranslate'); } });
       if (man) { man.classList.remove('tr-plain'); words.length = 0; $$('span.w', man).forEach(function(w){ words.push(w); }); }
       if (typeof onScroll === 'function') onScroll();
     }
@@ -168,6 +189,12 @@
         s.textContent = d[lang] || s.getAttribute('data-en'); });
     }
     if (!on && trLang) { trLang = ''; $$('[data-tr]').forEach(function(s){ s.textContent = s.getAttribute('data-en'); }); }
+    // autres éléments avec leur version française écrite à la main (data-fr), ex. le menu
+    frEls.forEach(function(e){
+      var want = on && lang === 'fr';
+      if (want && e._en == null) { e._en = e.innerHTML; noTr(e); e.innerHTML = e.getAttribute('data-fr'); }
+      else if (!want && e._en != null) { e.innerHTML = e._en; e._en = null; e.removeAttribute('translate'); e.classList.remove('notranslate'); }
+    });
     if (on && document.title !== pageTitle) document.title = pageTitle;
     if (on && lang === 'fr') frFixSoon();
     navFit();
