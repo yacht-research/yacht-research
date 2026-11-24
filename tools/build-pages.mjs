@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '66'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '67'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -64,7 +64,6 @@ const NAV = `<nav id="nav">
   <a href="/recruitment">Careers</a>
   <a href="/contact">Contact</a>
   <a href="/contact#newsletter"><em>Newsletter</em></a>
-  <a href="/fr/" class="lang-sw menu-lang" hreflang="fr" lang="fr" translate="no">Version <em>française</em></a>
   <a href="/yacht-research-form" class="btn btn-gold menu-cta">Enquire now <i>→</i></a>
 </div>`;
 
