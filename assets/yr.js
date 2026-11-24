@@ -29,7 +29,12 @@
   // prix et lieux issus des fiches (en anglais dans les données)
   var PLACES_FR = [['United Kingdom', 'Royaume-Uni'], ['Turkey', 'Turquie'], ['Greece', 'Grèce'], ['Italy', 'Italie'], ['Thailand', 'Thaïlande'], ['Florida', 'Floride'], ['Spain', 'Espagne'], ['Croatia', 'Croatie'], ['Netherlands', 'Pays-Bas'], ['Germany', 'Allemagne'], ['Montenegro', 'Monténégro'], ['UAE', 'EAU'], ['Dubai', 'Dubaï'], ['(new)', '(neuf)'], ['Mallorca', 'Majorque'], ['Corsica', 'Corse'], ['Aegean Sea', 'mer Égée'], ['South of France', 'Sud de la France'], ['Mediterranean', 'Méditerranée'], ['French Riviera', 'Côte d’Azur']];
   function placeFr(s){ return IS_FR ? PLACES_FR.reduce(function(a, p){ return a.split(p[0]).join(p[1]); }, String(s || '')) : s; }
-  function priceFr(s){ return IS_FR ? String(s || '').replace(/^From (.+?) per hour/, 'À partir de $1 / heure').replace(/^From (.+?) per day/, 'À partir de $1 / jour').replace(/^From (.+?) per week/, 'À partir de $1 / semaine').replace(/^From /, 'À partir de ').replace(/Price on request/, 'Prix sur demande').replace(/\(Landed Exc\. Taxes\)/, '(hors taxes, livré)') : s; }
+  function priceFr(s){ return IS_FR ? String(s || '')
+    .replace(/(HK\$|AED|USD|€|£|\$)\s?(\d[\d,]*(?:\.\d+)?)/g, function(m, c, n){ return n.replace(/,/g, '\u00a0') + '\u00a0' + c; })
+    .replace(/^From (.+?) per hour/, 'À partir de $1 / heure').replace(/^From (.+?) per day/, 'À partir de $1 / jour').replace(/^From (.+?) per week/, 'À partir de $1 / semaine')
+    .replace(/^From /, 'À partir de ').replace(/ for (\d+) hours/, ' pour $1 heures').replace(/ per hour/, ' / heure').replace(/ per week/, ' / semaine')
+    .replace(/VAT Included/i, 'TVA incluse').replace(/VAT Excluded/i, 'hors TVA').replace(/\(Landed Exc\. Taxes\)/, '(livré, hors taxes)').replace(/\(Exc\. Taxes\)/, '(hors taxes)')
+    .replace(/Price on request/, 'Prix sur demande').replace(/\bSold\b/, 'Vendu') : s; }
   // sélecteur de langue : la même page dans l'autre langue
   $$('.lang-sw').forEach(function(a){ a.setAttribute('href', (IS_FR ? PATHNAME : '/fr' + (PATHNAME === '/' ? '/' : PATHNAME)) + location.search + location.hash); });
   // ---------- Hauteur d'écran figée au chargement (--vh, utilisée par yr.css) ----------
