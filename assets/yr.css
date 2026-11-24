@@ -1038,3 +1038,7 @@ nav.compact .nav-qs{opacity:1;visibility:visible;pointer-events:auto;transform:n
 html.menu-lock,html.menu-lock body{overflow:hidden!important;overscroll-behavior:none}
 .menu a.menu-cta{position:sticky;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2;flex:none;
   box-shadow:0 0 0 10px var(--black),0 14px 34px -14px rgba(201,168,76,.7)}
+/* Page traduite (Google / Chrome) : menu burger si les libellés ne tiennent plus, titres en phrase entière */
+html.nav-tight .nav-links{display:none}html.nav-tight .burger{display:block}html.nav-tight .nav-r .btn{display:none}
+.split-words.tr-plain .acc{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+#manifesto.tr-plain{opacity:1}
