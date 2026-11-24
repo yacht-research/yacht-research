@@ -62,12 +62,19 @@
   // 1) noms de marque jamais traduits ; 2) mots isolés mal traduits (« Charter » → « Charte ») remplacés par
   // notre propre libellé ; 3) titres découpés mot par mot remis en phrase entière avant traduction ;
   // 4) si le menu traduit ne tient plus sur une ligne, on passe au menu déroulant (burger).
-  var BRAND = /(Yacht Research Group|Yacht Research|Yacht Club Academy|Xclusive Yachts?|Yacht Broker)/;
+  // mots entiers seulement (« Yacht Brokerage » n'est pas la marque « Yacht Broker »)
+  var BRAND = /\b(Yacht Research Group|Yacht Research|Yacht Club Academy|Xclusive Yachts?|Yacht Brokers?)(?![A-Za-z])/;
   var TR = {
     charter: { fr: 'Location', es: 'Alquiler', it: 'Noleggio', pt: 'Aluguel', de: 'Charter', nl: 'Charter', ru: 'Аренда', ar: 'تأجير' },
     'charter fleet': { fr: 'Flotte en location', es: 'Flota de alquiler', it: 'Flotta a noleggio', pt: 'Frota para aluguel' },
     home: { fr: 'Accueil', es: 'Inicio', it: 'Home', pt: 'Início', de: 'Startseite', ru: 'Главная', ar: 'الرئيسية' },
-    newsletter: {}, academy: {}
+    newsletter: {}, academy: {},
+    // phrases imposées ; dans les autres langues (_free), Google traduit normalement
+    'international yacht brokerage': { _free: 1, fr: 'Courtage de yachts international' },
+    'plan a charter': { _free: 1, fr: 'Planifier une location' },
+    'sales, acquisitions and crewed charters, handled personally wherever you are in the world.': { _free: 1, fr: 'Ventes, acquisitions et locations avec équipage, gérés personnellement où que vous soyez dans le monde.' },
+    'new listings, charters and behind the scenes, every week on our networks.': { _free: 1, fr: 'Nouvelles annonces, locations et coulisses, chaque semaine sur nos réseaux.' },
+    'the art of effortless yachting. yacht sales, charter and bespoke services, worldwide.': { _free: 1, fr: 'L’art du yachting sans effort. Vente, location et services sur mesure de yachts, partout dans le monde.' }
   };
   function noTr(el){ el.setAttribute('translate', 'no'); el.classList.add('notranslate'); }
   (function protect(root){
@@ -80,12 +87,18 @@
       if (TR[key]) { var s = document.createElement('span'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
         var parts = t.split(t.trim()); var f = document.createDocumentFragment(); if (parts[0]) f.appendChild(document.createTextNode(parts[0])); f.appendChild(s); if (parts[1]) f.appendChild(document.createTextNode(parts[1])); n.parentNode.replaceChild(f, n); return; }
       if (!BRAND.test(t)) return;
-      var frag = document.createDocumentFragment();
-      t.split(BRAND).forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('span'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
+      var frag = document.createDocumentFragment(), parts = t.split(BRAND);
+      // les espaces autour de la marque passent DANS la zone non traduite : Google les supprimait (« avecYacht Research »)
+      for (var i = 1; i < parts.length; i += 2) {
+        var a = /\s+$/.exec(parts[i - 1]), z = /^\s+/.exec(parts[i + 1] || '');
+        if (a) { parts[i] = a[0] + parts[i]; parts[i - 1] = parts[i - 1].slice(0, -a[0].length); }
+        if (z) { parts[i] += z[0]; parts[i + 1] = parts[i + 1].slice(z[0].length); }
+      }
+      parts.forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('span'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
       n.parentNode.replaceChild(frag, n);
     });
   })(document.body);
-  $$('.yca-link,.logo,.foot-logo').forEach(noTr);
+  $$('.yca-link,.logo,.foot-logo,.foot-bot > span:first-child').forEach(noTr);
   var plainHTML = [];
   $$('.split-words,#manifesto,[data-tr-plain]').forEach(function(el){ plainHTML.push([el, el.getAttribute('data-tr-plain') || el.innerHTML]); });
 
@@ -135,10 +148,39 @@
     }
     if (on && lang !== trLang) {
       trLang = lang;
-      $$('[data-tr]').forEach(function(s){ var d = TR[s.getAttribute('data-tr')] || {}; s.textContent = d[lang] || s.getAttribute('data-en'); });
+      $$('[data-tr]').forEach(function(s){ var d = TR[s.getAttribute('data-tr')] || {};
+        if (d._free && !d[lang]) { s.parentNode.replaceChild(document.createTextNode(s.getAttribute('data-en')), s); return; }
+        s.textContent = d[lang] || s.getAttribute('data-en'); });
     }
     if (!on && trLang) { trLang = ''; $$('[data-tr]').forEach(function(s){ s.textContent = s.getAttribute('data-en'); }); }
+    if (on && document.title !== pageTitle) document.title = pageTitle;
+    if (on && lang === 'fr') frFixSoon();
     navFit();
+  }
+  // titre de l'onglet : reste en anglais (sinon « Yacht Research » devient « Recherche sur les yachts »)
+  var pageTitle = document.title, titleEl = document.querySelector('title');
+  // français : « charter » se dit toujours « location » (Google écrit « affrètement » ou « charte »)
+  var FR_FIX = [
+    [/\b([Ll])['’]affrètement(s?)\b/g, function(m, l, s){ return (l === 'L' ? 'L' : 'l') + (s ? 'es locations' : 'a location'); }],
+    [/\b([Dd])['’]affrètement(s?)\b/g, function(m, d, s){ return d + 'e location' + s; }],
+    [/\b([Uu])n affrètement\b/g, function(m, u){ return u + 'ne location'; }],
+    [/\b([Dd])u charter\b/g, function(m, d){ return d + 'e la location'; }],
+    [/\b([Uu])n charter\b/g, function(m, u){ return u + 'ne location'; }],
+    [/\b([Ll])e charter\b/g, function(m, l){ return l + 'a location'; }],
+    [/\b([Aa])ffrètement(s?)\b/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'ocation' + s; }],
+    [/\b([Cc])harte(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
+    [/\b([Cc])harter(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
+    [/\b([Aa])ffréter\b/g, function(m, a){ return (a === 'A' ? 'L' : 'l') + 'ouer'; }],
+    [/\b([Aa])ffrété(e?s?)(?![\wÀ-ÿ])/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'oué' + s; }]
+  ];
+  var frT;
+  function frFixSoon(){ if (!frT) frT = setTimeout(function(){ frT = 0; frFix(); }, 300); }
+  function frFix(){
+    if (!/translated-/.test(html.className) || (html.lang || '').slice(0, 2).toLowerCase() !== 'fr') return;
+    var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+      var p = n.parentNode; return (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.nodeName) || p.closest('[translate="no"]')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
+    var n, v, w;
+    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
   }
   // menu du haut : si les libellés (traduits, plus longs) chevauchent le logo ou le bouton, on passe au burger
   var links = $('.nav-links'), logo = $('#nav .logo'), navR = $('.nav-r'), fitT;
@@ -156,6 +198,9 @@
   }
   if ('MutationObserver' in window) {
     new MutationObserver(trApply).observe(html, { attributes: true, attributeFilter: ['class', 'lang'] });
+    if (titleEl) new MutationObserver(function(){ if (/translated-/.test(html.className) && document.title !== pageTitle) document.title = pageTitle; }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+    // Google traduit par morceaux, au fil du scroll : on repasse derrière lui
+    new MutationObserver(function(){ if (/translated-/.test(html.className)) frFixSoon(); }).observe(document.body, { childList: true, characterData: true, subtree: true });
     if (links) new MutationObserver(navFit).observe(links, { childList: true, characterData: true, subtree: true });
     if (nav) new MutationObserver(function(){ if (!nav.classList.contains('compact')) navFit(); }).observe(nav, { attributes: true, attributeFilter: ['class'] });
   }

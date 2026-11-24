@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '57'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '58'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -422,7 +422,7 @@ pages.push({
   <div class="ya-in">
     <img class="ya-logo" src="/images/brand/yca-logo-white.svg" alt="Yacht Club Academy" width="132" height="90">
     <p class="ya-k">By the founders of Yacht Research</p>
-    <h1 class="ya-h1">Want to become<br>a Yacht <em>Broker?</em></h1>
+    <h1 class="ya-h1">Want to become<br>a<span class="notranslate" translate="no"> Yacht <em>Broker?</em></span></h1>
     <p class="ya-lead">We created Yacht Club Academy to open the doors of our profession. No theory from the outside: the method we use every day at Yacht Research, shared step by step, wherever you are in the world.</p>
     <div class="ya-ctas"><a href="${YCA_URL}" target="_blank" rel="noopener" class="ya-btn">Discover the academy <i>→</i></a><a href="#ya-plan" class="ya-btn ya-ghost">See the 30-day plan</a></div>
   </div>
