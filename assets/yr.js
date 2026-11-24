@@ -96,7 +96,15 @@
     'our academy for those who want to become yacht brokers: the off-market world, the method professionals use, a dedicated platform and much more.': { _free: 1, fr: 'Notre académie pour ceux qui veulent devenir Yacht Brokers : le hors marché, la méthode des professionnels, une plateforme dédiée et bien plus encore.' },
     'we created yacht club academy to open the doors of our profession. no theory from the outside: the method we use every day at yacht research, shared step by step, wherever you are in the world.': { _free: 1, fr: 'Nous avons créé Yacht Club Academy pour ouvrir les portes de notre métier. Pas de théorie vue de l’extérieur : la méthode que nous appliquons chaque jour chez Yacht Research, partagée étape par étape, où que vous soyez dans le monde.' },
     'join yacht club academy and learn the profession from two brokers who do it every day.': { _free: 1, fr: 'Rejoignez Yacht Club Academy et apprenez le métier auprès de deux Yacht Brokers qui l’exercent au quotidien.' },
-    'everything in the elite pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.': { _free: 1, fr: 'Tout le Pack Elite, plus cinq heures de coaching par semaine avec nous : votre plan d’action, des jeux de rôle pour les appels et les négociations, une analyse de vos messages, votre première liste de prospects et des présentations à notre réseau.' },
+    'everything in the elite pack, plus 5 hours a week of 1:1 coaching with us: action plan and positioning, call and negotiation role-plays, review and edits of your messages, your first prospect list, a vip private group and introductions.': { _free: 1, fr: 'Tout le Pack Elite, plus 5 h de coaching 1:1 par semaine avec nous : plan d’action et positionnement, simulations d’appels et de négociation, analyse et correction de vos messages, votre première liste de prospects, un groupe privé VIP et des mises en relation.' },
+    '1:1 coaching, call and negotiation role-plays, review and edits of your messages': { _free: 1, fr: 'Coaching 1:1, simulations d’appels et de négociation, analyse et correction de vos messages' },
+    'become a yacht broker, with us': { _free: 1, fr: 'Devenez Yacht Broker avec nous' },
+    'everything in the ebook, and much more: we guide you to close your first deals.': { _free: 1, fr: 'Tout le contenu de l’ebook, et bien plus encore : nous vous accompagnons jusqu’à vos premiers deals.' },
+    // jet privé : pas de traduction mot à mot (« vol privé », « jambes vides »)
+    'empty legs': { _free: 1, fr: 'Empty legs' },
+    'fly private': { _free: 1, fr: 'Voyager en jet privé' },
+    'private jets, empty legs and private flights, anywhere in the world, booked through our global network.': { _free: 1, fr: 'Jets privés, empty legs et vols privés, partout dans le monde, réservés via notre réseau international.' },
+    'private jets, empty legs and private flights anywhere in the world, booked through our global network.': { _free: 1, fr: 'Jets privés, empty legs et vols privés, partout dans le monde, réservés via notre réseau international.' },
     'we have been interviewed by well-known figures of entrepreneurship and online business, sharing our vision of yachting and of the yacht broker profession with their audiences.': { _free: 1, fr: 'Nous avons été interviewés par des figures reconnues de l’entrepreneuriat et du business en ligne, pour partager notre vision du yachting et du métier de Yacht Broker avec leur public.' }
   };
   function noTr(el){ el.setAttribute('translate', 'no'); el.classList.add('notranslate'); }
@@ -107,7 +115,8 @@
     var list = []; while (tw.nextNode()) list.push(tw.currentNode);
     list.forEach(function(n){
       var t = n.nodeValue, key = t.trim().toLowerCase();
-      if (TR[key]) { var s = document.createElement('span'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
+      // balise neutre <yr-t> (pas <span>) : aucun style du site ne la cible (ex. .ya-week span = pastille bleue)
+      if (TR[key]) { var s = document.createElement('yr-t'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
         var parts = t.split(t.trim()); var f = document.createDocumentFragment(); if (parts[0]) f.appendChild(document.createTextNode(parts[0])); f.appendChild(s); if (parts[1]) f.appendChild(document.createTextNode(parts[1])); n.parentNode.replaceChild(f, n); return; }
       if (!BRAND.test(t)) return;
       var frag = document.createDocumentFragment(), parts = t.split(BRAND);
@@ -117,7 +126,7 @@
         if (a) { parts[i] = a[0] + parts[i]; parts[i - 1] = parts[i - 1].slice(0, -a[0].length); }
         if (z) { parts[i] += z[0]; parts[i + 1] = parts[i + 1].slice(z[0].length); }
       }
-      parts.forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('span'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
+      parts.forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('yr-t'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
       n.parentNode.replaceChild(frag, n);
     });
   })(document.body);
@@ -209,6 +218,7 @@
     // (jamais « charter » : c'est aussi le mot anglais, pas encore traduit par Google plus bas dans la page)
     [/\b([Aa])ffrètement(s?)\b/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'ocation' + s; }],
     [/\b([Cc])harte(s?)\b/g, function(m, c, s){ return (c === 'C' ? 'L' : 'l') + 'ocation' + s; }],
+    [/\b([Jj])ambes? vides?\b/g, function(m, j){ return (j === 'J' ? 'E' : 'e') + 'mpty leg' + (/s$/.test(m) ? 's' : ''); }],
     [/\b([Aa])ffréter\b/g, function(m, a){ return (a === 'A' ? 'L' : 'l') + 'ouer'; }],
     [/\b([Aa])ffrété(e?s?)(?![\wÀ-ÿ])/g, function(m, a, s){ return (a === 'A' ? 'L' : 'l') + 'oué' + s; }]
   ];
@@ -219,7 +229,7 @@
     var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
       var p = n.parentNode; return (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.nodeName) || p.closest('[translate="no"]')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
     var n, v, w;
-    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte\b|hartes\b/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
+    while ((n = tw.nextNode())) { v = n.nodeValue; if (!/ffr[eéè]t|harte\b|hartes\b|ambes? vide/i.test(v)) continue; w = v; FR_FIX.forEach(function(r){ w = w.replace(r[0], r[1]); }); if (w !== v) n.nodeValue = w; }
   }
   // menu du haut : si les libellés (traduits, plus longs) chevauchent le logo ou le bouton, on passe au burger
   var links = $('.nav-links'), logo = $('#nav .logo'), navR = $('.nav-r'), fitT;
@@ -298,7 +308,7 @@
     return '<a class="card rv' + (sold ? ' card-sold' : '') + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '">' +
       '<div class="ph"' + (y.photos ? ' data-imgs="' + esc(JSON.stringify(y.photos)) + '" data-i="0"' : '') + '><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : sold ? ' sold' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span>' +
       (y.photos ? '<button type="button" class="ph-nav prev" aria-label="Previous photo">‹</button><button type="button" class="ph-nav next" aria-label="Next photo">›</button><span class="ph-count"><b>1</b>/' + y.photos.length + '</span>' : '') + '</div>' +
-      '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y) + '</h4>' + specs +
+      '<div class="bd"><small>' + esc(sub) + '</small><h4 class="notranslate" translate="no">' + splitTitle(y) + '</h4>' + specs +
       '<div class="price">' + price + ' <i>→</i></div></div></a>';
   }
   window.YR = { card: card, observe: observe, esc: esc };

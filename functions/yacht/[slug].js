@@ -154,8 +154,8 @@ function renderYachtPage(y, slug, base, origin) {
     (isCharter ? charterBody({ y, slug, title, location, city, gallery, price, guests, description, calloutHTML, hlHTML, specsHTML, videoHTML, galHTML, brochure, enquire, faq }) : (
     // Fiche à vendre : même disposition que les fiches charter (titre, chiffres clés, mosaïque de photos)
     '<main class="lx lx-sale">' +
-    '<p class="lx-crumb yp-crumb"><a href="/">Home</a> · <a href="/listings">Yachts for sale</a> · <span>' + esc(title) + '</span></p>' +
-    '<div class="lx-top"><div><span class="tag yp-tag' + (sold ? ' is-sold' : '') + '">' + badgeLabel(y.badge, isCharter) + '</span><h1 class="lx-h1">' + titleHTML(title) + '</h1>' +
+    '<p class="lx-crumb yp-crumb"><a href="/">Home</a> · <a href="/listings">Yachts for sale</a> · <span class="notranslate" translate="no">' + esc(title) + '</span></p>' +
+    '<div class="lx-top"><div><span class="tag yp-tag' + (sold ? ' is-sold' : '') + '">' + badgeLabel(y.badge, isCharter) + '</span><h1 class="lx-h1 notranslate" translate="no">' + titleHTML(title) + '</h1>' +
     '<p class="lx-loc">' + [y.year, y.length, location].filter(Boolean).map(esc).join(' · ') + '</p></div>' +
     '<div class="lx-chips">' + keySpecs.map(s => '<div><b>' + esc(s[1]) + '</b><span>' + esc(s[0]) + '</span></div>').join('') + '</div></div>' +
     mosaic([y.image || image].concat(gallery), title + ' ' + (y.year || '') + ' for sale') +
@@ -210,14 +210,14 @@ function charterBody(o) {
   const paras = esc(description).split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
   const priceShort = price.replace(/^From\s+/i, '');
   return '<main class="lx">' +
-    '<p class="lx-crumb"><a href="/">Home</a> · <a href="/charter">Charter</a>' + (city ? ' · <a href="/charter?location=' + encodeURIComponent(city) + '">' + esc(city) + '</a>' : '') + ' · <span>' + esc(name) + '</span></p>' +
-    '<div class="lx-top"><div><span class="tag yp-tag">Charter</span><h1 class="lx-h1">' + esc(name) + (model ? ' <em>' + esc(model) + '</em>' : '') + '</h1>' +
+    '<p class="lx-crumb"><a href="/">Home</a> · <a href="/charter">Charter</a>' + (city ? ' · <a href="/charter?location=' + encodeURIComponent(city) + '">' + esc(city) + '</a>' : '') + ' · <span class="notranslate" translate="no">' + esc(name) + '</span></p>' +
+    '<div class="lx-top"><div><span class="tag yp-tag">Charter</span><h1 class="lx-h1 notranslate" translate="no">' + esc(name) + (model ? ' <em>' + esc(model) + '</em>' : '') + '</h1>' +
     (location ? '<p class="lx-loc">⚲ ' + esc(location) + '</p>' : '') + '</div>' +
     (chips.length ? '<div class="lx-chips">' + chips.map(c => '<div><b>' + esc(c[0]) + '</b><span>' + c[1] + '</span></div>').join('') + '</div>' : '') + '</div>' +
     '<div class="lx-mosaic lx-n' + Math.min(imgs.length, 5) + '">' + imgs.slice(0, 5).map((g, i) => '<button class="yp-shot" data-full="' + esc(g) + '"><img src="' + esc(i ? t800(g) : g) + '" alt="' + esc(name) + ' yacht charter' + (city ? ' ' + esc(city) : '') + ' photo ' + (i + 1) + '"' + (i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"') + '></button>').join('') +
     (imgs.length > 1 ? '<button class="lx-all" type="button" onclick="this.parentNode.querySelector(\'.yp-shot\').click()">All ' + imgs.length + ' photos</button>' : '') + '</div>' +
     '<div class="lx-body"><div class="lx-main">' +
-    '<section class="lx-sec"><h2>About ' + esc(name) + '</h2><div class="yp-desc">' + paras + '</div></section>' +
+    '<section class="lx-sec"><h2>About <span class="notranslate" translate="no">' + esc(name) + '</span></h2><div class="yp-desc">' + paras + '</div></section>' +
     (calloutHTML ? '<div class="lx-callout">' + calloutHTML + '</div>' : '') +
     (hlHTML ? '<section class="lx-sec lx-hl">' + hlHTML + '</section>' : '') +
     '<section class="lx-sec"><h2>Rate</h2><div class="lx-grid"><div><span>From</span><b>' + esc(priceShort) + '</b></div>' + (city ? '<div><span>Departs from</span><b>' + esc(location) + '</b></div>' : '') + '<div><span>Rate type</span><b>Preferential B2B rate</b></div></div>' +
