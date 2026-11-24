@@ -10,3 +10,29 @@
 # Fiches et index des yachts : 5 minutes, pour qu'un nouveau bateau apparaisse vite
 /content/*
   Cache-Control: public, max-age=300
+
+# Brochures rapatriées de Google Drive : même nom de fichier qu'avant quand on les enregistre
+/brochures/agapa-sunseeker-predator-84.pdf
+  Content-Disposition: inline; filename="BF Brochure AGAPA - Sunseeker Predator 84 (2009 - Refit 2024) Yacht For Charter.pdf"; filename*=UTF-8''BF%20Brochure%20AGAPA%20-%20Sunseeker%20Predator%2084%20(2009%20-%20Refit%202024)%20Yacht%20For%20Charter.pdf
+/brochures/catamaran-catafjord-nordest-63.pdf
+  Content-Disposition: inline; filename="Brochure Catamaran Catafjord Nordest 63 (1996) - EN Version.pdf"; filename*=UTF-8''Brochure%20Catamaran%20Catafjord%20Nordest%2063%20(1996)%20-%20EN%20Version.pdf
+/brochures/lauren-v-mangusta-105.pdf
+  Content-Disposition: inline; filename="BF Brochure LAUREN V - Mangusta 105 (1999 - Refit 2023) Yacht For Charter.pdf"; filename*=UTF-8''BF%20Brochure%20LAUREN%20V%20-%20Mangusta%20105%20(1999%20-%20Refit%202023)%20Yacht%20For%20Charter.pdf
+/brochures/m-y-fjord-44-open.pdf
+  Content-Disposition: inline; filename="BF Brochure M/Y Fjord 44 Open (2019 - Refit 2025) EUR 490,000 VAT Included.pdf"; filename*=UTF-8''BF%20Brochure%20M%2FY%20Fjord%2044%20Open%20(2019%20-%20Refit%202025)%20%E2%82%AC490%2C000%20VAT%20Included.pdf
+/brochures/majesty-62.pdf
+  Content-Disposition: inline; filename="BF Brochure Majesty 62 (2018) AED 5,450,000.pdf"; filename*=UTF-8''BF%20Brochure%20Majesty%2062%20(2018)%20AED%205%2C450%2C000.pdf
+/brochures/ocean-one-azimut-grande-36m.pdf
+  Content-Disposition: inline; filename="BF Brochure OCEAN ONE - Azimut Grande 36M (2023) Yacht For Charter.pdf"; filename*=UTF-8''BF%20Brochure%20OCEAN%20ONE%20-%20Azimut%20Grande%2036M%20(2023)%20Yacht%20For%20Charter.pdf
+/brochures/pearl-63.pdf
+  Content-Disposition: inline; filename="BF Brochure Pearl 63 (2025) $ 3,529,186.pdf"; filename*=UTF-8''BF%20Brochure%20Pearl%2063%20(2025)%20%24%203%2C529%2C186.pdf
+/brochures/silver-breeze-riva-86-domino.pdf
+  Content-Disposition: inline; filename="BF Brochure SILVER BREEZE - Riva 86 Domino (2010 - Refit 2023) Yacht For Charter.pdf"; filename*=UTF-8''BF%20Brochure%20SILVER%20BREEZE%20-%20Riva%2086%20Domino%20(2010%20-%20Refit%202023)%20Yacht%20For%20Charter.pdf
+/brochures/sunseeker-82-yacht.pdf
+  Content-Disposition: inline; filename="BF Brochure Sunseeker 82 Yacht - Harrys Game (2006) EUR 1,350,000 Tax Paid.pdf"; filename*=UTF-8''BF%20Brochure%20Sunseeker%2082%20Yacht%20-%20Harrys%20Game%20(2006)%20%E2%82%AC1%2C350%2C000%20Tax%20Paid.pdf
+/brochures/sunseeker-86.pdf
+  Content-Disposition: inline; filename="BF Brochure Sunseeker 86 Yacht - Amanecer VII (2009) EUR 1,600,000 Ex Tax.pdf"; filename*=UTF-8''BF%20Brochure%20Sunseeker%2086%20Yacht%20-%20Amanecer%20VII%20(2009)%20%E2%82%AC1%2C600%2C000%20Ex%20Tax.pdf
+/brochures/sunseeker-manhattan-55.pdf
+  Content-Disposition: inline; filename="BF Brochure Manhattan 55 (2025) GBP 2,270,968 (Landed Exc. Taxes).pdf"; filename*=UTF-8''BF%20Brochure%20Manhattan%2055%20(2025)%20%C2%A3%202%2C270%2C968%20(Landed%20Exc.%20Taxes).pdf
+/brochures/sunseeker-manhattan-68.pdf
+  Content-Disposition: inline; filename="BF Brochure Manhattan 68 (2025) GBP 3,235,111 (Landed Exc. Taxes).pdf"; filename*=UTF-8''BF%20Brochure%20Manhattan%2068%20(2025)%20%C2%A3%203%2C235%2C111%20(Landed%20Exc.%20Taxes).pdf

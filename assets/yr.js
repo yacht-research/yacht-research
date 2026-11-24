@@ -58,6 +58,37 @@
       });
     })(h);
   }
+  // ---------- Traduction automatique (Google / Chrome) ----------
+  // 1) noms de marque jamais traduits ; 2) mots isolés mal traduits (« Charter » → « Charte ») remplacés par
+  // notre propre libellé ; 3) titres découpés mot par mot remis en phrase entière avant traduction ;
+  // 4) si le menu traduit ne tient plus sur une ligne, on passe au menu déroulant (burger).
+  var BRAND = /(Yacht Research Group|Yacht Research|Yacht Club Academy|Xclusive Yachts?|Yacht Broker)/;
+  var TR = {
+    charter: { fr: 'Location', es: 'Alquiler', it: 'Noleggio', pt: 'Aluguel', de: 'Charter', nl: 'Charter', ru: 'Аренда', ar: 'تأجير' },
+    'charter fleet': { fr: 'Flotte en location', es: 'Flota de alquiler', it: 'Flotta a noleggio', pt: 'Frota para aluguel' },
+    home: { fr: 'Accueil', es: 'Inicio', it: 'Home', pt: 'Início', de: 'Startseite', ru: 'Главная', ar: 'الرئيسية' },
+    newsletter: {}, academy: {}
+  };
+  function noTr(el){ el.setAttribute('translate', 'no'); el.classList.add('notranslate'); }
+  (function protect(root){
+    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+      var p = n.parentNode; if (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|OPTION|TITLE)$/.test(p.nodeName) || p.closest('[translate="no"]')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT; } });
+    var list = []; while (tw.nextNode()) list.push(tw.currentNode);
+    list.forEach(function(n){
+      var t = n.nodeValue, key = t.trim().toLowerCase();
+      if (TR[key]) { var s = document.createElement('span'); noTr(s); s.setAttribute('data-tr', key); s.setAttribute('data-en', t.trim()); s.textContent = t.trim();
+        var parts = t.split(t.trim()); var f = document.createDocumentFragment(); if (parts[0]) f.appendChild(document.createTextNode(parts[0])); f.appendChild(s); if (parts[1]) f.appendChild(document.createTextNode(parts[1])); n.parentNode.replaceChild(f, n); return; }
+      if (!BRAND.test(t)) return;
+      var frag = document.createDocumentFragment();
+      t.split(BRAND).forEach(function(part, i){ if (!part) return; if (i % 2) { var b = document.createElement('span'); noTr(b); b.textContent = part; frag.appendChild(b); } else frag.appendChild(document.createTextNode(part)); });
+      n.parentNode.replaceChild(frag, n);
+    });
+  })(document.body);
+  $$('.yca-link,.logo,.foot-logo').forEach(noTr);
+  var plainHTML = [];
+  $$('.split-words,#manifesto,[data-tr-plain]').forEach(function(el){ plainHTML.push([el, el.getAttribute('data-tr-plain') || el.innerHTML]); });
+
   $$('.split-words').forEach(splitWords);
 
   // ---------- Manifeste : mots qui s'allument au scroll ----------
@@ -92,6 +123,45 @@
     $$('.rv,.split-words,.clip,.step,[data-count]', root).forEach(function(el){ if (io) io.observe(el); else el.classList.add('is-in'); });
   }
   observe(document);
+
+  // ---------- Page traduite : phrases entières, libellés maison, menu qui tient ----------
+  var html = document.documentElement, trDone = false, trLang = '';
+  function trApply(){
+    var on = /translated-/.test(html.className), lang = (html.lang || '').slice(0, 2).toLowerCase();
+    if (on && !trDone) {
+      trDone = true;
+      plainHTML.forEach(function(p){ p[0].innerHTML = p[1]; p[0].classList.add('tr-plain', 'is-in'); });
+      if (man) man.classList.add('tr-plain');
+    }
+    if (on && lang !== trLang) {
+      trLang = lang;
+      $$('[data-tr]').forEach(function(s){ var d = TR[s.getAttribute('data-tr')] || {}; s.textContent = d[lang] || s.getAttribute('data-en'); });
+    }
+    if (!on && trLang) { trLang = ''; $$('[data-tr]').forEach(function(s){ s.textContent = s.getAttribute('data-en'); }); }
+    navFit();
+  }
+  // menu du haut : si les libellés (traduits, plus longs) chevauchent le logo ou le bouton, on passe au burger
+  var links = $('.nav-links'), logo = $('#nav .logo'), navR = $('.nav-r'), fitT;
+  function navFit(){
+    clearTimeout(fitT);
+    fitT = setTimeout(function(){
+      if (!links || !nav || nav.classList.contains('compact')) return;
+      html.classList.remove('nav-tight');
+      if (getComputedStyle(links).display === 'none') return;
+      var L = links.getBoundingClientRect(), lg = logo ? logo.getBoundingClientRect() : null, r = navR ? navR.getBoundingClientRect() : null;
+      var tight = links.scrollWidth > links.clientWidth + 2 || (lg && lg.right > L.left - 16) || (r && L.right > r.left - 16);
+      if (!tight) $$('li', links).forEach(function(li){ if (li.getBoundingClientRect().height > 40) tight = true; });
+      html.classList.toggle('nav-tight', !!tight);
+    }, 120);
+  }
+  if ('MutationObserver' in window) {
+    new MutationObserver(trApply).observe(html, { attributes: true, attributeFilter: ['class', 'lang'] });
+    if (links) new MutationObserver(navFit).observe(links, { childList: true, characterData: true, subtree: true });
+    if (nav) new MutationObserver(function(){ if (!nav.classList.contains('compact')) navFit(); }).observe(nav, { attributes: true, attributeFilter: ['class'] });
+  }
+  window.addEventListener('resize', navFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(navFit);
+  trApply();
 
   function countUp(el){
     var end = +el.dataset.count, sup = el.querySelector('sup'), t0 = null;
