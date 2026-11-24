@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-24T20:03:19.498Z",
+ "generated": "2026-11-24T21:06:11.512Z",
  "count": 113,
  "yachts": [
   {
@@ -31,7 +31,8 @@
    "price_eur": 5768400,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sx88-2024",
@@ -62,7 +63,8 @@
    "price_eur": 5500000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl86-2017-bodrum",
@@ -93,7 +95,8 @@
    "price_eur": 4200000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "sunseeker-manhattan-55",
@@ -117,7 +120,8 @@
    "price_eur": 2657033,
    "guests": "6",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "azimut-80-2018",
@@ -136,7 +140,8 @@
    "price_eur": 2500000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "princess-60-2017",
@@ -167,7 +172,8 @@
    "price_eur": 1100000,
    "guests": "6",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "behike-141ft-tri-deck-dubai",
@@ -198,7 +204,8 @@
    "price_eur": 2875,
    "guests": "50",
    "cabins": "5",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "encore-sunseeker-131ft-dubai",
@@ -229,7 +236,8 @@
    "price_eur": 2300,
    "guests": "50",
    "cabins": "5",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "stardom-140ft-tri-deck-dubai",
@@ -260,7 +268,8 @@
    "price_eur": 1150,
    "guests": "100",
    "cabins": "5",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "aura-90ft-gulf-craft-dubai",
@@ -289,7 +298,8 @@
    "price_eur": 673,
    "guests": "55",
    "cabins": "4",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "icon-110ft-dubai",
@@ -320,7 +330,8 @@
    "price_eur": 673,
    "guests": "50",
    "cabins": "5",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "solana-92ft-majesty-dubai",
@@ -349,7 +360,8 @@
    "price_eur": 673,
    "guests": "60",
    "cabins": "2",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "x40-65ft-aicon-dubai",
@@ -378,7 +390,8 @@
    "price_eur": 575,
    "guests": "20",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "x42-92ft-amsca-dubai",
@@ -409,7 +422,8 @@
    "price_eur": 523,
    "guests": "45",
    "cabins": "2",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "polaris-92ft-amsca-dubai",
@@ -438,7 +452,8 @@
    "price_eur": 428,
    "guests": "45",
    "cabins": "2",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "starlight-92ft-maiora-dubai",
@@ -467,7 +482,8 @@
    "price_eur": 420,
    "guests": "39",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "x41-75ft-lux-dubai",
@@ -498,7 +514,8 @@
    "price_eur": 305,
    "guests": "30",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "leopard-65ft-lagoon-dubai",
@@ -527,7 +544,8 @@
    "price_eur": 253,
    "guests": "30",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "vio-75ft-lux-dubai",
@@ -556,7 +574,8 @@
    "price_eur": 243,
    "guests": "30",
    "cabins": "3",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "daphne-53ft-as-marine-dubai",
@@ -585,7 +604,8 @@
    "price_eur": 203,
    "guests": "17",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "aries-64ft-bluewater-dubai",
@@ -614,7 +634,8 @@
    "price_eur": 188,
    "guests": "30",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "magnum-52ft-as-marine-dubai",
@@ -643,7 +664,8 @@
    "price_eur": 188,
    "guests": "17",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "iris-62ft-majesty-dubai",
@@ -672,7 +694,8 @@
    "price_eur": 185,
    "guests": "25",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "altar-70ft-durreti-dubai",
@@ -701,7 +724,8 @@
    "price_eur": 178,
    "guests": "23",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "libra-62ft-bluewater-dubai",
@@ -725,7 +749,8 @@
    "price_eur": 175,
    "guests": "24",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "orion-48ft-al-shaali-dubai",
@@ -754,7 +779,8 @@
    "price_eur": 170,
    "guests": "12",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "misty-50ft-azimut-dubai",
@@ -783,7 +809,8 @@
    "price_eur": 165,
    "guests": "12",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "pisces-62ft-bluewater-dubai",
@@ -812,7 +839,8 @@
    "price_eur": 165,
    "guests": "25",
    "cabins": "1",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "blessed-50ft-azimut-dubai",
@@ -841,7 +869,8 @@
    "price_eur": 163,
    "guests": "12",
    "cabins": "2",
-   "updated": "2026-11-15"
+   "updated": "2026-11-15",
+   "fr": true
   },
   {
    "slug": "feadship-philosophy-44m-2015",
@@ -870,7 +899,8 @@
    "price_eur": 23500000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-100-contessa-2024-florida",
@@ -889,7 +919,8 @@
    "price_eur": 13708000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-131-nexus-40m-2019",
@@ -920,7 +951,8 @@
    "price_eur": 13000000,
    "guests": "12",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-90-ocean-2025-phuket",
@@ -939,7 +971,8 @@
    "price_eur": 10595485,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-1000-skydeck-2022-miami",
@@ -958,7 +991,8 @@
    "price_eur": 10120000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y95-2023-singapore",
@@ -977,7 +1011,8 @@
    "price_eur": 9828000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "riva-100-corsaro-ruzarija-2020",
@@ -1008,7 +1043,8 @@
    "price_eur": 8350000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-x95-splash-2022-florida",
@@ -1027,7 +1063,8 @@
    "price_eur": 7815400,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sd96-2021-asia",
@@ -1058,7 +1095,8 @@
    "price_eur": 7750000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl90a-2023-turkey",
@@ -1089,7 +1127,8 @@
    "price_eur": 7500000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-infynito-80-new-2026",
@@ -1120,7 +1159,8 @@
    "price_eur": 7213829,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "riva-100-corsaro-2019-turkey",
@@ -1139,7 +1179,8 @@
    "price_eur": 6950000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "riva-100-corsaro-2019-hong-kong",
@@ -1170,7 +1211,8 @@
    "price_eur": 6550000,
    "guests": "10",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-860-2023-malta",
@@ -1189,7 +1231,8 @@
    "price_eur": 6500000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y85-2024-united-kingdom",
@@ -1214,7 +1257,8 @@
    "price_eur": 6025442,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-88-into-the-sunset-2024-miami",
@@ -1233,7 +1277,8 @@
    "price_eur": 5979080,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y85-2021-jupiter-florida",
@@ -1252,7 +1297,8 @@
    "price_eur": 5887080,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-860-2023-thailand",
@@ -1275,7 +1321,8 @@
    "price_eur": 5860000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "azimut-grande-30-silvia-2018-italy",
@@ -1306,7 +1353,8 @@
    "price_eur": 5400000,
    "guests": "6",
    "cabins": "3",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "azimut-fly-82-2027",
@@ -1332,7 +1380,8 @@
    "price_eur": 5200000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y85-2023-singapore",
@@ -1351,7 +1400,8 @@
    "price_eur": 4914000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y72-2025-french-riviera",
@@ -1382,7 +1432,8 @@
    "price_eur": 4900000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-85-kaos-2019-florida",
@@ -1413,7 +1464,8 @@
    "price_eur": 4871400,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y85-2021-united-kingdom",
@@ -1432,7 +1484,8 @@
    "price_eur": 4797000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-95-yacht-2018-china",
@@ -1463,7 +1516,8 @@
    "price_eur": 4508000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl86-2019",
@@ -1494,7 +1548,8 @@
    "price_eur": 4500000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y85-2022-singapore",
@@ -1513,7 +1568,8 @@
    "price_eur": 4400000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-86-yacht-seawater-2019",
@@ -1544,7 +1600,8 @@
    "price_eur": 4350000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sx88-lady-larisa-2018",
@@ -1575,7 +1632,8 @@
    "price_eur": 4300000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-32m-2012-phuket",
@@ -1594,7 +1652,8 @@
    "price_eur": 4180000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl86-2018-antibes",
@@ -1625,7 +1684,8 @@
    "price_eur": 4100000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-76-misty-k-2024-miami",
@@ -1656,7 +1716,8 @@
    "price_eur": 4047080,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl86-squalo-2018-florida",
@@ -1675,7 +1736,8 @@
    "price_eur": 3955080,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y78-2021-aegean",
@@ -1706,7 +1768,8 @@
    "price_eur": 3790000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl86-2017-viareggio",
@@ -1737,7 +1800,8 @@
    "price_eur": 3750000,
    "guests": "10",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-s78-2021-antibes",
@@ -1768,7 +1832,8 @@
    "price_eur": 3700000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "azimut-116-2008-hong-kong",
@@ -1799,7 +1864,8 @@
    "price_eur": 3680000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-86-yacht-insomnia-2020-spain",
@@ -1830,7 +1896,8 @@
    "price_eur": 3650000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-98-mira-2013-marmaris",
@@ -1861,7 +1928,8 @@
    "price_eur": 3500000,
    "guests": "9",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "riva-92-duchessa-2015-uae",
@@ -1888,7 +1956,8 @@
    "price_eur": 3500000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "azimut-95-rph-2014-hong-kong",
@@ -1907,7 +1976,8 @@
    "price_eur": 3293600,
    "guests": "10",
    "cabins": "5",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "azimut-grande-25m-2020-hong-kong",
@@ -1938,7 +2008,8 @@
    "price_eur": 3220000,
    "guests": "10",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-88-lady-parisa-2014-bodrum",
@@ -1969,7 +2040,8 @@
    "price_eur": 3200000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y72-2021-imperia",
@@ -2000,7 +2072,8 @@
    "price_eur": 3200000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-y75-ragarda-2020-montenegro",
@@ -2031,7 +2104,8 @@
    "price_eur": 2999995,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-76-lady-m-2019-palma",
@@ -2050,7 +2124,8 @@
    "price_eur": 2983500,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-f70-2021-hong-kong",
@@ -2081,7 +2156,8 @@
    "price_eur": 2833600,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sanlorenzo-sl88-2009-marmaris",
@@ -2112,7 +2188,8 @@
    "price_eur": 2570000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-75-2017-phuket",
@@ -2131,7 +2208,8 @@
    "price_eur": 2568150,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-s66-bk-one-2022-spain",
@@ -2162,7 +2240,8 @@
    "price_eur": 2500000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-74-xps-blossom-2023-hong-kong",
@@ -2193,7 +2272,8 @@
    "price_eur": 2438000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-870-2016-hong-kong",
@@ -2224,7 +2304,8 @@
    "price_eur": 2300000,
    "guests": "",
    "cabins": "3",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-88-yacht-2011-hong-kong",
@@ -2243,7 +2324,8 @@
    "price_eur": 1821600,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-68-2017-antibes",
@@ -2262,7 +2344,8 @@
    "price_eur": 1750000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "princess-68-2018-marmaris",
@@ -2293,7 +2376,8 @@
    "price_eur": 1750000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunseeker-75-yacht-2014-hong-kong",
@@ -2324,7 +2408,8 @@
    "price_eur": 1748000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-690-2013-hong-kong",
@@ -2343,7 +2428,8 @@
    "price_eur": 1085600,
    "guests": "6",
    "cabins": "3",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "ferretti-530-2012",
@@ -2362,7 +2448,8 @@
    "price_eur": 595000,
    "guests": "",
    "cabins": "",
-   "updated": "2026-11-14"
+   "updated": "2026-11-14",
+   "fr": true
   },
   {
    "slug": "sunreef-80-eco",
@@ -2393,7 +2480,8 @@
    "price_eur": 7900000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "sunseeker-manhattan-68",
@@ -2423,7 +2511,8 @@
    "price_eur": 3785080,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "pearl-63",
@@ -2454,7 +2543,8 @@
    "price_eur": 3246851,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "sunseeker-86",
@@ -2485,7 +2575,8 @@
    "price_eur": 1600000,
    "guests": "10",
    "cabins": "5",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "majesty-62",
@@ -2516,7 +2607,8 @@
    "price_eur": 1362500,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "sunseeker-82-yacht",
@@ -2547,7 +2639,8 @@
    "price_eur": 1350000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "m-y-fjord-44-open",
@@ -2578,7 +2671,8 @@
    "price_eur": 490000,
    "guests": "2",
    "cabins": "",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "catamaran-catafjord-nordest-63",
@@ -2609,7 +2703,8 @@
    "price_eur": 340000,
    "guests": "",
    "cabins": "6",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "ocean-one-azimut-grande-36m",
@@ -2640,7 +2735,8 @@
    "price_eur": 160000,
    "guests": "10",
    "cabins": "5",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "silver-breeze-riva-86-domino",
@@ -2671,7 +2767,8 @@
    "price_eur": 59000,
    "guests": "8",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "lauren-v-mangusta-105",
@@ -2702,7 +2799,8 @@
    "price_eur": 52000,
    "guests": "9",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "agapa-sunseeker-predator-84",
@@ -2733,7 +2831,8 @@
    "price_eur": 50000,
    "guests": "9",
    "cabins": "4",
-   "updated": "2026-11-11"
+   "updated": "2026-11-11",
+   "fr": true
   },
   {
    "slug": "princess-y85-2021-singapore",
@@ -2764,7 +2863,8 @@
    "price_eur": 5300000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "asmaraty-g-100-superyacht-new-build",
@@ -2795,7 +2895,8 @@
    "price_eur": 3496000,
    "guests": "",
    "cabins": "5",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "asmaraty-g-77-luxury-yacht-new-build",
@@ -2826,7 +2927,8 @@
    "price_eur": 1748000,
    "guests": "",
    "cabins": "4",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "x15-125ft-amsca-marine-dubai",
@@ -2855,7 +2957,8 @@
    "price_eur": 2300,
    "guests": "190",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "x8-90ft-manzil-dubai",
@@ -2884,7 +2987,8 @@
    "price_eur": 920,
    "guests": "60",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "gulf-craft-majesty-48-abu-dhabi",
@@ -2915,7 +3019,8 @@
    "price_eur": 750,
    "guests": "12",
    "cabins": "2",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "poco-loco-90ft-2023-dubai",
@@ -2946,7 +3051,8 @@
    "price_eur": 613,
    "guests": "75",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "freedom-80ft-classico-dubai",
@@ -2975,7 +3081,8 @@
    "price_eur": 508,
    "guests": "45",
    "cabins": "2",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "silo-82ft-gulf-explorer-dubai",
@@ -3004,7 +3111,8 @@
    "price_eur": 470,
    "guests": "50",
    "cabins": "2",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "x43-80ft-amsca-dubai",
@@ -3034,7 +3142,8 @@
    "price_eur": 318,
    "guests": "25",
    "cabins": "3",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "elara-82ft-maiora-dubai",
@@ -3063,7 +3172,8 @@
    "price_eur": 290,
    "guests": "30",
    "cabins": "1",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "dos-40ft-gulf-craft-dubai",
@@ -3092,7 +3202,8 @@
    "price_eur": 115,
    "guests": "9",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "tres-40ft-amsca-dubai",
@@ -3118,7 +3229,8 @@
    "price_eur": 115,
    "guests": "10",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   },
   {
    "slug": "uno-35ft-gulf-craft-dubai",
@@ -3147,7 +3259,8 @@
    "price_eur": 115,
    "guests": "9",
    "cabins": "",
-   "updated": "2026-11-10"
+   "updated": "2026-11-10",
+   "fr": true
   }
  ]
 }
