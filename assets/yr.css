@@ -1042,3 +1042,4 @@ html.menu-lock,html.menu-lock body{overflow:hidden!important;overscroll-behavior
 html.nav-tight .nav-links{display:none}html.nav-tight .burger{display:block}html.nav-tight .nav-r .btn{display:none}
 .split-words.tr-plain .acc{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
 #manifesto.tr-plain{opacity:1}
+html.translated-ltr .ya-strike{margin-left:.3em}
