@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Yacht Research">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://images.unsplash.com">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=69">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=70">
 <link rel="alternate" hreflang="en" href="https://yachtresearchgroup.com/yacht-research-form"><link rel="alternate" hreflang="fr" href="https://yachtresearchgroup.com/fr/yacht-research-form"><link rel="alternate" hreflang="x-default" href="https://yachtresearchgroup.com/yacht-research-form">
 </head>
 <body>
@@ -122,12 +122,23 @@
   <p>We use cookies for basic site functionality and to improve your experience. See our <a href="/privacy-policy">Privacy Policy</a>.</p>
   <div><button data-consent="declined">Decline</button><button class="ok" data-consent="accepted">Accept</button></div>
 </div>
-<script src="/assets/yr.js?v=69" defer></script><script type="speculationrules">{"prerender":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
+<script src="/assets/yr.js?v=70" defer></script><script type="speculationrules">{"prerender":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
 <script>
 (function(){
   // Même adresse et mêmes champs que l'ancienne page (Google Apps Script : Sheets, mails, Brevo)
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec';
   var selected = '', formData = {};
+  // version française (/fr/) : textes affichés en français, valeurs envoyées au Google Sheet inchangées (anglais)
+  var FR = location.pathname === '/fr' || location.pathname.indexOf('/fr/') === 0;
+  var TFR = { 'Budget range': 'Budget', 'Select a range': 'Choisissez une fourchette', 'Under €500K': 'Moins de 500 k€', '€500K – €1M': '500 k€ – 1 M€', '€1M – €3M': '1 M€ – 3 M€', '€3M – €10M': '3 M€ – 10 M€', '€10M+': 'Plus de 10 M€', 'Price on Request': 'Prix sur demande',
+    'Yacht type': 'Type de yacht', 'Any': 'Tous', 'Motor Yacht': 'Yacht à moteur', 'Sailing Yacht': 'Voilier', 'Catamaran': 'Catamaran', 'Superyacht (30m+)': 'Superyacht (30 m et plus)', 'Open / Sport': 'Open / Sport',
+    'Preferred market': 'Zone souhaitée', 'Dubai / UAE': 'Dubaï / EAU', 'French Riviera': 'Côte d’Azur', 'Mediterranean': 'Méditerranée', 'Atlantic': 'Atlantique', 'Worldwide': 'Monde entier',
+    'Company / brokerage': 'Société / agence', 'Your company name': 'Nom de votre société', 'Role': 'Fonction', 'Yacht broker, concierge, real estate...': 'Yacht Broker, conciergerie, immobilier…', 'Message': 'Message',
+    'Tell us more about your project, timeline, or any specific requirements...': 'Parlez-nous de votre projet, de votre calendrier ou de vos besoins particuliers…',
+    'Your project: ': 'Votre projet : ', 'Help us understand your requirements': 'Aidez-nous à comprendre votre besoin', 'Regarding: ': 'Concernant : ',
+    'Please select one option.': 'Choisissez une option.', 'Please accept the Privacy Policy to continue.': 'Merci d’accepter la politique de confidentialité pour continuer.',
+    'Please fill in your name and email address.': 'Indiquez votre nom et votre adresse e-mail.' };
+  function t(s){ return FR && TFR[s] != null ? TFR[s] : s; }
   var qs = new URLSearchParams(location.search), preYacht = qs.get('yacht') || '', preProject = (qs.get('project') || '').toLowerCase();
   var cards = document.querySelectorAll('.pcard');
   function pick(c){ cards.forEach(function(x){ x.classList.remove('on'); }); c.classList.add('on'); selected = c.dataset.value; document.getElementById('msg-1').textContent = ''; }
@@ -136,9 +147,9 @@
   if (map[preProject]) cards.forEach(function(c){ if (c.dataset.value === map[preProject]) pick(c); });
   if (preYacht && !selected) cards.forEach(function(c){ if (c.dataset.value === 'Yacht Acquisition') pick(c); });
   // Carte choisie par le bouton cliqué sur le site : le message pré-rempli ne vaut que pour elle
-  var preCard = selected, prefill = preYacht ? 'Regarding: ' + preYacht + '\n' : '';
+  var preCard = selected, prefill = preYacht ? t('Regarding: ') + preYacht + '\n' : '';
 
-  function sel(id, label, opts){ return '<label class="field"><span>' + label + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option' + (i ? '' : ' value=""') + '>' + o + '</option>'; }).join('') + '</select></label>'; }
+  function sel(id, label, opts){ return '<label class="field"><span>' + t(label) + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option value="' + (i ? o : '') + '">' + t(o) + '</option>'; }).join('') + '</select></label>'; }
   function buildDynamicFields(){
     var p = selected, html = '';
     var isYacht = ['Yacht Acquisition', 'Sell Your Yacht', 'Charter', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'].indexOf(p) > -1;
@@ -149,10 +160,10 @@
       html += sel('market', 'Preferred market', ['Any', 'Dubai / UAE', 'French Riviera', 'Mediterranean', 'Atlantic', 'Worldwide']);
     }
     if (isPartner) {
-      html += '<label class="field"><span>Company / brokerage</span><input type="text" id="company" placeholder="Your company name"></label>';
-      html += '<label class="field"><span>Role</span><input type="text" id="role" placeholder="Yacht broker, concierge, real estate..."></label>';
+      html += '<label class="field"><span>' + t('Company / brokerage') + '</span><input type="text" id="company" placeholder="' + t('Your company name') + '"></label>';
+      html += '<label class="field"><span>' + t('Role') + '</span><input type="text" id="role" placeholder="' + t('Yacht broker, concierge, real estate...') + '"></label>';
     }
-    html += '<label class="field full"><span>Message</span><textarea id="message" rows="5" placeholder="Tell us more about your project, timeline, or any specific requirements..."></textarea></label>';
+    html += '<label class="field full"><span>' + t('Message') + '</span><textarea id="message" rows="5" placeholder="' + t('Tell us more about your project, timeline, or any specific requirements...') + '"></textarea></label>';
     var box = document.getElementById('dynamic-fields'), keep = formData.message;
     // S'il change de carte, on retire le message pré-rempli (ex. un horaire d'expérience sous « Bespoke services »)
     if (keep === prefill && p !== preCard) keep = '';
@@ -160,7 +171,7 @@
     var m = document.getElementById('message');
     if (keep) m.value = keep; else if (prefill && p === preCard) m.value = prefill;
     var sub = document.querySelector('#step-2 .cform-sub'), card = document.querySelector('.pcard.on b');
-    sub.textContent = card ? 'Your project: ' + card.textContent : 'Help us understand your requirements';
+    sub.textContent = card ? t('Your project: ') + card.textContent : t('Help us understand your requirements');
   }
   function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
   function go(from, to, pct){
@@ -173,7 +184,7 @@
   }
   document.querySelectorAll('[data-next]').forEach(function(b){ b.addEventListener('click', function(){
     var f = +b.dataset.next;
-    if (f === 1) { if (!selected) { document.getElementById('msg-1').textContent = 'Please select one option.'; document.getElementById('msg-1').className = 'cform-msg err'; return; } buildDynamicFields(); }
+    if (f === 1) { if (!selected) { document.getElementById('msg-1').textContent = t('Please select one option.'); document.getElementById('msg-1').className = 'cform-msg err'; return; } buildDynamicFields(); }
     if (f === 2) { formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role') }; }
     go('step-' + f, 'step-' + (f + 1), f === 1 ? '66%' : '100%');
   }); });
@@ -182,9 +193,9 @@
   }); });
   document.getElementById('submitBtn').addEventListener('click', function(){
     var msg = document.getElementById('msg-3'); msg.className = 'cform-msg err';
-    if (!document.getElementById('gdprConsent').checked) { msg.textContent = 'Please accept the Privacy Policy to continue.'; return; }
+    if (!document.getElementById('gdprConsent').checked) { msg.textContent = t('Please accept the Privacy Policy to continue.'); return; }
     var fname = v('fname').trim(), lname = v('lname').trim(), email = v('email').trim();
-    if (!fname || !email) { msg.textContent = 'Please fill in your name and email address.'; return; }
+    if (!fname || !email) { msg.textContent = t('Please fill in your name and email address.'); return; }
     var formName = (selected === 'Partnership' || selected === 'Referral Programme') ? 'Partnership Inquiry' : 'Yacht Enquiry';
     // Venu d'un horaire d'expérience et toujours sur « Charter » : demande d'expérience (son onglet et sa séquence)
     var isXp = preProject === 'experience' && selected === 'Charter';
