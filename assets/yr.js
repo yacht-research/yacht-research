@@ -74,7 +74,15 @@
     'plan a charter': { _free: 1, fr: 'Planifier une location' },
     'sales, acquisitions and crewed charters, handled personally wherever you are in the world.': { _free: 1, fr: 'Ventes, acquisitions et locations avec équipage, gérés personnellement où que vous soyez dans le monde.' },
     'new listings, charters and behind the scenes, every week on our networks.': { _free: 1, fr: 'Nouvelles annonces, locations et coulisses, chaque semaine sur nos réseaux.' },
-    'the art of effortless yachting. yacht sales, charter and bespoke services, worldwide.': { _free: 1, fr: 'L’art du yachting sans effort. Vente, location et services sur mesure de yachts, partout dans le monde.' }
+    'the art of effortless yachting. yacht sales, charter and bespoke services, worldwide.': { _free: 1, fr: 'L’art du yachting sans effort. Vente, location et services sur mesure de yachts, partout dans le monde.' },
+    // page Yacht Club Academy : mêmes termes que yachtclubacademy.com
+    'step 1 · the ebook': { _free: 1, fr: 'Étape 1 · L’ebook' },
+    'an introduction to the yacht broker profession, in english and french.': { _free: 1, fr: 'Une initiation au métier de Yacht Broker, en anglais et en français.' },
+    'your 30-day plan': { _free: 1, fr: 'Votre plan sur 30 jours' },
+    'see the 30-day plan': { _free: 1, fr: 'Voir le plan sur 30 jours' },
+    'in the field': { _free: 1, fr: 'Sur le terrain' },
+    'everything in the elite pack, plus five hours a week working directly with us: your action plan, call and negotiation role-plays, a review of your messages, your first prospect list and introductions to our network.': { _free: 1, fr: 'Tout le Pack Elite, plus cinq heures de coaching par semaine avec nous : votre plan d’action, des jeux de rôle pour les appels et les négociations, une analyse de vos messages, votre première liste de prospects et des présentations à notre réseau.' },
+    'we have been interviewed by well-known figures of entrepreneurship and online business, sharing our vision of yachting and of the yacht broker profession with their audiences.': { _free: 1, fr: 'Nous avons été interviewés par des figures reconnues de l’entrepreneuriat et du business en ligne, pour partager notre vision du yachting et du métier de Yacht Broker avec leur public.' }
   };
   function noTr(el){ el.setAttribute('translate', 'no'); el.classList.add('notranslate'); }
   (function protect(root){
@@ -98,7 +106,7 @@
       n.parentNode.replaceChild(frag, n);
     });
   })(document.body);
-  $$('.yca-link,.logo,.foot-logo,.foot-bot > span:first-child').forEach(noTr);
+  $$('.yca-link,.logo,.foot-logo,.foot-bot > span:first-child,.ya-tags span,[data-notr]').forEach(noTr);
   var plainHTML = [];
   $$('.split-words,#manifesto,[data-tr-plain]').forEach(function(el){ plainHTML.push([el, el.getAttribute('data-tr-plain') || el.innerHTML]); });
 
@@ -143,8 +151,15 @@
     var on = /translated-/.test(html.className), lang = (html.lang || '').slice(0, 2).toLowerCase();
     if (on && !trDone) {
       trDone = true;
-      plainHTML.forEach(function(p){ p[0].innerHTML = p[1]; p[0].classList.add('tr-plain', 'is-in'); });
+      // on garde la version animée (mot par mot) pour la remettre si on revient en anglais
+      plainHTML.forEach(function(p){ p[2] = p[0].innerHTML; p[0].innerHTML = p[1]; p[0].classList.add('tr-plain', 'is-in'); });
       if (man) man.classList.add('tr-plain');
+    }
+    if (!on && trDone) {
+      trDone = false;
+      plainHTML.forEach(function(p){ if (p[2] != null) p[0].innerHTML = p[2]; p[0].classList.remove('tr-plain'); });
+      if (man) { man.classList.remove('tr-plain'); words.length = 0; $$('span.w', man).forEach(function(w){ words.push(w); }); }
+      if (typeof onScroll === 'function') onScroll();
     }
     if (on && lang !== trLang) {
       trLang = lang;

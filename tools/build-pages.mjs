@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '59'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '60'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -502,7 +502,7 @@ pages.push({
       ['deck', 'Cannes Yachting Festival'],
       ['dubai', 'Dubai Marina'],
       ['sunset', 'On board at sunset']
-    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-400.webp" srcset="/images/yca/${f}-400.webp 400w, /images/yca/${f}-800.webp 800w" sizes="(max-width:560px) 50vw, (max-width:960px) 33vw, 20vw" alt="${c}" width="800" height="1000" loading="lazy" decoding="async"><figcaption>${c}</figcaption></figure>`).join('')}
+    ].map(([f, c], i) => `<figure class="rv${i % 4 ? ' d' + (i % 4) : ''}"><img src="/images/yca/${f}-400.webp" srcset="/images/yca/${f}-400.webp 400w, /images/yca/${f}-800.webp 800w" sizes="(max-width:560px) 50vw, (max-width:960px) 33vw, 20vw" alt="${c}" width="800" height="1000" loading="lazy" decoding="async"><figcaption${/Show|Festival/.test(c) ? ' data-notr' : ''}>${c}</figcaption></figure>`).join('')}
   </div>
   <div class="ya-split ya-int">
     <div>
