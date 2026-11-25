@@ -22,6 +22,8 @@
     'From': 'Dès', 'Price on request': 'Prix sur demande', 'Few places left': 'Dernières places', 'Available': 'Disponible', 'Few left': 'Dernières places',
     'Book': 'Réserver', 'Enquire for': 'Demander pour', 'Enquire': 'Demander', 'Loading times…': 'Chargement des horaires…',
     'Payment cancelled: nothing has been charged.': 'Paiement annulé : aucun montant n’a été débité.',
+    'Payment declined: nothing has been charged. Please try again or use another card.': 'Paiement refusé : aucun montant n’a été débité. Réessayez ou utilisez une autre carte.',
+    'TEST MODE · payments are simulated, nothing is charged and no seat is booked.': 'MODE TEST · les paiements sont simulés, rien n’est débité et aucune place n’est réservée.',
     'Live availability, instant confirmation and secure card payment.': 'Disponibilités en direct, confirmation immédiate et paiement sécurisé par carte.',
     'Live times and prices. Choose a time and send your request: we confirm your seats with you directly by WhatsApp or email.': 'Horaires et prix en direct. Choisissez un horaire et envoyez votre demande : nous vous confirmons vos places directement par WhatsApp ou par e-mail.',
     'Live times are unavailable right now. Send us your request and we will confirm availability for you.': 'Les horaires en direct sont momentanément indisponibles. Envoyez-nous votre demande et nous vérifierons les disponibilités pour vous.',
@@ -118,7 +120,10 @@
     fetch('/api/sx/departures?date=' + encodeURIComponent(state.date)).then(function (r) { return r.json(); }).then(function (d) {
       if (!d.enabled) throw new Error('off');
       state.bookings = !!d.bookings;
-      note.textContent = /sx=cancelled/.test(location.search) ? L('Payment cancelled: nothing has been charged.') : state.bookings
+      note.textContent = /sx=cancelled/.test(location.search) ? L('Payment cancelled: nothing has been charged.')
+        : /sx=failed/.test(location.search) ? L('Payment declined: nothing has been charged. Please try again or use another card.')
+        : d.test ? L('TEST MODE · payments are simulated, nothing is charged and no seat is booked.')
+        : state.bookings
         ? L('Live availability, instant confirmation and secure card payment.')
         : L('Live times and prices. Choose a time and send your request: we confirm your seats with you directly by WhatsApp or email.');
       var deps = (d.departures || []).filter(function (x) { return x.availability !== 'None'; });
@@ -179,7 +184,7 @@
     var btn = form.querySelector('button[type=submit]'); btn.disabled = true; btn.firstChild.textContent = L('Redirecting to payment… ');
     fetch('/api/sx/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       departure_id: state.dep.id, date: state.dep.date, adults: +form.adults.value, children: +form.children.value,
-      name: form.name.value, email: form.email.value, phone: form.phone.value }) })
+      name: form.name.value, email: form.email.value, phone: form.phone.value, lang: FR ? 'fr' : 'en' }) })
       .then(function (r) { return r.json(); }).then(function (d) {
         if (d.url) { location.href = d.url; return; }
         err.textContent = ERR[d.error] || L('Something went wrong. Please try again or contact us on WhatsApp.');

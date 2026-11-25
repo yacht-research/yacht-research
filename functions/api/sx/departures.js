@@ -1,6 +1,6 @@
 // GET /api/sx/departures?date=YYYY-MM-DD → sorties partagées du jour (Dubai), avec un prix public « à partir de » par produit.
 // Le tarif B2B ne quitte jamais le serveur : seul le prix public (B2B + marge) est renvoyé.
-import { json, xc, retailMinor, dubaiToday } from '../../_sx.js';
+import { json, xc, retailMinor, dubaiToday, bookingsOpen, payProvider, ziinaTest } from '../../_sx.js';
 
 const CACHE_HOST = 'https://sx-cache.yachtresearchgroup.com';
 // Le portail autorise 60 appels par minute et par clé : le prix « à partir de » (1 adulte) de chaque produit
@@ -59,5 +59,6 @@ export async function onRequestGet(ctx) {
     from_aed: prices[d.product_id] ? prices[d.product_id].m / 100 : null
   })).sort((a, b) => a.time.localeCompare(b.time));
 
-  return json({ enabled: true, bookings: env.SX_BOOKINGS === 'on' && !!env.STRIPE_SECRET_KEY, date, departures });
+  const bookable = bookingsOpen(env);
+  return json({ enabled: true, bookings: bookable, test: bookable && payProvider(env) === 'ziina' && ziinaTest(env), date, departures });
 }
