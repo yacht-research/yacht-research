@@ -72,7 +72,9 @@ function summary(m, piId, test) {
   return {
     product: m.pr, date: m.d, time: m.t, guests: String(Number(m.a) + Number(m.c)), name: m.n, phone: m.p, client_email: m.e,
     paid_aed: aed(Number(m.retail) + Number(m.fee)), card_fee_aed: aed(m.fee), b2b_aed: aed(m.b2b), margin_aed: aed(Number(m.retail) - Number(m.b2b)),
-    payment: 'Ziina ' + piId + (test ? ' (TEST)' : '')
+    payment: 'Ziina ' + piId + (test ? ' (TEST)' : ''),
+    // la colonne du Sheet s'appelle encore « stripe_session » : on y range la référence du paiement Ziina
+    stripe_session: 'Ziina ' + piId + (test ? ' (TEST)' : '')
   };
 }
 
