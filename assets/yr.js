@@ -749,8 +749,8 @@
       // les vendus ne comptent pas dans « yachts for sale » : « 12 yachts for sale · 1 sold », ou « 1 sold » avec le filtre Sold
       var nSold = list.filter(isSold).length, nSale = list.length - nSold, soldOut = $('[data-sold-out]', cat), label = $('[data-count-label]', cat);
       countOut.textContent = nSale || !nSold ? nSale : nSold;
-      if (label) label.textContent = L(nSale || !nSold ? 'yachts for sale' : 'sold');
-      if (soldOut) soldOut.textContent = nSale && nSold ? ' · ' + nSold + L(' sold') : '';
+      if (label) label.textContent = nSale || !nSold ? L('yachts for sale') : (IS_FR ? (nSold > 1 ? 'vendus' : 'vendu') : 'sold');
+      if (soldOut) soldOut.textContent = nSale && nSold ? ' · ' + nSold + (IS_FR ? (nSold > 1 ? ' vendus' : ' vendu') : ' sold') : '';
       grid.innerHTML = list.length ? list.map(card).join('') : '<p class="cat-empty">' + L('No yacht matches these filters yet.') + ' <a href="' + U('/yacht-research-form') + '">' + L('Tell us what you are looking for') + '</a> ' + L('and we will search the off-market for you.') + '</p>';
       $$('.card', grid).forEach(function(c){ c.classList.add('is-in'); });
     }
