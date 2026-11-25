@@ -44,7 +44,7 @@ export async function onRequestPost({ env, request }) {
       amount: retail + fee,
       currency_code: 'AED',
       message: (dep.product.slice(0, 80) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
-      success_url: origin + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
+      success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
       cancel_url: back + '?sx=cancelled#sx',
       failure_url: back + '?sx=failed#sx',
       expiry: String(Date.now() + 30 * 60 * 1000),

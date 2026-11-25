@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '71'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '72'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -265,7 +265,7 @@ const SX_MODAL = `<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
     <button type="button" class="sx-bank" data-sx-bank>Prefer a bank transfer? Request our bank details</button>
-    <p class="yp-disc" style="margin:0">Secure card payment by Stripe. Your details are only used to arrange this experience. ${SX_POLICY}</p>
+    <p class="yp-disc" style="margin:0">Secure payment by card, Apple Pay or Google Pay via Ziina. Your details are only used to arrange this experience. ${SX_POLICY}</p>
   </form>
 </div>`;
 const SHARED_EXP = sxSection(XP_CARDS) + '\n' + SX_MODAL;

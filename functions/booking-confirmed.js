@@ -32,15 +32,18 @@ const T = {
   }
 };
 
-export async function onRequestGet({ env, request }) {
+// La langue suit l'adresse (/booking-confirmed ou /fr/booking-confirmed), pour que le bouton FR/EN fonctionne
+export async function onRequestGet(ctx) { return render(ctx, 'en'); }
+
+export async function render({ env, request }, pageLang) {
   const q = new URL(request.url).searchParams;
-  let v = { kind: 'fail', lang: 'en' };
+  let v = { kind: 'fail', lang: pageLang };
 
   if (q.get('pi')) {
     const r = await confirmZiina(env, q.get('pi'), q.get('t'));
     const m = r.meta;
     if (m) {
-      v = { lang: m.l === 'fr' ? 'fr' : 'en', name: m.n, product: m.pr, date: m.d, time: m.t, guests: Number(m.a) + Number(m.c), totalMinor: Number(m.retail) + Number(m.fee), test: r.test };
+      v = { lang: pageLang, name: m.n, product: m.pr, date: m.d, time: m.t, guests: Number(m.a) + Number(m.c), totalMinor: Number(m.retail) + Number(m.fee), test: r.test };
       v.kind = r.state === 'paid_booked' || r.state === 'paid_test' ? 'paid' : r.state === 'retry' ? 'paid_processing'
         : r.state === 'pending' ? 'pending' : r.state === 'refunded' ? 'refund' : r.state === 'refund_failed' ? 'paid_processing' : 'fail';
       v.booked = r.state === 'paid_booked';
@@ -51,7 +54,7 @@ export async function onRequestGet({ env, request }) {
       const r = await stripe(env, '/checkout/sessions/' + id, null, 'GET');
       if (r.ok && r.data.payment_status === 'paid') {
         const m = r.data.metadata || {};
-        v = { kind: 'paid_processing', lang: 'en', name: m.name, product: m.product, date: m.date, time: m.time, guests: Number(m.adults || 0) + Number(m.children || 0), totalMinor: Number(m.retail_minor) + Number(m.card_fee_minor || 0) };
+        v = { kind: 'paid_processing', lang: pageLang, name: m.name, product: m.product, date: m.date, time: m.time, guests: Number(m.adults || 0) + Number(m.children || 0), totalMinor: Number(m.retail_minor) + Number(m.card_fee_minor || 0) };
       }
     }
   }

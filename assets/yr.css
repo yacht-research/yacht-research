@@ -716,7 +716,7 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .sx-form h3{margin:0;font-size:22px}
 .sx-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .sx-total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line-2);padding-top:14px;font-size:18px}
-.sx-err{color:#ff8a80;font-size:14px;min-height:1em;margin:0}
+.sx-err{color:#ff8a80;font-size:14px;min-height:1em;margin:0}.sx-err.ok{color:#d9b86c}
 .sx-x{justify-self:end;background:none;border:0;color:inherit;font-size:26px;cursor:pointer;line-height:1}
 .sx-ok{max-width:640px;margin:0 auto;text-align:center;padding:40px 0}
 @media(max-width:560px){.sx-row{grid-template-columns:1fr}.b2b-note{padding:18px}}

@@ -33,7 +33,7 @@
     'Something went wrong. Please try again or contact us on WhatsApp.': 'Une erreur est survenue. Réessayez ou contactez-nous sur WhatsApp.',
     'Connection problem. Please try again.': 'Problème de connexion. Réessayez.',
     'Please fill in your name, email and phone first.': 'Indiquez d’abord votre nom, votre e-mail et votre téléphone.',
-    'Thank you. We will send you our bank details shortly; your seats are confirmed once the transfer is received.': 'Merci. Nous vous envoyons nos coordonnées bancaires très vite ; vos places sont confirmées dès réception du virement.'
+    'Request sent. We will email you our bank details shortly.': 'Demande envoyée. Nous vous envoyons nos coordonnées bancaires par e-mail très vite.'
   };
   var L = function (s) { return FR && TFR[s] != null ? TFR[s] : s; };
   var U = function (p) { return FR ? '/fr' + p : p; };
@@ -165,7 +165,7 @@
   }
 
   function open(dep, title) {
-    state.dep = dep; err.textContent = '';
+    state.dep = dep; err.textContent = ''; err.classList.remove('ok');
     modal.querySelector('[data-sx-title]').textContent = title || dep.product;
     modal.querySelector('[data-sx-when]').textContent = dep.date + ' ' + L('at') + ' ' + dep.time + ' ' + L('(Dubai time)');
     modal.querySelector('[data-sx-a]').textContent = (dep.categories && dep.categories.adults) || L('Adults');
@@ -180,7 +180,7 @@
   form.adults.onchange = form.children.onchange = quote;
 
   form.onsubmit = function (e) {
-    e.preventDefault(); err.textContent = '';
+    e.preventDefault(); err.textContent = ''; err.classList.remove('ok');
     var btn = form.querySelector('button[type=submit]'); btn.disabled = true; btn.firstChild.textContent = L('Redirecting to payment… ');
     fetch('/api/sx/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       departure_id: state.dep.id, date: state.dep.date, adults: +form.adults.value, children: +form.children.value,
@@ -203,7 +203,7 @@
       type: 'Shared experience (bank transfer)', message: (modal.querySelector('[data-sx-title]').textContent) + ' · ' + state.dep.date + ' ' + state.dep.time + ' · ' + a + ' adult(s), ' + c + ' child(ren) · departure #' + state.dep.id + ' · quoted ' + modal.querySelector('[data-sx-total]').textContent + ' (card total)', website: '', submitted_at: new Date().toLocaleString('fr-FR') });
     fetch('https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec', { method: 'POST', body: p, mode: 'no-cors' }).catch(function () {});
     bank.disabled = true;
-    err.textContent = L('Thank you. We will send you our bank details shortly; your seats are confirmed once the transfer is received.');
+    err.classList.add('ok'); err.textContent = L('Request sent. We will email you our bank details shortly.');
   };
 
   dateIn.onchange = load;

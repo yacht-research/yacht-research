@@ -122,7 +122,7 @@ export default {
   'Total': 'Total',
   'Pay securely <i>→</i>': 'Payer en toute sécurité <i>→</i>',
   'Prefer a bank transfer? Request our bank details': 'Vous préférez un virement ? Demandez nos coordonnées bancaires',
-  'Secure card payment by Stripe. Your details are only used to arrange this experience. Free cancellation up to 48 hours before departure. Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.': 'Paiement sécurisé par carte via Stripe. Vos coordonnées servent uniquement à organiser cette expérience. Annulation gratuite jusqu’à 48 heures avant le départ. Les annulations plus tardives et les absences ne sont pas remboursées. Si la sortie est annulée pour raison météo ou de sécurité, vous choisissez entre une autre date et un remboursement intégral.',
+  'Secure payment by card, Apple Pay or Google Pay via Ziina. Your details are only used to arrange this experience. Free cancellation up to 48 hours before departure. Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.': 'Paiement sécurisé par carte, Apple Pay ou Google Pay via Ziina. Vos coordonnées servent uniquement à organiser cette expérience. Annulation gratuite jusqu’à 48 heures avant le départ. Les annulations plus tardives et les absences ne sont pas remboursées. Si la sortie est annulée pour raison météo ou de sécurité, vous choisissez entre une autre date et un remboursement intégral.',
   'Superyacht, BBQ, sunset, party…': 'Superyacht, barbecue, coucher de soleil, soirée…',
   'Choose a date': 'Choisissez une date',
   'Close': 'Fermer',
