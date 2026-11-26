@@ -781,16 +781,31 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .xp-from b{font-size:22px;font-weight:500;color:var(--gold-l)}
 .xp-from small{font-size:12px;opacity:.7;letter-spacing:.04em}
 /* Charters : extras à bord (cases à cocher, prix direct barré) */
-.lx-xg{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:18px 0 8px}
-.lx-xl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
-.lx-x{display:flex;align-items:center;gap:12px;background:var(--black-2);border:1px solid var(--line-2);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;line-height:1.35}
-.lx-x input{accent-color:var(--gold);width:17px;height:17px;flex:none;margin:0}
-.lx-x span{flex:1}
-.lx-x b{font-weight:500;color:var(--gold-l);white-space:nowrap;font-size:14px}
-.lx-x .sx-was{font-size:.82em}
-.lx-x:has(input:checked){border-color:var(--gold);background:rgba(201,168,76,.08)}
+.xg{border:1px solid var(--line-2);border-radius:14px;background:var(--black-2);margin:0 0 10px;overflow:hidden}
+.xg>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;font:500 11px/1.2 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--cream)}
+.xg>summary::-webkit-details-marker{display:none}
+.xg>summary:after{content:"+";font:300 20px/1 var(--sans);color:var(--gold);letter-spacing:0}
+.xg[open]>summary:after{content:"–"}
+.xg>summary small{margin-left:auto;font:400 11px var(--sans);letter-spacing:.04em;text-transform:none;color:var(--faint)}
+.xg>summary em{font-style:normal;color:var(--gold-l);letter-spacing:.04em;text-transform:none;font-size:12px;margin-left:8px}
+.xl{display:block;border-top:1px solid var(--line-2)}
+.x{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line-2);cursor:pointer;font:300 15px/1.35 var(--sans);color:var(--cream);letter-spacing:0;text-transform:none}
+.x:first-child{border-top:0}
+.x input[type=checkbox]{-webkit-appearance:auto;appearance:auto;accent-color:var(--gold);width:17px;height:17px;margin:0;padding:0;border:0;background:none;border-radius:0}
+.x .xn{font:300 15px/1.35 var(--sans);letter-spacing:0;text-transform:none;color:var(--cream)}
+.x .xp{text-align:right;white-space:nowrap;font:500 14.5px/1.3 var(--sans);letter-spacing:0;text-transform:none;color:var(--gold-l)}
+.x .xp s{display:block;font:400 11.5px/1.2 var(--sans);color:var(--faint);text-decoration:line-through}
+.x .xp small{font:400 11px var(--sans);color:var(--mute);margin-left:3px}
+.x:hover{background:rgba(201,168,76,.05)}
+.x:has(input:checked){background:rgba(201,168,76,.10)}
+.xf{grid-column:1/-1;margin-top:6px}
+.xf-h{font:500 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin:0 0 12px}
+@media(max-width:560px){.x{padding:12px 14px;gap:12px;font-size:14px}.x .xn{font-size:14px}}
 /* Prix direct barré, notre prix mis en avant */
-.sx-was{font-size:.62em;font-weight:400;color:var(--mute);opacity:.85;text-decoration:line-through;text-decoration-thickness:1px;margin-right:4px;white-space:nowrap}
+.sx-was{font-size:.62em;font-weight:400;color:var(--faint);text-decoration:line-through;text-decoration-thickness:1px;white-space:nowrap}
+.xp-price .sx-was,.xp-from .sx-was{display:block;font-size:13px;line-height:1.2;margin:0 0 3px}
+.sx-total b .sx-was{display:block;text-align:right;font-size:13px;margin-bottom:2px}
+.lx-book .yp-was{margin:4px 0 -4px}
 .xp-price{color:var(--gold-l)}
 .xp-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 .xp-more-link{font-size:13px;color:var(--gold-l);text-decoration:underline;text-underline-offset:3px;margin-right:auto}

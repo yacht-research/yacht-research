@@ -63,8 +63,9 @@
       c.dataset.from = v; c.dataset.was = best.w > v ? Math.round(best.w) : '';
       var f = c.querySelector('.xp-from');
       if (!f) { f = document.createElement('p'); f.className = 'xp-from'; f.hidden = !!c.querySelector('.xp-slot'); var meta = c.querySelector('.xp-meta'); meta.parentNode.insertBefore(f, meta.nextSibling); }
-      f.innerHTML = '<small>' + L('Starting from') + '</small> ' + was(c.dataset.was) + '<b>' + aed(v) + '</b> <small>' + L('per guest') + '</small>';
-      if (c.classList.contains('xp-solo') && c.dataset.was) document.querySelectorAll('[data-live-from]').forEach(function (e) { var s = e.parentNode.querySelector('.sx-was'); if (!s) { s = document.createElement('s'); s.className = 'sx-was'; e.parentNode.insertBefore(s, e.parentNode.firstChild); } s.textContent = aed(c.dataset.was); s.title = L('Price when booking direct'); });
+      f.innerHTML = was(c.dataset.was) + '<small>' + L('Starting from') + '</small> <b>' + aed(v) + '</b> <small>' + L('per guest') + '</small>';
+      // fiche d'une expérience : prix direct barré sur sa propre ligne au-dessus du prix, comme pour les charters
+      if (c.classList.contains('xp-solo') && c.dataset.was) document.querySelectorAll('.lx-price [data-live-from]').forEach(function (e) { var p = e.closest('.lx-price'), s = p.previousElementSibling; if (!s || !s.classList.contains('yp-was')) { s = document.createElement('p'); s.className = 'yp-was'; p.parentNode.insertBefore(s, p); } s.textContent = aed(c.dataset.was); s.title = L('Price when booking direct'); });
       if (c.classList.contains('xp-solo')) document.querySelectorAll('[data-live-from]').forEach(function (e) { e.textContent = Number(v).toLocaleString(FR ? 'fr-FR' : 'en-US'); });
     });
     document.dispatchEvent(new Event('sx:from')); // le tri de la page se refait avec les prix en direct
@@ -103,7 +104,7 @@
     var best = null;
     deps.forEach(function (d) { if (d.from_aed && (!best || d.from_aed < best.v)) best = { v: d.from_aed, w: d.was_aed }; });
     if (!best && card.dataset.from) best = { v: +card.dataset.from, w: +card.dataset.was || 0 }; // prix indicatif si le devis du jour n'est pas encore arrivé
-    price.innerHTML = best ? '<small>' + L('From') + '</small> ' + was(best.w) + aed(best.v) + ' <small>' + L('per guest') + '</small>' : '<small>' + L('Price on request') + '</small>';
+    price.innerHTML = best ? was(best.w) + '<small>' + L('From') + '</small> ' + aed(best.v) + ' <small>' + L('per guest') + '</small>' : '<small>' + L('Price on request') + '</small>';
     slots.innerHTML = deps.map(function (d, i) {
       // places restantes exactes quand il en reste peu, sinon « dernières places » si le portail l'indique
       var low = d.seats > 0 || d.availability === 'Low availability';
