@@ -7,7 +7,8 @@
     "base": "Dubai Harbour Yacht Club",
     "names": [
       "Dubai Harbour Tour",
-      "Dubai Harbour: 1-Hour Yacht Tour with Ain & JBR Views"
+      "Dubai Harbour: 1-Hour Yacht Tour with Ain & JBR Views",
+      "Dubai Harbour: JBR AIN MARINA Tour"
     ],
     "yachts": [
       "x42-92ft-amsca-dubai"
@@ -23,7 +24,7 @@
       "/images/experiences/harbour-tour/01",
       "/images/experiences/harbour-tour/02"
     ],
-    "from": 69,
+    "from": 86,
     "about": "A short, easy outing from Dubai Harbour on a 92ft yacht: one hour along JBR, Ain Dubai and Dubai Marina, with an audio guide. The boarding point is beside the Dubai Harbour Yacht Club gate, so arrival is quick and you spend more time on board. A good option when you have little time or are travelling with children.",
     "meet": "Dubai Harbour, beside the Dubai Harbour Yacht Club gate. The exact berth is sent with your confirmation.",
     "info": [
@@ -62,7 +63,7 @@
       "/images/experiences/superyacht-experience/02",
       "/images/experiences/superyacht-experience/03"
     ],
-    "from": 371,
+    "from": 399,
     "about": "Stardom is one of the largest yachts offering shared sailings in Dubai. Three decks give you plenty of room to move between the sun deck, the lounge areas and the bar, while the resident DJ sets the mood. The brunch sailing is the sunniest, the sundowner catches golden hour over Palm Jumeirah, and the nightfall sailing shows the skyline lit up.",
     "meet": "Dubai Harbour. The exact berth is sent with your confirmation.",
     "info": [
@@ -166,7 +167,8 @@
     "names": [
       "Breakfast Tour",
       "Late Riser Tour",
-      "2 Hour Late Riser with Breakfast"
+      "2 Hour Late Riser with Breakfast",
+      "2 Hour Morning Yacht Tour with Breakfast"
     ],
     "yachts": [
       "solana-92ft-majesty-dubai",
@@ -184,7 +186,7 @@
       "/images/experiences/breakfast-yacht-tour/02",
       "/images/experiences/breakfast-yacht-tour/03"
     ],
-    "from": 170,
+    "from": 183,
     "about": "A calm, bright way to start the day. Breakfast is served on board as you cruise past Dubai Marina, Ain Dubai, Palm Jumeirah and the Burj Al Arab in the soft morning light, with an audio guide along the way. Ideal for families and for photos without the midday heat.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [
@@ -220,7 +222,7 @@
       "/images/experiences/dinner-cruise/02",
       "/images/experiences/dinner-cruise/03"
     ],
-    "from": 170,
+    "from": 183,
     "about": "An evening cruise along Dubai Marina aboard a 125ft event yacht. You are welcomed on a red carpet, then enjoy an international buffet with a live cooking station and live music as the skyline lights up. The sunset sailing leaves around 5 pm, the dinner sailing around 8:30 pm.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [
@@ -257,7 +259,7 @@
       "/images/experiences/yacht-party/02",
       "/images/experiences/yacht-party/03"
     ],
-    "from": 290,
+    "from": 314,
     "about": "Four hours of party on the water: a resident DJ playing international hits (requests welcome), a freshly cooked BBQ with burgers and hot dogs, and the Dubai Marina and JBR skyline all around you. Around 25 to 45 guests on board, with a balanced crowd.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [
@@ -275,7 +277,8 @@
     "base": "Dubai Harbour",
     "names": [
       "Burj Sunset",
-      "Night Lights"
+      "Night Lights",
+      "Burj Afternoon"
     ],
     "yachts": [
       "x42-92ft-amsca-dubai"
@@ -292,7 +295,7 @@
       "/images/experiences/harbour-bbq-tour/02",
       "/images/experiences/harbour-bbq-tour/03"
     ],
-    "from": 180,
+    "from": 183,
     "about": "Leave from Dubai Harbour, the closest marina to Palm Jumeirah and the Burj Al Arab, so you spend more time in front of the landmarks. A BBQ is prepared on board while an audio guide tells the story of each icon. Choose the sunset sailing for the golden light, or Night Lights for the illuminated skyline.",
     "meet": "Dubai Harbour. The exact berth is sent with your confirmation.",
     "info": [
@@ -357,7 +360,7 @@
     "images": [
       "/images/experiences/speedboat-tour/01"
     ],
-    "from": 92,
+    "from": 122,
     "about": "The fastest way to see Dubai's icons: a 90-minute speedboat ride from Dubai Marina past Ain Dubai, Palm Jumeirah, Atlantis The Palm, the Royal Atlantis and the Burj Al Arab, with stops for photos. In normal conditions everyone stays dry; on windier days, expect a few splashes.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [
@@ -391,7 +394,7 @@
       "/images/experiences/ain-cruise/01",
       "/images/experiences/ain-cruise/02"
     ],
-    "from": 58,
+    "from": 86,
     "about": "A relaxed one-hour evening cruise on a 90ft houseboat with an open-air top deck. Move freely between the decks and take photos of Ain Dubai lit up at night and the lights of Dubai Marina.",
     "meet": "Dubai Marina, behind Al Majara Towers (DMCC metro station is the closest). The exact meeting point is sent with your confirmation.",
     "info": [

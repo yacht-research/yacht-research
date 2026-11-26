@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '70'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '77'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -262,10 +262,11 @@ const SX_MODAL = `<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-
     <label class="field"><span>Phone (with country code)</span><input name="phone" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" required></label>
     <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
     <p class="sx-fee" data-sx-fee></p>
+    <div data-sx-addons hidden></div>
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
     <button type="button" class="sx-bank" data-sx-bank>Prefer a bank transfer? Request our bank details</button>
-    <p class="yp-disc" style="margin:0">Secure card payment by Stripe. Your details are only used to arrange this experience. ${SX_POLICY}</p>
+    <p class="yp-disc" style="margin:0">Secure payment by card, Apple Pay or Google Pay via Ziina. Your details are only used to arrange this experience. ${SX_POLICY}</p>
   </form>
 </div>`;
 const SHARED_EXP = sxSection(XP_CARDS) + '\n' + SX_MODAL;
@@ -727,7 +728,12 @@ pages.push({
     'Tell us more about your project, timeline, or any specific requirements...': 'Parlez-nous de votre projet, de votre calendrier ou de vos besoins particuliers…',
     'Your project: ': 'Votre projet : ', 'Help us understand your requirements': 'Aidez-nous à comprendre votre besoin', 'Regarding: ': 'Concernant : ',
     'Please select one option.': 'Choisissez une option.', 'Please accept the Privacy Policy to continue.': 'Merci d’accepter la politique de confidentialité pour continuer.',
-    'Please fill in your name and email address.': 'Indiquez votre nom et votre adresse e-mail.' };
+    'Please fill in your name and email address.': 'Indiquez votre nom et votre adresse e-mail.',
+    'Charter date *': 'Date de la location *', 'Start time': 'Heure de départ', 'Select a time': 'Choisissez une heure', 'Flexible': 'Flexible', 'Duration': 'Durée', 'Select a duration': 'Choisissez une durée',
+    '2 hours': '2 heures', '3 hours': '3 heures', '4 hours': '4 heures', '5 hours': '5 heures', '6 hours': '6 heures', '8 hours': '8 heures', 'Full day': 'Journée complète',
+    'Number of guests': 'Nombre d’invités', 'Occasion': 'Occasion', 'Select an occasion': 'Choisissez une occasion', 'Birthday': 'Anniversaire', 'Family day out': 'Sortie en famille',
+    'Friends gathering': 'Entre amis', 'Corporate event': 'Événement d’entreprise', 'Proposal or anniversary': 'Demande en mariage ou anniversaire de couple', 'Sunset cruise': 'Croisière au coucher du soleil', 'Other': 'Autre',
+    'Please choose your charter date.': 'Choisissez la date de votre location.' };
   function t(s){ return FR && TFR[s] != null ? TFR[s] : s; }
   var qs = new URLSearchParams(location.search), preYacht = qs.get('yacht') || '', preProject = (qs.get('project') || '').toLowerCase();
   var cards = document.querySelectorAll('.pcard');
@@ -738,13 +744,51 @@ pages.push({
   if (preYacht && !selected) cards.forEach(function(c){ if (c.dataset.value === 'Yacht Acquisition') pick(c); });
   // Carte choisie par le bouton cliqué sur le site : le message pré-rempli ne vaut que pour elle
   var preCard = selected, prefill = preYacht ? t('Regarding: ') + preYacht + '\\n' : '';
+  // Extras à bord d'un charter (venu d'une fiche : &slug=…&extras=k1,k2) : cases à cocher à l'étape 2, ajoutées au message
+  var xSlug = qs.get('slug') || '', xPre = (qs.get('extras') || '').split(',').filter(Boolean), xItems = [];
+  var XG = { 'Catering': 'Restauration', 'Beverages': 'Boissons', 'Watersports': 'Sports nautiques', 'Decorations': 'Décoration', 'Transportation': 'Transferts', 'Photo & Video': 'Photo et vidéo', 'Entertainment': 'Animation', 'Miscellaneous': 'Divers', 'Food': 'Restauration', 'Photo and video': 'Photo et vidéo', 'Other extras': 'Autres extras' };
+  function money(n){ return FR ? Number(n).toLocaleString('fr-FR') + ' AED' : 'AED ' + Number(n).toLocaleString('en-US'); }
+  function xesc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var xOnRequest = false; // charter de la flotte partenaire dont la liste d'extras n'est pas encore relevée
+  function extrasHtml(){
+    if (xOnRequest && !xItems.length && selected === 'Charter') return '<div class="xf"><p class="xf-h">' + (FR ? 'Extras à bord (sur demande)' : 'Extras on board (on request)') + '</p><p class="lx-small" style="margin:0">' + (FR ? 'Restauration, boissons, décoration, photographe, DJ, sports nautiques et bien plus encore : précisez vos envies dans le message, nous les ajoutons à votre devis.' : 'Catering, drinks, decorations, photographer, DJ, water sports and more: tell us what you would like in your message and we include it in your quote.') + '</p></div>';
+    if (!xItems.length || selected !== 'Charter') return '';
+    var groups = []; xItems.forEach(function(x){ var g = x.g || 'Other extras'; if (groups.indexOf(g) < 0) groups.push(g); });
+    return '<div class="xf"><p class="xf-h">' + (FR ? 'Extras à bord (en option)' : 'Extras on board (optional)') + '</p>' + groups.map(function(g){
+      var xs = xItems.filter(function(x){ return (x.g || 'Other extras') === g; });
+      var n = xs.filter(function(x){ return xPre.indexOf(x.k) > -1; }).length;
+      return '<details class="xg"' + (n ? ' open' : '') + '><summary>' + xesc(FR && XG[g] ? XG[g] : g) + '<small>' + xs.length + '</small><em>' + (n ? '✓ ' + n : '') + '</em></summary><div class="xl">' + xs.map(function(x){
+        return '<label class="x"><input type="checkbox" class="xf-x" value="' + xesc(x.k) + '"' + (xPre.indexOf(x.k) > -1 ? ' checked' : '') + '><span class="xn">' + xesc(FR && x.fr ? x.fr : x.n) + '</span><span class="xp">' + (x.d > x.p ? '<s>' + money(x.d) + '</s>' : '') + money(x.p) + (x.u === 'pp' ? '<small>' + (FR ? '/ pers.' : '/ guest') + '</small>' : '') + '</span></label>';
+      }).join('') + '</div></details>';
+    }).join('') + '</div>';
+  }
+  // Venu du bouton « Check availability » d'une fiche charter : questions de location à l'heure (date, horaire, durée, invités, occasion)
+  var charterTrip = preProject === 'charter' && !!preYacht;
+  function inp(id, label, type, extra){ return '<label class="field"><span>' + t(label) + '</span><input type="' + type + '" id="' + id + '"' + (extra || '') + '></label>'; }
+  function charterFields(){
+    var times = ['Flexible']; for (var h = 7; h <= 23; h++) { times.push((h < 10 ? '0' : '') + h + ':00'); if (h < 23) times.push((h < 10 ? '0' : '') + h + ':30'); }
+    var today = new Date(Date.now() + 4 * 3600e3).toISOString().slice(0, 10);
+    return inp('c_date', 'Charter date *', 'date', ' min="' + today + '"') +
+      sel('c_time', 'Start time', ['Select a time'].concat(times)) +
+      sel('c_hours', 'Duration', ['Select a duration', '2 hours', '3 hours', '4 hours', '5 hours', '6 hours', '8 hours', 'Full day']) +
+      inp('c_guests', 'Number of guests', 'number', ' min="1" max="300" inputmode="numeric" placeholder="10"') +
+      sel('c_occ', 'Occasion', ['Select an occasion', 'Birthday', 'Family day out', 'Friends gathering', 'Corporate event', 'Proposal or anniversary', 'Sunset cruise', 'Other']).replace('class="field"', 'class="field full"');
+  }
+  function extrasPicked(){ return [].map.call(document.querySelectorAll('.xf-x:checked'), function(i){ return i.value; }); }
+  if (/^[a-z0-9-]{3,120}$/.test(xSlug)) fetch('/content/yachts/' + xSlug + '.json').then(function(r){ return r.json(); }).then(function(y){
+    xItems = (y && y.extras && y.extras.items) || [];
+    xOnRequest = !!(y && y.listing_type === 'charter' && /B2B/.test(y.price_note || ''));
+    var box = document.getElementById('dynamic-fields');
+    if ((xItems.length || xOnRequest) && box.children.length && !box.querySelector('.xf')) box.insertAdjacentHTML('beforeend', extrasHtml());
+  }).catch(function(){});
 
   function sel(id, label, opts){ return '<label class="field"><span>' + t(label) + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option value="' + (i ? o : '') + '">' + t(o) + '</option>'; }).join('') + '</select></label>'; }
   function buildDynamicFields(){
     var p = selected, html = '';
     var isYacht = ['Yacht Acquisition', 'Sell Your Yacht', 'Charter', '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16.5 6.5l3 3M14 9l2.2 2.2"/>'].indexOf(p) > -1;
     var isPartner = ['Partnership', 'Referral Programme'].indexOf(p) > -1;
-    if (isYacht) {
+    if (p === 'Charter' && charterTrip) html += charterFields();
+    else if (isYacht) {
       html += sel('budget', 'Budget range', ['Select a range', 'Under €500K', '€500K – €1M', '€1M – €3M', '€3M – €10M', '€10M+', 'Price on Request']).replace('class="field"', 'class="field full"');
       html += sel('yacht_type', 'Yacht type', ['Any', 'Motor Yacht', 'Sailing Yacht', 'Catamaran', 'Superyacht (30m+)', 'Open / Sport']);
       html += sel('market', 'Preferred market', ['Any', 'Dubai / UAE', 'French Riviera', 'Mediterranean', 'Atlantic', 'Worldwide']);
@@ -754,6 +798,7 @@ pages.push({
       html += '<label class="field"><span>' + t('Role') + '</span><input type="text" id="role" placeholder="' + t('Yacht broker, concierge, real estate...') + '"></label>';
     }
     html += '<label class="field full"><span>' + t('Message') + '</span><textarea id="message" rows="5" placeholder="' + t('Tell us more about your project, timeline, or any specific requirements...') + '"></textarea></label>';
+    html += extrasHtml();
     var box = document.getElementById('dynamic-fields'), keep = formData.message;
     // S'il change de carte, on retire le message pré-rempli (ex. un horaire d'expérience sous « Bespoke services »)
     if (keep === prefill && p !== preCard) keep = '';
@@ -761,7 +806,7 @@ pages.push({
     var m = document.getElementById('message');
     if (keep) m.value = keep; else if (prefill && p === preCard) m.value = prefill;
     var sub = document.querySelector('#step-2 .cform-sub'), card = document.querySelector('.pcard.on b');
-    sub.textContent = card ? t('Your project: ') + card.textContent : t('Help us understand your requirements');
+    sub.textContent = card ? t('Your project: ') + card.textContent : t('Help us understand your requirements'); sub.style.color = '';
   }
   function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
   function go(from, to, pct){
@@ -775,7 +820,12 @@ pages.push({
   document.querySelectorAll('[data-next]').forEach(function(b){ b.addEventListener('click', function(){
     var f = +b.dataset.next;
     if (f === 1) { if (!selected) { document.getElementById('msg-1').textContent = t('Please select one option.'); document.getElementById('msg-1').className = 'cform-msg err'; return; } buildDynamicFields(); }
-    if (f === 2) { formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role') }; }
+    if (f === 2) {
+      if (selected === 'Charter' && charterTrip && !v('c_date')) { var m2 = document.querySelector('#step-2 .cform-sub'); m2.textContent = t('Please choose your charter date.'); m2.style.color = '#e88'; return; }
+      if (xItems.length) xPre = extrasPicked();
+      formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role'),
+        trip: selected === 'Charter' && charterTrip ? ['Date: ' + v('c_date'), 'Start: ' + (v('c_time') || '-'), 'Duration: ' + (v('c_hours') || '-'), 'Guests: ' + (v('c_guests') || '-'), 'Occasion: ' + (v('c_occ') || '-')].join('\\n') : '' };
+    }
     go('step-' + f, 'step-' + (f + 1), f === 1 ? '66%' : '100%');
   }); });
   document.querySelectorAll('[data-prev]').forEach(function(b){ b.addEventListener('click', function(){
@@ -794,7 +844,8 @@ pages.push({
       website: v('honeypot'), form_name: formName, experience: isXp ? preYacht : '',
       name: fname + ' ' + lname, email: email, phone: v('phone').trim(), country: v('country').trim(),
       type: selected, budget: formData.budget || '', yacht_type: formData.yacht_type || '', market: formData.market || '',
-      company: formData.company || '', role: formData.role || '', message: formData.message || '',
+      company: formData.company || '', role: formData.role || '',
+      message: (formData.trip ? formData.trip + '\\n\\n' : '') + (formData.message || '') + (selected === 'Charter' && xItems.length && xPre.length ? '\\n\\nExtras requested: ' + xItems.filter(function(x){ return xPre.indexOf(x.k) > -1; }).map(function(x){ return x.n + ' (AED ' + x.p + (x.u === 'pp' ? ' per guest' : '') + ')'; }).join(', ') : ''),
       submitted_at: new Date().toLocaleString('fr-FR')
     });
     fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});
@@ -999,7 +1050,7 @@ function card(y, i) {
   const specs = y.type === 'charter' ? '' : '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
     (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
     (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (l => '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>')((y.location || '—').split(',')[0].trim())) + '</div>';
-  const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
+  const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : y.direct_price ? '<span><s>' + esc(y.direct_price.replace(/ per hour$/, '')) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
   return '\n    <a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '"><div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
     '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';
 }

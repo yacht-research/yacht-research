@@ -8,7 +8,7 @@
     "length": "27.4 m / 90 ft",
     "year": "",
     "location": "Dubai, UAE",
-    "price": "From AED 3,680 per hour",
+    "price": "From AED 2,300 per hour",
     "price_note": "Private charters in Dubai by the hour · Preferential B2B rate · Final rate depends on date and time",
     "original_price": "",
     "specs": {
@@ -28,7 +28,7 @@
     ],
     "description": "X8 is a 90ft Manzil party houseboat available for private charter in Dubai, offering a party houseboat whose generous indoor and outdoor areas welcome large groups.\n\nShe welcomes up to 60 guests and is run by a professional crew of 3. Departing from Dubai Marina, she is a great choice for celebrations, corporate outings and large groups, with routes past Bluewaters, Ain Dubai, the Palm Jumeirah and the Burj Al Arab.\n\nCharters are available by the hour, for sunset cruises or for the full day. Contact Yacht Research for availability, routes and a tailored quote.",
     "seo_title": "X8 90ft Manzil Yacht Charter in Dubai | Yacht Research",
-    "seo_description": "Charter X8, a 90ft Manzil in Dubai for up to 60 guests. From AED 3,680 per hour at our preferential B2B rate.",
+    "seo_description": "Charter X8, a 90ft Manzil in Dubai for up to 60 guests. From AED 2,300 per hour at our preferential B2B rate.",
     "brochure": "/brochures/x8-90ft-manzil-dubai.pdf",
     "published": true,
     "image": "/images/yachts/x8-90ft-manzil-dubai/01.webp",
@@ -42,5 +42,67 @@
         "/images/yachts/x8-90ft-manzil-dubai/07.webp",
         "/images/yachts/x8-90ft-manzil-dubai/08.webp"
     ],
-    "updated": "2026-11-10"
+    "updated": "2026-11-10",
+    "extras": {
+        "checked": "2026-11-27",
+        "source": "public",
+        "items": [
+            {
+                "k": "cat-104",
+                "g": "Catering",
+                "n": "Exotic Fruit Platter",
+                "fr": "Plateau de fruits exotiques",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "misc-10",
+                "g": "Photo & Video",
+                "n": "Photographer",
+                "fr": "Photographe",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-14",
+                "g": "Photo & Video",
+                "n": "Videographer",
+                "fr": "Vidéaste",
+                "p": 1100,
+                "d": 1200
+            },
+            {
+                "k": "misc-11",
+                "g": "Photo & Video",
+                "n": "Photographer & Videographer Package",
+                "fr": "Formule photographe et vidéaste",
+                "p": 1840,
+                "d": 2000
+            },
+            {
+                "k": "misc-5",
+                "g": "Entertainment",
+                "n": "DJ & Equipment",
+                "fr": "DJ et matériel",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-42",
+                "g": "Miscellaneous",
+                "n": "Bartender",
+                "fr": "Barman",
+                "p": 1840,
+                "d": 2000
+            },
+            {
+                "k": "misc-45",
+                "g": "Miscellaneous",
+                "n": "Projector Screen Set Up",
+                "fr": "Installation d’un écran et d’un projecteur",
+                "p": 4600,
+                "d": 5000
+            }
+        ]
+    }
 }

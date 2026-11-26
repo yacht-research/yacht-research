@@ -46,5 +46,397 @@
     ],
     "updated": "2026-11-10",
     "video": "/videos/yachts/x43-80ft-amsca-dubai.mp4",
-    "video_poster": "/videos/yachts/x43-80ft-amsca-dubai.jpg"
+    "video_poster": "/videos/yachts/x43-80ft-amsca-dubai.jpg",
+    "extras": {
+        "checked": "2026-11-27",
+        "source": "public",
+        "items": [
+            {
+                "k": "cat-61",
+                "g": "Catering",
+                "n": "Fruit Platter for 5",
+                "fr": "Plateau de fruits pour 5",
+                "p": 90,
+                "d": 100
+            },
+            {
+                "k": "cat-104",
+                "g": "Catering",
+                "n": "Exotic Fruit Platter",
+                "fr": "Plateau de fruits exotiques",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "cat-63",
+                "g": "Catering",
+                "n": "Nibbles",
+                "fr": "Amuse-bouches",
+                "p": 320,
+                "d": 350
+            },
+            {
+                "k": "cat-102",
+                "g": "Catering",
+                "n": "Cheese Platter",
+                "fr": "Plateau de fromages",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "cat-103",
+                "g": "Catering",
+                "n": "Breakfast Menu",
+                "fr": "Menu petit-déjeuner",
+                "p": 90,
+                "d": 100,
+                "u": "pp",
+                "min": 5
+            },
+            {
+                "k": "cat-49",
+                "g": "Catering",
+                "n": "BBQ Menu",
+                "fr": "Menu barbecue",
+                "p": 170,
+                "d": 190,
+                "u": "pp",
+                "min": 5
+            },
+            {
+                "k": "cat-122",
+                "g": "Catering",
+                "n": "VIP BBQ Menu",
+                "fr": "Menu barbecue VIP",
+                "p": 230,
+                "d": 250,
+                "u": "pp",
+                "min": 5
+            },
+            {
+                "k": "cat-40",
+                "g": "Catering",
+                "n": "VEG BBQ Menu",
+                "fr": "Menu barbecue végétarien",
+                "p": 140,
+                "d": 150,
+                "u": "pp",
+                "min": 5
+            },
+            {
+                "k": "cat-58",
+                "g": "Catering",
+                "n": "Arabic Platter for 5",
+                "fr": "Plateau arabe pour 5",
+                "p": 690,
+                "d": 750
+            },
+            {
+                "k": "cat-120",
+                "g": "Catering",
+                "n": "Indian Menu",
+                "fr": "Menu indien",
+                "p": 140,
+                "d": 150,
+                "u": "pp",
+                "min": 5
+            },
+            {
+                "k": "cat-62",
+                "g": "Catering",
+                "n": "Lebanese Platter for 5",
+                "fr": "Plateau libanais pour 5",
+                "p": 550,
+                "d": 600
+            },
+            {
+                "k": "cat-47",
+                "g": "Catering",
+                "n": "Chocolate Cake",
+                "fr": "Gâteau au chocolat",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-60",
+                "g": "Catering",
+                "n": "Canapes Platter for 5",
+                "fr": "Plateau de canapés pour 5",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "cat-64",
+                "g": "Catering",
+                "n": "Dessert Platter for 5",
+                "fr": "Plateau de desserts pour 5",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-87",
+                "g": "Beverages",
+                "n": "5 extra bags of ice (1 kg each)",
+                "fr": "5 sacs de glace supplémentaires (1 kg chacun)",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-69",
+                "g": "Beverages",
+                "n": "Bucket of 10 beers",
+                "fr": "Seau de 10 bières",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "cat-109",
+                "g": "Beverages",
+                "n": "Bottle of Bottega Gold",
+                "fr": "Bouteille de Bottega Gold",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-116",
+                "g": "Beverages",
+                "n": "Bottle of Macallan",
+                "fr": "Bouteille de Macallan",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "cat-133",
+                "g": "Beverages",
+                "n": "Bottle of Jacob's Creek Red Wine",
+                "fr": "Bouteille de vin rouge Jacob’s Creek",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-124",
+                "g": "Beverages",
+                "n": "Bottle of Minuty Rosé",
+                "fr": "Bouteille de rosé Minuty",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-123",
+                "g": "Beverages",
+                "n": "Bottle of Jack Daniel's Whisky",
+                "fr": "Bouteille de whisky Jack Daniel’s",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "cat-100",
+                "g": "Beverages",
+                "n": "Unlimited Mocktail Package",
+                "fr": "Formule mocktails à volonté",
+                "p": 2760,
+                "d": 3000
+            },
+            {
+                "k": "cat-130",
+                "g": "Beverages",
+                "n": "Unlimited Cocktail Package",
+                "fr": "Formule cocktails à volonté",
+                "p": 4140,
+                "d": 4500
+            },
+            {
+                "k": "water-1",
+                "g": "Watersports",
+                "n": "1-hour jet ski",
+                "fr": "Jet-ski 1 heure",
+                "p": 740,
+                "d": 800
+            },
+            {
+                "k": "water-3",
+                "g": "Watersports",
+                "n": "Banana Ride",
+                "fr": "Bouée banane",
+                "p": 740,
+                "d": 800
+            },
+            {
+                "k": "water-4",
+                "g": "Watersports",
+                "n": "Floating Pool",
+                "fr": "Piscine flottante",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "water-5",
+                "g": "Watersports",
+                "n": "Donut Ride",
+                "fr": "Bouée donut",
+                "p": 740,
+                "d": 800
+            },
+            {
+                "k": "water-10",
+                "g": "Watersports",
+                "n": "E-Foil",
+                "fr": "E-foil",
+                "p": 1100,
+                "d": 1200
+            },
+            {
+                "k": "misc-31",
+                "g": "Decorations",
+                "n": "12 Rose Bouquet",
+                "fr": "Bouquet de 12 roses",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "misc-32",
+                "g": "Decorations",
+                "n": "50 Rose Bouquet",
+                "fr": "Bouquet de 50 roses",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-33",
+                "g": "Decorations",
+                "n": "100 Rose Bouquet",
+                "fr": "Bouquet de 100 roses",
+                "p": 2070,
+                "d": 2250
+            },
+            {
+                "k": "misc-3",
+                "g": "Decorations",
+                "n": "Classic Balloon Package",
+                "fr": "Ballons, formule classique",
+                "p": 90,
+                "d": 100
+            },
+            {
+                "k": "misc-56",
+                "g": "Decorations",
+                "n": "Romantic Decor Package",
+                "fr": "Décoration romantique",
+                "p": 1840,
+                "d": 2000
+            },
+            {
+                "k": "misc-9",
+                "g": "Decorations",
+                "n": "Number Balloon Package",
+                "fr": "Ballons chiffres",
+                "p": 280,
+                "d": 300
+            },
+            {
+                "k": "misc-13",
+                "g": "Decorations",
+                "n": "Signature Balloon Package",
+                "fr": "Ballons, formule signature",
+                "p": 1380,
+                "d": 1500
+            },
+            {
+                "k": "misc-28",
+                "g": "Decorations",
+                "n": "Premium Balloon Package",
+                "fr": "Ballons, formule premium",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "misc-29",
+                "g": "Decorations",
+                "n": "VIP Décor Package",
+                "fr": "Décoration VIP",
+                "p": 2760,
+                "d": 3000
+            },
+            {
+                "k": "misc-35",
+                "g": "Decorations",
+                "n": "Flower Decor Package",
+                "fr": "Décoration florale",
+                "p": 5520,
+                "d": 6000
+            },
+            {
+                "k": "misc-15",
+                "g": "Decorations",
+                "n": "Tropical Theme Package",
+                "fr": "Décor tropical",
+                "p": 4600,
+                "d": 5000
+            },
+            {
+                "k": "misc-18",
+                "g": "Decorations",
+                "n": "Casino Theme Package",
+                "fr": "Décor casino",
+                "p": 4600,
+                "d": 5000
+            },
+            {
+                "k": "misc-10",
+                "g": "Photo & Video",
+                "n": "Photographer",
+                "fr": "Photographe",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-14",
+                "g": "Photo & Video",
+                "n": "Videographer",
+                "fr": "Vidéaste",
+                "p": 1100,
+                "d": 1200
+            },
+            {
+                "k": "misc-11",
+                "g": "Photo & Video",
+                "n": "Photographer & Videographer Package",
+                "fr": "Formule photographe et vidéaste",
+                "p": 1840,
+                "d": 2000
+            },
+            {
+                "k": "misc-5",
+                "g": "Entertainment",
+                "n": "DJ & Equipment",
+                "fr": "DJ et matériel",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-1",
+                "g": "Miscellaneous",
+                "n": "Use of BBQ Grill",
+                "fr": "Utilisation du barbecue",
+                "p": 460,
+                "d": 500
+            },
+            {
+                "k": "misc-19",
+                "g": "Miscellaneous",
+                "n": "Electric Shisha",
+                "fr": "Chicha électrique",
+                "p": 230,
+                "d": 250
+            },
+            {
+                "k": "misc-54",
+                "g": "Miscellaneous",
+                "n": "Tender Service",
+                "fr": "Service d’annexe",
+                "p": 460,
+                "d": 500
+            }
+        ]
+    }
 }

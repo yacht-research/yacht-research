@@ -1,12 +1,11 @@
-// GET /api/sx/from → prix public « à partir de » (1 adulte) de chaque produit Xclusive sur les 14 prochains jours,
-// pour afficher un prix même les jours sans départ. Résultat gardé 6 h (1 h s'il manque des prix).
-// Le tarif B2B ne quitte jamais le serveur : seul le prix public (B2B + marge) est renvoyé.
-import { json, xc, retailMinor, dubaiToday } from '../../_sx.js';
+// GET /api/sx/from → prix client « à partir de » (1 adulte, hors frais de carte) de chaque produit Xclusive
+// sur les 14 prochains jours, avec le prix public de référence du même horaire (affiché barré).
+// Résultat gardé 1 h (1 min s'il manque encore des tarifs B2B : ils se complètent 20 par appel). Le tarif B2B ne quitte jamais le serveur.
+import { json, xc, dubaiToday, publicSlots, publicMinor, sellMinor, b2bPrices } from '../../_sx.js';
 
 const CACHE_HOST = 'https://sx-cache.yachtresearchgroup.com';
-const FROM_KEY = CACHE_HOST + '/from/v1';
-const PRICES_KEY = CACHE_HOST + '/prices/v2'; // même cache de prix que /api/sx/departures
-const DAYS = 14, MAX_QUOTES = 20, PRICE_TTL = 12 * 3600e3;
+const FROM_KEY = CACHE_HOST + '/from/v3';
+const DAYS = 14, MAX_QUOTES = 20;
 
 function addDays(iso, k) { return new Date(Date.parse(iso + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10); }
 
@@ -34,38 +33,18 @@ export async function onRequestGet(ctx) {
     list.forEach(d => { if (d.availability !== 'None') open.push(d); });
   }
 
-  // Prix par produit (cache commun 12 h) ; on ne demande que les produits manquants
-  const pReq = new Request(PRICES_KEY);
-  const pHit = await cache.match(pReq);
-  const prices = pHit ? await pHit.json() : {};
-  const now = Date.now(), todo = [];
-  open.forEach(d => {
-    const p = prices[d.product_id];
-    if ((!p || now - p.t > PRICE_TTL) && !todo.some(t => t.product_id === d.product_id)) todo.push(d);
-  });
-  if (todo.length) {
-    const queue = todo.slice(0, MAX_QUOTES);
-    let changed = false;
-    const worker = async () => {
-      for (let d; (d = queue.shift());) {
-        const q = await xc(env, '/quote', { method: 'POST', body: { departure_id: d.id, adults: 1, children: 0, featured: false } });
-        if (q.ok) { prices[d.product_id] = { m: retailMinor(q.data.total_minor, env), t: now }; changed = true; }
-      }
-    };
-    await Promise.all([worker(), worker()]);
-    if (changed) ctx.waitUntil(cache.put(pReq, new Response(JSON.stringify(prices), { headers: { 'Cache-Control': 'max-age=86400' } })));
-  }
+  const [pub, b2b] = await Promise.all([publicSlots(env, ctx), b2bPrices(env, ctx, open, MAX_QUOTES)]);
 
-  // { nom du produit : prix public le plus bas en AED }
-  const from = {};
+  // { nom du produit : prix client le plus bas en AED }, et le prix public barré du même horaire
+  const from = {}, was = {};
   let missing = false;
   open.forEach(d => {
-    const p = prices[d.product_id];
-    if (!p) { missing = true; return; }
-    const aed = p.m / 100;
-    if (!(d.product in from) || aed < from[d.product]) from[d.product] = aed;
+    const m = b2b(d);
+    if (!m) { missing = true; return; }
+    const slot = pub[d.id], w = publicMinor(slot, 1, 0), s = sellMinor(env, m, w, slot && slot[5]), aed = s.retail / 100; // hors frais de carte
+    if (!(d.product in from) || aed < from[d.product]) { from[d.product] = aed; was[d.product] = w && w / 100 > aed ? w / 100 : null; }
   });
-  const out = { enabled: true, days: DAYS, from };
-  ctx.waitUntil(cache.put(fReq, new Response(JSON.stringify(out), { headers: { 'Cache-Control': 'max-age=' + (missing ? 3600 : 6 * 3600) } })));
+  const out = { enabled: true, days: DAYS, from, was };
+  ctx.waitUntil(cache.put(fReq, new Response(JSON.stringify(out), { headers: { 'Cache-Control': 'max-age=' + (missing ? 60 : 3600) } })));
   return json(out);
 }

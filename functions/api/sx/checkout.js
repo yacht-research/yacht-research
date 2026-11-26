@@ -1,9 +1,9 @@
-// POST /api/sx/checkout → vérifie la sortie, le prix et les données client, puis crée un paiement Stripe Checkout.
-// La réservation chez Xclusive n'est faite QU'APRÈS le paiement (webhook Stripe), avec le même prix B2B vérifié.
-import { json, xc, stripe, retailMinor, cardFeeMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
+// POST /api/sx/checkout → vérifie la sortie, le prix et les données client, puis crée le paiement (Ziina par défaut, ou Stripe).
+// La réservation chez Xclusive n'est faite QU'APRÈS le paiement, avec le même prix B2B vérifié.
+import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
 export async function onRequestPost({ env, request }) {
-  if (env.SX_BOOKINGS !== 'on' || !env.STRIPE_SECRET_KEY || !env.XCLUSIVE_API_KEY) return json({ error: 'bookings_closed' }, 503);
+  if (!bookingsOpen(env)) return json({ error: 'bookings_closed' }, 503);
   let b; try { b = await request.json(); } catch (e) { return json({ error: 'invalid_body' }, 400); }
 
   const departure_id = int(b.departure_id, 1, 2147483647), adults = int(b.adults, 0, 20), children = int(b.children, 0, 20);
@@ -31,10 +31,31 @@ export async function onRequestPost({ env, request }) {
   const dry = await xc(env, '/validate-booking', { method: 'POST', body: booking });
   if (!dry.ok) return json({ error: dry.code }, 409);
 
-  // 4) paiement Stripe au prix public
-  const retail = retailMinor(b2b, env), fee = cardFeeMinor(retail, env);
+  // 4) paiement au prix client (prix public de l'horaire −10 %, jamais sous B2B + marge), même calcul que /api/sx/quote
+  const pub = await publicSlots(env);
+  const slot = pub[departure_id];
+  const { retail, fee } = sellMinor(env, b2b, publicMinor(slot, adults, children), slot && slot[5]);
   const origin = new URL(request.url).origin;
   const guests = adults + children;
+  const fr = b.lang === 'fr';
+
+  if (payProvider(env) === 'ziina') {
+    const token = await sealToken(env, { dep: departure_id, a: adults, c: children, b2b, retail, fee, n: name, p: phone, e: email, pr: dep.product.slice(0, 120), d: dep.date, t: dep.time, l: fr ? 'fr' : 'en' });
+    const back = origin + (fr ? '/fr' : '') + '/shared-experiences';
+    const z = await ziina(env, '/payment_intent', {
+      amount: retail + fee,
+      currency_code: 'AED',
+      message: (dep.product.slice(0, 80) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
+      success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
+      cancel_url: back + '?sx=cancelled#sx',
+      failure_url: back + '?sx=failed#sx',
+      expiry: String(Date.now() + 30 * 60 * 1000),
+      test: ziinaTest(env)
+    });
+    if (!z.ok || !z.data.redirect_url) return json({ error: 'payment_unavailable' }, 502);
+    return json({ url: z.data.redirect_url });
+  }
+
   const meta = { departure_id, adults, children, b2b_minor: b2b, retail_minor: retail, card_fee_minor: fee, name, phone, email, product: dep.product.slice(0, 200), date: dep.date, time: dep.time };
   const p = {
     mode: 'payment',

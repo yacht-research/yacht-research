@@ -58,6 +58,7 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'in
     location: y.location || '',
     price: y.price || '',
     original_price: y.original_price || '',
+    direct_price: directPrice(y),
     price_eur: toEur(y.price),
     guests: (guests.match(/\d+/) || [''])[0],
     cabins: (guests.match(/(\d+)\s*cabin/i) || [])[1] || (cabinsField.match(/\d+/) || [''])[0],
@@ -65,6 +66,15 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'in
     // fiche française écrite (content/i18n/yachts/<slug>.json) : la page /fr/yacht/<slug> existe
     ...(fs.existsSync(path.join(__dirname, 'content', 'i18n', 'yachts', slug + '.json')) ? { fr: true } : {})
   });
+}
+// Charters de la flotte partenaire (tarif B2B) : notre prix = net + 15 %, et le net = prix public −20 %
+// → prix public en direct = notre prix ÷ 1,15 ÷ 0,8, affiché barré (sans nommer l'opérateur). Même calcul dans lib/yacht-page.js
+function directPrice(y) {
+  if (y.listing_type !== 'charter' || !/B2B/.test(y.price_note || '')) return '';
+  const m = String(y.price || '').match(/^From AED ([\d,]+) per hour$/);
+  if (!m) return '';
+  const n = Math.round(Number(m[1].replace(/,/g, '')) / 1.15 / 0.8 / 10) * 10;
+  return 'AED ' + n.toLocaleString('en-US') + ' per hour';
 }
 const noFr = yachts.filter(y => !y.fr).map(y => y.slug);
 if (noFr.length) console.warn('⚠ Sans version française (la page FR renvoie vers l’anglais) : ' + noFr.join(', '));

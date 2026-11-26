@@ -270,8 +270,8 @@ function sendBookingConfirmation(data) {
     + row('Guests', esc(data.guests))
     + row('Total paid', 'AED ' + esc(paid))
     + '</table>'
-    + emailP('Our team will send you the meeting point and final details before your experience. Please bring a valid ID for each guest.')
-    + emailP('For any question or change, simply reply to this email.');
+    + emailP('Your <strong>e-ticket</strong>, with your boarding QR code, the meeting point and directions, arrives in a separate email within a few minutes. Please be at the boarding point <strong>25 minutes before departure</strong> and bring a valid ID for each guest (passport copy for tourists, Emirates ID for residents).')
+    + emailP('For any question or change, simply reply to this email or message us on WhatsApp.');
   var html = emailHtml({
     subject: 'Booking confirmed', pre: 'Your experience is confirmed: ' + esc(data.product) + ', ' + esc(data.date) + '.',
     eyebrow: 'Booking confirmed', t1: 'Your booking', t2: 'is confirmed', hero: heroUrl('photo-1722502831572-2d12e8f30c59'),
