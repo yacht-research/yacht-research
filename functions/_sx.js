@@ -8,7 +8,8 @@
 //   STRIPE_WEBHOOK_SECRET   secret du webhook Stripe (whsec_…)
 //   XCLUSIVE_WEBHOOK_SECRET secret de signature des webhooks Xclusive (facultatif)
 // Réglages (variables simples) :
-//   SX_MARKUP        marge sur le tarif B2B, défaut 0.15 (15 %)
+//   SX_MARKUP        marge MINIMALE sur le tarif B2B, défaut 0.15 (15 %)
+//   SX_DISCOUNT      remise sur le prix public Xclusive de l'horaire, frais de carte compris, défaut 0.10 (10 %)
 //   SX_BOOKINGS      "on" pour accepter les paiements ; sinon le bloc reste en consultation seule
 //   SX_PAYMENT       "ziina" (défaut si ZIINA_API_KEY existe) ou "stripe"
 //   ZIINA_TEST       mode test Ziina ACTIF PAR DÉFAUT : aucun débit, et aucune vraie réservation Xclusive
@@ -38,6 +39,85 @@ export function cardFeePct(env) { const p = env.SX_CARD_FEE_PCT === undefined ||
 
 export function retailMinor(b2bMinor, env) {
   return Math.ceil((b2bMinor * (1 + markup(env))) / 100) * 100;
+}
+
+// ------------------------------------------------------------
+// Prix calé sur le site public Xclusive (réglages : SX_DISCOUNT, défaut 0.10 ; SX_PUBLIC_FEED pour les tests)
+// Le client paie (frais de carte compris) le prix public de l'horaire moins 10 %, mais jamais moins que
+// B2B + SX_MARKUP. Sans prix public connu (flux indisponible, catégorie sans prix) : B2B + SX_MARKUP.
+// ------------------------------------------------------------
+export const PUBLIC_FEED = 'https://xclusiveyachts.com/tours-data/tours.json';
+const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v1';
+export function discount(env) {
+  const d = parseFloat(env.SX_DISCOUNT);
+  return isFinite(d) && d >= 0 && d < 0.5 ? d : 0.1;
+}
+// { departure_id : [prix adulte, prix enfant|null, places restantes, niveau Plenty/Limited/Few, complet] }, gardé 5 min
+export async function publicSlots(env, ctx) {
+  const cache = caches.default, key = new Request(PUBLIC_KEY);
+  const hit = await cache.match(key);
+  if (hit) return hit.json();
+  let tours;
+  try {
+    const r = await fetch(env.SX_PUBLIC_FEED || PUBLIC_FEED, { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(5000) });
+    if (!r.ok) return {};
+    tours = await r.json();
+  } catch (e) { return {}; }
+  const map = {};
+  (Array.isArray(tours) ? tours : []).forEach(t => (t.timeSlots || []).forEach(s => {
+    if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out];
+  }));
+  const p = cache.put(key, new Response(JSON.stringify(map), { headers: { 'Cache-Control': 'max-age=300' } }));
+  if (ctx && ctx.waitUntil) ctx.waitUntil(p); else await p;
+  return map;
+}
+// Prix public total d'une sélection, en fils (null si une catégorie n'a pas de prix public)
+export function publicMinor(slot, adults, children) {
+  if (!slot || !slot[0]) return null;
+  if (children > 0 && !(slot[1] > 0)) return null;
+  return (adults * slot[0] + children * (slot[1] || 0)) * 100;
+}
+// → { retail, fee } en fils : retail + fee ≤ prix public × (1 − remise), retail ≥ B2B + marge
+export function sellMinor(env, b2bMinor, pubMinor) {
+  const floor = retailMinor(b2bMinor, env);
+  let retail = floor;
+  if (pubMinor > 0) {
+    const target = Math.floor((pubMinor * (1 - discount(env))) / 100) * 100;
+    let r = Math.floor(target / (1 + cardFeePct(env) / 100) / 100) * 100;
+    while (r > floor && r + cardFeeMinor(r, env) > target) r -= 100;
+    retail = Math.max(r, floor);
+  }
+  return { retail, fee: cardFeeMinor(retail, env) };
+}
+// Places restantes affichables : seulement quand il en reste peu (comme le site public : Limited / Few)
+export function seatsShown(slot) {
+  return slot && (slot[3] === 'Limited' || slot[3] === 'Few') && slot[2] > 0 ? slot[2] : null;
+}
+
+// Tarif B2B 1 adulte par produit et horaire, cache commun 12 h ; complète au plus `max` devis par appel
+const B2B_KEY = 'https://sx-cache.yachtresearchgroup.com/b2b/v1';
+export async function b2bPrices(env, ctx, deps, max) {
+  const cache = caches.default, req = new Request(B2B_KEY);
+  const hit = await cache.match(req);
+  const prices = hit ? await hit.json() : {}; // { "product_id|time": { m: fils B2B, t: horodatage } }
+  const now = Date.now(), todo = [];
+  deps.forEach(d => {
+    const k = d.product_id + '|' + d.time, p = prices[k];
+    if ((!p || now - p.t > 12 * 3600e3) && !todo.some(t => t.product_id + '|' + t.time === k)) todo.push(d);
+  });
+  if (todo.length) {
+    const queue = todo.slice(0, max);
+    let changed = false;
+    const worker = async () => {
+      for (let d; (d = queue.shift());) {
+        const q = await xc(env, '/quote', { method: 'POST', body: { departure_id: d.id, adults: 1, children: 0, featured: false } });
+        if (q.ok) { prices[d.product_id + '|' + d.time] = { m: q.data.total_minor, t: now }; changed = true; }
+      }
+    };
+    await Promise.all([worker(), worker()]);
+    if (changed) ctx.waitUntil(cache.put(req, new Response(JSON.stringify(prices), { headers: { 'Cache-Control': 'max-age=86400' } })));
+  }
+  return d => { const p = prices[d.product_id + '|' + d.time]; return p ? p.m : null; };
 }
 
 export async function xc(env, path, { method = 'GET', body, idem } = {}) {

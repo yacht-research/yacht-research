@@ -1,6 +1,6 @@
 // POST /api/sx/checkout → vérifie la sortie, le prix et les données client, puis crée le paiement (Ziina par défaut, ou Stripe).
 // La réservation chez Xclusive n'est faite QU'APRÈS le paiement, avec le même prix B2B vérifié.
-import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, retailMinor, cardFeeMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
+import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
 export async function onRequestPost({ env, request }) {
   if (!bookingsOpen(env)) return json({ error: 'bookings_closed' }, 503);
@@ -31,8 +31,9 @@ export async function onRequestPost({ env, request }) {
   const dry = await xc(env, '/validate-booking', { method: 'POST', body: booking });
   if (!dry.ok) return json({ error: dry.code }, 409);
 
-  // 4) paiement au prix public
-  const retail = retailMinor(b2b, env), fee = cardFeeMinor(retail, env);
+  // 4) paiement au prix client (prix public de l'horaire −10 %, jamais sous B2B + marge), même calcul que /api/sx/quote
+  const pub = await publicSlots(env);
+  const { retail, fee } = sellMinor(env, b2b, publicMinor(pub[departure_id], adults, children));
   const origin = new URL(request.url).origin;
   const guests = adults + children;
   const fr = b.lang === 'fr';

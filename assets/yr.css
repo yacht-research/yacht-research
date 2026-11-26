@@ -780,6 +780,9 @@ body.menu-open .burger i:nth-child(3){top:21px;transform:rotate(-45deg)}
 .xp-from{margin:0;font-size:15px}
 .xp-from b{font-size:22px;font-weight:500;color:var(--gold-l)}
 .xp-from small{font-size:12px;opacity:.7;letter-spacing:.04em}
+/* Prix direct barré, notre prix mis en avant */
+.sx-was{font-size:.62em;font-weight:400;color:var(--mute);opacity:.85;text-decoration:line-through;text-decoration-thickness:1px;margin-right:4px;white-space:nowrap}
+.xp-price{color:var(--gold-l)}
 .xp-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 .xp-more-link{font-size:13px;color:var(--gold-l);text-decoration:underline;text-underline-offset:3px;margin-right:auto}
 .xp-wa{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:99px;border:1px solid rgba(37,211,102,.45);font-size:12px;letter-spacing:.06em;color:#dff7e8;text-decoration:none}

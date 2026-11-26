@@ -27,7 +27,8 @@
     'Live availability, instant confirmation and secure card payment.': 'Disponibilités en direct, confirmation immédiate et paiement sécurisé par carte.',
     'Live times and prices. Choose a time and send your request: we confirm your seats with you directly by WhatsApp or email.': 'Horaires et prix en direct. Choisissez un horaire et envoyez votre demande : nous vous confirmons vos places directement par WhatsApp ou par e-mail.',
     'Live times are unavailable right now. Send us your request and we will confirm availability for you.': 'Les horaires en direct sont momentanément indisponibles. Envoyez-nous votre demande et nous vérifierons les disponibilités pour vous.',
-    'Price unavailable for this selection.': 'Prix indisponible pour cette sélection.',
+    'Price when booking direct': 'Prix en réservant en direct',
+    'Price unavailable for this selection.':'Prix indisponible pour cette sélection.',
     '(Dubai time)': '(heure de Dubaï)', 'at': 'à', 'Adults': 'Adultes', 'Children': 'Enfants',
     'Redirecting to payment… ': 'Redirection vers le paiement… ', 'Pay securely ': 'Payer en toute sécurité ',
     'Something went wrong. Please try again or contact us on WhatsApp.': 'Une erreur est survenue. Réessayez ou contactez-nous sur WhatsApp.',
@@ -38,6 +39,8 @@
   var L = function (s) { return FR && TFR[s] != null ? TFR[s] : s; };
   var U = function (p) { return FR ? '/fr' + p : p; };
   var aed = function (n) { var v = Number(n).toLocaleString(FR ? 'fr-FR' : 'en-US', { maximumFractionDigits: 0 }); return FR ? v + ' AED' : 'AED ' + v; };
+  // Prix de référence barré (prix public en direct chez l'opérateur, jamais nommé)
+  var was = function (w) { return w > 0 ? '<s class="sx-was" title="' + L('Price when booking direct') + '">' + aed(w) + '</s> ' : ''; };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var ERR = { departure_unavailable: L('This departure is now full. Please choose another time.'), booking_unavailable: L('This departure is now full. Please choose another time.'), price_changed: L('The price has just changed. Please check the new total.'), invalid_phone: L('Please enter your phone number with the country code, e.g. +971 50 123 4567.'), invalid_email: L('Please enter a valid email address.'), invalid_name: L('Please enter your full name.'), invalid_guests: L('Choose between 1 and 20 guests.'), bookings_closed: L('Online booking is not open yet. Send us an enquiry instead.') };
 
@@ -53,13 +56,15 @@
   fetch('/api/sx/from').then(function (r) { return r.json(); }).then(function (d) {
     if (!d || !d.from) return;
     cards.forEach(function (c) {
-      var v = JSON.parse(c.dataset.names || '[]').map(function (n) { return d.from[n]; }).filter(function (x) { return x > 0; });
-      if (!v.length) return;
-      v = Math.round(Math.min.apply(null, v));
-      c.dataset.from = v;
+      var best = null;
+      JSON.parse(c.dataset.names || '[]').forEach(function (n) { var x = d.from[n]; if (x > 0 && (!best || x < best.v)) best = { v: x, w: d.was && d.was[n] }; });
+      if (!best) return;
+      var v = Math.round(best.v);
+      c.dataset.from = v; c.dataset.was = best.w > v ? Math.round(best.w) : '';
       var f = c.querySelector('.xp-from');
       if (!f) { f = document.createElement('p'); f.className = 'xp-from'; f.hidden = !!c.querySelector('.xp-slot'); var meta = c.querySelector('.xp-meta'); meta.parentNode.insertBefore(f, meta.nextSibling); }
-      f.innerHTML = '<small>' + L('Starting from') + '</small> <b>' + aed(v) + '</b> <small>' + L('per guest') + '</small>';
+      f.innerHTML = '<small>' + L('Starting from') + '</small> ' + was(c.dataset.was) + '<b>' + aed(v) + '</b> <small>' + L('per guest') + '</small>';
+      if (c.classList.contains('xp-solo') && c.dataset.was) document.querySelectorAll('[data-live-from]').forEach(function (e) { var s = e.parentNode.querySelector('.sx-was'); if (!s) { s = document.createElement('s'); s.className = 'sx-was'; e.parentNode.insertBefore(s, e.parentNode.firstChild); } s.textContent = aed(c.dataset.was); s.title = L('Price when booking direct'); });
       if (c.classList.contains('xp-solo')) document.querySelectorAll('[data-live-from]').forEach(function (e) { e.textContent = Number(v).toLocaleString(FR ? 'fr-FR' : 'en-US'); });
     });
     document.dispatchEvent(new Event('sx:from')); // le tri de la page se refait avec les prix en direct
@@ -95,11 +100,15 @@
     // l'ordre des cartes est donné par le tri de la page (yr.js) : plus cher d'abord par défaut, la nouveauté en tête
     if (fromEl) fromEl.hidden = !!deps.length; // le prix du jour remplace le prix indicatif
     if (!deps.length) { slots.innerHTML = '<span class="xp-wait">' + L('No departure on this date. Try another day.') + '</span>'; price.innerHTML = ''; cta.innerHTML = ''; return; }
-    var low = deps.map(function (d) { return d.from_aed; }).filter(Boolean);
-    if (!low.length && card.dataset.from) low = [+card.dataset.from]; // prix indicatif si le devis du jour n'est pas encore arrivé
-    price.innerHTML = low.length ? '<small>' + L('From') + '</small> ' + aed(Math.min.apply(null, low)) + ' <small>' + L('per guest') + '</small>' : '<small>' + L('Price on request') + '</small>';
+    var best = null;
+    deps.forEach(function (d) { if (d.from_aed && (!best || d.from_aed < best.v)) best = { v: d.from_aed, w: d.was_aed }; });
+    if (!best && card.dataset.from) best = { v: +card.dataset.from, w: +card.dataset.was || 0 }; // prix indicatif si le devis du jour n'est pas encore arrivé
+    price.innerHTML = best ? '<small>' + L('From') + '</small> ' + was(best.w) + aed(best.v) + ' <small>' + L('per guest') + '</small>' : '<small>' + L('Price on request') + '</small>';
     slots.innerHTML = deps.map(function (d, i) {
-      return '<button type="button" class="xp-slot' + (d.availability === 'Low availability' ? ' low' : '') + '" data-i="' + i + '" title="' + (d.availability === 'Low availability' ? L('Few places left') : L('Available')) + '">' + esc(d.time) + (d.availability === 'Low availability' ? '<small>' + L('Few left') + '</small>' : '') + '</button>';
+      // places restantes exactes quand il en reste peu, sinon « dernières places » si le portail l'indique
+      var low = d.seats > 0 || d.availability === 'Low availability';
+      var tag = d.seats > 0 ? (FR ? d.seats + (d.seats > 1 ? ' places' : ' place') : d.seats + (d.seats > 1 ? ' spots left' : ' spot left')) : low ? L('Few left') : '';
+      return '<button type="button" class="xp-slot' + (low ? ' low' : '') + '" data-i="' + i + '" title="' + (low ? L('Few places left') : L('Available')) + '">' + esc(d.time) + (tag ? '<small>' + tag + '</small>' : '') + '</button>';
     }).join('');
     var pick = function (i) {
       slots.querySelectorAll('.xp-slot').forEach(function (b) { b.classList.toggle('on', +b.dataset.i === i); });
@@ -160,7 +169,7 @@
       var a = +form.adults.value, c = +form.children.value;
       if (a + c < 1) { tot.textContent = '—'; return; }
       fetch('/api/sx/quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ departure_id: state.dep.id, adults: a, children: c }) })
-        .then(function (r) { return r.json(); }).then(function (q) { tot.textContent = q.total_aed ? aed(q.pay_aed || q.total_aed) : '—'; var fe = modal.querySelector('[data-sx-fee]'); if (fe) fe.textContent = q.card_fee_aed ? (FR ? 'Dont ' + aed(q.card_fee_aed) + ' de frais de paiement par carte (' + q.card_fee_pct + ' %). Aucun frais par virement.' : 'Includes ' + aed(q.card_fee_aed) + ' card processing fee (' + q.card_fee_pct + '%). No fee by bank transfer.') : ''; err.textContent = q.error ? (ERR[q.error] || L('Price unavailable for this selection.')) : ''; });
+        .then(function (r) { return r.json(); }).then(function (q) { state.pay = q.total_aed ? aed(q.pay_aed || q.total_aed) : '—'; tot.innerHTML = q.total_aed ? was(q.was_aed) + state.pay : '—'; var fe = modal.querySelector('[data-sx-fee]'); if (fe) fe.textContent = q.card_fee_aed ? (FR ? 'Dont ' + aed(q.card_fee_aed) + ' de frais de paiement par carte (' + q.card_fee_pct + ' %). Aucun frais par virement.' : 'Includes ' + aed(q.card_fee_aed) + ' card processing fee (' + q.card_fee_pct + '%). No fee by bank transfer.') : ''; err.textContent = q.error ? (ERR[q.error] || L('Price unavailable for this selection.')) : ''; });
     }, 250);
   }
 
@@ -200,7 +209,7 @@
     if (form.name.value.trim().length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim()) || form.phone.value.trim().length < 6) { err.textContent = L('Please fill in your name, email and phone first.'); return; }
     var a = +form.adults.value, c = +form.children.value;
     var p = new URLSearchParams({ form_name: 'Bank Transfer Request', name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim(),
-      type: 'Shared experience (bank transfer)', message: (modal.querySelector('[data-sx-title]').textContent) + ' · ' + state.dep.date + ' ' + state.dep.time + ' · ' + a + ' adult(s), ' + c + ' child(ren) · departure #' + state.dep.id + ' · quoted ' + modal.querySelector('[data-sx-total]').textContent + ' (card total)', website: '', submitted_at: new Date().toLocaleString('fr-FR') });
+      type: 'Shared experience (bank transfer)', message: (modal.querySelector('[data-sx-title]').textContent) + ' · ' + state.dep.date + ' ' + state.dep.time + ' · ' + a + ' adult(s), ' + c + ' child(ren) · departure #' + state.dep.id + ' · quoted ' + (state.pay || '—') + ' (card total)', website: '', submitted_at: new Date().toLocaleString('fr-FR') });
     fetch('https://script.google.com/macros/s/AKfycbwT-6-C2qRtUhX4MXVhFzNUd5t1By9PDNdHfZ3krMiW8LIVgnC6ry-Qyon7Fam2B0gd/exec', { method: 'POST', body: p, mode: 'no-cors' }).catch(function () {});
     bank.disabled = true;
     err.classList.add('ok'); err.textContent = L('Request sent. We will email you our bank details shortly.');
