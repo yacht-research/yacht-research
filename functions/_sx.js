@@ -49,8 +49,8 @@ export function retailMinor(b2bMinor, env) {
 export const PUBLIC_FEED = 'https://xclusiveyachts.com/tours-data/tours.json';
 const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v3';
 // Prix affiché (hors frais de carte) fixé en proportion du prix public pour certains produits (décisions Mathis) :
-// speedboat 125 AED pour 160 (26/11), superyacht Stardom 399 AED pour 460 (27/11 ; le Sundowner à 510 suit la même proportion)
-const SLUG_RETAIL = { 'sightseeing-tours-dubai': 125 / 160, 'super-yacht-experience-dubai-tour': 399 / 460 };
+// speedboat 122 AED pour 160 (27/11), superyacht Stardom 399 AED pour 460 (27/11 ; le Sundowner à 510 suit la même proportion)
+const SLUG_RETAIL = { 'sightseeing-tours-dubai': 122 / 160, 'super-yacht-experience-dubai-tour': 399 / 460 };
 export function discount(env) {
   const d = parseFloat(env.SX_DISCOUNT);
   return isFinite(d) && d >= 0 && d < 0.5 ? d : 0.1;
