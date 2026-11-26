@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '76'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '77'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -749,7 +749,9 @@ pages.push({
   var XG = { 'Catering': 'Restauration', 'Beverages': 'Boissons', 'Watersports': 'Sports nautiques', 'Decorations': 'Décoration', 'Transportation': 'Transferts', 'Photo & Video': 'Photo et vidéo', 'Entertainment': 'Animation', 'Miscellaneous': 'Divers', 'Food': 'Restauration', 'Photo and video': 'Photo et vidéo', 'Other extras': 'Autres extras' };
   function money(n){ return FR ? Number(n).toLocaleString('fr-FR') + ' AED' : 'AED ' + Number(n).toLocaleString('en-US'); }
   function xesc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var xOnRequest = false; // charter de la flotte partenaire dont la liste d'extras n'est pas encore relevée
   function extrasHtml(){
+    if (xOnRequest && !xItems.length && selected === 'Charter') return '<div class="xf"><p class="xf-h">' + (FR ? 'Extras à bord (sur demande)' : 'Extras on board (on request)') + '</p><p class="lx-small" style="margin:0">' + (FR ? 'Restauration, boissons, décoration, photographe, DJ, sports nautiques et bien plus encore : précisez vos envies dans le message, nous les ajoutons à votre devis.' : 'Catering, drinks, decorations, photographer, DJ, water sports and more: tell us what you would like in your message and we include it in your quote.') + '</p></div>';
     if (!xItems.length || selected !== 'Charter') return '';
     var groups = []; xItems.forEach(function(x){ var g = x.g || 'Other extras'; if (groups.indexOf(g) < 0) groups.push(g); });
     return '<div class="xf"><p class="xf-h">' + (FR ? 'Extras à bord (en option)' : 'Extras on board (optional)') + '</p>' + groups.map(function(g){
@@ -775,8 +777,9 @@ pages.push({
   function extrasPicked(){ return [].map.call(document.querySelectorAll('.xf-x:checked'), function(i){ return i.value; }); }
   if (/^[a-z0-9-]{3,120}$/.test(xSlug)) fetch('/content/yachts/' + xSlug + '.json').then(function(r){ return r.json(); }).then(function(y){
     xItems = (y && y.extras && y.extras.items) || [];
+    xOnRequest = !!(y && y.listing_type === 'charter' && /B2B/.test(y.price_note || ''));
     var box = document.getElementById('dynamic-fields');
-    if (xItems.length && box.children.length && !box.querySelector('.xf')) box.insertAdjacentHTML('beforeend', extrasHtml());
+    if ((xItems.length || xOnRequest) && box.children.length && !box.querySelector('.xf')) box.insertAdjacentHTML('beforeend', extrasHtml());
   }).catch(function(){});
 
   function sel(id, label, opts){ return '<label class="field"><span>' + t(label) + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option value="' + (i ? o : '') + '">' + t(o) + '</option>'; }).join('') + '</select></label>'; }
