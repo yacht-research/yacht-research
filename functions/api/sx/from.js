@@ -1,6 +1,6 @@
 // GET /api/sx/from → prix client « à partir de » (1 adulte, frais de carte compris) de chaque produit Xclusive
 // sur les 14 prochains jours, avec le prix public de référence du même horaire (affiché barré).
-// Résultat gardé 1 h (15 min s'il manque des prix). Le tarif B2B ne quitte jamais le serveur.
+// Résultat gardé 1 h (1 min s'il manque encore des tarifs B2B : ils se complètent 20 par appel). Le tarif B2B ne quitte jamais le serveur.
 import { json, xc, dubaiToday, publicSlots, publicMinor, sellMinor, b2bPrices } from '../../_sx.js';
 
 const CACHE_HOST = 'https://sx-cache.yachtresearchgroup.com';
@@ -45,6 +45,6 @@ export async function onRequestGet(ctx) {
     if (!(d.product in from) || aed < from[d.product]) { from[d.product] = aed; was[d.product] = w && w / 100 > aed ? w / 100 : null; }
   });
   const out = { enabled: true, days: DAYS, from, was };
-  ctx.waitUntil(cache.put(fReq, new Response(JSON.stringify(out), { headers: { 'Cache-Control': 'max-age=' + (missing ? 900 : 3600) } })));
+  ctx.waitUntil(cache.put(fReq, new Response(JSON.stringify(out), { headers: { 'Cache-Control': 'max-age=' + (missing ? 60 : 3600) } })));
   return json(out);
 }
