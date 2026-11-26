@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '75'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '76'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -262,6 +262,7 @@ const SX_MODAL = `<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-
     <label class="field"><span>Phone (with country code)</span><input name="phone" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" required></label>
     <div class="sx-total"><span>Total</span><b data-sx-total>—</b></div>
     <p class="sx-fee" data-sx-fee></p>
+    <div data-sx-addons hidden></div>
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
     <button type="button" class="sx-bank" data-sx-bank>Prefer a bank transfer? Request our bank details</button>

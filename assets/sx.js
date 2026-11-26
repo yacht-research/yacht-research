@@ -28,6 +28,8 @@
     'Live times and prices. Choose a time and send your request: we confirm your seats with you directly by WhatsApp or email.': 'Horaires et prix en direct. Choisissez un horaire et envoyez votre demande : nous vous confirmons vos places directement par WhatsApp ou par e-mail.',
     'Live times are unavailable right now. Send us your request and we will confirm availability for you.': 'Les horaires en direct sont momentanément indisponibles. Envoyez-nous votre demande et nous vérifierons les disponibilités pour vous.',
     'Price when booking direct': 'Prix en réservant en direct',
+    'Add-ons on request': 'Add-ons sur demande',
+    'Add-ons are arranged on request. To include them, message us on WhatsApp instead of paying here: we book your seats together with the add-ons and send you the payment details.': 'Les add-ons sont sur demande. Pour en ajouter, écrivez-nous sur WhatsApp au lieu de payer ici : nous réservons vos places avec les add-ons et vous envoyons les détails du paiement.',
     'Price unavailable for this selection.':'Prix indisponible pour cette sélection.',
     '(Dubai time)': '(heure de Dubaï)', 'at': 'à', 'Adults': 'Adultes', 'Children': 'Enfants',
     'Redirecting to payment… ': 'Redirection vers le paiement… ', 'Pay securely ': 'Payer en toute sécurité ',
@@ -129,7 +131,7 @@
     cards.forEach(function (c) { c.querySelector('[data-slots]').innerHTML = '<span class="xp-wait">' + L('Loading times…') + '</span>'; });
     fetch('/api/sx/departures?date=' + encodeURIComponent(state.date)).then(function (r) { return r.json(); }).then(function (d) {
       if (!d.enabled) throw new Error('off');
-      state.bookings = !!d.bookings;
+      state.bookings = !!d.bookings; state.addons = d.addons || {};
       note.textContent = /sx=cancelled/.test(location.search) ? L('Payment cancelled: nothing has been charged.')
         : /sx=failed/.test(location.search) ? L('Payment declined: nothing has been charged. Please try again or use another card.')
         : d.test ? L('TEST MODE · payments are simulated, nothing is charged and no seat is booked.')
@@ -174,8 +176,21 @@
     }, 250);
   }
 
+  // Add-ons de l'expérience : sur demande (l'API ne permet pas de les réserver), le client nous contacte sur WhatsApp
+  function addonsBox(dep) {
+    var box = modal.querySelector('[data-sx-addons]'); if (!box) return;
+    var list = (state.addons && dep.slug && state.addons[dep.slug]) || [];
+    box.hidden = !list.length; if (!list.length) { box.innerHTML = ''; return; }
+    var AFR = { 'Birthday Celebrations': 'Anniversaire', 'Photographer (1hr)': 'Photographe (1 h)', 'Unlimited beers': 'Bières à volonté', 'Romantic Decorations': 'Décoration romantique', 'Butler Service': 'Service de majordome', 'Upper Deck Seat': 'Place sur le pont supérieur', 'Moët & Chandon': 'Moët & Chandon', 'MoÃ«t & Chandon': 'Moët & Chandon' };
+    var unit = function (u) { return u === 'adult' ? (FR ? ' / adulte' : ' / adult') : u === 'guest' ? (FR ? ' / pers.' : ' / guest') : ''; };
+    box.innerHTML = '<details class="xg sx-addons"><summary>' + L('Add-ons on request') + '<small>' + list.length + '</small><em></em></summary><div class="xl">' +
+      list.map(function (a) { return '<div class="x" style="grid-template-columns:1fr auto;cursor:default"><span class="xn">' + esc(FR && AFR[a.n] ? AFR[a.n] : a.n.replace('MoÃ«t', 'Moët')) + '</span><span class="xp">' + aed(a.p) + '<small>' + unit(a.u) + '</small></span></div>'; }).join('') +
+      '<p class="sx-addon-note">' + L('Add-ons are arranged on request. To include them, message us on WhatsApp instead of paying here: we book your seats together with the add-ons and send you the payment details.') + '</p>' +
+      '<div class="yp-wa"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp ' + (FR ? 'EAU' : 'UAE') + '</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp FR</a></div></div></details>';
+  }
+
   function open(dep, title) {
-    state.dep = dep; err.textContent = ''; err.classList.remove('ok');
+    state.dep = dep; err.textContent = ''; err.classList.remove('ok'); addonsBox(dep);
     modal.querySelector('[data-sx-title]').textContent = title || dep.product;
     modal.querySelector('[data-sx-when]').textContent = dep.date + ' ' + L('at') + ' ' + dep.time + ' ' + L('(Dubai time)');
     modal.querySelector('[data-sx-a]').textContent = (dep.categories && dep.categories.adults) || L('Adults');

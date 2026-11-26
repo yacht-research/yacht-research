@@ -50,7 +50,7 @@
     ],
     "updated": "2026-11-15",
     "extras": {
-        "checked": "2026-11-26",
+        "checked": "2026-11-27",
         "source": "public",
         "items": [
             {
@@ -204,6 +204,38 @@
                 "fr": "Bouteille de whisky Jack Daniel’s",
                 "p": 230,
                 "d": 250
+            },
+            {
+                "k": "cat-101",
+                "g": "Beverages",
+                "n": "Unlimited Mocktail Package",
+                "fr": "Formule mocktails à volonté",
+                "p": 6900,
+                "d": 7500
+            },
+            {
+                "k": "cat-100",
+                "g": "Beverages",
+                "n": "Unlimited Mocktail Package",
+                "fr": "Formule mocktails à volonté",
+                "p": 2760,
+                "d": 3000
+            },
+            {
+                "k": "cat-130",
+                "g": "Beverages",
+                "n": "Unlimited Cocktail Package",
+                "fr": "Formule cocktails à volonté",
+                "p": 4140,
+                "d": 4500
+            },
+            {
+                "k": "cat-131",
+                "g": "Beverages",
+                "n": "Unlimited Cocktail Package",
+                "fr": "Formule cocktails à volonté",
+                "p": 10350,
+                "d": 11250
             },
             {
                 "k": "water-1",

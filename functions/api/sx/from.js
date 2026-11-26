@@ -1,10 +1,10 @@
-// GET /api/sx/from → prix client « à partir de » (1 adulte, frais de carte compris) de chaque produit Xclusive
+// GET /api/sx/from → prix client « à partir de » (1 adulte, hors frais de carte) de chaque produit Xclusive
 // sur les 14 prochains jours, avec le prix public de référence du même horaire (affiché barré).
 // Résultat gardé 1 h (1 min s'il manque encore des tarifs B2B : ils se complètent 20 par appel). Le tarif B2B ne quitte jamais le serveur.
 import { json, xc, dubaiToday, publicSlots, publicMinor, sellMinor, b2bPrices } from '../../_sx.js';
 
 const CACHE_HOST = 'https://sx-cache.yachtresearchgroup.com';
-const FROM_KEY = CACHE_HOST + '/from/v2';
+const FROM_KEY = CACHE_HOST + '/from/v3';
 const DAYS = 14, MAX_QUOTES = 20;
 
 function addDays(iso, k) { return new Date(Date.parse(iso + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10); }
@@ -41,7 +41,7 @@ export async function onRequestGet(ctx) {
   open.forEach(d => {
     const m = b2b(d);
     if (!m) { missing = true; return; }
-    const slot = pub[d.id], w = publicMinor(slot, 1, 0), s = sellMinor(env, m, w, slot && slot[5]), aed = (s.retail + s.fee) / 100;
+    const slot = pub[d.id], w = publicMinor(slot, 1, 0), s = sellMinor(env, m, w, slot && slot[5]), aed = s.retail / 100; // hors frais de carte
     if (!(d.product in from) || aed < from[d.product]) { from[d.product] = aed; was[d.product] = w && w / 100 > aed ? w / 100 : null; }
   });
   const out = { enabled: true, days: DAYS, from, was };

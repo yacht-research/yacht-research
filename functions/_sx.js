@@ -47,11 +47,11 @@ export function retailMinor(b2bMinor, env) {
 // B2B + SX_MARKUP. Sans prix public connu (flux indisponible, catégorie sans prix) : B2B + SX_MARKUP.
 // ------------------------------------------------------------
 export const PUBLIC_FEED = 'https://xclusiveyachts.com/tours-data/tours.json';
-const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v2';
-// Remise propre à un produit public (slug du site public) : le speedboat est vendu 125 AED au lieu de 160 (décision Mathis 2026-11-26)
-const SLUG_DISCOUNT = { 'sightseeing-tours-dubai': 1 - 125 / 160 };
-export function discount(env, slug) {
-  if (slug && SLUG_DISCOUNT[slug] != null) return SLUG_DISCOUNT[slug];
+const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v3';
+// Prix affiché (hors frais de carte) fixé en proportion du prix public pour certains produits (décisions Mathis) :
+// speedboat 125 AED pour 160 (26/11), superyacht Stardom 399 AED pour 460 (27/11 ; le Sundowner à 510 suit la même proportion)
+const SLUG_RETAIL = { 'sightseeing-tours-dubai': 125 / 160, 'super-yacht-experience-dubai-tour': 399 / 460 };
+export function discount(env) {
   const d = parseFloat(env.SX_DISCOUNT);
   return isFinite(d) && d >= 0 && d < 0.5 ? d : 0.1;
 }
@@ -66,7 +66,10 @@ export async function publicSlots(env, ctx) {
     if (!r.ok) return {};
     tours = await r.json();
   } catch (e) { return {}; }
-  const map = {};
+  const map = {}, addons = {};
+  // add-ons de chaque expérience (sur demande chez nous : l'API ne permet pas de les réserver)
+  (Array.isArray(tours) ? tours : []).forEach(t => { if (t.slug && Array.isArray(t.addons) && t.addons.length) addons[t.slug] = t.addons.filter(a => a && a.label && a.price > 0).map(a => ({ k: a.key, n: a.label, d: a.desc || '', p: Number(a.price), u: a.unit || '' })); });
+  map._a = addons;
   (Array.isArray(tours) ? tours : []).forEach(t => (t.timeSlots || []).forEach(s => {
     if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out, t.slug || ''];
   }));
@@ -84,8 +87,10 @@ export function publicMinor(slot, adults, children) {
 export function sellMinor(env, b2bMinor, pubMinor, slug) {
   const floor = retailMinor(b2bMinor, env);
   let retail = floor;
-  if (pubMinor > 0) {
-    const target = Math.floor((pubMinor * (1 - discount(env, slug))) / 100) * 100;
+  if (pubMinor > 0 && slug && SLUG_RETAIL[slug]) {
+    retail = Math.max(Math.floor((pubMinor * SLUG_RETAIL[slug]) / 100) * 100, floor);
+  } else if (pubMinor > 0) {
+    const target = Math.floor((pubMinor * (1 - discount(env))) / 100) * 100;
     let r = Math.floor(target / (1 + cardFeePct(env) / 100) / 100) * 100;
     while (r > floor && r + cardFeeMinor(r, env) > target) r -= 100;
     retail = Math.max(r, floor);

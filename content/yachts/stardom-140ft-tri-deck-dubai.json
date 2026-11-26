@@ -51,7 +51,7 @@
     "video": "/videos/yachts/stardom-140ft-tri-deck-dubai.mp4",
     "video_poster": "/videos/yachts/stardom-140ft-tri-deck-dubai.jpg",
     "extras": {
-        "checked": "2026-11-26",
+        "checked": "2026-11-27",
         "source": "public",
         "items": [
             {
@@ -421,6 +421,22 @@
                 "fr": "5 briques de jus de cranberry",
                 "p": 320,
                 "d": 350
+            },
+            {
+                "k": "cat-101",
+                "g": "Beverages",
+                "n": "Unlimited Mocktail Package",
+                "fr": "Formule mocktails à volonté",
+                "p": 6900,
+                "d": 7500
+            },
+            {
+                "k": "cat-131",
+                "g": "Beverages",
+                "n": "Unlimited Cocktail Package",
+                "fr": "Formule cocktails à volonté",
+                "p": 10350,
+                "d": 11250
             },
             {
                 "k": "water-3",
