@@ -13,7 +13,8 @@ export async function onRequestPost(ctx) {
   ]);
   if (!q.ok) return json({ error: q.code }, q.status >= 500 ? 502 : 409);
   const was = publicMinor(pub[departure_id], adults, children);
-  const { retail, fee } = sellMinor(env, q.data.total_minor, was);
+  const slot = pub[departure_id];
+  const { retail, fee } = sellMinor(env, q.data.total_minor, was, slot && slot[5]);
   return json({
     departure_id, adults, children, total_aed: retail / 100, card_fee_aed: fee / 100, card_fee_pct: cardFeePct(env), pay_aed: (retail + fee) / 100,
     was_aed: was && was > retail + fee ? was / 100 : null, currency: 'AED'

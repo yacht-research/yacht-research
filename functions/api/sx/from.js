@@ -41,7 +41,7 @@ export async function onRequestGet(ctx) {
   open.forEach(d => {
     const m = b2b(d);
     if (!m) { missing = true; return; }
-    const w = publicMinor(pub[d.id], 1, 0), s = sellMinor(env, m, w), aed = (s.retail + s.fee) / 100;
+    const slot = pub[d.id], w = publicMinor(slot, 1, 0), s = sellMinor(env, m, w, slot && slot[5]), aed = (s.retail + s.fee) / 100;
     if (!(d.product in from) || aed < from[d.product]) { from[d.product] = aed; was[d.product] = w && w / 100 > aed ? w / 100 : null; }
   });
   const out = { enabled: true, days: DAYS, from, was };

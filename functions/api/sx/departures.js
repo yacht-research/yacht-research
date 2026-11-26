@@ -34,7 +34,7 @@ export async function onRequestGet(ctx) {
 
   const departures = list.map(d => {
     const slot = pub[d.id], m = b2b(d), was = publicMinor(slot, 1, 0);
-    const s = m ? sellMinor(env, m, was) : null;
+    const s = m ? sellMinor(env, m, was, slot && slot[5]) : null;
     const pay = s ? s.retail + s.fee : null;
     return {
       id: d.id, product_id: d.product_id, product: d.product, date: d.date, time: d.time,

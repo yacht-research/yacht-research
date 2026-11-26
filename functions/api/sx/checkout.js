@@ -33,7 +33,8 @@ export async function onRequestPost({ env, request }) {
 
   // 4) paiement au prix client (prix public de l'horaire −10 %, jamais sous B2B + marge), même calcul que /api/sx/quote
   const pub = await publicSlots(env);
-  const { retail, fee } = sellMinor(env, b2b, publicMinor(pub[departure_id], adults, children));
+  const slot = pub[departure_id];
+  const { retail, fee } = sellMinor(env, b2b, publicMinor(slot, adults, children), slot && slot[5]);
   const origin = new URL(request.url).origin;
   const guests = adults + children;
   const fr = b.lang === 'fr';

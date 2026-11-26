@@ -47,8 +47,11 @@ export function retailMinor(b2bMinor, env) {
 // B2B + SX_MARKUP. Sans prix public connu (flux indisponible, catégorie sans prix) : B2B + SX_MARKUP.
 // ------------------------------------------------------------
 export const PUBLIC_FEED = 'https://xclusiveyachts.com/tours-data/tours.json';
-const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v1';
-export function discount(env) {
+const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v2';
+// Remise propre à un produit public (slug du site public) : le speedboat est vendu 125 AED au lieu de 160 (décision Mathis 2026-11-26)
+const SLUG_DISCOUNT = { 'sightseeing-tours-dubai': 1 - 125 / 160 };
+export function discount(env, slug) {
+  if (slug && SLUG_DISCOUNT[slug] != null) return SLUG_DISCOUNT[slug];
   const d = parseFloat(env.SX_DISCOUNT);
   return isFinite(d) && d >= 0 && d < 0.5 ? d : 0.1;
 }
@@ -65,7 +68,7 @@ export async function publicSlots(env, ctx) {
   } catch (e) { return {}; }
   const map = {};
   (Array.isArray(tours) ? tours : []).forEach(t => (t.timeSlots || []).forEach(s => {
-    if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out];
+    if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out, t.slug || ''];
   }));
   const p = cache.put(key, new Response(JSON.stringify(map), { headers: { 'Cache-Control': 'max-age=300' } }));
   if (ctx && ctx.waitUntil) ctx.waitUntil(p); else await p;
@@ -78,11 +81,11 @@ export function publicMinor(slot, adults, children) {
   return (adults * slot[0] + children * (slot[1] || 0)) * 100;
 }
 // → { retail, fee } en fils : retail + fee ≤ prix public × (1 − remise), retail ≥ B2B + marge
-export function sellMinor(env, b2bMinor, pubMinor) {
+export function sellMinor(env, b2bMinor, pubMinor, slug) {
   const floor = retailMinor(b2bMinor, env);
   let retail = floor;
   if (pubMinor > 0) {
-    const target = Math.floor((pubMinor * (1 - discount(env))) / 100) * 100;
+    const target = Math.floor((pubMinor * (1 - discount(env, slug))) / 100) * 100;
     let r = Math.floor(target / (1 + cardFeePct(env) / 100) / 100) * 100;
     while (r > floor && r + cardFeeMinor(r, env) > target) r -= 100;
     retail = Math.max(r, floor);
