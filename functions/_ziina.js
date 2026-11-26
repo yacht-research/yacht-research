@@ -44,7 +44,8 @@ export async function confirmZiina(env, piId, token) {
 
   if (test) {
     // Mode test : on vérifie seulement que la réservation serait acceptée (rien n'est bloqué ni payé chez Xclusive)
-    const dry = await xc(env, '/validate-booking', { method: 'POST', body: booking });
+    // Nom « REFUND TEST » : refus simulé, pour tester le remboursement automatique Ziina (mode test seulement)
+    const dry = meta.n === 'REFUND TEST' ? { ok: false, code: 'forced_test_refusal' } : await xc(env, '/validate-booking', { method: 'POST', body: booking });
     if (!dry.ok && RETRY.has(dry.code)) return { state: 'retry', meta, test };
     let rf = null;
     if (!dry.ok) rf = await ziina(env, '/refund', { id: await stableUuid('refund|' + piId), payment_intent_id: piId, amount: Number(pi.amount), currency_code: 'AED', test: true });
