@@ -999,7 +999,7 @@ function card(y, i) {
   const specs = y.type === 'charter' ? '' : '<div class="specs"><div><b>' + esc(shortLen(y.length) || '—') + '</b><span>Length</span></div>' +
     (y.guests ? '<div><b>' + esc(y.guests) + '</b><span>Guests</span></div>' : '<div><b>' + esc(y.year || '—') + '</b><span>Year</span></div>') +
     (y.cabins ? '<div><b>' + esc(y.cabins) + '</b><span>Cabins</span></div>' : (l => '<div><b' + (l.length > 10 ? ' class="sm"' : '') + '>' + esc(l) + '</b><span>Location</span></div>')((y.location || '—').split(',')[0].trim())) + '</div>';
-  const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
+  const price = y.original_price ? '<span><s>' + esc(y.original_price) + '</s> ' + esc(y.price) + '</span>' : y.direct_price ? '<span><s>' + esc(y.direct_price.replace(/ per hour$/, '')) + '</s> ' + esc(y.price) + '</span>' : esc(y.price || 'Price on request');
   return '\n    <a class="card rv' + (i % 4 ? ' d' + (i % 4) : '') + '" href="/yacht/' + esc(y.slug) + '"><div class="ph"><img src="' + esc(y.thumb || y.image) + '" alt="' + esc(y.title) + (y.type === 'charter' ? ' yacht charter' : ' for sale') + '" loading="lazy"><span class="tag">' + badgeLabel(y.badge, y.type) + '</span></div>' +
     '<div class="bd"><small>' + esc(sub) + '</small><h4>' + splitTitle(y.title) + '</h4>' + specs + '<div class="price">' + price + ' <i>→</i></div></div></a>';
 }
