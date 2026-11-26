@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Yacht Research">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://images.unsplash.com">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=73">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/yr.css?v=74">
 <link rel="alternate" hreflang="en" href="https://yachtresearchgroup.com/yacht-research-form"><link rel="alternate" hreflang="fr" href="https://yachtresearchgroup.com/fr/yacht-research-form"><link rel="alternate" hreflang="x-default" href="https://yachtresearchgroup.com/yacht-research-form">
 </head>
 <body>
@@ -122,7 +122,7 @@
   <p>We use cookies for basic site functionality and to improve your experience. See our <a href="/privacy-policy">Privacy Policy</a>.</p>
   <div><button data-consent="declined">Decline</button><button class="ok" data-consent="accepted">Accept</button></div>
 </div>
-<script src="/assets/yr.js?v=73" defer></script><script type="speculationrules">{"prerender":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
+<script src="/assets/yr.js?v=74" defer></script><script type="speculationrules">{"prerender":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
 <script>
 (function(){
   // Même adresse et mêmes champs que l'ancienne page (Google Apps Script : Sheets, mails, Brevo)
@@ -148,6 +148,25 @@
   if (preYacht && !selected) cards.forEach(function(c){ if (c.dataset.value === 'Yacht Acquisition') pick(c); });
   // Carte choisie par le bouton cliqué sur le site : le message pré-rempli ne vaut que pour elle
   var preCard = selected, prefill = preYacht ? t('Regarding: ') + preYacht + '\n' : '';
+  // Extras à bord d'un charter (venu d'une fiche : &slug=…&extras=k1,k2) : cases à cocher à l'étape 2, ajoutées au message
+  var xSlug = qs.get('slug') || '', xPre = (qs.get('extras') || '').split(',').filter(Boolean), xItems = [];
+  var XG = { 'Food': 'Restauration', 'Drinks': 'Boissons', 'Entertainment': 'Animation', 'Photo and video': 'Photo et vidéo', 'Decoration': 'Décoration', 'Water sports': 'Sports nautiques', 'Watersports': 'Sports nautiques', 'Other extras': 'Autres extras' };
+  function money(n){ return FR ? Number(n).toLocaleString('fr-FR') + ' AED' : 'AED ' + Number(n).toLocaleString('en-US'); }
+  function xesc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function extrasHtml(){
+    if (!xItems.length || selected !== 'Charter') return '';
+    var groups = []; xItems.forEach(function(x){ var g = x.g || 'Other extras'; if (groups.indexOf(g) < 0) groups.push(g); });
+    return '<div class="field full"><span>' + (FR ? 'Extras à bord (en option, prix par location)' : 'Extras on board (optional, price per charter)') + '</span>' + groups.map(function(g){
+      return '<p class="lx-xg">' + xesc(FR && XG[g] ? XG[g] : g) + '</p><div class="lx-xl">' + xItems.filter(function(x){ return (x.g || 'Other extras') === g; }).map(function(x){
+        return '<label class="lx-x"><input type="checkbox" class="xf-x" value="' + xesc(x.k) + '"' + (xPre.indexOf(x.k) > -1 ? ' checked' : '') + '><span>' + xesc(FR && x.fr ? x.fr : x.n) + '</span><b>' + (x.d > x.p ? '<s class="sx-was">' + money(x.d) + '</s> ' : '') + money(x.p) + '</b></label>';
+      }).join('') + '</div>';
+    }).join('') + '</div>';
+  }
+  function extrasPicked(){ return [].map.call(document.querySelectorAll('.xf-x:checked'), function(i){ return i.value; }); }
+  if (/^[a-z0-9-]{3,120}$/.test(xSlug)) fetch('/content/yachts/' + xSlug + '.json').then(function(r){ return r.json(); }).then(function(y){
+    xItems = (y && y.extras && y.extras.items) || [];
+    if (xItems.length && document.getElementById('step-2').classList.contains('active')) { formData.message = v('message'); buildDynamicFields(); }
+  }).catch(function(){});
 
   function sel(id, label, opts){ return '<label class="field"><span>' + t(label) + '</span><select id="' + id + '">' + opts.map(function(o, i){ return '<option value="' + (i ? o : '') + '">' + t(o) + '</option>'; }).join('') + '</select></label>'; }
   function buildDynamicFields(){
@@ -164,6 +183,7 @@
       html += '<label class="field"><span>' + t('Role') + '</span><input type="text" id="role" placeholder="' + t('Yacht broker, concierge, real estate...') + '"></label>';
     }
     html += '<label class="field full"><span>' + t('Message') + '</span><textarea id="message" rows="5" placeholder="' + t('Tell us more about your project, timeline, or any specific requirements...') + '"></textarea></label>';
+    html += extrasHtml();
     var box = document.getElementById('dynamic-fields'), keep = formData.message;
     // S'il change de carte, on retire le message pré-rempli (ex. un horaire d'expérience sous « Bespoke services »)
     if (keep === prefill && p !== preCard) keep = '';
@@ -185,7 +205,7 @@
   document.querySelectorAll('[data-next]').forEach(function(b){ b.addEventListener('click', function(){
     var f = +b.dataset.next;
     if (f === 1) { if (!selected) { document.getElementById('msg-1').textContent = t('Please select one option.'); document.getElementById('msg-1').className = 'cform-msg err'; return; } buildDynamicFields(); }
-    if (f === 2) { formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role') }; }
+    if (f === 2) { if (xItems.length) xPre = extrasPicked(); formData = { message: v('message'), budget: v('budget'), yacht_type: v('yacht_type'), market: v('market'), company: v('company'), role: v('role') }; }
     go('step-' + f, 'step-' + (f + 1), f === 1 ? '66%' : '100%');
   }); });
   document.querySelectorAll('[data-prev]').forEach(function(b){ b.addEventListener('click', function(){
@@ -204,7 +224,8 @@
       website: v('honeypot'), form_name: formName, experience: isXp ? preYacht : '',
       name: fname + ' ' + lname, email: email, phone: v('phone').trim(), country: v('country').trim(),
       type: selected, budget: formData.budget || '', yacht_type: formData.yacht_type || '', market: formData.market || '',
-      company: formData.company || '', role: formData.role || '', message: formData.message || '',
+      company: formData.company || '', role: formData.role || '',
+      message: (formData.message || '') + (selected === 'Charter' && xItems.length && xPre.length ? '\n\nExtras requested: ' + xItems.filter(function(x){ return xPre.indexOf(x.k) > -1; }).map(function(x){ return x.n + ' (AED ' + x.p + ')'; }).join(', ') : ''),
       submitted_at: new Date().toLocaleString('fr-FR')
     });
     fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});

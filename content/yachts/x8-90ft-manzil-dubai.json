@@ -42,5 +42,73 @@
         "/images/yachts/x8-90ft-manzil-dubai/07.webp",
         "/images/yachts/x8-90ft-manzil-dubai/08.webp"
     ],
-    "updated": "2026-11-10"
+    "updated": "2026-11-10",
+    "extras": {
+        "checked": "2026-11-26",
+        "items": [
+            {
+                "k": "cat-104",
+                "g": "Food",
+                "n": "Exotic Fruit Platter",
+                "fr": "Plateau de fruits exotiques",
+                "p": 460,
+                "d": 500,
+                "max": 5
+            },
+            {
+                "k": "misc-5",
+                "g": "Entertainment",
+                "n": "DJ & Equipment",
+                "fr": "DJ et matériel",
+                "p": 920,
+                "d": 1000,
+                "max": 1
+            },
+            {
+                "k": "misc-10",
+                "g": "Photo and video",
+                "n": "Photographer",
+                "fr": "Photographe",
+                "p": 920,
+                "d": 1000,
+                "max": 1
+            },
+            {
+                "k": "misc-14",
+                "g": "Photo and video",
+                "n": "Videographer",
+                "fr": "Vidéaste",
+                "p": 1100,
+                "d": 1200,
+                "max": 1
+            },
+            {
+                "k": "misc-11",
+                "g": "Photo and video",
+                "n": "Photographer & Videographer Package",
+                "fr": "Formule photographe et vidéaste",
+                "p": 1840,
+                "d": 2000,
+                "max": 1
+            },
+            {
+                "k": "misc-42",
+                "g": "Other extras",
+                "n": "Bartender",
+                "fr": "Barman",
+                "p": 1840,
+                "d": 2000,
+                "max": 1
+            },
+            {
+                "k": "misc-45",
+                "g": "Other extras",
+                "n": "Projector Screen Set Up",
+                "fr": "Installation d’un écran et d’un projecteur",
+                "p": 4600,
+                "d": 5000,
+                "max": 1
+            }
+        ]
+    }
 }
