@@ -319,7 +319,7 @@ export default {
   '10. Changes to this policy': '10. Modifications de cette politique',
   'We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated date. We encourage you to review this page periodically.': 'Nous pouvons mettre à jour cette politique de confidentialité. Toute modification sera publiée sur cette page avec sa date de mise à jour. Nous vous invitons à la consulter régulièrement.',
   'Contact for privacy matters': 'Contact pour vos données personnelles',
-  'Yacht Research · Worldwide<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a>': 'Yacht Research · Monde entier<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a>',
+  'Yacht Research · Worldwide<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a>': 'Yacht Research · Worldwide<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a>',
 
   // ---- Page introuvable
   'Page not found | Yacht Research': 'Page introuvable | Yacht Research',

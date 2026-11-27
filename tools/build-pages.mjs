@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '78'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '79'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -187,7 +187,7 @@ const yachtName = slug => { try { return JSON.parse(fs.readFileSync(path.join(SI
 const xesc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 const xpCard = (x, detail) => {
   const ys = x.yachts.map(s => [s, yachtName(s)]).filter(([, n]) => n);
-  return `<article class="xp-card rv${detail ? ' xp-solo' : ''}${x.featured && !detail ? ' xp-feat' : ''}" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}" data-title="${xesc(x.title)}"${x.from ? ` data-from="${x.from}"` : ''}>
+  return `<article class="xp-card rv${detail ? ' xp-solo' : ''}${x.featured && !detail ? ' xp-feat' : ''}" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}"${x.xslug ? ` data-xslug="${x.xslug}"` : ''} data-title="${xesc(x.title)}"${x.from ? ` data-from="${x.from}"` : ''}>
     <div class="xp-media" data-imgs="${xesc(JSON.stringify(x.images))}">
       <img src="${x.images[0]}-800.webp" srcset="${x.images[0]}-800.webp 800w, ${x.images[0]}.webp 1600w" sizes="(max-width:760px) 100vw, 560px" alt="${xesc(x.title)} in Dubai" width="800" height="533" loading="lazy">
       ${detail ? '' : `<a class="xp-hit" href="/shared-experiences/${x.id}" aria-label="${xesc(x.title)}: details"></a>`}

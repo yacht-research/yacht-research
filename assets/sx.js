@@ -142,7 +142,8 @@
       var used = {};
       cards.forEach(function (c) {
         var names = JSON.parse(c.dataset.names || '[]');
-        var mine = deps.filter(function (x) { return names.indexOf(x.product) > -1; });
+        // reconnue par son nom, ou par l'identifiant Xclusive du produit (les noms changent parfois chez eux)
+        var mine = deps.filter(function (x) { return !used[x.id] && (names.indexOf(x.product) > -1 || (c.dataset.xslug && x.slug === c.dataset.xslug)); });
         mine.forEach(function (x) { used[x.id] = 1; });
         fill(c, c.dataset.title, mine);
       });
@@ -192,17 +193,27 @@
   function open(dep, title) {
     state.dep = dep; err.textContent = ''; err.classList.remove('ok'); addonsBox(dep);
     modal.querySelector('[data-sx-title]').textContent = title || dep.product;
-    modal.querySelector('[data-sx-when]').textContent = dep.date + ' ' + L('at') + ' ' + dep.time + ' ' + L('(Dubai time)');
+    var left = dep.seats > 0 ? dep.seats : 0;
+    modal.querySelector('[data-sx-when]').textContent = dep.date + ' ' + L('at') + ' ' + dep.time + ' ' + L('(Dubai time)')
+      + (left ? ' · ' + (FR ? left + (left > 1 ? ' places restantes' : ' place restante') : left + (left > 1 ? ' spots left' : ' spot left')) : '');
     modal.querySelector('[data-sx-a]').textContent = (dep.categories && dep.categories.adults) || L('Adults');
     modal.querySelector('[data-sx-c]').textContent = (dep.categories && dep.categories.children) || L('Children');
-    form.adults.value = '2'; form.children.value = '0';
+    form.adults.value = String(left && left < 2 ? left : 2); form.children.value = '0';
+    capSeats();
     modal.hidden = false; document.body.style.overflow = 'hidden'; quote();
+  }
+  // Quand il reste peu de places (nombre connu), on ne peut pas choisir plus de participants qu'il n'en reste
+  function capSeats() {
+    var max = state.dep && state.dep.seats > 0 ? state.dep.seats : 0, a = +form.adults.value, c = +form.children.value;
+    [[form.adults, c], [form.children, a]].forEach(function (p) {
+      [].forEach.call(p[0].options, function (o) { o.disabled = !!max && +o.value + p[1] > max; });
+    });
   }
   function close() { modal.hidden = true; document.body.style.overflow = ''; }
   modal.querySelector('.sx-x').onclick = close;
   modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
-  form.adults.onchange = form.children.onchange = quote;
+  form.adults.onchange = form.children.onchange = function () { capSeats(); quote(); };
   // Retour arrière depuis la page de paiement : le navigateur restaure la page telle quelle (bouton bloqué), on la remet à zéro
   window.addEventListener('pageshow', function (e) {
     if (!e.persisted) return;
