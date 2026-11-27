@@ -80,9 +80,9 @@ export async function render({ env, request }, pageLang) {
     body = `<p class="eyebrow">${t[k + 'T']}</p><h1 class="t-l" style="margin:22px 0">${t[k + 'H']}</h1><p class="lead">${t[k + 'L']}</p>`;
   }
   const html = `<!DOCTYPE html><html lang="${v.lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${t.page} | Yacht Research</title><meta name="robots" content="noindex">` + HEAD_ASSETS + '</head><body>' + (fr ? NAV_FR : NAV) +
-    '<section class="sx-ok" style="min-height:80vh;display:grid;align-content:center;padding:140px var(--pad) 60px">' + body +
+    '<section class="sx-ok" style="min-height:80vh;display:grid;align-content:center;max-width:980px;box-sizing:border-box;padding:140px var(--pad) 60px">' + body +
     // Contacts : trois boutons de même taille sur une ligne (empilés sur mobile), puis « Autres expériences » à part, plus bas
-    `<style>.sx-ok-cta{display:grid;grid-template-columns:repeat(3,250px);gap:14px;justify-content:center;margin-top:30px}.sx-ok-cta .btn{width:100%;justify-content:center;white-space:nowrap;padding-left:16px;padding-right:16px}` +
+    `<style>.sx-ok .lead{margin-left:auto;margin-right:auto}.sx-ok-cta{display:grid;grid-template-columns:repeat(3,250px);gap:14px;justify-content:center;margin-top:30px}.sx-ok-cta .btn{width:100%;justify-content:center;white-space:nowrap;padding-left:16px;padding-right:16px}` +
     `.sx-ok-more{margin-top:56px;padding-top:30px;border-top:1px solid rgba(201,168,76,.18);text-align:center}.sx-ok-more a{color:var(--gold-l);font-size:13px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none}.sx-ok-more a:hover{color:var(--gold)}` +
     `@media(max-width:860px){.sx-ok-cta{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}}</style>` +
     `<div class="sx-ok-cta"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp ${fr ? 'EAU' : 'UAE'}</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp FR</a><a href="mailto:contact@yachtresearchgroup.com" class="btn btn-ghost">${fr ? 'Nous écrire' : 'Write to us'}</a></div>` +
