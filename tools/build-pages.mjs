@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '82'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '83'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -858,6 +858,7 @@ pages.push({
       submitted_at: new Date().toLocaleString('fr-FR')
     });
     fetch(APPS_SCRIPT_URL, { method: 'POST', body: params, mode: 'no-cors' }).catch(function(){});
+    if (window.yrTrack) window.yrTrack('lead', { form: formName });
     document.querySelector('.wiz-prog').style.visibility = 'hidden';
     go('step-3', 'success', '100%');
   });
