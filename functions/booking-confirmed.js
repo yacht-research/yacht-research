@@ -41,7 +41,12 @@ export async function render({ env, request }, pageLang) {
   const q = new URL(request.url).searchParams;
   let v = { kind: 'fail', lang: pageLang };
 
-  if (q.get('pi')) {
+  // Aperçu des différents écrans (site de prévisualisation seulement, jamais en production) : ?demo=paid|manual|processing|refund|pending|fail
+  const demo = q.get('demo'), host = new URL(request.url).hostname;
+  if (demo && !host.endsWith('yachtresearchgroup.com')) {
+    v = { lang: pageLang, name: 'Sarah Martin', product: 'Sunseeker Superyacht Experience', date: '2026-12-02', time: '19:00', guests: 2, totalMinor: 133500,
+      kind: demo === 'paid' || demo === 'manual' || demo === 'processing' ? (demo === 'paid' ? 'paid' : 'paid_processing') : demo, booked: demo === 'paid', manual: demo === 'manual' };
+  } else if (q.get('pi')) {
     const r = await confirmZiina(env, q.get('pi'), q.get('t'));
     const m = r.meta;
     if (m) {
@@ -76,11 +81,15 @@ export async function render({ env, request }, pageLang) {
   }
   const html = `<!DOCTYPE html><html lang="${v.lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${t.page} | Yacht Research</title><meta name="robots" content="noindex">` + HEAD_ASSETS + '</head><body>' + (fr ? NAV_FR : NAV) +
     '<section class="sx-ok" style="min-height:80vh;display:grid;align-content:center;padding:140px var(--pad) 60px">' + body +
-    `<div class="ctas" style="justify-content:center;margin-top:26px;flex-wrap:wrap"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp ${fr ? 'EAU' : 'UAE'} <i>→</i></a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp FR <i>→</i></a><a href="mailto:contact@yachtresearchgroup.com" class="btn btn-ghost">contact@yachtresearchgroup.com</a></div>` +
-    `<div class="ctas" style="justify-content:center;margin-top:14px"><a href="${fr ? '/fr' : ''}/shared-experiences" class="btn btn-ghost">${t.more}</a></div></section>` +
+    // Contacts : trois boutons de même taille sur une ligne (empilés sur mobile), puis « Autres expériences » à part, plus bas
+    `<style>.sx-ok-cta{display:grid;grid-template-columns:repeat(3,250px);gap:14px;justify-content:center;margin-top:30px}.sx-ok-cta .btn{width:100%;justify-content:center;white-space:nowrap;padding-left:16px;padding-right:16px}` +
+    `.sx-ok-more{margin-top:56px;padding-top:30px;border-top:1px solid rgba(201,168,76,.18);text-align:center}.sx-ok-more a{color:var(--gold-l);font-size:13px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none}.sx-ok-more a:hover{color:var(--gold)}` +
+    `@media(max-width:860px){.sx-ok-cta{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}}</style>` +
+    `<div class="sx-ok-cta"><a href="https://wa.me/qr/5NK5SR22CXGNC1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp ${fr ? 'EAU' : 'UAE'}</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" class="btn btn-gold" target="_blank" rel="noopener">WhatsApp FR</a><a href="mailto:contact@yachtresearchgroup.com" class="btn btn-ghost">${fr ? 'Nous écrire' : 'Write to us'}</a></div>` +
+    `<div class="sx-ok-more"><a href="${fr ? '/fr' : ''}/shared-experiences">${t.more} →</a></div></section>` +
     // Réservation pas encore faite (paiement en cours, ou finalisation) : la page se recharge toute seule (max 20 fois),
     // ce qui relance la réservation dès que c'est possible (par exemple après la recharge du wallet)
-    (v.kind === 'paid_processing' || v.kind === 'pending' ? `<script>(function(){try{var k='yr_rl_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}',n=+(sessionStorage.getItem(k)||0);if(n<20){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},${v.kind === 'pending' ? 10000 : 60000});}}catch(e){}})();</script>` : '') +
+    (!demo && (v.kind === 'paid_processing' || v.kind === 'pending') ? `<script>(function(){try{var k='yr_rl_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}',n=+(sessionStorage.getItem(k)||0);if(n<20){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},${v.kind === 'pending' ? 10000 : 60000});}}catch(e){}})();</script>` : '') +
     (fr ? FOOTER_FR : FOOTER) + SCRIPTS + '</body></html>';
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } });
 }
