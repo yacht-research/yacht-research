@@ -223,7 +223,7 @@ const SX_TEASER = `<section class="sxt rv">
   </a>
 </section>`;
 
-const SX_POLICY = 'Free cancellation up to 48 hours before departure. Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.';
+const SX_POLICY = 'Free cancellation up to 48 hours before departure (the card processing fee is not refunded). Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.';
 // Filtres de la page Shared experiences (même principe que Buy / Charter ; les tags sont calculés par yr.js)
 const XP_FILTERS = `<div class="xf" data-xf>
   <div class="filters xp-filters rv">
@@ -921,15 +921,15 @@ pages.push({
   <h2>2. Our role</h2>
   <p>Yacht Research acts as a booking agent and Yacht Broker. Shared experiences and charters are operated by our partner operators in Dubai, who are responsible for the yacht, its crew and safety on board. The captain may change the route, or shorten or cancel a cruise, for weather or safety reasons.</p>
   <h2>3. Shared experiences: prices</h2>
-  <p>Prices are per guest, in UAE dirhams (AED). The price that applies is the one shown for the chosen departure at the time of booking. A card processing fee of 3% is added to the total when paying by card, Apple Pay or Google Pay; there is no fee when paying by bank transfer. The full amount to pay is shown before payment.</p>
+  <p>Prices are per guest, in UAE dirhams (AED). The price that applies is the one shown for the chosen departure at the time of booking. A card processing fee of 3% is added to the total when paying by card, Apple Pay or Google Pay; there is no fee when paying by bank transfer. The full amount to pay is shown before payment. The card processing fee is not refunded when you cancel, but it is refunded if the sailing is cancelled by the operator or if your seats cannot be confirmed.</p>
   <h2>4. Shared experiences: booking and payment</h2>
   <p>Online payments are handled by Ziina. We never receive your full card details. Your booking is confirmed once the payment is confirmed and the operator has confirmed your seats. Your e-ticket is sent to the email address entered when booking. If the seats can no longer be confirmed after payment, for example because the departure has just sold out, your payment is refunded in full.</p>
   <p>To pay by bank transfer, request our bank details from the booking window or on WhatsApp. Your seats are booked once the transfer is received.</p>
   <h2>5. Add-ons</h2>
   <p>Add-ons (photographer, decoration, drinks and more) are arranged on request. To include them, contact us on WhatsApp before paying: they cannot be added to a booking already paid online. Their price is confirmed in writing.</p>
   <h2>6. Shared experiences: cancellation and changes</h2>
-  <ul><li>Free cancellation up to 48 hours before departure: the amount paid is refunded.</li><li>Later cancellations and no-shows are not refunded.</li><li>Changes of date or time can be requested up to 48 hours before departure, subject to availability and to any price difference.</li><li>If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.</li></ul>
-  <p>To cancel or change a booking, write to us by email or WhatsApp. Refunds are made to the payment method used: to your card for online payments, by bank transfer for bank transfer payments. The time it takes for a refund to reach your account depends on your bank.</p>
+  <ul><li>Free cancellation up to 48 hours before departure: the amount paid is refunded, except the card processing fee.</li><li>Later cancellations and no-shows are not refunded.</li><li>Changes of date or time can be requested up to 48 hours before departure, subject to availability and to any price difference.</li><li>If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.</li></ul>
+  <p>To cancel or change a booking, write to us by email or WhatsApp. Refunds are issued within 14 days to the payment method used: to your card for online payments, by bank transfer for bank transfer payments. The time it then takes to reach your account depends on your bank.</p>
   <h2>7. Private charters</h2>
   <p>Private charters are booked on request. Our written quote states the yacht, date, start time, duration, number of guests, extras, price, payment schedule and cancellation terms. The charter is confirmed once you accept the quote in writing and we receive the payment requested. Unless agreed otherwise, charters are paid by bank transfer.</p>
   <h2>8. On board</h2>

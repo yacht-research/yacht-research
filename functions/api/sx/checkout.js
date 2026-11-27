@@ -47,18 +47,27 @@ export async function onRequestPost({ env, request }) {
   if (payProvider(env) === 'ziina') {
     const token = await sealToken(env, { dep: departure_id, a: adults, c: children, b2b, retail, fee, n: name, p: phone, e: email, pr: dep.product.slice(0, 120), d: dep.date, t: dep.time, l: fr ? 'fr' : 'en' });
     const back = origin + (fr ? '/fr' : '') + '/shared-experiences';
-    const z = await ziina(env, '/payment_intent', {
-      amount: retail + fee,
-      currency_code: 'AED',
-      message: (zMsg(dep.product, fr) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
-      success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
-      cancel_url: back + '?sx=cancelled#sx',
-      failure_url: back + '?sx=failed#sx',
-      expiry: String(Date.now() + 30 * 60 * 1000),
-      test: ziinaTest(env)
-    });
-    if (!z.ok || !z.data.redirect_url) return json({ error: 'payment_unavailable' }, 424);
-    return json({ url: z.data.redirect_url });
+    const when = dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest');
+    // Ziina refuse certains libellés : on retente avec un libellé plus court, puis minimal, plutôt que de bloquer le paiement
+    const labels = [zMsg(dep.product, fr) + ' · ' + when, 'Yacht Research · ' + when, 'Yacht Research'];
+    let z, detail = '';
+    for (const message of labels) {
+      z = await ziina(env, '/payment_intent', {
+        amount: retail + fee,
+        currency_code: 'AED',
+        message,
+        success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
+        cancel_url: back + '?sx=cancelled#sx',
+        failure_url: back + '?sx=failed#sx',
+        expiry: String(Date.now() + 30 * 60 * 1000),
+        test: ziinaTest(env)
+      });
+      if (z.ok && z.data.redirect_url) return json({ url: z.data.redirect_url, ...(detail ? { note: detail } : {}) });
+      const d = z.data || {};
+      detail += (detail ? ' | ' : '') + z.status + ' ' + String(d.message || d.error || d.code || '').slice(0, 160);
+      if (z.status >= 500 || z.status === 401 || z.status === 503) break;
+    }
+    return json({ error: 'payment_unavailable', detail }, 424);
   }
 
   const meta = { departure_id, adults, children, b2b_minor: b2b, retail_minor: retail, card_fee_minor: fee, name, phone, email, product: dep.product.slice(0, 200), date: dep.date, time: dep.time };
