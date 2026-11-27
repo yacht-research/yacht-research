@@ -95,6 +95,30 @@
   // project=experience : la demande part comme « Shared Experience Enquiry » (son onglet, sa liste Brevo, sa séquence)
   function enquireHref(title, dep) { return U('/yacht-research-form') + '?project=experience&yacht=' + encodeURIComponent(title + ' · ' + dep.date + ' ' + dep.time); }
 
+  // Bateau de chaque horaire (code du flux public de l'opérateur) → notre fiche yacht. Codes absents : ligne « On board » d'origine.
+  var BOATS = { X1: ['altar-70ft-durreti-dubai', 'Altar'], X2: ['aura-90ft-gulf-craft-dubai', 'Aura'], X3: ['iris-62ft-majesty-dubai', 'Iris'],
+    X4: ['orion-48ft-al-shaali-dubai', 'Orion'], X5: ['uno-35ft-gulf-craft-dubai', 'Uno'], X6: ['leopard-65ft-lagoon-dubai', 'Leopard'],
+    X8: ['x8-90ft-manzil-dubai', 'X8'], X9: ['magnum-52ft-as-marine-dubai', 'Magnum'], X10: ['daphne-53ft-as-marine-dubai', 'Daphne'],
+    X12: ['elara-82ft-maiora-dubai', 'Elara'], X13: ['dos-40ft-gulf-craft-dubai', 'Dos'], X15: ['x15-125ft-amsca-marine-dubai', 'X15'],
+    X16: ['starlight-92ft-maiora-dubai', 'Starlight'], X20: ['tres-40ft-amsca-dubai', 'Tres'], X24: ['aries-64ft-bluewater-dubai', 'Aries'],
+    X25: ['freedom-80ft-classico-dubai', 'Freedom'], X32: ['vio-75ft-lux-dubai', 'Vio'], X34: ['solana-92ft-majesty-dubai', 'Solana'],
+    X35: ['icon-110ft-dubai', 'Icon'], X36: ['silo-82ft-gulf-explorer-dubai', 'Silo'], X37: ['polaris-92ft-amsca-dubai', 'Polaris'],
+    X40: ['x40-65ft-aicon-dubai', 'X40'], X41: ['x41-75ft-lux-dubai', 'X41'], X42: ['x42-92ft-amsca-dubai', 'X42'], X43: ['x43-80ft-amsca-dubai', 'X43'],
+    A1: ['stardom-140ft-tri-deck-dubai', 'Stardom'], A2: ['behike-141ft-tri-deck-dubai', 'Behike'], A4: ['encore-sunseeker-131ft-dubai', 'Encore'] };
+  var boatOf = function (d) { return d && BOATS[d.boat] || null; };
+  // Met à jour « On board » (carte, et sur la fiche d'une expérience le texte du haut) avec le bateau de l'horaire choisi
+  function onBoard(card, d) {
+    var els = card.classList.contains('xp-solo') ? document.querySelectorAll('[data-onboard]') : card.querySelectorAll('[data-onboard]');
+    var b = boatOf(d);
+    [].forEach.call(els, function (el) {
+      if (el.dataset.def == null) el.dataset.def = el.innerHTML;
+      // bateau inconnu pour cet horaire (départ absent du flux public, ou nouveau code) : on n'affirme rien
+      var lead = FR ? 'À bord à ' + esc(d.time) + ' : ' : 'On board at ' + esc(d.time) + ': ';
+      el.innerHTML = b ? lead + '<a href="' + U('/yacht/' + b[0]) + '" class="notranslate" translate="no">' + esc(b[1]) + '</a>'
+        : lead + (FR ? 'yacht précisé dans votre confirmation' : 'yacht named in your booking confirmation');
+    });
+  }
+
   // Remplit une carte avec ses départs du jour
   function fill(card, title, deps) {
     var slots = card.querySelector('[data-slots]'), price = card.querySelector('[data-price]'), cta = card.querySelector('[data-cta]');
@@ -120,6 +144,7 @@
         ? '<button type="button" class="btn btn-gold">' + L('Book') + ' ' + esc(d.time) + ' <i>→</i></button>'
         : '<a class="btn btn-gold" href="' + enquireHref(title, d) + '">' + L('Enquire for') + ' ' + esc(d.time) + ' <i>→</i></a>';
       var b = cta.querySelector('button'); if (b) b.onclick = function () { open(d, title); };
+      onBoard(card, d);
     };
     slots.querySelectorAll('.xp-slot').forEach(function (b) { b.onclick = function () { pick(+b.dataset.i); }; });
     pick(0);
@@ -194,13 +219,16 @@
     state.dep = dep; err.textContent = ''; err.classList.remove('ok'); addonsBox(dep);
     modal.querySelector('[data-sx-title]').textContent = title || dep.product;
     var left = dep.seats > 0 ? dep.seats : 0;
+    var bt = boatOf(dep);
     modal.querySelector('[data-sx-when]').textContent = dep.date + ' ' + L('at') + ' ' + dep.time + ' ' + L('(Dubai time)')
+      + (bt ? ' · ' + (FR ? 'À bord : ' : 'On board: ') + bt[1] : '')
       + (left ? ' · ' + (FR ? left + (left > 1 ? ' places restantes' : ' place restante') : left + (left > 1 ? ' spots left' : ' spot left')) : '');
     modal.querySelector('[data-sx-a]').textContent = (dep.categories && dep.categories.adults) || L('Adults');
     modal.querySelector('[data-sx-c]').textContent = (dep.categories && dep.categories.children) || L('Children');
     form.adults.value = String(left && left < 2 ? left : 2); form.children.value = '0';
     capSeats();
-    modal.hidden = false; document.body.style.overflow = 'hidden'; quote();
+    // comme le menu : la page derrière ne défile plus (classe sur <html>, nécessaire sur iPhone), seul le formulaire défile
+    modal.hidden = false; document.documentElement.classList.add('sx-lock'); quote();
   }
   // Quand il reste peu de places (nombre connu), on ne peut pas choisir plus de participants qu'il n'en reste
   function capSeats() {
@@ -209,7 +237,7 @@
       [].forEach.call(p[0].options, function (o) { o.disabled = !!max && +o.value + p[1] > max; });
     });
   }
-  function close() { modal.hidden = true; document.body.style.overflow = ''; }
+  function close() { modal.hidden = true; document.documentElement.classList.remove('sx-lock'); }
   modal.querySelector('.sx-x').onclick = close;
   modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });

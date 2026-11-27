@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '80'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '81'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -185,6 +185,15 @@ const B2B_NOTE = `<div class="b2b-wrap"><div class="b2b-note rv"><span class="ic
 const XP = JSON.parse(fs.readFileSync(path.join(SITE, 'content/experiences.json'), 'utf8'));
 const yachtName = slug => { try { return JSON.parse(fs.readFileSync(path.join(SITE, 'content/yachts', slug + '.json'), 'utf8')).title; } catch (e) { return ''; } };
 const xesc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+// « On board » : yachts habituels de l'expérience. Le bateau exact de chaque horaire est mis en direct par sx.js
+// (data-onboard) quand le client choisit un créneau.
+const onBoard = (ys, cls) => {
+  if (!ys.length) return '';
+  const links = ys.map(([s, n]) => `<a href="/yacht/${s}" class="notranslate" translate="no">${n}</a>`);
+  const en = `On board: ${links.join(' or ')}${ys.length > 1 ? ', depending on the departure time' : ''}`;
+  const fr = `À bord : ${links.join(' ou ')}${ys.length > 1 ? ', selon l’horaire choisi' : ''}`;
+  return `<p class="${cls}" data-onboard data-fr="${xesc(fr)}">${en}</p>`;
+};
 const xpCard = (x, detail) => {
   const ys = x.yachts.map(s => [s, yachtName(s)]).filter(([, n]) => n);
   return `<article class="xp-card rv${detail ? ' xp-solo' : ''}${x.featured && !detail ? ' xp-feat' : ''}" data-xp="${x.id}" data-names="${xesc(JSON.stringify(x.names))}"${x.xslug ? ` data-xslug="${x.xslug}"` : ''} data-title="${xesc(x.title)}"${x.from ? ` data-from="${x.from}"` : ''}>
@@ -201,7 +210,7 @@ const xpCard = (x, detail) => {
       ${x.from ? `<p class="xp-from"><small>Starting from</small> <b>AED ${x.from}</b> <small>per guest</small></p>` : ''}
       ${detail ? '' : `<p class="xp-sum">${x.summary}</p>`}
       <ul class="xp-hl">${x.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
-      ${ys.length ? `<p class="xp-yacht">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}" class="notranslate" translate="no">${n}</a>`).join(' or ')}</p>` : ''}
+      ${onBoard(ys, 'xp-yacht')}
       <div class="xp-slots" data-slots><span class="xp-wait">Loading times…</span></div>
       <div class="xp-foot"><p class="xp-price" data-price></p><span data-cta></span></div>
       <div class="xp-links">${detail ? '' : `<a href="/shared-experiences/${x.id}" class="xp-more-link">Details, meeting point and policy <i>→</i></a>`}<a class="xp-wa" href="${WA_UAE}" target="_blank" rel="noopener">${WA_SVG}WhatsApp UAE</a><a class="xp-wa" href="${WA_FR}" target="_blank" rel="noopener">${WA_SVG}WhatsApp FR</a></div>
@@ -292,7 +301,7 @@ const xpDetail = x => {
     <div class="lx-chips">${chips.map(([v, k]) => `<div><b${k === 'AED / guest' ? ' data-live-from' : ''}>${v}</b><span>${k}</span></div>`).join('')}</div></div>
   <div class="lx-mosaic lx-n${Math.min(x.images.length, 5)}">${x.images.slice(0, 5).map((im, i) => `<button class="yp-shot" data-full="${im}.webp"><img src="${i ? im + '-800' : im}.webp" alt="${xesc(x.title)} in Dubai photo ${i + 1}"${i ? ' loading="lazy" decoding="async"' : ' fetchpriority="high"'}></button>`).join('')}${x.images.length > 1 ? `<button class="lx-all" type="button" onclick="this.parentNode.querySelector('.yp-shot').click()">All ${x.images.length} photos</button>` : ''}</div>
   <div class="lx-body"><div class="lx-main">
-    <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${ys.length ? `<p class="lx-small">On board: ${ys.map(([s, n]) => `<a href="/yacht/${s}" class="notranslate" translate="no">${n}</a>`).join(' or ')}</p>` : ''}</section>
+    <section class="lx-sec"><h2>The experience</h2><div class="yp-desc"><p>${x.summary}</p><p>${x.about}</p></div>${onBoard(ys, 'lx-small')}</section>
     <section class="lx-sec lx-hl"><div class="yp-hl"><p class="eyebrow">Included</p><ul>${x.highlights.map(h => `<li>${h}</li>`).join('')}</ul></div></section>
     <section class="lx-sec"><h2>Good to know</h2><div class="lx-grid"><div><span>Meeting point</span><b>${x.meet}</b></div><div><span>Duration</span><b>${x.duration}</b></div>${x.note ? `<div><span>Please note</span><b>${x.note}</b></div>` : ''}<div><span>Shared yacht</span><b>Other guests join you on board. For the yacht to yourself, see our <a href="/charter">private charters</a>.</b></div></div>
       <ul class="lx-pts" style="margin-top:18px">${x.info.map(i => `<li>${i}</li>`).join('')}</ul></section>
