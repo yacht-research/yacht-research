@@ -4,4 +4,5 @@
 import accueil from './fr-accueil.mjs';
 import pages from './fr-pages.mjs';
 import experiences from './fr-experiences.mjs';
-export default Object.assign({}, accueil, pages, experiences);
+import legal from './fr-legal.mjs';
+export default Object.assign({}, accueil, pages, experiences, legal);

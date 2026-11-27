@@ -19,7 +19,7 @@ const ORIGIN = 'https://yachtresearchgroup.com';
 // pages traduites (les pages de test/démo restent en anglais seulement)
 const PAGES = ['index.html', 'listings.html', 'charter.html', 'shared-experiences.html', 'private-jet.html', 'bespoke.html',
   'why-us.html', 'yacht-club-academy.html', 'partnerships.html', 'recruitment.html', 'contact.html', 'yacht-research-form.html',
-  'privacy-policy.html', '404.html']
+  'privacy-policy.html', 'terms.html', 'legal-notice.html', '404.html']
   .concat(fs.readdirSync(path.join(SITE, 'shared-experiences')).filter(f => f.endsWith('.html')).map(f => 'shared-experiences/' + f));
 
 const dict = (await import('./i18n/fr.mjs')).default;

@@ -2,6 +2,11 @@
 // La réservation chez Xclusive n'est faite QU'APRÈS le paiement, avec le même prix B2B vérifié.
 import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
+// Ziina refuse certains caractères dans le libellé (le « & » de « Palm Jumeirah, Burj Al Arab & Marina » faisait échouer le paiement)
+function zMsg(s, fr) {
+  return String(s || '').replace(/&/g, fr ? ' et ' : ' and ').replace(/[<>"'`\\{}|^~[\]#%:;=+$@*]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+}
+
 export async function onRequestPost({ env, request }) {
   if (!bookingsOpen(env)) return json({ error: 'bookings_closed' }, 503);
   let b; try { b = await request.json(); } catch (e) { return json({ error: 'invalid_body' }, 400); }
@@ -19,7 +24,7 @@ export async function onRequestPost({ env, request }) {
 
   // 1) la sortie existe toujours et a encore des places
   const list = await xc(env, '/departures?date=' + date);
-  if (!list.ok) return json({ error: list.code }, 502);
+  if (!list.ok) return json({ error: list.code }, 424);
   const dep = (list.data.departures || []).find(d => d.id === departure_id);
   if (!dep || dep.availability === 'None') return json({ error: 'departure_unavailable' }, 409);
 
@@ -45,14 +50,14 @@ export async function onRequestPost({ env, request }) {
     const z = await ziina(env, '/payment_intent', {
       amount: retail + fee,
       currency_code: 'AED',
-      message: (dep.product.slice(0, 80) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
+      message: (zMsg(dep.product, fr) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
       success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
       cancel_url: back + '?sx=cancelled#sx',
       failure_url: back + '?sx=failed#sx',
       expiry: String(Date.now() + 30 * 60 * 1000),
       test: ziinaTest(env)
     });
-    if (!z.ok || !z.data.redirect_url) return json({ error: 'payment_unavailable' }, 502);
+    if (!z.ok || !z.data.redirect_url) return json({ error: 'payment_unavailable' }, 424);
     return json({ url: z.data.redirect_url });
   }
 
@@ -79,6 +84,6 @@ export async function onRequestPost({ env, request }) {
   };
   for (const [k, v] of Object.entries(meta)) { p['metadata[' + k + ']'] = String(v); p['payment_intent_data[metadata][' + k + ']'] = String(v); }
   const s = await stripe(env, '/checkout/sessions', p);
-  if (!s.ok || !s.data.url) return json({ error: 'payment_unavailable' }, 502);
+  if (!s.ok || !s.data.url) return json({ error: 'payment_unavailable' }, 424);
   return json({ url: s.data.url });
 }
