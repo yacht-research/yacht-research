@@ -90,6 +90,8 @@ export async function render({ env, request }, pageLang) {
     // Réservation pas encore faite (paiement en cours, ou finalisation) : la page se recharge toute seule (max 20 fois),
     // ce qui relance la réservation dès que c'est possible (par exemple après la recharge du wallet)
     (!demo && (v.kind === 'paid_processing' || v.kind === 'pending') ? `<script>(function(){try{var k='yr_rl_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}',n=+(sessionStorage.getItem(k)||0);if(n<20){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},${v.kind === 'pending' ? 10000 : 60000});}}catch(e){}})();</script>` : '') +
+    // Conversion « achat » pour Google Ads : une fois par paiement (le rechargement automatique ne la renvoie pas), jamais en test ni en démo
+    (!demo && !v.test && q.get('pi') && (v.kind === 'paid' || v.kind === 'paid_processing') ? `<script>document.addEventListener('DOMContentLoaded',function(){try{var k='yr_conv_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}';if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}catch(e){}if(window.yrTrack)window.yrTrack('purchase',{value:${(Number(v.totalMinor) || 0) / 100},currency:'AED',transaction_id:${JSON.stringify(String(q.get('pi')).replace(/[^A-Za-z0-9_-]/g, ''))}});});</script>` : '') +
     (fr ? FOOTER_FR : FOOTER) + SCRIPTS + '</body></html>';
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } });
 }

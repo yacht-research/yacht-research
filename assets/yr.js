@@ -1,4 +1,35 @@
 /* Yacht Research : animations et interactions communes à toutes les pages */
+
+// ---------- Mesure Google Ads / GA4 (Consent Mode v2) ----------
+// Rien n'est chargé tant que ADS_ID est vide. Identifiants publics (visibles dans toute page qui les utilise), pas des secrets.
+//   ADS_ID   : balise Google Ads « AW-… »       GA4_ID : flux GA4 « G-… » (optionnel)
+//   LABELS   : libellé de chaque action de conversion créée dans Google Ads (Objectifs › Conversions)
+// Les cookies publicitaires ne sont posés qu'après « Accept » sur le bandeau ; sans accord, Google ne reçoit que des signaux sans cookie.
+(function(){
+  var ADS_ID = '', GA4_ID = '';
+  var LABELS = { purchase: '', lead: '', whatsapp: '' };
+  var q = []; window.yrTrack = function(ev, p){ q.push([ev, p || {}]); };
+  if (!ADS_ID && !GA4_ID) return;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+  var ok = /(?:^|; )yr_cookie_consent=accepted/.test(document.cookie);
+  var st = function(g){ return { ad_storage: g, ad_user_data: g, ad_personalization: g, analytics_storage: g }; };
+  gtag('consent', 'default', Object.assign(st('denied'), { wait_for_update: 500 }));
+  if (ok) gtag('consent', 'update', st('granted'));
+  gtag('set', 'url_passthrough', true); // sans cookie, l'identifiant du clic publicitaire suit dans l'adresse jusqu'à la conversion
+  gtag('js', new Date());
+  if (ADS_ID) gtag('config', ADS_ID);
+  if (GA4_ID) gtag('config', GA4_ID);
+  var s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + (ADS_ID || GA4_ID); document.head.appendChild(s);
+  document.addEventListener('yr:consent', function(e){ gtag('consent', 'update', st(e.detail === 'accepted' ? 'granted' : 'denied')); });
+  window.yrTrack = function(ev, p){
+    p = p || {};
+    if (ADS_ID && LABELS[ev]) gtag('event', 'conversion', Object.assign({ send_to: ADS_ID + '/' + LABELS[ev] }, p));
+    if (GA4_ID) gtag('event', ev === 'lead' ? 'generate_lead' : ev === 'whatsapp' ? 'contact' : ev, p);
+  };
+  q.forEach(function(a){ window.yrTrack(a[0], a[1]); });
+})();
+
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function(s, r){ return (r || document).querySelector(s); };
@@ -795,6 +826,7 @@
       btn.disabled = true;
       fetch(APPS_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fd), mode: 'no-cors' }).catch(function(){});
       f.reset(); btn.disabled = false;
+      window.yrTrack('lead', { form: 'page' });
       say(L('Thank you. Your message has been sent, we will be in touch shortly.'), true);
     });
   });
@@ -819,8 +851,15 @@
     btn.disabled = true;
     fetch(APPS_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fd), mode: 'no-cors' }).catch(function(){});
     cf.reset(); btn.disabled = false;
+    window.yrTrack('lead', { form: 'contact' });
     say(L('Thank you. Your message has been sent, we will reply within 24 hours.'), true);
   });
+
+  // ---------- Clic sur un lien WhatsApp : conversion secondaire (contact) ----------
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+    if (a) window.yrTrack('whatsapp', { link_url: a.href.split('?')[0] });
+  }, true);
 
   // ---------- Bandeau cookies (même cookie que l'ancien site) ----------
   var cb = $('#cookie');
@@ -829,6 +868,7 @@
     $$('[data-consent]', cb).forEach(function(b){ b.addEventListener('click', function(){
       var d = new Date(); d.setTime(d.getTime() + 365 * 864e5);
       document.cookie = 'yr_cookie_consent=' + b.dataset.consent + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+      document.dispatchEvent(new CustomEvent('yr:consent', { detail: b.dataset.consent }));
       cb.classList.remove('show');
     }); });
   }
