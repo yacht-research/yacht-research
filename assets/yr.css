@@ -752,7 +752,7 @@ html.sx-lock,html.sx-lock body{overflow:hidden!important;overscroll-behavior:non
 .xp-hl li{position:relative;padding-left:18px;color:rgba(243,238,228,.86)}
 .xp-hl li:before{content:'◆';position:absolute;left:0;top:1px;font-size:9px;color:var(--gold)}
 .xp-yacht{margin:0;font-size:14px;color:rgba(243,238,228,.7)}
-.xp-yacht a{color:var(--gold-l);text-decoration:underline;text-underline-offset:3px}
+.xp-yacht a,.lx-small[data-onboard] a{color:var(--gold-l);text-decoration:underline;text-underline-offset:3px}
 .xp-slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px;min-height:44px;align-items:center}
 .xp-slot{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;padding:9px 12px;border-radius:12px;border:1px solid var(--line-2);background:transparent;color:inherit;font:inherit;font-size:15px;cursor:pointer;line-height:1.1}
 .xp-slot small{font-size:10px;color:#e8c06a;margin-top:3px;letter-spacing:.04em}
