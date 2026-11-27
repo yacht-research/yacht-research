@@ -42,5 +42,83 @@
         "/images/yachts/uno-35ft-gulf-craft-dubai/07.webp",
         "/images/yachts/uno-35ft-gulf-craft-dubai/08.webp"
     ],
-    "updated": "2026-11-10"
+    "updated": "2026-11-10",
+    "extras": {
+        "checked": "2026-11-27",
+        "source": "public",
+        "items": [
+            {
+                "k": "cat-61",
+                "g": "Catering",
+                "n": "Fruit Platter for 5",
+                "fr": "Plateau de fruits pour 5",
+                "p": 90,
+                "d": 100
+            },
+            {
+                "k": "cat-63",
+                "g": "Catering",
+                "n": "Nibbles",
+                "fr": "Amuse-bouches",
+                "p": 320,
+                "d": 350
+            },
+            {
+                "k": "misc-3",
+                "g": "Decorations",
+                "n": "Classic Balloon Package",
+                "fr": "Ballons, formule classique",
+                "p": 90,
+                "d": 100
+            },
+            {
+                "k": "misc-9",
+                "g": "Decorations",
+                "n": "Number Balloon Package",
+                "fr": "Ballons chiffres",
+                "p": 280,
+                "d": 300
+            },
+            {
+                "k": "misc-10",
+                "g": "Photo & Video",
+                "n": "Photographer",
+                "fr": "Photographe",
+                "p": 920,
+                "d": 1000
+            },
+            {
+                "k": "misc-14",
+                "g": "Photo & Video",
+                "n": "Videographer",
+                "fr": "Vidéaste",
+                "p": 1100,
+                "d": 1200
+            },
+            {
+                "k": "misc-11",
+                "g": "Photo & Video",
+                "n": "Photographer & Videographer Package",
+                "fr": "Formule photographe et vidéaste",
+                "p": 1840,
+                "d": 2000
+            },
+            {
+                "k": "misc-6",
+                "g": "Miscellaneous",
+                "n": "Slippers for 5",
+                "fr": "Chaussons pour 5",
+                "p": 90,
+                "d": 100
+            },
+            {
+                "k": "misc-59",
+                "g": "Miscellaneous",
+                "n": "Slippers & Towels for 2",
+                "fr": "Chaussons et serviettes pour 2",
+                "p": 140,
+                "d": 150
+            }
+        ]
+    }
 }
