@@ -59,9 +59,14 @@ export async function confirmZiina(env, piId, token) {
     return remember(cache, memo, { state: 'paid_booked', meta, test, booking_id: r.data.id });
   }
   if (RETRY.has(r.code)) return { state: 'retry', meta, test };
-  if (r.code === 'payment_required') {
-    await notify(env, { status: 'ACTION NEEDED · wallet Xclusive insuffisant : rechargez-le, la réservation sera retentée (le client a payé)', ...sum });
-    return { state: 'retry', meta, test };
+  if (r.code === 'payment_required' || r.status === 402) {
+    // Une seule alerte par paiement (la page du client se recharge toute seule et le webhook Ziina réessaie)
+    const once = new Request(DONE + 'wallet-alert/' + encodeURIComponent(piId));
+    if (!(await cache.match(once))) {
+      await notify(env, { status: 'ACTION NEEDED · wallet Xclusive insuffisant · le client a PAYÉ ' + aed(Number(meta.retail) + Number(meta.fee)) + ' AED · rechargez au moins ' + aed(meta.b2b) + ' AED (prix B2B de cette réservation) : elle est retentée tant que le client garde sa page ouverte ; sinon réservez-la vous-même dans le portail', ...sum });
+      await cache.put(once, new Response('1', { headers: { 'Cache-Control': 'max-age=86400' } }));
+    }
+    return { state: 'retry', meta, test, code: 'payment_required' };
   }
   // Refus définitif : remboursement intégral, identifiant stable pour ne jamais rembourser deux fois
   const rf = await ziina(env, '/refund', { id: await stableUuid('refund|' + piId), payment_intent_id: piId, amount: Number(pi.amount), currency_code: 'AED' });

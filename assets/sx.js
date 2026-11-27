@@ -229,6 +229,14 @@
       name: form.name.value, email: form.email.value, phone: form.phone.value, lang: FR ? 'fr' : 'en' }) })
       .then(function (r) { return r.json(); }).then(function (d) {
         if (d.url) { location.href = d.url; return; }
+        if (d.error === 'contact_us') {
+          // réservation en ligne impossible pour ce départ en ce moment : on oriente vers WhatsApp / e-mail (rien n'a été payé)
+          err.innerHTML = esc(FR ? 'La réservation en ligne n’est pas disponible pour ce départ en ce moment. Rien n’a été débité : contactez-nous, nous réservons vos places pour vous.'
+            : 'Online booking is not available for this departure right now. Nothing has been charged: contact us and we will book your seats for you.') +
+            '<span class="sx-contact"><a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" rel="noopener">WhatsApp ' + (FR ? 'EAU' : 'UAE') + '</a><a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" rel="noopener">WhatsApp FR</a><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a></span>';
+          btn.disabled = false; btn.firstChild.textContent = L('Pay securely ');
+          return;
+        }
         err.textContent = ERR[d.error] || L('Something went wrong. Please try again or contact us on WhatsApp.');
         btn.disabled = false; btn.firstChild.textContent = L('Pay securely ');
         if (d.error === 'departure_unavailable' || d.error === 'booking_unavailable') load();

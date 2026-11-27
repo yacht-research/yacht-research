@@ -1,6 +1,6 @@
 // POST /api/sx/checkout → vérifie la sortie, le prix et les données client, puis crée le paiement (Ziina par défaut, ou Stripe).
 // La réservation chez Xclusive n'est faite QU'APRÈS le paiement, avec le même prix B2B vérifié.
-import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
+import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, notify, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
 // Ziina refuse certains caractères dans le libellé (le « & » de « Palm Jumeirah, Burj Al Arab & Marina » faisait échouer le paiement)
 function zMsg(s, fr) {
@@ -34,6 +34,11 @@ export async function onRequestPost({ env, request }) {
   const b2b = q.data.total_minor;
   const booking = { departure_id, adults, children, featured: false, name, phone, email: env.SX_GUEST_EMAIL || email, expected_total_minor: b2b };
   const dry = await xc(env, '/validate-booking', { method: 'POST', body: booking });
+  if (!dry.ok && (dry.code === 'payment_required' || dry.status === 402)) {
+    // Wallet Xclusive insuffisant : le client ne paie pas, il est invité à nous contacter (sans mention du wallet)
+    await notify(env, { status: 'ACTION NEEDED · wallet Xclusive insuffisant · un client voulait réserver (NON payé) · rechargez au moins ' + (b2b / 100).toFixed(2) + ' AED (prix B2B)', product: dep.product, date: dep.date, time: dep.time, guests: String(adults + children), name, phone, client_email: email, b2b_aed: (b2b / 100).toFixed(2) });
+    return json({ error: 'contact_us' }, 409);
+  }
   if (!dry.ok) return json({ error: dry.code }, 409);
 
   // 4) paiement au prix client (prix public de l'horaire −10 %, jamais sous B2B + marge), même calcul que /api/sx/quote
