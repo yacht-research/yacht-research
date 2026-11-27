@@ -43,7 +43,8 @@ export async function onRequestGet(ctx) {
       from_aed: shown ? shown / 100 : null,
       was_aed: shown && was > shown ? was / 100 : null,
       seats: d.availability === 'None' ? null : seatsShown(slot),
-      slug: (slot && slot[5]) || ''
+      slug: (slot && slot[5]) || '',
+      boat: (slot && slot[6]) || '' // code du bateau de cet horaire (X6, A1…), absent si le départ n'est pas dans le flux public
     };
   }).sort((a, b) => a.time.localeCompare(b.time));
 

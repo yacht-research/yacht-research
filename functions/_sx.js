@@ -47,7 +47,9 @@ export function retailMinor(b2bMinor, env) {
 // B2B + SX_MARKUP. Sans prix public connu (flux indisponible, catégorie sans prix) : B2B + SX_MARKUP.
 // ------------------------------------------------------------
 export const PUBLIC_FEED = 'https://xclusiveyachts.com/tours-data/tours.json';
-const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v3';
+const PUBLIC_KEY = 'https://sx-cache.yachtresearchgroup.com/public/v4';
+// Bateau d'un départ dans le flux public (« Xclusive 6 », « Stardom A1-140 ») → code court (X6, A1), sans nom d'opérateur
+export const boatCode = b => { b = String(b || ''); const x = b.match(/Xclusive\s*(\d+)/i); if (x) return 'X' + x[1]; const a = b.match(/\b(A\d+)\b/); return a ? a[1] : ''; };
 // Prix affiché (hors frais de carte) fixé en proportion du prix public pour certains produits (décisions Mathis) :
 // speedboat 122 AED pour 160 (27/11), superyacht Stardom 399 AED pour 460 (27/11 ; le Sundowner à 510 suit la même proportion)
 const SLUG_RETAIL = { 'sightseeing-tours-dubai': 122 / 160, 'super-yacht-experience-dubai-tour': 399 / 460 };
@@ -71,7 +73,7 @@ export async function publicSlots(env, ctx) {
   (Array.isArray(tours) ? tours : []).forEach(t => { if (t.slug && Array.isArray(t.addons) && t.addons.length) addons[t.slug] = t.addons.filter(a => a && a.label && a.price > 0).map(a => ({ k: a.key, n: a.label, d: a.desc || '', p: Number(a.price), u: a.unit || '' })); });
   map._a = addons;
   (Array.isArray(tours) ? tours : []).forEach(t => (t.timeSlots || []).forEach(s => {
-    if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out, t.slug || ''];
+    if (s && s.cruise_id) map[s.cruise_id] = [Number(s.price) || null, s.child_price == null ? null : Number(s.child_price), typeof s.seats_left === 'number' ? s.seats_left : null, s.tier || '', !!s.sold_out, t.slug || '', boatCode(s.boat)];
   }));
   const p = cache.put(key, new Response(JSON.stringify(map), { headers: { 'Cache-Control': 'max-age=300' } }));
   if (ctx && ctx.waitUntil) ctx.waitUntil(p); else await p;
