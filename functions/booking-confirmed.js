@@ -41,7 +41,12 @@ export async function render({ env, request }, pageLang) {
   const q = new URL(request.url).searchParams;
   let v = { kind: 'fail', lang: pageLang };
 
-  if (q.get('pi')) {
+  // Aperçu des différents écrans (site de prévisualisation seulement, jamais en production) : ?demo=paid|manual|processing|refund|pending|fail
+  const demo = q.get('demo'), host = new URL(request.url).hostname;
+  if (demo && !host.endsWith('yachtresearchgroup.com')) {
+    v = { lang: pageLang, name: 'Sarah Martin', product: 'Sunseeker Superyacht Experience', date: '2026-12-02', time: '19:00', guests: 2, totalMinor: 133500,
+      kind: demo === 'paid' || demo === 'manual' || demo === 'processing' ? (demo === 'paid' ? 'paid' : 'paid_processing') : demo, booked: demo === 'paid', manual: demo === 'manual' };
+  } else if (q.get('pi')) {
     const r = await confirmZiina(env, q.get('pi'), q.get('t'));
     const m = r.meta;
     if (m) {
@@ -80,7 +85,7 @@ export async function render({ env, request }, pageLang) {
     `<div class="ctas" style="justify-content:center;margin-top:14px"><a href="${fr ? '/fr' : ''}/shared-experiences" class="btn btn-ghost">${t.more}</a></div></section>` +
     // Réservation pas encore faite (paiement en cours, ou finalisation) : la page se recharge toute seule (max 20 fois),
     // ce qui relance la réservation dès que c'est possible (par exemple après la recharge du wallet)
-    (v.kind === 'paid_processing' || v.kind === 'pending' ? `<script>(function(){try{var k='yr_rl_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}',n=+(sessionStorage.getItem(k)||0);if(n<20){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},${v.kind === 'pending' ? 10000 : 60000});}}catch(e){}})();</script>` : '') +
+    (!demo && (v.kind === 'paid_processing' || v.kind === 'pending') ? `<script>(function(){try{var k='yr_rl_${(q.get('pi') || '').replace(/[^A-Za-z0-9_-]/g, '')}',n=+(sessionStorage.getItem(k)||0);if(n<20){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},${v.kind === 'pending' ? 10000 : 60000});}}catch(e){}})();</script>` : '') +
     (fr ? FOOTER_FR : FOOTER) + SCRIPTS + '</body></html>';
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } });
 }
