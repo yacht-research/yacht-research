@@ -203,6 +203,12 @@
   modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
   form.adults.onchange = form.children.onchange = quote;
+  // Retour arrière depuis la page de paiement : le navigateur restaure la page telle quelle (bouton bloqué), on la remet à zéro
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    var b = form.querySelector('button[type=submit]'); b.disabled = false; b.firstChild.textContent = L('Pay securely ');
+    if (!modal.hidden && state.dep) quote();
+  });
 
   form.onsubmit = function (e) {
     e.preventDefault(); err.textContent = ''; err.classList.remove('ok');
