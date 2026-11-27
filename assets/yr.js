@@ -4,7 +4,24 @@
 // Rien n'est chargé tant que ADS_ID est vide. Identifiants publics (visibles dans toute page qui les utilise), pas des secrets.
 //   ADS_ID   : balise Google Ads « AW-… »       GA4_ID : flux GA4 « G-… » (optionnel)
 //   LABELS   : libellé de chaque action de conversion créée dans Google Ads (Objectifs › Conversions)
-// Les cookies publicitaires ne sont posés qu'après « Accept » sur le bandeau ; sans accord, Google ne reçoit que des signaux sans cookie.
+// Consentement préalable exigé dans l'UE/EEE, au Royaume-Uni et en Suisse (même liste que yachtclubacademy.com) :
+// là-bas, bandeau affiché et cookies refusés tant que le visiteur n'a pas cliqué « Accept ».
+// Ailleurs, mesure active d'office ; « Cookie settings » en pied de page permet toujours de refuser.
+window.yrConsentRegions = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
+  'IS', 'LI', 'NO', 'GB', 'CH', 'GP', 'MQ', 'GF', 'RE', 'YT', 'MF', 'GI', 'JE', 'GG', 'IM'];
+// Pays du visiteur via /cdn-cgi/trace de Cloudflare (sans appel de fonction). Pays inconnu = traité comme l'Europe.
+// En local : ?country=AE pour tester.
+window.yrCountry = function(done){
+  var c = null;
+  var test = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('country');
+  if (test) return done(test.toUpperCase());
+  try { c = sessionStorage.getItem('yr_country'); } catch (e) {}
+  if (c) return done(c);
+  fetch('/cdn-cgi/trace', { cache: 'no-store' })
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(t){ var m = /(?:^|\n)loc=([A-Z]{2})/.exec(t); c = m ? m[1] : 'XX'; try { sessionStorage.setItem('yr_country', c); } catch (e) {} done(c); })
+    .catch(function(){ done('XX'); });
+};
 (function(){
   var ADS_ID = '', GA4_ID = '';
   var LABELS = { purchase: '', lead: '', whatsapp: '' };
@@ -12,10 +29,13 @@
   if (!ADS_ID && !GA4_ID) return;
   window.dataLayer = window.dataLayer || [];
   function gtag(){ window.dataLayer.push(arguments); }
-  var ok = /(?:^|; )yr_cookie_consent=accepted/.test(document.cookie);
+  var choice = (/(?:^|; )yr_cookie_consent=(\w+)/.exec(document.cookie) || [])[1];
   var st = function(g){ return { ad_storage: g, ad_user_data: g, ad_personalization: g, analytics_storage: g }; };
-  gtag('consent', 'default', Object.assign(st('denied'), { wait_for_update: 500 }));
-  if (ok) gtag('consent', 'update', st('granted'));
+  // Google applique lui-même la règle par région : accordé par défaut, refusé dans les pays à consentement préalable
+  gtag('consent', 'default', st('granted'));
+  gtag('consent', 'default', Object.assign(st('denied'), { region: window.yrConsentRegions, wait_for_update: 500 }));
+  if (choice === 'accepted') gtag('consent', 'update', st('granted'));
+  else if (choice === 'declined') gtag('consent', 'update', st('denied'));
   gtag('set', 'url_passthrough', true); // sans cookie, l'identifiant du clic publicitaire suit dans l'adresse jusqu'à la conversion
   gtag('js', new Date());
   if (ADS_ID) gtag('config', ADS_ID);
@@ -862,15 +882,24 @@
   }, true);
 
   // ---------- Bandeau cookies (même cookie que l'ancien site) ----------
+  // Affiché d'office seulement dans les pays à consentement préalable (voir yrConsentRegions en haut du fichier)
   var cb = $('#cookie');
   if (cb) {
-    if (!/(?:^|; )yr_cookie_consent=/.test(document.cookie)) setTimeout(function(){ cb.classList.add('show'); }, 900);
+    var showCb = function(){ cb.classList.add('show'); };
+    if (!/(?:^|; )yr_cookie_consent=/.test(document.cookie)) window.yrCountry(function(cc){
+      if (cc === 'XX' || window.yrConsentRegions.indexOf(cc) > -1) setTimeout(showCb, 900);
+    });
     $$('[data-consent]', cb).forEach(function(b){ b.addEventListener('click', function(){
       var d = new Date(); d.setTime(d.getTime() + 365 * 864e5);
       document.cookie = 'yr_cookie_consent=' + b.dataset.consent + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
       document.dispatchEvent(new CustomEvent('yr:consent', { detail: b.dataset.consent }));
+      if (b.dataset.consent === 'declined') document.cookie.split('; ').forEach(function(kv){
+        var k = kv.split('=')[0];
+        if (/^_(gcl|ga)/.test(k)) ['', ';domain=.' + location.hostname.replace(/^www\./, '')].forEach(function(dm){ document.cookie = k + '=;Max-Age=0;path=/' + dm; });
+      });
       cb.classList.remove('show');
     }); });
+    $$('[data-cookie-settings]').forEach(function(b){ b.addEventListener('click', function(e){ e.preventDefault(); showCb(); }); });
   }
 
   // ---------- Boucle de scroll : nav, parallaxe, manifeste, off-market ----------

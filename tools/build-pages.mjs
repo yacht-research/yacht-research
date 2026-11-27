@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '83'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '84'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -75,7 +75,7 @@ const FOOTER = `<footer class="foot">
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/contact#newsletter">Newsletter</a></div>
     <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
-  <div class="foot-bot"><span>© 2026 Yacht Research Group · YR Brokerage FZ-LLC</span><span><a href="/terms">Booking terms</a> · <a href="/privacy-policy">Privacy policy</a> · <a href="/legal-notice">Legal notice</a> · Photography: Unsplash</span></div>
+  <div class="foot-bot"><span>© 2026 Yacht Research Group · YR Brokerage FZ-LLC</span><span><a href="/terms">Booking terms</a> · <a href="/privacy-policy">Privacy policy</a> · <a href="/legal-notice">Legal notice</a> · <a href="#" data-cookie-settings>Cookie settings</a> · Photography: Unsplash</span></div>
 </footer>
 <div class="wa-stack">
   <a class="wa" href="${WA_UAE}" aria-label="WhatsApp UAE">${WA_SVG}<span>WhatsApp</span><b>UAE</b></a>
