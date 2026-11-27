@@ -2,6 +2,11 @@
 // La réservation chez Xclusive n'est faite QU'APRÈS le paiement, avec le même prix B2B vérifié.
 import { json, xc, stripe, ziina, ziinaTest, sealToken, payProvider, bookingsOpen, sellMinor, publicSlots, publicMinor, cardFeePct, int, cleanPhone } from '../../_sx.js';
 
+// Ziina refuse certains caractères dans le libellé (le « & » de « Palm Jumeirah, Burj Al Arab & Marina » faisait échouer le paiement)
+function zMsg(s, fr) {
+  return String(s || '').replace(/&/g, fr ? ' et ' : ' and ').replace(/[<>"'`\\{}|^~[\]#%:;=+$@*]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+}
+
 export async function onRequestPost({ env, request }) {
   if (!bookingsOpen(env)) return json({ error: 'bookings_closed' }, 503);
   let b; try { b = await request.json(); } catch (e) { return json({ error: 'invalid_body' }, 400); }
@@ -19,7 +24,7 @@ export async function onRequestPost({ env, request }) {
 
   // 1) la sortie existe toujours et a encore des places
   const list = await xc(env, '/departures?date=' + date);
-  if (!list.ok) return json({ error: list.code }, 502);
+  if (!list.ok) return json({ error: list.code }, 424);
   const dep = (list.data.departures || []).find(d => d.id === departure_id);
   if (!dep || dep.availability === 'None') return json({ error: 'departure_unavailable' }, 409);
 
@@ -42,18 +47,27 @@ export async function onRequestPost({ env, request }) {
   if (payProvider(env) === 'ziina') {
     const token = await sealToken(env, { dep: departure_id, a: adults, c: children, b2b, retail, fee, n: name, p: phone, e: email, pr: dep.product.slice(0, 120), d: dep.date, t: dep.time, l: fr ? 'fr' : 'en' });
     const back = origin + (fr ? '/fr' : '') + '/shared-experiences';
-    const z = await ziina(env, '/payment_intent', {
-      amount: retail + fee,
-      currency_code: 'AED',
-      message: (dep.product.slice(0, 80) + ' · ' + dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest')),
-      success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
-      cancel_url: back + '?sx=cancelled#sx',
-      failure_url: back + '?sx=failed#sx',
-      expiry: String(Date.now() + 30 * 60 * 1000),
-      test: ziinaTest(env)
-    });
-    if (!z.ok || !z.data.redirect_url) return json({ error: 'payment_unavailable' }, 502);
-    return json({ url: z.data.redirect_url });
+    const when = dep.date + ' ' + dep.time + ' · ' + guests + (fr ? ' pers.' : guests > 1 ? ' guests' : ' guest');
+    // Ziina refuse certains libellés : on retente avec un libellé plus court, puis minimal, plutôt que de bloquer le paiement
+    const labels = [zMsg(dep.product, fr) + ' · ' + when, 'Yacht Research · ' + when, 'Yacht Research'];
+    let z, detail = '';
+    for (const message of labels) {
+      z = await ziina(env, '/payment_intent', {
+        amount: retail + fee,
+        currency_code: 'AED',
+        message,
+        success_url: origin + (fr ? '/fr' : '') + '/booking-confirmed?pi={PAYMENT_INTENT_ID}&t=' + token,
+        cancel_url: back + '?sx=cancelled#sx',
+        failure_url: back + '?sx=failed#sx',
+        expiry: String(Date.now() + 30 * 60 * 1000),
+        test: ziinaTest(env)
+      });
+      if (z.ok && z.data.redirect_url) return json({ url: z.data.redirect_url, ...(detail ? { note: detail } : {}) });
+      const d = z.data || {};
+      detail += (detail ? ' | ' : '') + z.status + ' ' + String(d.message || d.error || d.code || '').slice(0, 160);
+      if (z.status >= 500 || z.status === 401 || z.status === 503) break;
+    }
+    return json({ error: 'payment_unavailable', detail }, 424);
   }
 
   const meta = { departure_id, adults, children, b2b_minor: b2b, retail_minor: retail, card_fee_minor: fee, name, phone, email, product: dep.product.slice(0, 200), date: dep.date, time: dep.time };
@@ -79,6 +93,6 @@ export async function onRequestPost({ env, request }) {
   };
   for (const [k, v] of Object.entries(meta)) { p['metadata[' + k + ']'] = String(v); p['payment_intent_data[metadata][' + k + ']'] = String(v); }
   const s = await stripe(env, '/checkout/sessions', p);
-  if (!s.ok || !s.data.url) return json({ error: 'payment_unavailable' }, 502);
+  if (!s.ok || !s.data.url) return json({ error: 'payment_unavailable' }, 424);
   return json({ url: s.data.url });
 }

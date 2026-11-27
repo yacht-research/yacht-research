@@ -75,7 +75,7 @@ const FOOTER = `<footer class="foot">
     <div><h5>Company</h5><a href="/why-us">Why us</a><a href="/yacht-club-academy">Yacht Club Academy</a><a href="/partnerships">Partnerships</a><a href="/partnerships#referral">Referral programme</a><a href="/recruitment">Recruitment</a><a href="/contact#newsletter">Newsletter</a></div>
     <div><h5>Contact</h5><a href="mailto:contact@yachtresearchgroup.com">contact@yachtresearchgroup.com</a><a href="${WA_UAE}">WhatsApp UAE</a><a href="${WA_FR}">WhatsApp France</a><a href="https://www.instagram.com/yacht_research/">Instagram</a><a href="https://linktr.ee/yacht_research">Linktree</a><a href="https://www.linkedin.com/in/mathis-ybs-bb20483b7" target="_blank" rel="noopener">Connect with Mathis on LinkedIn</a><a href="https://www.linkedin.com/in/antoine-elie-163583383" target="_blank" rel="noopener">Connect with Antoine on LinkedIn</a></div>
   </div>
-  <div class="foot-bot"><span>© 2026 Yacht Research Group · Worldwide</span><span><a href="/privacy-policy">Privacy policy</a> · Photography: Unsplash</span></div>
+  <div class="foot-bot"><span>© 2026 Yacht Research Group · YR Brokerage FZ-LLC</span><span><a href="/terms">Booking terms</a> · <a href="/privacy-policy">Privacy policy</a> · <a href="/legal-notice">Legal notice</a> · Photography: Unsplash</span></div>
 </footer>
 <div class="wa-stack">
   <a class="wa" href="${WA_UAE}" aria-label="WhatsApp UAE">${WA_SVG}<span>WhatsApp</span><b>UAE</b></a>
@@ -223,7 +223,7 @@ const SX_TEASER = `<section class="sxt rv">
   </a>
 </section>`;
 
-const SX_POLICY = 'Free cancellation up to 48 hours before departure. Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.';
+const SX_POLICY = 'Free cancellation up to 48 hours before departure (the card processing fee is not refunded). Later cancellations and no-shows are not refunded. If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.';
 // Filtres de la page Shared experiences (même principe que Buy / Charter ; les tags sont calculés par yr.js)
 const XP_FILTERS = `<div class="xf" data-xf>
   <div class="filters xp-filters rv">
@@ -266,7 +266,7 @@ const SX_MODAL = `<div class="sx-modal" id="sx-modal" hidden role="dialog" aria-
     <p class="sx-err" aria-live="polite"></p>
     <button type="submit" class="btn btn-gold">Pay securely <i>→</i></button>
     <button type="button" class="sx-bank" data-sx-bank>Prefer a bank transfer? Request our bank details</button>
-    <p class="yp-disc" style="margin:0">Secure payment by card, Apple Pay or Google Pay via Ziina. Your details are only used to arrange this experience. ${SX_POLICY}</p>
+    <p class="yp-disc" style="margin:0">Secure payment by card, Apple Pay or Google Pay via Ziina. Your details are only used to arrange this experience. ${SX_POLICY} By paying, you accept our <a href="/terms">booking terms</a>.</p>
   </form>
 </div>`;
 const SHARED_EXP = sxSection(XP_CARDS) + '\n' + SX_MODAL;
@@ -872,21 +872,24 @@ pages.push({
   + `<section class="legal" style="padding-top:0"><div class="legal-in">
   <h2>1. Who we are</h2>
   <p>Yacht Research is an international luxury yacht brokerage operating worldwide. Our website is located at yachtresearchgroup.com. For any privacy-related enquiries, you may contact us at <a class="mail" href="#">contact [at] yachtresearchgroup.com</a>.</p>
+  <p>Yacht Research is operated by YR Brokerage FZ-LLC, FDRK9097 Compass Building, Al Shohada Road, Al Hamra Industrial Zone-FZ, Ras Al Khaimah, United Arab Emirates, which is the controller of your personal data.</p>
   <h2>2. Data we collect</h2>
   <p>When you interact with our website, we may collect the following personal data:</p>
   <ul><li>Full name and first name</li><li>Email address</li><li>Phone or WhatsApp number</li><li>Country of residence</li><li>Information about your yacht project (type, budget, preferences)</li><li>Company name and professional role (for partnership enquiries)</li><li>Any additional information you choose to include in your message</li></ul>
+  <p>When you book a shared experience or a charter, we also collect the date, time and number of guests, and the name, email address and phone number of the lead guest. Card, Apple Pay and Google Pay payments are handled by Ziina: we never receive your full card details.</p>
   <h2>3. How we use your data</h2>
   <p>Your data is used exclusively for the following purposes:</p>
-  <ul><li>Responding to your enquiry and providing the service you requested</li><li>Sending you relevant information about yacht listings and market opportunities</li><li>Sending our newsletter if you have subscribed</li><li>Managing our business relationship with you</li></ul>
+  <ul><li>Responding to your enquiry and providing the service you requested</li><li>Booking your experience or charter, taking payment, and sending your confirmation and e-ticket</li><li>Sending you relevant information about yacht listings and market opportunities</li><li>Sending our newsletter if you have subscribed</li><li>Managing our business relationship with you</li></ul>
   <p>We do not use your data for automated decision-making or profiling, and we do not sell your personal data to third parties.</p>
   <h2>4. Legal basis for processing</h2>
   <p>We process your data on the basis of your explicit consent, given when you submit a form on our website. You may withdraw your consent at any time by contacting us at <a class="mail" href="#">contact [at] yachtresearchgroup.com</a>.</p>
+  <p>When you make a booking, we process your data because it is necessary to perform that booking.</p>
   <h2>5. Data storage and security</h2>
   <p>Your data is stored securely using Google Sheets (Google LLC) and Brevo (Sendinblue SAS), both of which are GDPR-compliant platforms. Our website is hosted via Cloudflare Pages, which provides industry-standard security including SSL/TLS encryption and DDoS protection.</p>
   <p>We retain your data for as long as necessary to fulfil the purpose for which it was collected, or until you request its deletion.</p>
   <h2>6. Third-party services</h2>
   <p>To operate our services, we use the following third-party processors:</p>
-  <ul><li>Google Apps Script / Google Sheets: form data storage (Google LLC, USA)</li><li>Brevo (formerly Sendinblue): email marketing and contact management (France / EU)</li><li>Cloudflare Pages: website hosting, image delivery, CDN and security (USA)</li><li>Cloudflare Web Analytics: privacy-friendly, cookieless audience analytics. No personal data or cross-site tracking. EU visitor data excluded from analytics in compliance with GDPR.</li><li>Unsplash: supplementary website imagery (Canada)</li><li>Google Fonts: web typography loaded from fonts.googleapis.com (Google LLC, USA)</li></ul>
+  <ul><li>Google Apps Script / Google Sheets: form data storage (Google LLC, USA)</li><li>Brevo (formerly Sendinblue): email marketing and contact management (France / EU)</li><li>Cloudflare Pages: website hosting, image delivery, CDN and security (USA)</li><li>Cloudflare Web Analytics: privacy-friendly, cookieless audience analytics. No personal data or cross-site tracking. EU visitor data excluded from analytics in compliance with GDPR.</li><li>Unsplash: supplementary website imagery (Canada)</li><li>Google Fonts: web typography loaded from fonts.googleapis.com (Google LLC, USA)</li><li>Ziina: card, Apple Pay and Google Pay payments (United Arab Emirates)</li><li>Our yacht operating partners in Dubai: they receive the name, email address and phone number of the lead guest to issue the e-ticket and run the experience or charter</li></ul>
   <p>Each of these providers maintains their own privacy policies and GDPR compliance frameworks. Where applicable, data processing agreements are in place.</p>
   <h2>7. Your rights</h2>
   <p>Under the GDPR (for EU residents) and the PDPL (for UAE residents), you have the following rights:</p>
@@ -902,6 +905,64 @@ pages.push({
   <div class="referral" style="margin-top:50px"><p class="eyebrow">Contact for privacy matters</p><p style="margin-top:14px;color:var(--mute)">Yacht Research · Worldwide<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a></p></div>
 </div></section>`,
   script: `<script>(function(){var e='contact'+'\\u0040'+'yachtresearchgroup.com';document.querySelectorAll('a.mail').forEach(function(a){a.textContent=e;a.href='mailto:'+e;});})();</script>`
+});
+
+// Conditions de réservation (expériences partagées et charters) et mentions légales
+const MAIL_JS = `<script>(function(){var e='contact'+'\\u0040'+'yachtresearchgroup.com';document.querySelectorAll('a.mail').forEach(function(a){a.textContent=e;a.href='mailto:'+e;});})();</script>`;
+const YR_ADDRESS = 'FDRK9097 Compass Building, Al Shohada Road, Al Hamra Industrial Zone-FZ, Ras Al Khaimah, United Arab Emirates';
+pages.push({
+  file: 'terms.html', canonical: '/terms',
+  title: 'Booking terms | Yacht Research',
+  desc: 'Booking terms for shared yacht experiences and private charters booked with Yacht Research: prices, payment, cancellation and refunds.',
+  body: hero({ eyebrow: 'Legal', title: 'Booking <span class="acc">terms</span>', lead: 'Last updated: November 2026' })
+  + `<section class="legal" style="padding-top:0"><div class="legal-in">
+  <h2>1. Who we are</h2>
+  <p>Yacht Research is operated by YR Brokerage FZ-LLC, ${YR_ADDRESS}. These terms apply to bookings made on yachtresearchgroup.com, by WhatsApp or by email, between YR Brokerage FZ-LLC and the person who makes the booking (the “client”).</p>
+  <h2>2. Our role</h2>
+  <p>Yacht Research acts as a booking agent and Yacht Broker. Shared experiences and charters are operated by our partner operators in Dubai, who are responsible for the yacht, its crew and safety on board. The captain may change the route, or shorten or cancel a cruise, for weather or safety reasons.</p>
+  <h2>3. Shared experiences: prices</h2>
+  <p>Prices are per guest, in UAE dirhams (AED). The price that applies is the one shown for the chosen departure at the time of booking. A card processing fee of 3% is added to the total when paying by card, Apple Pay or Google Pay; there is no fee when paying by bank transfer. The full amount to pay is shown before payment. The card processing fee is not refunded when you cancel, but it is refunded if the sailing is cancelled by the operator or if your seats cannot be confirmed.</p>
+  <h2>4. Shared experiences: booking and payment</h2>
+  <p>Online payments are handled by Ziina. We never receive your full card details. Your booking is confirmed once the payment is confirmed and the operator has confirmed your seats. Your e-ticket is sent to the email address entered when booking. If the seats can no longer be confirmed after payment, for example because the departure has just sold out, your payment is refunded in full.</p>
+  <p>To pay by bank transfer, request our bank details from the booking window or on WhatsApp. Your seats are booked once the transfer is received.</p>
+  <h2>5. Add-ons</h2>
+  <p>Add-ons (photographer, decoration, drinks and more) are arranged on request. To include them, contact us on WhatsApp before paying: they cannot be added to a booking already paid online. Their price is confirmed in writing.</p>
+  <h2>6. Shared experiences: cancellation and changes</h2>
+  <ul><li>Free cancellation up to 48 hours before departure: the amount paid is refunded, except the card processing fee.</li><li>Later cancellations and no-shows are not refunded.</li><li>Changes of date or time can be requested up to 48 hours before departure, subject to availability and to any price difference.</li><li>If the sailing is cancelled for weather or safety reasons, you choose between another date and a full refund.</li></ul>
+  <p>To cancel or change a booking, write to us by email or WhatsApp. Refunds are issued within 14 days to the payment method used: to your card for online payments, by bank transfer for bank transfer payments. The time it then takes to reach your account depends on your bank.</p>
+  <h2>7. Private charters</h2>
+  <p>Private charters are booked on request. Our written quote states the yacht, date, start time, duration, number of guests, extras, price, payment schedule and cancellation terms. The charter is confirmed once you accept the quote in writing and we receive the payment requested. Unless agreed otherwise, charters are paid by bank transfer.</p>
+  <h2>8. On board</h2>
+  <p>Guests follow the instructions of the captain and crew, as well as the operator’s rules on board.</p>
+  <h2>9. Liability</h2>
+  <p>Within the limits set by law, our liability is limited to the amount paid for the booking. The operation of the yacht and safety on board are the responsibility of the operator.</p>
+  <h2>10. Personal data</h2>
+  <p>How we process your data is described in our <a href="/privacy-policy">privacy policy</a>.</p>
+  <h2>11. Governing law and disputes</h2>
+  <p>These terms are governed by the laws of the United Arab Emirates as applied in the Emirate of Ras Al Khaimah. Any dispute falls under the competent courts of Ras Al Khaimah. This choice does not deprive a consumer client of the protection granted by the mandatory provisions of the law of their country of residence. If there is a problem, please write to us first so we can find an amicable solution.</p>
+  <div class="referral" style="margin-top:50px"><p class="eyebrow">Contact</p><p style="margin-top:14px;color:var(--mute)">YR Brokerage FZ-LLC<br><a class="mail" href="#">contact [at] yachtresearchgroup.com</a></p></div>
+</div></section>`,
+  script: MAIL_JS
+});
+pages.push({
+  file: 'legal-notice.html', canonical: '/legal-notice',
+  title: 'Legal notice | Yacht Research',
+  desc: 'Legal notice of yachtresearchgroup.com: publisher, registered office and hosting.',
+  body: hero({ eyebrow: 'Legal', title: 'Legal <span class="acc">notice</span>', lead: 'Last updated: November 2026' })
+  + `<section class="legal" style="padding-top:0"><div class="legal-in">
+  <h2>Publisher</h2>
+  <p>Yacht Research, published by YR Brokerage FZ-LLC.</p>
+  <p>Registered office: ${YR_ADDRESS}.</p>
+  <p>Publication director: Mathis Ybs.</p>
+  <p>Contact: <a class="mail" href="#">contact [at] yachtresearchgroup.com</a>.</p>
+  <h2>Hosting</h2>
+  <p>Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, United States. Website: cloudflare.com.</p>
+  <h2>Intellectual property</h2>
+  <p>The texts, logos and images on this website belong to YR Brokerage FZ-LLC or its partners. Some photos come from Unsplash. Any reproduction without written permission is prohibited.</p>
+  <h2>Liability</h2>
+  <p>Yacht listings, prices and availability are provided for information and may change without notice. Within the limits set by law, YR Brokerage FZ-LLC cannot be held liable for the content of third-party websites.</p>
+</div></section>`,
+  script: MAIL_JS
 });
 
 // Fiches des expériences partagées
