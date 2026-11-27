@@ -397,6 +397,8 @@ footer a{color:var(--gold)}
 .yp-wa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .yp-wa .btn{padding:0 10px;font-size:10px;letter-spacing:.14em;min-height:48px}
 .yp-disc{color:var(--faint);font-size:12px;line-height:1.6;margin-top:4px}
+.yp-disc a{color:var(--gold-l);text-decoration:underline;text-underline-offset:3px}
+.yp-disc a:hover{color:var(--gold)}
 .yp-sec{padding-top:clamp(50px,7vw,100px);padding-bottom:clamp(50px,7vw,100px)}
 .yp-h2{font-size:clamp(32px,4.6vw,64px);margin-top:20px}
 .yp-specs{display:grid;grid-template-columns:repeat(2,1fr);gap:0 clamp(30px,5vw,80px);margin-top:clamp(36px,4vw,56px);border-top:1px solid var(--line-2)}

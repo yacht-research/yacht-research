@@ -23,6 +23,8 @@ export async function onRequest(context) {
     { url: '/recruitment', priority: '0.6', changefreq: 'monthly' },
     { url: '/yacht-research-form', priority: '0.9', changefreq: 'weekly' },
     { url: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
+    { url: '/terms', priority: '0.3', changefreq: 'yearly' },
+    { url: '/legal-notice', priority: '0.2', changefreq: 'yearly' },
   ];
 
   // 1) Index généré au build (seulement les yachts publiés, avec date de mise à jour)
