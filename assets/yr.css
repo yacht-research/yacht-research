@@ -1084,3 +1084,4 @@ html[lang="fr"] .nav-links{gap:clamp(12px,1.2vw,22px)}html[lang="fr"] .nav-links
 @media(max-width:420px){.nav-r{gap:8px}.nav-r .lang-sw{min-width:36px;height:36px;padding:0 8px;font-size:10px;letter-spacing:.12em}}
 /* pages avec barre de recherche : sur les écrans de moins de 1000 px, bouton FR/EN seulement tout en haut de la page (ensuite la recherche prend sa place) ; au-delà, il reste */
 @media(max-width:999px){nav.has-qs.solid .nav-r .lang-sw,nav.has-qs.compact .nav-r .lang-sw{display:none}}
+.sx-days .sx-more-d{border-style:dashed;color:var(--gold-l)}.sx-days .sx-more-d.on{border-style:solid;color:var(--black)}

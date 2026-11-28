@@ -37,7 +37,7 @@ export default {
   'Duration: shortest': 'Durée : la plus courte',
   'experiences': 'expériences',
   'No experience matches these filters. Tell us on <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" rel="noopener">WhatsApp UAE</a> or <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" rel="noopener">WhatsApp FR</a> what you have in mind.': 'Aucune expérience ne correspond à ces filtres. Dites-nous ce que vous avez en tête sur <a href="https://wa.me/qr/5NK5SR22CXGNC1" target="_blank" rel="noopener">WhatsApp EAU</a> ou <a href="https://wa.me/message/CVQVHBO3GXLZP1" target="_blank" rel="noopener">WhatsApp FR</a>.',
-  'Other date': 'Autre date',
+  'Choose another date': 'Choisir une autre date',
   'New experience': 'Nouvelle expérience',
   'Starting from': 'À partir de',
   'per guest': 'par personne',
