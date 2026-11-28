@@ -17,7 +17,7 @@
     'Please enter your full name.': 'Indiquez vos nom et prénom.',
     'Choose between 1 and 20 guests.': 'Choisissez entre 1 et 20 personnes.',
     'Online booking is not open yet. Send us an enquiry instead.': 'La réservation en ligne n’est pas encore ouverte. Envoyez-nous plutôt une demande.',
-    'Starting from': 'À partir de', 'per guest': 'par personne', 'Today': 'Aujourd’hui', 'Tomorrow': 'Demain',
+    'Starting from': 'À partir de', 'per guest': 'par personne', 'Today': 'Aujourd’hui', 'Tomorrow': 'Demain', 'More dates': 'Plus de dates',
     'No departure on this date. Try another day.': 'Aucun départ à cette date. Essayez un autre jour.',
     'From': 'Dès', 'Price on request': 'Prix sur demande', 'Few places left': 'Dernières places', 'Available': 'Disponible', 'Few left': 'Dernières places',
     'Book': 'Réserver', 'Enquire for': 'Demander pour', 'Enquire': 'Demander', 'Loading times…': 'Chargement des horaires…',
@@ -89,8 +89,14 @@
     return d.toLocaleDateString(FR ? 'fr-FR' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   }
   dateIn.min = dubaiDate(0); dateIn.max = dubaiDate(89);
-  daysEl.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(function (k) { var d = dubaiDate(k); return '<button type="button" data-d="' + d + '">' + label(d, k) + '</button>'; }).join('');
-  daysEl.querySelectorAll('button').forEach(function (b) { b.onclick = function () { dateIn.value = b.dataset.d; load(); }; });
+  // 7 prochains jours en boutons, puis « Plus de dates » qui ouvre le calendrier (jusqu'à 3 mois) :
+  // une date plus lointaine choisie s'affiche dans ce dernier bouton, en surbrillance
+  var MORE = L('More dates') + ' <span aria-hidden="true">→</span>';
+  daysEl.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(function (k) { var d = dubaiDate(k); return '<button type="button" data-d="' + d + '">' + label(d, k) + '</button>'; }).join('')
+    + '<button type="button" class="sx-more-d" data-more>' + MORE + '</button>';
+  daysEl.querySelectorAll('button[data-d]').forEach(function (b) { b.onclick = function () { dateIn.value = b.dataset.d; load(); }; });
+  var moreB = daysEl.querySelector('[data-more]');
+  moreB.onclick = function () { try { dateIn.showPicker(); } catch (e) { dateIn.focus(); dateIn.click(); } };
 
   // project=experience : la demande part comme « Shared Experience Enquiry » (son onglet, sa liste Brevo, sa séquence)
   function enquireHref(title, dep) { return U('/yacht-research-form') + '?project=experience&yacht=' + encodeURIComponent(title + ' · ' + dep.date + ' ' + dep.time); }
@@ -152,7 +158,11 @@
 
   function load() {
     state.date = dateIn.value;
-    daysEl.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.d === state.date); });
+    var inWeek = false;
+    daysEl.querySelectorAll('button[data-d]').forEach(function (b) { var on = b.dataset.d === state.date; b.classList.toggle('on', on); if (on) inWeek = true; });
+    var far = !inWeek && !!state.date;
+    moreB.classList.toggle('on', far);
+    moreB.innerHTML = far ? label(state.date, -1) + ' <span aria-hidden="true">▾</span>' : MORE;
     cards.forEach(function (c) { c.querySelector('[data-slots]').innerHTML = '<span class="xp-wait">' + L('Loading times…') + '</span>'; });
     fetch('/api/sx/departures?date=' + encodeURIComponent(state.date)).then(function (r) { return r.json(); }).then(function (d) {
       if (!d.enabled) throw new Error('off');

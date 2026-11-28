@@ -35,11 +35,11 @@ export async function confirmZiina(env, piId, token) {
   }
   // Le montant payé doit être exactement celui calculé au moment du paiement
   if (Number(pi.amount) !== Number(meta.retail) + Number(meta.fee) || String(pi.currency_code).toUpperCase() !== 'AED') {
-    await notify(env, { status: 'ACTION NEEDED · montant Ziina inattendu, rien réservé', ...summary(meta, piId, test) });
+    await notify(env, { status: 'ACTION NEEDED · montant Ziina inattendu, rien réservé', ...summary(meta, piId, test, pi, env) });
     return remember(cache, memo, { state: 'failed', meta, test });
   }
 
-  const sum = summary(meta, piId, test);
+  const sum = summary(meta, piId, test, pi, env);
   const booking = { departure_id: meta.dep, adults: meta.a, children: meta.c, featured: false, name: meta.n, phone: meta.p, email: env.SX_GUEST_EMAIL || meta.e, expected_total_minor: meta.b2b };
 
   if (test) {
@@ -74,10 +74,26 @@ export async function confirmZiina(env, piId, token) {
   return remember(cache, memo, { state: rf.ok ? 'refunded' : 'refund_failed', meta, test, code: r.code });
 }
 
-function summary(m, piId, test) {
+// Frais prélevés par Ziina sur un paiement (en fils). Si Ziina les donne dans le paiement, on les prend ;
+// sinon estimation avec ZIINA_FEE_PCT (défaut 4,584 % : 17,28 AED retenus sur 377 AED, réservation du 28/11/2026).
+function ziinaFeeMinor(pi, paidMinor, env) {
+  for (const k of ['fee_amount', 'fees_amount', 'fee', 'processing_fee']) {
+    const v = pi && (typeof pi[k] === 'object' && pi[k] ? pi[k].amount : pi[k]);
+    if (v !== undefined && v !== null && v !== '' && isFinite(Number(v))) return { minor: Number(v), est: false };
+  }
+  const p = env && env.ZIINA_FEE_PCT !== undefined && env.ZIINA_FEE_PCT !== '' ? Number(env.ZIINA_FEE_PCT) : 4.584;
+  return { minor: Math.round(paidMinor * (isFinite(p) && p >= 0 && p < 15 ? p : 4.584) / 100), est: true };
+}
+
+function summary(m, piId, test, pi, env) {
+  const paid = Number(m.retail) + Number(m.fee);
+  const zf = ziinaFeeMinor(pi, paid, env);
   return {
     product: m.pr, date: m.d, time: m.t, guests: String(Number(m.a) + Number(m.c)), name: m.n, phone: m.p, client_email: m.e,
-    paid_aed: aed(Number(m.retail) + Number(m.fee)), card_fee_aed: aed(m.fee), b2b_aed: aed(m.b2b), margin_aed: aed(Number(m.retail) - Number(m.b2b)),
+    paid_aed: aed(paid), card_fee_aed: aed(m.fee),
+    // Ce que Ziina verse réellement, puis la marge nette = versé par Ziina − prix B2B Xclusive
+    ziina_fee_aed: (zf.est ? '≈ ' : '') + aed(zf.minor), received_aed: (zf.est ? '≈ ' : '') + aed(paid - zf.minor),
+    b2b_aed: aed(m.b2b), margin_aed: (zf.est ? '≈ ' : '') + aed(paid - zf.minor - Number(m.b2b)),
     payment: 'Ziina ' + piId + (test ? ' (TEST)' : ''),
     // la colonne du Sheet s'appelle encore « stripe_session » : on y range la référence du paiement Ziina
     stripe_session: 'Ziina ' + piId + (test ? ' (TEST)' : '')

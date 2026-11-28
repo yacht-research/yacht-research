@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '85'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '86'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -249,7 +249,7 @@ const sxSection = (cards, more = true) => `<section class="sx" id="sx">
   ${more ? XP_FILTERS : ''}
   <div class="sx-bar">
     <div class="sx-days" data-sx-days role="group" aria-label="Choose a date"></div>
-    <label class="field sx-date"><span>Other date</span><input type="date" data-sx-date></label>
+    <label class="field sx-date"><span>Choose another date</span><input type="date" data-sx-date></label>
   </div>
   <p class="sx-msg" data-sx-note></p>
   <div class="xp-grid${more ? '' : ' xp-grid-solo'}" data-sx-grid>
