@@ -93,10 +93,14 @@
   // une date plus lointaine choisie s'affiche dans ce dernier bouton, en surbrillance
   var MORE = L('More dates') + ' <span aria-hidden="true">→</span>';
   daysEl.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(function (k) { var d = dubaiDate(k); return '<button type="button" data-d="' + d + '">' + label(d, k) + '</button>'; }).join('')
-    + '<button type="button" class="sx-more-d" data-more>' + MORE + '</button>';
+    // un vrai champ date, invisible, posé sur la pastille : sur téléphone (iPhone surtout) le toucher ouvre
+    // directement le calendrier natif, ce qu'un appel par script ne fait pas toujours
+    + '<label class="sx-more-d" data-more><span data-more-t>' + MORE + '</span><input type="date" data-more-in aria-label="' + L('More dates') + '" min="' + dubaiDate(0) + '" max="' + dubaiDate(89) + '"></label>';
   daysEl.querySelectorAll('button[data-d]').forEach(function (b) { b.onclick = function () { dateIn.value = b.dataset.d; load(); }; });
-  var moreB = daysEl.querySelector('[data-more]');
-  moreB.onclick = function () { try { dateIn.showPicker(); } catch (e) { dateIn.focus(); dateIn.click(); } };
+  var moreB = daysEl.querySelector('[data-more]'), moreT = moreB.querySelector('[data-more-t]'), moreIn = moreB.querySelector('[data-more-in]');
+  // ordinateur : un clic sur la pastille ouvre aussi le calendrier
+  moreIn.addEventListener('click', function () { try { moreIn.showPicker(); } catch (e) {} });
+  moreIn.addEventListener('change', function () { if (moreIn.value) { dateIn.value = moreIn.value; load(); } });
 
   // project=experience : la demande part comme « Shared Experience Enquiry » (son onglet, sa liste Brevo, sa séquence)
   function enquireHref(title, dep) { return U('/yacht-research-form') + '?project=experience&yacht=' + encodeURIComponent(title + ' · ' + dep.date + ' ' + dep.time); }
@@ -162,7 +166,8 @@
     daysEl.querySelectorAll('button[data-d]').forEach(function (b) { var on = b.dataset.d === state.date; b.classList.toggle('on', on); if (on) inWeek = true; });
     var far = !inWeek && !!state.date;
     moreB.classList.toggle('on', far);
-    moreB.innerHTML = far ? label(state.date, -1) + ' <span aria-hidden="true">▾</span>' : MORE;
+    moreT.innerHTML = far ? label(state.date, -1) + ' <span aria-hidden="true">▾</span>' : MORE;
+    moreIn.value = state.date || '';
     cards.forEach(function (c) { c.querySelector('[data-slots]').innerHTML = '<span class="xp-wait">' + L('Loading times…') + '</span>'; });
     fetch('/api/sx/departures?date=' + encodeURIComponent(state.date)).then(function (r) { return r.json(); }).then(function (d) {
       if (!d.enabled) throw new Error('off');
