@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const V = '84'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
+const V = '85'; // à incrémenter quand yr.css / yr.js changent (cache navigateur)
 const U = (id, w = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 // Les premières photos de chaque page se chargent dès l'ouverture, au lieu d'attendre qu'on arrive dessus.
@@ -899,14 +899,15 @@ pages.push({
   <p>We retain your data for as long as necessary to fulfil the purpose for which it was collected, or until you request its deletion.</p>
   <h2>6. Third-party services</h2>
   <p>To operate our services, we use the following third-party processors:</p>
-  <ul><li>Google Apps Script / Google Sheets: form data storage (Google LLC, USA)</li><li>Brevo (formerly Sendinblue): email marketing and contact management (France / EU)</li><li>Cloudflare Pages: website hosting, image delivery, CDN and security (USA)</li><li>Cloudflare Web Analytics: privacy-friendly, cookieless audience analytics. No personal data or cross-site tracking. EU visitor data excluded from analytics in compliance with GDPR.</li><li>Unsplash: supplementary website imagery (Canada)</li><li>Google Fonts: web typography loaded from fonts.googleapis.com (Google LLC, USA)</li><li>Ziina: card, Apple Pay and Google Pay payments (United Arab Emirates)</li><li>Our yacht operating partners in Dubai: they receive the name, email address and phone number of the lead guest to issue the e-ticket and run the experience or charter</li></ul>
+  <ul><li>Google Apps Script / Google Sheets: form data storage (Google LLC, USA)</li><li>Brevo (formerly Sendinblue): email marketing and contact management (France / EU)</li><li>Cloudflare Pages: website hosting, image delivery, CDN and security (USA)</li><li>Cloudflare Web Analytics: privacy-friendly, cookieless audience analytics. No personal data or cross-site tracking. EU visitor data excluded from analytics in compliance with GDPR.</li><li>Unsplash: supplementary website imagery (Canada)</li><li>Google Fonts: web typography loaded from fonts.googleapis.com (Google LLC, USA)</li><li>Ziina: card, Apple Pay and Google Pay payments (United Arab Emirates)</li><li>Google Ads: measurement of the enquiries, WhatsApp contacts and bookings that come from our ads (Google LLC, USA, and Google Ireland Ltd)</li><li>Our yacht operating partners in Dubai: they receive the name, email address and phone number of the lead guest to issue the e-ticket and run the experience or charter</li></ul>
   <p>Each of these providers maintains their own privacy policies and GDPR compliance frameworks. Where applicable, data processing agreements are in place.</p>
   <h2>7. Your rights</h2>
   <p>Under the GDPR (for EU residents) and the PDPL (for UAE residents), you have the following rights:</p>
   <ul><li>The right to access the personal data we hold about you</li><li>The right to request correction of inaccurate data</li><li>The right to request deletion of your data ("right to be forgotten")</li><li>The right to withdraw consent at any time</li><li>The right to object to processing of your data</li><li>The right to data portability</li><li>The right to lodge a complaint with a supervisory authority</li></ul>
   <p>To exercise any of these rights, please contact us at <a class="mail" href="#">contact [at] yachtresearchgroup.com</a>. We will respond within 30 days.</p>
   <h2>8. Cookies</h2>
-  <p>Our website uses strictly necessary cookies to ensure basic functionality. We do not use advertising or cross-site tracking cookies. A cookie consent banner is displayed on your first visit to allow you to manage your preferences.</p>
+  <p>Our website uses strictly necessary cookies to ensure basic functionality. We also use Google Ads conversion tracking to measure which of our ads lead to an enquiry, a WhatsApp contact or a booking. It may set advertising cookies such as _gcl_au.</p>
+  <p>In the EU/EEA, the United Kingdom and Switzerland, a cookie banner is displayed on your first visit and these cookies are only set if you click Accept. Without your consent, Google only receives cookieless signals and nothing is stored on your device. In other countries, conversion tracking is active by default. Wherever you are, you can refuse it at any time with the Cookie settings link at the bottom of every page; refusing deletes these cookies.</p>
   <p>We use Cloudflare Web Analytics, a cookieless and privacy-preserving analytics tool that does not track individual visitors, does not set cookies, and does not share data with third parties. EU visitor data is excluded from analytics reports in accordance with GDPR requirements.</p>
   <h2>9. Newsletter</h2>
   <p>If you subscribe to our newsletter, your email address and name will be stored in our mailing list managed by Brevo. You may unsubscribe at any time by clicking the unsubscribe link in any email we send, or by contacting us directly.</p>
