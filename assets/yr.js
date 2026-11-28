@@ -23,8 +23,9 @@ window.yrCountry = function(done){
     .catch(function(){ done('XX'); });
 };
 (function(){
-  var ADS_ID = '', GA4_ID = '';
-  var LABELS = { purchase: '', lead: '', whatsapp: '' };
+  // Compte Google Ads 462-583-8593 (Yacht Research), actions créées le 28/11/2026
+  var ADS_ID = 'AW-18599815038', GA4_ID = '';
+  var LABELS = { purchase: 'ZRUxCPug88AdEP7OiqVF', lead: 'LFNOCP6g88AdEP7OiqVF', whatsapp: 'KTDhCP269MAdEP7OiqVF' };
   var q = []; window.yrTrack = function(ev, p){ q.push([ev, p || {}]); };
   if (!ADS_ID && !GA4_ID) return;
   window.dataLayer = window.dataLayer || [];
